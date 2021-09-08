@@ -1,13 +1,14 @@
 import React from 'react';
 import { Jumbotron } from 'reactstrap';
+import { SITE } from '../shared/site';
 
 const Home = (props) => {
     return (
         <div className='container col-12 justify-content-center'>
             <Jumbotron >
                 <div className='row home-page-heading'>
-                    <h3>Welcome to Animator</h3>
-                    <p>Animation without the patience</p>
+                    <h3>{SITE.home_heading}</h3>
+                    <p>{SITE.home_sub_heading}</p>
                 </div>
                 <div className='row'>
                     <img className='sample-anim col-lg-5 col-md-8 col-sm-12' src='assets/sample.gif' alt='Sample animation' />
