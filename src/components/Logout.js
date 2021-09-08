@@ -11,7 +11,7 @@ const Logout = () => {
     return(
         !isAuthenticated && (
             <div>
-                <h1>{user.name}</h1>
+                <h1>Logged out</h1>
             </div>
         )
     )

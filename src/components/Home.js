@@ -18,7 +18,7 @@ const Home = () => {
                 <div className='row'>
                     <div className='home-page-btn-rack col-lg-5 col-md-8 col-sm-12'>
                         <button type='button' className='btn btn-primary btn-lg m-1'>Create</button>
-                        <LoginBtn size='btn-lg' />
+                        <LoginBtn size='btn-lg' href='/login'/>
                         <LogoutBtn size='btn-lg' />
                     </div>
                 </div>
