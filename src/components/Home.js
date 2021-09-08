@@ -1,8 +1,10 @@
 import React from 'react';
 import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
+import LoginBtn from './partials/LoginBtn';
+import LogoutBtn from './partials/LogoutBtn';
 
-const Home = (props) => {
+const Home = () => {
     return (
         <div className='container col-12 justify-content-center'>
             <Jumbotron >
@@ -16,8 +18,8 @@ const Home = (props) => {
                 <div className='row'>
                     <div className='home-page-btn-rack col-lg-5 col-md-8 col-sm-12'>
                         <button type='button' className='btn btn-primary btn-lg m-1'>Create</button>
-                        <button type='button' className='btn btn-outline-secondary btn-lg m-1'>Login</button>
-                        <button type='button' className='btn btn-outline-secondary btn-lg m-1'>Sign-up</button>
+                        <LoginBtn size='btn-lg' />
+                        <LogoutBtn size='btn-lg' />
                     </div>
                 </div>
             </Jumbotron>
