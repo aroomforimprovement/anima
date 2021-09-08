@@ -4,6 +4,7 @@ import Main from './components/Main';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConfigureStore } from './redux/configureStore';
+import Auth0ProviderWithHistory from './auth/Auth0ProviderWithHistory';
 
 const store = ConfigureStore();
 
@@ -12,9 +13,11 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div className='App'>
-            <Main />
-          </div>
+          <Auth0ProviderWithHistory>
+              <div className='App'>
+                <Main />
+              </div>
+          </Auth0ProviderWithHistory>
         </BrowserRouter>
       </Provider>
     );
