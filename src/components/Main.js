@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Home from './Home';
-import Login from './Login';
+import { Login } from './Login';
 import Logout from './Logout';
 
-
 class Main extends Component {
+
     componentDidMount(){
         console.log("Main: componentDidMount");
     }
