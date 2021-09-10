@@ -5,6 +5,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const Login = () => {
     const putLogin = (login) => {
+        console.log('putLogin'); 
         return fetch(`${apiUrl}login`, {
             method: 'PUT',
             mode: 'cors',
@@ -17,7 +18,10 @@ export const Login = () => {
             console.log("then");
             if(response.ok){
                 console.log("response ok");
-                console.dir(response);
+                dispatch({
+                    type: 'setIsRegistered', 
+                    data: true
+                })
                 return response;
             }else{
                 var error = new Error('Error:'+
@@ -30,74 +34,70 @@ export const Login = () => {
             throw errmess;
         })
         .then(response => response.json())
-        .then(response => dispatch({
-            type: 'setRegistered', 
-            data: response
-        }))
+        .then(response => console.log("redirect, I guess", response))
         .catch(error => {
-            dispatch({type: 'setFailed', data: true})
-            console.log('PUT Login:' + error.message)
+            dispatch({type: 'setIsFailed', data: true});
+            console.log('PUT Login:' + error.message);
         });
     }
 
+
     const loginReducer = (state, action) => {
+        console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
-                console.log('setIsLoading');
-                return {...state, isLoaded: action.data};
+                return ({...state, isLoaded: action.data});
             }
             case 'setIsSending':{
-                console.log('setIsSending');
-                return {...state, isSending: action.data};
+                return ({...state, isSending: action.data});
             }
             case 'setIsRegistered':{
-                console.log('setIsRegistered');
-                return {...state, isRegistered: action.data};
+                return ({...state, isRegistered: action.data});
             }
             case 'setIsFailed':{
-                console.log('setIsFailed');
-                return {...state, isFailed: action.data};
+                return ({...state, isFailed: action.data});
             }
-            case 'putLogin':{
-                console.log('putLogin');
-                if(state.isSending){return;}
+            case 'putLogin':{               
                 const data = {
                     "userid": user.sub.replace('auth0|', ''),
                     "email": user.email,
                     "name": user.nickname 
                 }
                 putLogin(data);
-                return {...state, isSending: true}
+                return ({...state, isRegistered: true});
+                
             }
             default:
                 return state;
         }
     }
     const {user, isAuthenticated, isLoading} = useAuth0();
-    const [login, dispatch] = useReducer(loginReducer, {
+    const [state, dispatch] = useReducer(loginReducer, {
+        isLoaded: false,
         isSending: false,
         isRegistered: false,
         isFailed: false,
-        isLoaded: false,
         user: {},
-        login: {}
+        login: {},
     });
-
     useEffect(() => {
         console.log("Login: useEffect");
-        if(!isLoading && isAuthenticated && user && !login.isLoaded){
-            console.log("dispatch: isLoaded");
-            dispatch({type: 'setIsLoaded', data: true});
-            dispatch({type: 'putLogin', data: user})
+        console.log('isSending: ' + state.isSending);
+        console.log('isRegistered: ' + state.isRegistered);
+        console.log('isFailed: ' + state.isFailed);
+        if(state.isRegistered){
+            return;
         }
-    }, [isLoading, user, isAuthenticated, login.isLoaded]);
-
-    
-    
-
-
-
-
+        if(isLoading){
+            return;
+        }else if(!state.isLoaded){
+            dispatch({type: 'setIsLoaded', data: true});
+        }else if(state.isLoaded && isAuthenticated && user &&  !state.isSending && !state.isFailed){
+            dispatch({type: 'setIsSending', data: true});
+            dispatch({type: 'putLogin', data: user});
+        }
+    }, [isLoading, user, isAuthenticated, state.isLoaded, 
+        state.isSending, state.isRegistered, state.isFailed]);
 
     return(
         <div><h1>here</h1></div>
