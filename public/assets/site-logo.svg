@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120.0px"
+   height="120.0px"
+   viewBox="0 0 120.0 120.0"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="site-logo.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview26351"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:zoom="5.9295174"
+     inkscape:cx="90.985482"
+     inkscape:cy="60.797528"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid26357" />
+  </sodipodi:namedview>
+  <defs
+     id="defs26346" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:128px;line-height:1.25;font-family:Vivaldi;-inkscape-font-specification:Vivaldi;stroke-width:1.28684"
+       x="11.477746"
+       y="100.47849"
+       id="text29376"
+       transform="scale(1.0225003,0.97799482)"><tspan
+         sodipodi:role="line"
+         id="tspan29374"
+         x="11.477746"
+         y="100.47849"
+         style="font-size:128px;stroke-width:1.28684">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:13.3333px;line-height:1.25;font-family:sans-serif"
+       x="10"
+       y="100"
+       id="text36056"><tspan
+         sodipodi:role="line"
+         id="tspan36054"
+         x="10"
+         y="100" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:27.5976px;line-height:1.25;font-family:sans-serif;stroke-width:1.29364"
+       x="0.33818099"
+       y="125.42921"
+       id="text50112"
+       transform="scale(1.0927274,0.91514133)"><tspan
+         sodipodi:role="line"
+         id="tspan50110"
+         x="0.33818099"
+         y="125.42921"
+         style="stroke-width:1.29364">nimator</tspan></text>
+  </g>
+</svg>

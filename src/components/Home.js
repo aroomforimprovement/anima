@@ -1,21 +1,14 @@
 import React from 'react';
 import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
-import LoginBtn from './partials/LoginBtn';
-import LogoutBtn from './partials/LogoutBtn';
-import SignupBtn from './partials/SignupBtn';
-import { Loading } from './partials/Loading';
+import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
 
 const Home = () => {
-    const {isAuthenticated, isLoading} = useAuth0();
-    if(isLoading){
-        return (
-            <Loading message={"Going home..."}/>
-        )
-    }
+    const {isAuthenticated} = useAuth0();
+    
     return (
         <div className='container col-12 justify-content-center'>
             <Jumbotron >

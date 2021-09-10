@@ -6,7 +6,7 @@ import { Redirect } from 'react-router';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const Login = () => {
+const Login = () => {
 
     const putLogin = (login) => {
         console.log('putLogin'); 
@@ -130,3 +130,4 @@ export const Login = () => {
     )
 }
 
+export default Login;

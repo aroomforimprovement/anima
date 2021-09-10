@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+.auth-nav {
+  position: absolute;
+  right: 1em;
+}
+
 .home-page-heading {
   padding-top: 1.5em;
   padding-bottom: 1em;
