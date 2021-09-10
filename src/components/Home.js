@@ -4,8 +4,18 @@ import { SITE } from '../shared/site';
 import LoginBtn from './partials/LoginBtn';
 import LogoutBtn from './partials/LogoutBtn';
 import SignupBtn from './partials/SignupBtn';
+import { Loading } from './partials/Loading';
+
+import { useAuth0 } from '@auth0/auth0-react';
+
 
 const Home = () => {
+    const {isAuthenticated, isLoading} = useAuth0();
+    if(isLoading){
+        return (
+            <Loading message={"Going home..."}/>
+        )
+    }
     return (
         <div className='container col-12 justify-content-center'>
             <Jumbotron >
@@ -19,9 +29,9 @@ const Home = () => {
                 <div className='row'>
                     <div className='home-page-btn-rack col-lg-5 col-md-8 col-sm-12'>
                         <button type='button' className='btn btn-primary btn-lg m-1'>Create</button>
-                        <LoginBtn size='btn-lg' href='/login'/>
-                        <LogoutBtn size='btn-lg' href='/logout'/>
-                        <SignupBtn size='btn-lg' href='/signup' />
+                        {isAuthenticated ? null : <LoginBtn size='btn-lg' href='/login'/>}
+                        {isAuthenticated ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
+                        {isAuthenticated ? null : <SignupBtn size='btn-lg' href='/signup' />}
                     </div>
                 </div>
             </Jumbotron>
