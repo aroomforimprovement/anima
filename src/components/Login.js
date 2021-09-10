@@ -8,7 +8,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const Login = () => {
 
-    
     const putLogin = (login) => {
         console.log('putLogin'); 
         return fetch(`${apiUrl}login`, {
@@ -20,29 +19,27 @@ export const Login = () => {
             },
         })
         .then(response => {
-            if(response.ok){
-                console.log("response ok");
-                dispatch({type: 'setLogin', data: response});
-                return response;
-            }else{
-                var error = new Error('Error:'+
-                    response.status+':'+response.statusText);
-                    error.response = response;
-                    throw error;
-            }
-        }, error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-        })
-        .then(response => response.json())
-        .catch(error => {
+            if(response.ok){ return response;
+            }else{ 
+                dispatch({type: 'setIsFailed', data: true});
+                console.error("response not ok") }
+        }, error => { 
             dispatch({type: 'setIsFailed', data: true});
-            console.log('PUT Login:' + error.message);
-        })
-        .finally(response => dispatch({
-            type: 'setIsRegistered', 
-            data: true
-        }));
+            console.error("error fetching login");
+         }
+        )
+        .then(response => response.json())
+        .then(response => {   
+            dispatch(
+            {
+                type: 'setLogin', 
+                data: login
+            })
+        }
+        ).catch(error => { console.error(error)})
+        .finally(response =>{ 
+            dispatch({type: 'setIsRegistered', data: true})
+        });
     }
 
     const loginReducer = (state, action) => {
@@ -65,7 +62,11 @@ export const Login = () => {
                 return state;
             }
             case 'setLogin':{
-                return ({...state, logout: action.data});
+                console.dir('setLogin: ', action.data);
+                localStorage.setItem('userid', action.data.userid);
+                localStorage.setItem('username', action.data.username);
+                localStorage.setItem('email', action.data.email);
+                return ({...state, login: action.data, isRegistered: true});
             }
             default:
                 return state;
@@ -78,7 +79,6 @@ export const Login = () => {
         isSending: false,
         isRegistered: false,
         isFailed: false,
-        user: {},
         login: {},
     });
     
@@ -96,7 +96,7 @@ export const Login = () => {
         }else if(!state.isLoaded){
             dispatch({type: 'setIsLoaded', data: true});
         }else if(state.isLoaded && isAuthenticated && user &&  !state.isSending && !state.isFailed){
-            console.dir(user);
+            console.dir('useEffect, user: ', user);
             dispatch({type: 'setIsSending', data: true});
             dispatch({type: 'putLogin', data: { 
                 userid: user.sub.replace('auth0|', ''),
@@ -119,8 +119,9 @@ export const Login = () => {
         return(
             <Problem message={"It looks like there was a problem with your login"} />
         );
-    }else if(state.isRegistered){
+    }else if(state.isRegistered && localStorage.getItem('userid')){
         return(
+           // <Loading message="redirect blocked" />
             <Redirect to='/'/>
         );
     }
