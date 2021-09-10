@@ -3,6 +3,7 @@ import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
 import LoginBtn from './partials/LoginBtn';
 import LogoutBtn from './partials/LogoutBtn';
+import SignupBtn from './partials/SignupBtn';
 
 const Home = () => {
     return (
@@ -19,7 +20,8 @@ const Home = () => {
                     <div className='home-page-btn-rack col-lg-5 col-md-8 col-sm-12'>
                         <button type='button' className='btn btn-primary btn-lg m-1'>Create</button>
                         <LoginBtn size='btn-lg' href='/login'/>
-                        <LogoutBtn size='btn-lg' />
+                        <LogoutBtn size='btn-lg' href='/logout'/>
+                        <SignupBtn size='btn-lg' href='/signup' />
                     </div>
                 </div>
             </Jumbotron>
