@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^5.1.1",
     "chai": "^4.3.4",
+    "font-awesome": "^4.7.0",
     "hooks-for-redux": "^2.0.3",
     "mocha": "^9.1.1",
     "mocha-jsdom": "^2.0.0",

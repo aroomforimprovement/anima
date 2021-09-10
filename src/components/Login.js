@@ -1,9 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Loading } from './partials/Loading';
+import { Problem } from './partials/Problem';
+import { Redirect } from 'react-router';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const Login = () => {
+
+    
     const putLogin = (login) => {
         console.log('putLogin'); 
         return fetch(`${apiUrl}login`, {
@@ -15,13 +20,9 @@ export const Login = () => {
             },
         })
         .then(response => {
-            console.log("then");
             if(response.ok){
                 console.log("response ok");
-                dispatch({
-                    type: 'setIsRegistered', 
-                    data: true
-                })
+                dispatch({type: 'setLogin', data: response});
                 return response;
             }else{
                 var error = new Error('Error:'+
@@ -34,13 +35,15 @@ export const Login = () => {
             throw errmess;
         })
         .then(response => response.json())
-        .then(response => console.log("redirect, I guess", response))
         .catch(error => {
             dispatch({type: 'setIsFailed', data: true});
             console.log('PUT Login:' + error.message);
-        });
+        })
+        .finally(response => dispatch({
+            type: 'setIsRegistered', 
+            data: true
+        }));
     }
-
 
     const loginReducer = (state, action) => {
         console.log(action.type+':'+action.data);
@@ -58,19 +61,17 @@ export const Login = () => {
                 return ({...state, isFailed: action.data});
             }
             case 'putLogin':{               
-                const data = {
-                    "userid": user.sub.replace('auth0|', ''),
-                    "email": user.email,
-                    "name": user.nickname 
-                }
-                putLogin(data);
-                return ({...state, isRegistered: true});
-                
+                putLogin(action.data);
+                return state;
+            }
+            case 'setLogin':{
+                return ({...state, logout: action.data});
             }
             default:
                 return state;
         }
     }
+
     const {user, isAuthenticated, isLoading} = useAuth0();
     const [state, dispatch] = useReducer(loginReducer, {
         isLoaded: false,
@@ -80,6 +81,8 @@ export const Login = () => {
         user: {},
         login: {},
     });
+    
+
     useEffect(() => {
         console.log("Login: useEffect");
         console.log('isSending: ' + state.isSending);
@@ -93,14 +96,36 @@ export const Login = () => {
         }else if(!state.isLoaded){
             dispatch({type: 'setIsLoaded', data: true});
         }else if(state.isLoaded && isAuthenticated && user &&  !state.isSending && !state.isFailed){
+            console.dir(user);
             dispatch({type: 'setIsSending', data: true});
-            dispatch({type: 'putLogin', data: user});
+            dispatch({type: 'putLogin', data: { 
+                userid: user.sub.replace('auth0|', ''),
+                email: user.email,
+                username: user.nickname
+            }});
         }
     }, [isLoading, user, isAuthenticated, state.isLoaded, 
         state.isSending, state.isRegistered, state.isFailed]);
-
+    
+    if(isLoading){
+        return(
+            <Loading message={"Loading authentication..."} />
+        );
+    }else if(state.isSending && !state.isFailed && !state.isRegistered){
+        return(
+            <Loading message={"Registering login..."} />
+        );
+    }else if(state.isFailed){
+        return(
+            <Problem message={"It looks like there was a problem with your login"} />
+        );
+    }else if(state.isRegistered){
+        return(
+            <Redirect to='/'/>
+        );
+    }
     return(
-        <div><h1>here</h1></div>
+        <Loading message={"Something something..."} />
     )
 }
 
