@@ -12,9 +12,21 @@ code {
     monospace;
 }
 
-.auth-nav {
+.site-header {
   position: absolute;
-  right: 1em;
+  top: 1em;
+}
+
+.nav-area {
+  width: 100%;  
+}
+
+.auth-nav {
+  border-color: black;
+}
+
+.site-footer {
+  padding-top: 5em;
 }
 
 .home-page-heading {

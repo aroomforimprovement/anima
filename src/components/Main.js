@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect, withRouter, useHistory } from 'react-router-dom';
 import Header from './partials/Header';
+import Footer from './partials/Footer';
 import Home from './Home';
 import Login from './Login';
 import Logout from './Logout';
@@ -35,6 +36,7 @@ const Main = () => {
                     
                     <Redirect to='./home' />
                 </Switch>
+                <Footer />
             </div>
         );
 }
