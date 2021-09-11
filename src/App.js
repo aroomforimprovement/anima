@@ -12,7 +12,7 @@ class App extends Component {
         <BrowserRouter>
           <Auth0ProviderWithHistory>
               <div className='App'>
-                <Main />
+                <Main className='main'/>
               </div>
           </Auth0ProviderWithHistory>
         </BrowserRouter>

@@ -26,45 +26,45 @@ const Header = ({isAuthenticated}) => {
     }
 
     return(
-        <div className='nav-area'>
-            <Navbar  light expand="md">
-                <div className='container float-end'>
+        <div className='nav-area col-12'>
+            <Navbar dark expand='md'>
+                <div className='container'>
                     <NavbarToggler onClick={toggleNav} /> 
                     <NavbarBrand className='mr-auto' href='/'>
                         <img src={logo} height='40px' width='40px'
                             alt={SITE.name}/>
                     </NavbarBrand>            
                     <Collapse isOpen={state.isNavOpen} navbar>
-                        <Nav navbar>
-                            <div className='nav'>
-                                <NavItem className='nav-item'>
-                                    <NavLink className='nav-link' to='/create'>
-                                        <span className='fa fa-paint-brush fa-md m-1'></span> Create
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem className='nav-item'>
-                                    <NavLink className='nav-link' to='/collection'>
-                                        <span className='fa fa-star fa-md m-1'></span> Collection
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem className='nav-item'>
-                                    <NavLink className='nav-link' to='/browse'>
-                                        <span className='fa fa-eye fa-md m-1'></span> Browse
-                                    </NavLink>
-                                </NavItem>
-                            </div>
-                            <div className='nav auth-nav ms-5 me-0'>
-                                <NavItem className='nav-item'>
-                                    {isAuthenticated ? null : <LoginBtn size='btn-md' href='/login' />}
-                                </NavItem>
-                                <NavItem className='nav-item'>
-                                    {isAuthenticated ? <LogoutBtn size='btn-md' href='/logout' /> : null}
-                                </NavItem>
-                                <NavItem className='nav-item'>
-                                    {isAuthenticated ? null : <SignupBtn size='btn-md' href='/signup' />}
-                                </NavItem>
-                            </div>
+                        <Nav className='col-10 col-md-9' navbar>
+                            <NavItem className='nav-item nav-i'>
+                                <NavLink className='nav-link' to='/create'>
+                                    <span className='fa fa-paint-brush fa-md m-1'></span> Create
+                                </NavLink>
+                            </NavItem>
+                            <NavItem className='nav-item nav-i'>
+                                <NavLink className='nav-link' to='/collection'>
+                                    <span className='fa fa-film fa-md m-1'></span> Collection
+                                </NavLink>
+                            </NavItem>
+                            <NavItem className='nav-item nav-i'>
+                                <NavLink className='nav-link' to='/browse'>
+                                    <span className='fa fa-eye fa-md m-1'></span> Browse
+                                </NavLink>
+                            </NavItem>
                         </Nav>
+                        <div className='auth-nav-wrapper'>
+                            <Nav className='auth-nav' navbar >
+                                <NavItem className='nav-item nav-i'>
+                                    {isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
+                                </NavItem>
+                                <NavItem className='nav-item nav-i'>
+                                    {isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
+                                </NavItem>
+                                <NavItem className='nav-item nav-i'>
+                                    {isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
+                                </NavItem>
+                            </Nav>
+                        </div>
                     </Collapse>
                 </div>
             </Navbar>
