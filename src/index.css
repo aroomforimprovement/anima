@@ -76,3 +76,9 @@ body > #root > div {
   padding-bottom: 1em;
   display: block;
 }
+
+/** controls */
+
+.controller button, .btn-full-cond {
+  width: 100%;
+}
