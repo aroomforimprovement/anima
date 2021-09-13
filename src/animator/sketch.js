@@ -1,18 +1,24 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-
+import { initialCreateState } from './values';
 
 export const sketch = (p5) => {
-    let pen = { pc: null, ps: 5, mode: 101 };
-    
+    let state = values.initialCreateState;
+    let dispatch;
     /**
      *  P5
      */
     p5.setup = () => {
         p5.createCanvas(600, 600);
         p5.background(values.backgroundColour);
-        pen.pc = getPenColour(values.penWhite);
+        state.pc = getPenColour(values.penWhite);
     }
+
+    p5.updateWithProps = (props) => {
+        state = props.create;
+        dispatch = props.dispatch;
+    }
+
     p5.draw = () => {
         
     }
@@ -57,7 +63,7 @@ export const sketch = (p5) => {
      */
 
     const drawPoint = (p) => {
-        console.log("pen.drawPoint:"+JSON.stringify(p));
+        console.log("drawPoint:"+JSON.stringify(p));
         p5.stroke(p.pc);
         p5.fill(p.pc);
         switch(p.m)
@@ -90,6 +96,8 @@ export const sketch = (p5) => {
             let p = getPointObj(x, y);
             //points push!;
             drawPoint(p);
+        }else{
+            console.log("point not on canvas");
         }
     }
 
@@ -106,9 +114,9 @@ export const sketch = (p5) => {
         return {
             x : x,
             y : y,
-            pc: pen.pc.toString(),
-            ps: pen.ps,
-            m: pen.mode
+            pc: state.pc.toString(),
+            ps: state.ps,
+            m: state.mode
         }
     }
 
@@ -127,7 +135,7 @@ export const sketch = (p5) => {
      */
 
     const setMode = (controlObj) => {
-        pen.mode = controlObj.v;
+        state.mode = controlObj.v;
     }
 
 }

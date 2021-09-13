@@ -1,52 +1,61 @@
-import React from 'react';
+import React, { useContext, useState, useReducer } from 'react';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { SITE } from '../../shared/site';
+import { useCreateContext } from '../Create';
+import { CC } from '../../animator/controls';
 
-export const ControllerDropdown = ({title, classes, iSrc, btnList, disable, enable}) => {
-    const c = `btn btn-sm btn-full-cond ${classes} dropdown-toggle`;
+
+export const ControllerDropdownItem = ({title, classes, func, iSrc, text}) => {
+    const c = `btn btn-sm btn-ctl btn-full-cond dropdown-item`;
     return(
-        <div className='btn-group dropdown' onmouseover={disable} onmouseout={enable} >
-            <button className={c} title={title} type='button' data-toggle='dropdown' data-bs-toggle='dropdown' aria-expanded='false'>
-                <img src={iSrc} alt={title} />
-            </button>
-            <ul class='dropdown-menu list-unstyled'>
-                {btnList}
-            </ul>
-        </div>
+        <DropdownItem className={c} title={title} 
+            onClick={func} >
+            <img src={iSrc} alt={title} />
+            <span className='menu-text' ></span> {text}       
+        </DropdownItem>
     );
 }
 
-export const ControllerBtn = ({title, classes, func, disable, enable, iSrc, text}) => {
-    const c = `btn btn-sm btn-ctl btn-full-cond ${classes}`;
+export const ModeDropdown = () => {
+    const { create, dispatch } = useCreateContext();
+    const handle = (val) => {
+        dispatch({ type: 'MODE', data: val });
+    }
+    
     return(
-        <div>
-            <button className={c} title={title} 
-                onClick={func} onmouseover={disable} onmouseout={enable}>
-                <img src={iSrc} alt={title} />
-                <span className='menu-text' ></span> {text}       
-            </button>
-        </div>
-    );
-}
-
-export const ModeList = ({enable, disable}) => {
-
-    return(
-        <div>
-            <li>
-                <ControllerBtn 
-                    title='SINGLE mode' classes='dropdown-item' 
-                    func='setMode(CC.SINGLE)' enable={enable} disable={disable}
+        <DropdownMenu>
+                <ControllerDropdownItem 
+                    title='SINGLE mode' func={() => handle(CC.SINGLE)}
                     iSrc={SITE.icons.single} text='SINGLE'/>
-            </li>
-        </div>
+                <ControllerDropdownItem 
+                    title='MIRROR mode' func={() => handle(CC.MIRROR)}
+                    iSrc={SITE.icons.mirror} text='MIRROR'/>
+                <ControllerDropdownItem 
+                    title='LAKE mode' func={() => handle(CC.LAKE)}
+                    iSrc={SITE.icons.lake} text='LAKE'/>
+                <ControllerDropdownItem 
+                    title='QUAD mode' func={() => handle(CC.QUAD)}
+                    iSrc={SITE.icons.quad} text='QUAD'/>
+                
+                
+                
+        </DropdownMenu>        
     );
+    
 }
 
-export const ModeDropdown = ({enable, disable}) => {
-    const modeList = <ModeList enable={enable} disable={disable}/>
+
+export const Mode = () => {
+
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+
     return(
-        <ControllerDropdown 
-            title='Drawing Mode' classes='btn-outline-secondary'
-            iSrc={SITE.icons.drawingMode}  btnList={modeList}/>
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle >
+                Mode
+            </DropdownToggle>
+            <ModeDropdown />
+        </Dropdown>
     );
 }
