@@ -6,6 +6,7 @@ export const values = {
     initialCreateState: {
         mode: CC.SINGLE,
         pc: [200, 200, 200, 200],
-        ps: 5,
+        ps: CC.PS_2,
+        enabled: true,
     }
 }

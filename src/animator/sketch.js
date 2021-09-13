@@ -24,10 +24,19 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        setPointDrawn(p5.mouseX, p5.mouseY)
+        if(state.enabled){
+            setPointDrawn(p5.mouseX, p5.mouseY);
+        }else{
+            console.log("DISABLED");
+        }
     }
     p5.touchMoved = () => {
-        setPointDrawn(p5.mouseX, p5.mouseY);
+        console.log("STATE ENABLED: "+state.enabled);
+        if(state.enabled){
+            setPointDrawn(p5.mouseX, p5.mouseY);
+        }else{
+            console.log("DISABLED");
+        }
     }
 
     p5.keyPressed = () => {
@@ -51,7 +60,10 @@ export const sketch = (p5) => {
         switch(controlObj.t){
             case CC.TYPE_MODE:
                 setMode(controlObj);
-            break;
+                break;
+            case CC.TYPE_SIZE:
+                setPenSize(controlObj);
+                break;
             default:
                 console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
         }
@@ -135,8 +147,11 @@ export const sketch = (p5) => {
      */
 
     const setMode = (controlObj) => {
-        state.mode = controlObj.v;
+        dispatch({type: 'MODE', data: controlObj.v});
+    }
+
+    const setPenSize = (controlObj) => {
+        dispatch({type: 'PS', data: controlObj.size});
     }
 
 }
-

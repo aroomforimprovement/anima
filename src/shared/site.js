@@ -8,5 +8,6 @@ export const SITE = {
         "mirror": process.env.REACT_APP_URL + '/assets/mode-mirror.svg',
         "lake": process.env.REACT_APP_URL + '/assets/mode-lake.svg',
         "quad": process.env.REACT_APP_URL + '/assets/mode-mandala.svg',
+        "penSize": process.env.REACT_APP_URL + '/assets/pen-size.svg',
     }
 }

@@ -80,5 +80,10 @@ body > #root > div {
 /** controls */
 
 .controller button, .btn-full-cond {
-  width: 100%;
+  /**width: 100%;*/
+}
+
+.btn-ctl {
+  border-radius: 5px;
+  border-color:rgb(42, 42, 42);
 }

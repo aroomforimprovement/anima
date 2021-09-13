@@ -16,10 +16,24 @@ export const useCreateContext = () => {
 const Create = () => {
 
     const createReducer = (state, action) => {
-        console.log(action.type+':'+action.data);
+        //console.log(action.type+':'+action.data);
         switch(action.type){
+            case 'DISABLE':{
+                console.log("Disable");
+                return ({...state, enabled: false});
+            }
+            case 'ENABLE':{
+                console.log("Enable");
+                return ({...state, enabled: true});
+            }
             case 'MODE':{
                 return ({...state, mode: action.data});
+            }
+            case 'PC':{
+                return ({...state, pc: action.data})
+            }
+            case 'PS':{
+                return ({...state, ps: action.data});
             }
             default:
                 return state;
