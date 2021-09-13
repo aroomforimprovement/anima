@@ -30,7 +30,7 @@ const Main = () => {
                     <Route path='/home' history={history} component={HomePage} />
                     <Route path='/login' history={history} component={LoginPage} />
                     <Route path='/logout' history={history} component={LogoutPage} />
-                    <Route path='/create' history={history} component={CreatePage} />
+                    <Route exact path='/create' history={history} component={CreatePage} />
                     <Route path='/collection' history={history} component={CollectionPage} />
                     <Route path='/browse' history={history} component={BrowsePage} />
                     

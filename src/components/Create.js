@@ -3,7 +3,7 @@ import { Problem } from './partials/Problem';
 import Controller from './partials/Controller';
 import { Jumbotron } from 'reactstrap';
 import { Creation } from './partials/Creation';
-import { creator } from '../sketches/creator';
+import { sketch } from '../animator/sketch';
 
 
 const Create = () => {
@@ -15,10 +15,11 @@ const Create = () => {
         <div>
             <Jumbotron >
                 <Controller />
-                <Creation sketch={creator} />
+                <Creation sketch={sketch} />
             </Jumbotron>
         </div>
     );
+
 }
 
 export default Create;
