@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';
 import { CC } from '../../animator/controls';
 
 
-const ControllerDropdownItem = ({title, classes, func, iSrc, text}) => {
-    const c = `btn btn-sm`;
+const ControllerDropdownItem = ({title, func, iSrc, text}) => {
     return(
-        <DropdownItem className={c} title={title} 
+        <DropdownItem title={title} 
             onClick={func} >
             <img src={iSrc} alt={title} />
             <span className='menu-text' ></span> {text}       
@@ -47,7 +46,7 @@ export const Mode = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
-            <DropdownToggle className='btn btn-sm btn-outline-secondary col-1'>
+            <DropdownToggle >
                 <img src={SITE.icons.drawingMode} alt='Drawing Mode'/>
             </DropdownToggle>
             <ModeDropdown />
@@ -94,7 +93,7 @@ export const PenSize = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-outline-secondary col-1 btn-sm'>
+            <DropdownToggle >
                 <img src={SITE.icons.penSize} alt='Pen size'/>
             </DropdownToggle>
             <PenSizeDropdown />
@@ -152,7 +151,7 @@ export const PenColour = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-outline-secondary btn-sm'>
+            <DropdownToggle >
                 <img src={SITE.icons.penColour} alt='Pen size'/>
             </DropdownToggle>
             <PenColourDropdown />
@@ -199,7 +198,7 @@ export const FrameRate = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-outline-secondary btn-sm'>
+            <DropdownToggle >
                 <img src={SITE.icons.frate} alt='Frame rate'/>
             </DropdownToggle>
             <FrameRateDropdown />
@@ -215,10 +214,10 @@ const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     }
     return(
         <div >
-            <button type='button' className='btn btn-outline-secondary col-1 btn-sm' 
+            <Button type='button' 
                 title={btnText} onClick={() => handle()}>
                 <img src={icon} alt={btnText} />
-            </button>
+            </Button>
         </div>
     );
 

@@ -1,19 +1,20 @@
 import React from 'react';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate } from './ControllerBtns';
+import { ButtonGroup } from 'reactstrap';
 
 const Controller = ({create}) => {
 
     return(
-        <div className='container controller justify-content-center' >
+        <div className='container controller' >
             <p>Control panel</p>
-            <div className="row">
+            <ButtonGroup>
                 <Mode />
                 <PenSize />
                 <PenColour />
                 <Undo />
                 <Redo />
                 <FrameRate />
-            </div>
+            </ButtonGroup>
         </div>
     );
 }
