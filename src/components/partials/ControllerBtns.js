@@ -1,12 +1,13 @@
-import React, { useContext, useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { SITE } from '../../shared/site';
+import { values } from '../../animator/values';
 import { useCreateContext } from '../Create';
-import { CC, CONTROLS } from '../../animator/controls';
+import { CC } from '../../animator/controls';
 
 
 const ControllerDropdownItem = ({title, classes, func, iSrc, text}) => {
-    const c = `btn btn-sm btn-ctl btn-full-cond dropdown-item`;
+    const c = `btn btn-sm`;
     return(
         <DropdownItem className={c} title={title} 
             onClick={func} >
@@ -39,17 +40,14 @@ const ModeDropdown = () => {
                     iSrc={SITE.icons.quad} text='Quad'/>
         </DropdownMenu>        
     );
-    
 }
 
 export const Mode = () => {
-
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
-
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
-            <DropdownToggle className='btn btn-sm btn-outline-secondary btn-lg'>
+            <DropdownToggle className='btn btn-sm btn-outline-secondary col-1'>
                 <img src={SITE.icons.drawingMode} alt='Drawing Mode'/>
             </DropdownToggle>
             <ModeDropdown />
@@ -63,7 +61,6 @@ const PenSizeDropdown = () => {
         dispatch({ type: 'PS', data: val});
         dispatch({ type: 'ENABLE' });
     }
-
     return(
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
                 <ControllerDropdownItem 
@@ -95,13 +92,70 @@ const PenSizeDropdown = () => {
 export const PenSize = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
-
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-sm btn-outline-secondary btn-lg'>
+            <DropdownToggle className='btn btn-sm btn-outline-secondary col-1'>
                 <img src={SITE.icons.penSize} alt='Pen size'/>
             </DropdownToggle>
             <PenSizeDropdown />
+        </Dropdown>
+    );
+}
+
+const PenColourDropdown = () => {
+    const { dispatch } = useCreateContext();
+    const handle = (val) => {
+        dispatch({ type: 'PC', data: val});
+        dispatch({ type: 'ENABLE' });
+    }
+    return(
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+            <ControllerDropdownItem 
+                title='BG Solid' func={() => handle(values.bg_solid)}
+                iSrc={SITE.icons.penColour} text='BG Solid'/>
+            <ControllerDropdownItem 
+                title='BG Shade' func={() => handle(values.bg_shade)}
+                iSrc={SITE.icons.penColour} text='BG Shade'/>
+            <ControllerDropdownItem 
+                title='FG Solid' func={() => handle(values.fg_solid)}
+                iSrc={SITE.icons.penColour} text='FG Solid'/>
+            <ControllerDropdownItem 
+                title='FG Shade' func={() => handle(values.fg_shade)}
+                iSrc={SITE.icons.penColour} text='FG Shade'/>
+            <ControllerDropdownItem 
+                title='Red' func={() => handle(values.red)}
+                iSrc={SITE.icons.penColour} text='Red'/>
+            <ControllerDropdownItem 
+                title='Green' func={() => handle(values.green)}
+                iSrc={SITE.icons.penColour} text='Green'/>
+            <ControllerDropdownItem 
+                title='Blue' func={() => handle(values.blue)}
+                iSrc={SITE.icons.penColour} text='Blue'/>
+            <ControllerDropdownItem 
+                title='Yellow' func={() => handle(values.yellow)}
+                iSrc={SITE.icons.penColour} text='Yellow'/>
+            <ControllerDropdownItem 
+                title='Cyan' func={() => handle(values.cyan)}
+                iSrc={SITE.icons.penColour} text='Cyan'/>
+            <ControllerDropdownItem 
+                title='Purple' func={() => handle(values.purple)}
+                iSrc={SITE.icons.penColour} text='Purple'/>
+            <ControllerDropdownItem 
+                title='Pink' func={() => handle(values.pink)}
+                iSrc={SITE.icons.penColour} text='Pink'/>
+        </DropdownMenu>  
+    );
+}
+
+export const PenColour = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle className='btn btn-sm btn-outline-secondary'>
+                <img src={SITE.icons.penColour} alt='Pen size'/>
+            </DropdownToggle>
+            <PenColourDropdown />
         </Dropdown>
     );
 }

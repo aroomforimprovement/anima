@@ -1,17 +1,17 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { initialCreateState } from './values';
 
 export const sketch = (p5) => {
     let state = values.initialCreateState;
     let dispatch;
+    let pc = [220, 220, 220, 200];
     /**
      *  P5
      */
     p5.setup = () => {
         p5.createCanvas(600, 600);
         p5.background(values.backgroundColour);
-        state.pc = getPenColour(values.penWhite);
+        p5.noStroke();
     }
 
     p5.updateWithProps = (props) => {
@@ -29,6 +29,7 @@ export const sketch = (p5) => {
         }else{
             console.log("DISABLED");
         }
+        return isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
     p5.touchMoved = () => {
         console.log("STATE ENABLED: "+state.enabled);
@@ -37,6 +38,7 @@ export const sketch = (p5) => {
         }else{
             console.log("DISABLED");
         }
+        return isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
 
     p5.keyPressed = () => {
@@ -76,8 +78,8 @@ export const sketch = (p5) => {
 
     const drawPoint = (p) => {
         console.log("drawPoint:"+JSON.stringify(p));
-        p5.stroke(p.pc);
-        p5.fill(p.pc);
+        //p5.stroke(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
+        p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
         switch(p.m)
         {
             case CC.SINGLE:
@@ -117,16 +119,13 @@ export const sketch = (p5) => {
      * 
      *  DRAWING OBJ UTILS 
      */
-     const getPenColour = (arr) => {
-        const c =  p5.color(arr[0], arr[1], arr[2], arr[3]);
-        return c;
-    }
+    
 
     const getPointObj = (x, y) => {
         return {
             x : x,
             y : y,
-            pc: state.pc.toString(),
+            pc: state.pc,
             ps: state.ps,
             m: state.mode
         }
@@ -154,4 +153,25 @@ export const sketch = (p5) => {
         dispatch({type: 'PS', data: controlObj.size});
     }
 
+    const setPenColour = (controlObj) => {
+		console.log("Creation.setPenColour(" + controlObj.n + ")");
+		let colour;
+		switch(controlObj.v){
+			case CC.BG_SOLID:
+			colour = this.bgc;
+			break;
+			case CC.BG_SHADE:
+			colour = this.bgs;
+			break;
+			case CC.FG_SOLID:
+			colour = this.fgc;
+			break;
+			case CC.FG_SHADE:
+			colour = this.fgs;
+			break;
+			default:
+			colour = p5.color(controlObj.arr[0], controlObj.arr[1], controlObj.arr[2], controlObj.arr[3]);
+		}
+		dispatch({type: 'PC', data: colour});
+	}
 }

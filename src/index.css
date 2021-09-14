@@ -78,6 +78,9 @@ body > #root > div {
 }
 
 /** controls */
+.controller {
+
+}
 
 .controller button, .btn-full-cond {
   /**width: 100%;*/
@@ -87,3 +90,4 @@ body > #root > div {
   border-radius: 5px;
   border-color:rgb(42, 42, 42);
 }
+

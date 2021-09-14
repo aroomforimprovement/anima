@@ -1,14 +1,17 @@
 import React from 'react';
 import { sketch } from '../../animator/sketch';
-import { Mode, PenSize } from './ControllerBtns';
+import { Mode, PenColour, PenSize } from './ControllerBtns';
 
 const Controller = ({create}) => {
 
     return(
-        <div className='controller' >
+        <div className='container controller justify-content-center' >
             <p>Control panel</p>
-            <Mode create={create} />
-            <PenSize create={create} />
+            <div className="row">
+                <Mode  />
+                <PenSize />
+                <PenColour />
+            </div>
         </div>
     );
 }
