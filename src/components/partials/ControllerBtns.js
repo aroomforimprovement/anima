@@ -94,7 +94,7 @@ export const PenSize = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-sm btn-outline-secondary col-1'>
+            <DropdownToggle className='btn btn-outline-secondary col-1 btn-sm'>
                 <img src={SITE.icons.penSize} alt='Pen size'/>
             </DropdownToggle>
             <PenSizeDropdown />
@@ -152,10 +152,40 @@ export const PenColour = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
-            <DropdownToggle className='btn btn-sm btn-outline-secondary'>
+            <DropdownToggle className='btn btn-outline-secondary btn-sm'>
                 <img src={SITE.icons.penColour} alt='Pen size'/>
             </DropdownToggle>
             <PenColourDropdown />
         </Dropdown>
+    );
+}
+
+const ControllerBtn = ({dispatchType, btnText, icon}) =>{
+    const { dispatch } = useControlContext();
+    const handle = () => {
+        dispatch({type: dispatchType, data: true});
+    }
+    return(
+        <div >
+            <button type='button' className='btn btn-outline-secondary col-1 btn-sm' 
+                title={btnText} onClick={() => handle()}>
+                <img src={icon} alt={btnText} />
+            </button>
+        </div>
+    );
+
+}
+
+export const Undo = () => {
+    return(
+        <ControllerBtn dispatchType='UNDO' 
+            btnText={'Undo'} icon={SITE.icons.undo}/>
+    );
+}
+
+export const Redo = () => {
+    return(
+        <ControllerBtn dispatchType='REDO' 
+            btnText={'Redo'} icon={SITE.icons.redo}/>
     );
 }

@@ -16,7 +16,7 @@ export const useControlContext = () => {
 const Create = () => {
 
     const controlReducer = (state, action) => {
-        //console.log(action.type+':'+action.data);
+        console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DISABLE':{
                 console.log("Disable");
@@ -48,16 +48,15 @@ const Create = () => {
 
     const [ controls, dispatch ] = useReducer(controlReducer, values.initialControlState);
     const controlState = { controls, dispatch };
-    console.log("CONTROLS in CREATE:");
-    console.dir(controls);
+
     return(
         <div>
-            <Jumbotron >
-                <ControlContext.Provider value={controlState}>
-                    <Controller />
+            <ControlContext.Provider value={controlState}>
+                <Controller />
+                <Jumbotron >
                     <Creation sketch={sketch} />
-                </ControlContext.Provider>
-            </Jumbotron>
+                </Jumbotron>
+            </ControlContext.Provider>        
         </div>
     );
 

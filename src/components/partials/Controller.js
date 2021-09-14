@@ -1,6 +1,5 @@
 import React from 'react';
-import { sketch } from '../../animator/sketch';
-import { Mode, PenColour, PenSize } from './ControllerBtns';
+import { Mode, PenColour, PenSize, Undo, Redo } from './ControllerBtns';
 
 const Controller = ({create}) => {
 
@@ -8,9 +7,11 @@ const Controller = ({create}) => {
         <div className='container controller justify-content-center' >
             <p>Control panel</p>
             <div className="row">
-                <Mode  />
+                <Mode />
                 <PenSize />
                 <PenColour />
+                <Undo />
+                <Redo />
             </div>
         </div>
     );

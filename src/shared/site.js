@@ -9,6 +9,8 @@ export const SITE = {
         "lake": process.env.REACT_APP_URL + '/assets/mode-lake.svg',
         "quad": process.env.REACT_APP_URL + '/assets/mode-mandala.svg',
         "penSize": process.env.REACT_APP_URL + '/assets/pen-size.svg',
-        "penColour": process.env.REACT_APP_URL + '/assets/pen-colour.svg'
+        "penColour": process.env.REACT_APP_URL + '/assets/pen-colour.svg',
+        "undo": process.env.REACT_APP_URL + '/assets/undo.svg',
+        "redo": process.env.REACT_APP_URL + '/assets/redo.svg',
     }
 }

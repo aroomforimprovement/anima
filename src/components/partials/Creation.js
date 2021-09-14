@@ -16,41 +16,44 @@ export const Creation = ({sketch}) => {
     
     
     const animReducer = (state, action) => {
-        //console.log(action.type+':'+action.data);
+        console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DO_STROKE':{
-                let newUndo = state.undo;
-                newUndo.push(action.data);
-                return ({...state, undo: newUndo, 
+                let newUndos = state.undos;
+                newUndos.push(action.data);
+                return ({...state, undos: newUndos, 
                     redid: [], undid:[] });
             }
             case 'UNDO_STROKE':{
-                let newRedo = state.redo;
-                let newUndo = state.undo;
-                const undid = newUndo.pop();
-                newRedo.push(undid);
+                console.log("reached UNDO STROKE");
+                let newRedos = state.redos;
+                let newUndos = state.undos;
+                const undid = newUndos.pop();
+                newRedos.push(undid);
+                console.log("UNDID:");
+                console.dir(undid);
                 return ({ ...state, 
-                    redo: newRedo, undo: newUndo, 
+                    redos: newRedos, undos: newUndos, 
                     undid: undid, redid: []});
             }
             case 'REDO_STROKE':{
-                let newRedo = state.redo;
-                let newUndo = state.undo;
-                const redid = newRedo.pop();
-                newUndo.push(redid);
+                let newRedos = state.redos;
+                let newUndos = state.undos;
+                const redid = newRedos.pop();
+                newUndos.push(redid);
                 return ({ ...state, 
-                    redo: newRedo, undo: newUndo,
+                    redo: newRedos, undo: newUndos,
                     undid: [], redid: redid});
             }
             default:
+                console.log("reached DEFAULT");
                 return state;
         }
     }
     
     const [ anim, updateAnim ] = useReducer(animReducer, values.initialAnimState);
     const animState = { anim, updateAnim };
-    console.log("CONTROLS in CREATION:");
-    console.dir(controls);
+    
     return(
         <div>
             <ControlContext.Consumer> 

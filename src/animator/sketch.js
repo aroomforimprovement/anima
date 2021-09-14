@@ -1,6 +1,5 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { useImperativeHandle } from 'react';
 
 export const sketch = (p5) => {
     let controls = values.initialControlState;
@@ -20,8 +19,6 @@ export const sketch = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
-        console.log("CONTROLS: ");
-        console.dir(controls);
         console.log("PROP CONTROLS:");
         console.dir(props.controls);
         console.log("PROP ANIM: ");
@@ -33,10 +30,10 @@ export const sketch = (p5) => {
         
         if(controls.undo){
             dispatch({type: 'UNDO', data: false});
-            dispatch({type: 'UNDO_STROKE'});
+            updateAnim({type: 'UNDO_STROKE', data: true});
         }else if(controls.redo){
             dispatch({type: 'REDO', data: false});
-            dispatch({type: 'REDO_STROKE'});
+            updateAnim({type: 'REDO_STROKE'});
         }
         if(anim.redid.length > 0){
             //redraw stroke
@@ -80,7 +77,7 @@ export const sketch = (p5) => {
     }
 
     const handlePressed = (x, y) => {
-        if(controls.enabled && !isStroke){
+        if(controls.enabled && !isStroke && isPointOnCanvas(x,y)){
             return startStroke(x, y);
         }
         return false;
@@ -92,14 +89,14 @@ export const sketch = (p5) => {
     }
 
     const handleDragged = (x, y ) => {
-        if(controls.enabled && isStroke){
+        if(controls.enabled && isStroke && isPointOnCanvas(x,y)){
             return setPointDrawn(x, y);
         }
         return false;
     }
 
     const handleReleased = (x, y) => {
-        if(controls.enabled && isStroke){
+        if(controls.enabled && isStroke && isPointOnCanvas(x,y)){
             return endStroke(x, y);
         }
         return false;
@@ -146,7 +143,7 @@ export const sketch = (p5) => {
      */
 
     const drawPoint = (p) => {
-        console.log("drawPoint:"+JSON.stringify(p));
+        //console.log("drawPoint:"+JSON.stringify(p));
         //p5.stroke(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
         p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
         switch(p.m)
@@ -181,7 +178,8 @@ export const sketch = (p5) => {
             if(drawPoint(p)){
                 if(!isStroke){
                     //save and clear stroke
-                    updateAnim({type: 'DO_STROKE', data: p});   
+                    updateAnim({type: 'DO_STROKE', data: thisStroke});
+                    thisStroke = [];   
                 }
             }
             
@@ -227,7 +225,7 @@ export const sketch = (p5) => {
     }
 
     const setPenColour = (controlObj) => {
-		console.log("Creation.setPenColour(" + controlObj.n + ")");
+		//console.log("Creation.setPenColour(" + controlObj.n + ")");
 		let colour;
 		switch(controlObj.v){
 			case CC.BG_SOLID:
