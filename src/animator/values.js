@@ -12,6 +12,7 @@ export const values = {
         undo: false,
         redo: false,
         frate: 8,
+        wipe: false,
     },
     initialAnimState: {
         anim:{

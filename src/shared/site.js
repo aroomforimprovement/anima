@@ -13,5 +13,6 @@ export const SITE = {
         "undo": process.env.REACT_APP_URL + '/assets/undo.svg',
         "redo": process.env.REACT_APP_URL + '/assets/redo.svg',
         "frate": process.env.REACT_APP_URL + '/assets/frame-rate.svg',
+        "wipe": process.env.REACT_APP_URL + '/assets/wipe-frame.svg',
     }
 }

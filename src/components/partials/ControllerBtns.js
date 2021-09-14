@@ -206,6 +206,34 @@ export const FrameRate = () => {
     );
 }
 
+export const WipeFrameDropdown = () => {
+    const { dispatch } = useControlContext();
+    const handle = () => {
+        dispatch({type: 'WIPE', data: true});
+        dispatch({type: 'ENABLE'});
+    }
+    return(
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <ControllerDropdownItem className='btn btn-danger'
+            title='Confirm frame wipe' func={() => handle()}
+            iSrc={SITE.icons.wipe} text="Wipe frame (can't be undone!)"/>
+        </DropdownMenu>
+    );
+}
+
+export const WipeFrame = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle >
+                <img src={SITE.icons.wipe} alt='Frame rate'/>
+            </DropdownToggle>
+            <WipeFrameDropdown />
+        </Dropdown>
+    ); 
+}
+
 
 const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { dispatch } = useControlContext();

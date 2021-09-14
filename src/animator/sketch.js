@@ -42,6 +42,11 @@ export const sketch = (p5) => {
         if(props.controls.frate && anim.anim.frate && props.controls.frate !== anim.anim.frate){
             updateAnim({type: 'FRATE', data: props.controls.frate});
         }
+        if(props.controls.wipe){
+            dispatch({type: 'WIPE', data: false});
+            updateAnim({type: 'WIPE'});
+            wipeCurrentFrame();
+        }
     }
 
     p5.draw = () => {
@@ -184,6 +189,14 @@ export const sketch = (p5) => {
             }
             
             return isPointOnCanvas(x, y);
+    }
+
+    const wipeCurrentFrame = () => {
+        p5.background(values.initialBgc);
+        if(anim.lastFrame && anim.lastFrame.length > 0){
+            drawFrame(anim.bgFrame);
+        }
+        setBgOverlay();
     }
 
     const redrawCurrentFrame = () => {

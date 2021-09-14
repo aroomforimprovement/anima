@@ -1,21 +1,20 @@
 import React from 'react';
-import { Mode, PenColour, PenSize, Undo, Redo, FrameRate } from './ControllerBtns';
+import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
+    WipeFrame } from './ControllerBtns';
 import { ButtonGroup } from 'reactstrap';
 
 const Controller = ({create}) => {
 
     return(
-        <div className='container controller' >
-            <p>Control panel</p>
-            <ButtonGroup>
-                <Mode />
-                <PenSize />
-                <PenColour />
-                <Undo />
-                <Redo />
-                <FrameRate />
-            </ButtonGroup>
-        </div>
+        <ButtonGroup className='controller mt-1 mb-1' size='sm'>
+            <Mode />
+            <PenSize />
+            <PenColour />
+            <Undo />
+            <Redo />
+            <FrameRate />
+            <WipeFrame />
+        </ButtonGroup>
     );
 }
 

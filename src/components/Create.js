@@ -44,6 +44,9 @@ const Create = () => {
             case 'FRAME_RATE':{
                 return ({...state, frate: action.data});
             }
+            case 'WIPE':{
+                return ({...state, wipe: action.data})
+            }
             default:
                 return state;
         }
