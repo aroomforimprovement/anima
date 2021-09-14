@@ -1,13 +1,35 @@
-import { CC, CONTROLS }  from './controls';
+import { CC }  from './controls';
 
 export const values = {
     backgroundColour: [20, 20, 20, 200],
     penWhite: [220, 220, 220, 200],
-    initialCreateState: {
+    initialControlState: {
         mode: CC.SINGLE,
         pc: [200, 200, 200, 200],
         ps: CC.PS_2,
         enabled: true,
+        undo: false,
+        redo: false
+    },
+    initialAnimState: {
+        anim:{
+            "animid": null,
+            "userid": null,
+            "name": null,
+            "type": "animation",
+            "created": null,
+            "modified": null,
+            "frate": 8,
+            "size": 0,
+            "privacy": 0,
+            "frames": [],
+        },
+        points:[],
+        strokes:[],
+        undo:[],
+        redo:[],
+        undid:[],
+        redid:[],
     },
     red:  [185, 70, 70, 200],
     green: [70, 185, 70, 200],

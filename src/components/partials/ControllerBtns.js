@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
-import { useCreateContext } from '../Create';
+import { useControlContext } from '../Create';
 import { CC } from '../../animator/controls';
 
 
@@ -18,7 +18,7 @@ const ControllerDropdownItem = ({title, classes, func, iSrc, text}) => {
 }
 
 const ModeDropdown = () => {
-    const { dispatch } = useCreateContext();
+    const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'MODE', data: val });
         dispatch({ type: 'ENABLE' });
@@ -56,7 +56,7 @@ export const Mode = () => {
 }
 
 const PenSizeDropdown = () => {
-    const { dispatch } = useCreateContext();
+    const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'PS', data: val});
         dispatch({ type: 'ENABLE' });
@@ -103,7 +103,7 @@ export const PenSize = () => {
 }
 
 const PenColourDropdown = () => {
-    const { dispatch } = useCreateContext();
+    const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'PC', data: val});
         dispatch({ type: 'ENABLE' });

@@ -1,10 +1,15 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
+import { useImperativeHandle } from 'react';
 
 export const sketch = (p5) => {
-    let state = values.initialCreateState;
+    let controls = values.initialControlState;
     let dispatch;
-    let pc = [220, 220, 220, 200];
+    let anim = values.initialAnimState;
+    let updateAnim;
+    let thisStroke = [];
+    let isStroke = false;
+    
     /**
      *  P5
      */
@@ -15,8 +20,31 @@ export const sketch = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
-        state = props.create;
-        dispatch = props.dispatch;
+        console.log("CONTROLS: ");
+        console.dir(controls);
+        console.log("PROP CONTROLS:");
+        console.dir(props.controls);
+        console.log("PROP ANIM: ");
+        console.dir(props.anim);
+        if(props.controls){ controls = props.controls; }
+        if(props.dispatch){ dispatch = props.dispatch; }
+        if(props.anim){ anim = props.anim; }
+        if(props.updateAnim){ updateAnim = props.updateAnim; }
+        
+        if(controls.undo){
+            dispatch({type: 'UNDO', data: false});
+            dispatch({type: 'UNDO_STROKE'});
+        }else if(controls.redo){
+            dispatch({type: 'REDO', data: false});
+            dispatch({type: 'REDO_STROKE'});
+        }
+        if(anim.redid.length > 0){
+            //redraw stroke
+            console.log("redraw stroke");
+        }else if(anim.undid.length > 0){
+            //undraw stroke
+            console.log("undraw stroke");
+        }
     }
 
     p5.draw = () => {
@@ -24,21 +52,62 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        if(state.enabled){
-            setPointDrawn(p5.mouseX, p5.mouseY);
-        }else{
-            console.log("DISABLED");
+        return handlePressed(p5.mouseX, p5.mouseY);
+    }
+    p5.touchStarted = () => {
+        if(p5.touches.length === 1){
+            return handlePressed(p5.mouseX, p5.mouseY)
         }
-        return isPointOnCanvas(p5.mouseX, p5.mouseY);
+        return false;
+    }
+    p5.mouseDragged = () => {
+        return handleDragged(p5.mouseX, p5.mouseY);
     }
     p5.touchMoved = () => {
-        console.log("STATE ENABLED: "+state.enabled);
-        if(state.enabled){
-            setPointDrawn(p5.mouseX, p5.mouseY);
-        }else{
-            console.log("DISABLED");
+        if(p5.touches.length === 1){
+            return handleDragged(p5.mouseX, p5.mouseY);
         }
-        return isPointOnCanvas(p5.mouseX, p5.mouseY);
+        return false;
+    }
+    p5.mouseReleased = () => {
+        return handleReleased(p5.mouseX, p5.mouseY);
+    }
+    p5.touchEnded = () => {
+        if(p5.touches.length === 1){
+            return handleReleased(p5.mouseX, p5.mouseY);
+        }
+        return false;
+    }
+
+    const handlePressed = (x, y) => {
+        if(controls.enabled && !isStroke){
+            return startStroke(x, y);
+        }
+        return false;
+    }
+
+    const startStroke = (x, y) => {
+        isStroke = true;
+        return setPointDrawn(x, y);
+    }
+
+    const handleDragged = (x, y ) => {
+        if(controls.enabled && isStroke){
+            return setPointDrawn(x, y);
+        }
+        return false;
+    }
+
+    const handleReleased = (x, y) => {
+        if(controls.enabled && isStroke){
+            return endStroke(x, y);
+        }
+        return false;
+    }
+
+    const endStroke = (x, y) => {
+        isStroke = false;
+        return setPointDrawn(x, y);
     }
 
     p5.keyPressed = () => {
@@ -100,19 +169,23 @@ export const sketch = (p5) => {
 				p5.ellipse(p5.width - p.x, p.y, p.ps, p.ps);
                 break;
                 default:
-                    console.warn('drawing mode has been set to a an invalid value');        
+                    console.warn('drawing mode has been set to a an invalid value');
+                    return false;        
         }
-        
+        thisStroke.push(p);
+        return true;
     }
 
     const setPointDrawn = (x, y) => {
-        if(isPointOnCanvas(x, y)){
             let p = getPointObj(x, y);
-            //points push!;
-            drawPoint(p);
-        }else{
-            console.log("point not on canvas");
-        }
+            if(drawPoint(p)){
+                if(!isStroke){
+                    //save and clear stroke
+                    updateAnim({type: 'DO_STROKE', data: p});   
+                }
+            }
+            
+            return isPointOnCanvas(x, y);
     }
 
     /**
@@ -125,9 +198,9 @@ export const sketch = (p5) => {
         return {
             x : x,
             y : y,
-            pc: state.pc,
-            ps: state.ps,
-            m: state.mode
+            pc: controls.pc,
+            ps: controls.ps,
+            m: controls.mode
         }
     }
 

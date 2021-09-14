@@ -7,15 +7,15 @@ import { values } from '../animator/values';
 import { CC, CONTROLS }  from '../animator/controls';
 
 
-const CreateContext = createContext(values.initialControlState);
+export const ControlContext = createContext(values.initialControlState);
 
-export const useCreateContext = () => {
-    return useContext(CreateContext);
+export const useControlContext = () => {
+    return useContext(ControlContext);
 }
 
 const Create = () => {
 
-    const createReducer = (state, action) => {
+    const controlReducer = (state, action) => {
         //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DISABLE':{
@@ -35,21 +35,28 @@ const Create = () => {
             case 'PS':{
                 return ({...state, ps: action.data});
             }
+            case 'UNDO':{
+                return ({...state, undo: action.data});
+            }
+            case 'REDO':{
+                return ({...state, redo: action.data});
+            }
             default:
                 return state;
         }
     }
 
-    const [ create, dispatch ] = useReducer(createReducer, values.initialCreateState);
-    const providerState = {create, dispatch};
-
+    const [ controls, dispatch ] = useReducer(controlReducer, values.initialControlState);
+    const controlState = { controls, dispatch };
+    console.log("CONTROLS in CREATE:");
+    console.dir(controls);
     return(
         <div>
             <Jumbotron >
-                <CreateContext.Provider value={providerState}>
+                <ControlContext.Provider value={controlState}>
                     <Controller />
                     <Creation sketch={sketch} />
-                </CreateContext.Provider>
+                </ControlContext.Provider>
             </Jumbotron>
         </div>
     );
