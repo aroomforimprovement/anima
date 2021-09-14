@@ -14,7 +14,7 @@ export const sketch = (p5) => {
      */
     p5.setup = () => {
         p5.createCanvas(600, 600);
-        p5.background(values.backgroundColour);
+        p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
     }
 
@@ -35,12 +35,9 @@ export const sketch = (p5) => {
             dispatch({type: 'REDO', data: false});
             updateAnim({type: 'REDO_STROKE'});
         }
-        if(anim.redid && anim.redid.length > 0){
-            //redraw stroke
-            console.log("redraw stroke");
-        }else if(anim.undid && anim.undid.length > 0){
-            //undraw stroke
-            console.log("undraw stroke");
+        if((anim.redid && anim.redid.length > 0) ||
+            (anim.undid && anim.undid.length > 0)){
+            redrawCurrentFrame();
         }
     }
 
@@ -143,8 +140,6 @@ export const sketch = (p5) => {
      */
 
     const drawPoint = (p) => {
-        //console.log("drawPoint:"+JSON.stringify(p));
-        //p5.stroke(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
         p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
         switch(p.m)
         {
@@ -169,22 +164,59 @@ export const sketch = (p5) => {
                     console.warn('drawing mode has been set to a an invalid value');
                     return false;        
         }
-        thisStroke.push(p);
         return true;
     }
 
     const setPointDrawn = (x, y) => {
             let p = getPointObj(x, y);
             if(drawPoint(p)){
+                thisStroke.push(p);
                 if(!isStroke){
                     //save and clear stroke
                     updateAnim({type: 'DO_STROKE', data: thisStroke});
                     thisStroke = [];   
                 }
+            }else{
+                return false;
             }
             
             return isPointOnCanvas(x, y);
     }
+
+    const redrawCurrentFrame = () => {
+        p5.background(values.initialBgc);
+        if(anim.lastFrame && anim.lastFrame.length > 0){
+            drawFrame(anim.bgFrame);
+        }
+        if(anim.undos && anim.undos.length > 0){
+            drawFrame(anim.undos);
+        }
+    }
+
+    const drawFrame = (frame) => {
+        setBg();
+        frame.forEach((element) => {
+            drawStroke(element);
+        });
+    }
+
+    const drawStroke = (stroke) => {
+        stroke.forEach((element) => {
+            drawPoint(element);
+        });
+    }
+
+    const setBg = () => {
+        setBgOverlay();
+        if(anim.bgFrame && anim.bgFrame.length > 0){
+            drawFrame(anim.bgFrame)
+        }
+    }
+
+    const setBgOverlay = () => {
+        p5.background(values.bgc);
+    }
+
 
     /**
      * 
