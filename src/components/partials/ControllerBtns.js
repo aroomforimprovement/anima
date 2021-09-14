@@ -146,7 +146,7 @@ const PenColourDropdown = () => {
         </DropdownMenu>  
     );
 }
-
+ 
 export const PenColour = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
@@ -160,7 +160,55 @@ export const PenColour = () => {
     );
 }
 
-const ControllerBtn = ({dispatchType, btnText, icon}) =>{
+const FrameRateDropdown = () => {
+    const { dispatch } = useControlContext();
+    const handle = (val) => {
+        dispatch({ type: 'FRAME_RATE', data: val});
+        dispatch({ type: 'ENABLE' });
+    }
+    return(
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+                <ControllerDropdownItem 
+                    title='Frame rate 4' func={() => handle(4)}
+                    iSrc={SITE.icons.penSize} text='4'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 8' func={() => handle(8)}
+                    iSrc={SITE.icons.penSize} text='8'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 12' func={() => handle(12)}
+                    iSrc={SITE.icons.penSize} text='12'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 16' func={() => handle(16)}
+                    iSrc={SITE.icons.penSize} text='16'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 20' func={() => handle(20)}
+                    iSrc={SITE.icons.penSize} text='20'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 24' func={() => handle(24)}
+                    iSrc={SITE.icons.penSize} text='24'/>
+                <ControllerDropdownItem 
+                    title='Frame rate 28' func={() => handle(28)}
+                    iSrc={SITE.icons.penSize} text='28'/>
+        </DropdownMenu>  
+    );
+
+}
+
+export const FrameRate = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle className='btn btn-outline-secondary btn-sm'>
+                <img src={SITE.icons.frate} alt='Frame rate'/>
+            </DropdownToggle>
+            <FrameRateDropdown />
+        </Dropdown>
+    );
+}
+
+
+const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { dispatch } = useControlContext();
     const handle = () => {
         dispatch({type: dispatchType, data: true});
@@ -189,3 +237,27 @@ export const Redo = () => {
             btnText={'Redo'} icon={SITE.icons.redo}/>
     );
 }
+
+/**
+ * seems like this should work to abstract the dropdowns but
+ * it doesn't (menu opens but items don't respond to clicks)
+export const ControllerDropdown = ({ DropdownInstance, text, icon }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle className='btn btn-outline-secondary btn-sm'>
+                <img src={icon} alt={text}/>
+            </DropdownToggle>
+            <DropdownInstance />
+        </Dropdown>
+    );
+}
+export const PenColour = () => {
+    const ColourList = () => { return <PenColourDropdown /> }
+    return(
+        <ControllerDropdown DropdownInstance={ColourList}
+            text='Pen colour' icon={SITE.icons.penColour} />
+    );
+}
+*/

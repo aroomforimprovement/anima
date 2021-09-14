@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mode, PenColour, PenSize, Undo, Redo } from './ControllerBtns';
+import { Mode, PenColour, PenSize, Undo, Redo, FrameRate } from './ControllerBtns';
 
 const Controller = ({create}) => {
 
@@ -12,6 +12,7 @@ const Controller = ({create}) => {
                 <PenColour />
                 <Undo />
                 <Redo />
+                <FrameRate />
             </div>
         </div>
     );

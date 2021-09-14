@@ -35,9 +35,12 @@ export const sketch = (p5) => {
             dispatch({type: 'REDO', data: false});
             updateAnim({type: 'REDO_STROKE'});
         }
-        if((anim.redid && anim.redid.length > 0) ||
+        if((props.anim.redid && anim.redid.length > 0) ||
             (anim.undid && anim.undid.length > 0)){
             redrawCurrentFrame();
+        }
+        if(props.controls.frate && anim.anim.frate && props.controls.frate !== anim.anim.frate){
+            updateAnim({type: 'FRATE', data: props.controls.frate});
         }
     }
 

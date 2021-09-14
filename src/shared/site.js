@@ -12,5 +12,6 @@ export const SITE = {
         "penColour": process.env.REACT_APP_URL + '/assets/pen-colour.svg',
         "undo": process.env.REACT_APP_URL + '/assets/undo.svg',
         "redo": process.env.REACT_APP_URL + '/assets/redo.svg',
+        "frate": process.env.REACT_APP_URL + '/assets/frame-rate.svg',
     }
 }

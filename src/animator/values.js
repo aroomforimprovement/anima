@@ -10,7 +10,8 @@ export const values = {
         ps: CC.PS_2,
         enabled: true,
         undo: false,
-        redo: false
+        redo: false,
+        frate: 8,
     },
     initialAnimState: {
         anim:{

@@ -46,6 +46,9 @@ export const Creation = ({sketch}) => {
                     redos: newRedos, undos: newUndos,
                     undid: [], redid: redid ? redid : []});
             }
+            case 'FRATE':{
+                return ({...state, "anim": {...state["anim"], frate: action.data}});
+            }
             default:
                 console.log("reached DEFAULT");
                 return state;

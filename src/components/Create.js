@@ -19,11 +19,11 @@ const Create = () => {
         console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DISABLE':{
-                console.log("Disable");
+                //console.log("Disable");
                 return ({...state, enabled: false});
             }
             case 'ENABLE':{
-                console.log("Enable");
+                //console.log("Enable");
                 return ({...state, enabled: true});
             }
             case 'MODE':{
@@ -40,6 +40,9 @@ const Create = () => {
             }
             case 'REDO':{
                 return ({...state, redo: action.data});
+            }
+            case 'FRAME_RATE':{
+                return ({...state, frate: action.data});
             }
             default:
                 return state;
