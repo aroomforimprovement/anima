@@ -25,25 +25,26 @@ export const Creation = ({sketch}) => {
                     redid: [], undid:[] });
             }
             case 'UNDO_STROKE':{
-                console.log("reached UNDO STROKE");
                 let newRedos = state.redos;
                 let newUndos = state.undos;
                 const undid = newUndos.pop();
-                newRedos.push(undid);
-                console.log("UNDID:");
-                console.dir(undid);
+                if(undid){
+                    newRedos.push(undid);
+                }
                 return ({ ...state, 
                     redos: newRedos, undos: newUndos, 
-                    undid: undid, redid: []});
+                    undid: undid ? undid : [], redid: []});
             }
             case 'REDO_STROKE':{
                 let newRedos = state.redos;
                 let newUndos = state.undos;
                 const redid = newRedos.pop();
-                newUndos.push(redid);
+                if(redid){
+                    newUndos.push(redid);
+                }
                 return ({ ...state, 
-                    redo: newRedos, undo: newUndos,
-                    undid: [], redid: redid});
+                    redos: newRedos, undos: newUndos,
+                    undid: [], redid: redid ? redid : []});
             }
             default:
                 console.log("reached DEFAULT");

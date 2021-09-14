@@ -35,10 +35,10 @@ export const sketch = (p5) => {
             dispatch({type: 'REDO', data: false});
             updateAnim({type: 'REDO_STROKE'});
         }
-        if(anim.redid.length > 0){
+        if(anim.redid && anim.redid.length > 0){
             //redraw stroke
             console.log("redraw stroke");
-        }else if(anim.undid.length > 0){
+        }else if(anim.undid && anim.undid.length > 0){
             //undraw stroke
             console.log("undraw stroke");
         }

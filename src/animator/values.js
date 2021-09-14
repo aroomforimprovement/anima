@@ -1,7 +1,7 @@
 import { CC }  from './controls';
 
 export const values = {
-    backgroundColour: [20, 20, 20, 200],
+    backgroundColour: [20, 20, 20, 255],
     penWhite: [220, 220, 220, 200],
     initialControlState: {
         mode: CC.SINGLE,
@@ -24,8 +24,6 @@ export const values = {
             "privacy": 0,
             "frames": [],
         },
-        points:[],
-        strokes:[],
         undos:[],
         redos:[],
         undid:[],
