@@ -47,6 +47,15 @@ export const sketch = (p5) => {
             updateAnim({type: 'WIPE'});
             wipeCurrentFrame();
         }
+        if(props.controls.saveBg){
+            dispatch({type: 'SAVE_BG', data: false});
+            updateAnim({type: 'SAVE_BG'})
+        }
+        if(props.controls.drawBg){
+            dispatch({type: 'DRAW_BG', data: false});
+            updateAnim({type: 'DRAW_BG', data: true});
+            setBg();
+        }
     }
 
     p5.draw = () => {
@@ -202,15 +211,15 @@ export const sketch = (p5) => {
     const redrawCurrentFrame = () => {
         p5.background(values.initialBgc);
         if(anim.lastFrame && anim.lastFrame.length > 0){
-            drawFrame(anim.bgFrame);
+            drawFrame(anim.anim.bg);
         }
         if(anim.undos && anim.undos.length > 0){
+            setBg();
             drawFrame(anim.undos);
         }
     }
 
     const drawFrame = (frame) => {
-        setBg();
         frame.forEach((element) => {
             drawStroke(element);
         });
@@ -224,15 +233,14 @@ export const sketch = (p5) => {
 
     const setBg = () => {
         setBgOverlay();
-        if(anim.bgFrame && anim.bgFrame.length > 0){
-            drawFrame(anim.bgFrame)
+        if(anim.anim.bg && anim.anim.bg.length > 0){
+            drawFrame(anim.anim.bg);
         }
     }
 
     const setBgOverlay = () => {
         p5.background(values.bgc);
     }
-
 
     /**
      * 

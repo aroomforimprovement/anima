@@ -206,30 +206,36 @@ export const FrameRate = () => {
     );
 }
 
-export const WipeFrameDropdown = () => {
+export const BackgroundDropdown = () => {
     const { dispatch } = useControlContext();
-    const handle = () => {
-        dispatch({type: 'WIPE', data: true});
+    const handle = (val) => {
+        dispatch({type: val, data: true});
         dispatch({type: 'ENABLE'});
     }
     return(
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
-        <ControllerDropdownItem className='btn btn-danger'
-            title='Confirm frame wipe' func={() => handle()}
-            iSrc={SITE.icons.wipe} text="Wipe frame (can't be undone!)"/>
+            <ControllerDropdownItem 
+                title='Save background' func={() => handle('SAVE_BG')}
+                iSrc={SITE.icons.saveBg} text="Save this frame as background"/>
+            <ControllerDropdownItem 
+                title='Draw background' func={() => handle('DRAW_BG')}
+                iSrc={SITE.icons.drawBg} text="Clear frame and draw saved background"/>
+            <ControllerDropdownItem 
+                title='Wipe frame' func={() => handle('WIPE')}
+                iSrc={SITE.icons.wipe} text="Wipe frame (can't be undone!)"/>
         </DropdownMenu>
     );
 }
 
-export const WipeFrame = () => {
+export const Background = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
             <DropdownToggle >
-                <img src={SITE.icons.wipe} alt='Frame rate'/>
+                <img src={SITE.icons.bg} alt='Background'/>
             </DropdownToggle>
-            <WipeFrameDropdown />
+            <BackgroundDropdown />
         </Dropdown>
     ); 
 }

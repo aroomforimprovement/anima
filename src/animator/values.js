@@ -13,6 +13,8 @@ export const values = {
         redo: false,
         frate: 8,
         wipe: false,
+        saveBg: false,
+        drawBg: false,
     },
     initialAnimState: {
         anim:{
@@ -26,6 +28,7 @@ export const values = {
             "size": 0,
             "privacy": 0,
             "frames": [],
+            "bg":[]
         },
         undos:[],
         redos:[],

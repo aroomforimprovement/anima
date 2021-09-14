@@ -49,6 +49,15 @@ export const Creation = ({sketch}) => {
             case 'FRATE':{
                 return ({...state, "anim": {...state["anim"], frate: action.data}});
             }
+            case 'SAVE_BG':{
+                const bg = state.undos.length > 0 ? [...state.undos] : [];
+                return ({...state, 
+                    "anim": {...state["anim"], 
+                    bg: bg}});
+            }
+            case 'DRAW_BG':{
+                return (state);
+            }
             case 'WIPE':{
                 return ({...state, redos: [], undos: [], redid:[], undid:[]});
             }

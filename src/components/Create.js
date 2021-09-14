@@ -44,6 +44,12 @@ const Create = () => {
             case 'FRAME_RATE':{
                 return ({...state, frate: action.data});
             }
+            case 'SAVE_BG':{
+                return ({...state, saveBg: action.data});
+            }
+            case 'DRAW_BG':{
+                return ({...state, drawBg: action.data});
+            }
             case 'WIPE':{
                 return ({...state, wipe: action.data})
             }

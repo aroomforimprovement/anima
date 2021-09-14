@@ -14,5 +14,8 @@ export const SITE = {
         "redo": process.env.REACT_APP_URL + '/assets/redo.svg',
         "frate": process.env.REACT_APP_URL + '/assets/frame-rate.svg',
         "wipe": process.env.REACT_APP_URL + '/assets/wipe-frame.svg',
+        "bg": process.env.REACT_APP_URL + '/assets/bg.svg',
+        "saveBg": process.env.REACT_APP_URL + '/assets/save-bg.svg',
+        "drawBg": process.env.REACT_APP_URL + '/assets/draw-bg.svg',
     }
 }
