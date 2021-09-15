@@ -56,6 +56,11 @@ export const sketch = (p5) => {
             updateAnim({type: 'DRAW_BG', data: true});
             setBg();
         }
+        if(props.controls.next){
+            dispatch({type: 'NEXT', data: false});
+            updateAnim({type: 'NEXT', data: true});
+            setBg();
+        }
     }
 
     p5.draw = () => {

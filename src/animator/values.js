@@ -2,7 +2,7 @@ import { CC }  from './controls';
 
 export const values = {
     initialBgc: [20, 20, 20, 255],
-    bgc: [20, 20, 20, 200],
+    bgc: [20, 20, 20, 240],
     penWhite: [200, 200, 200, 200],
     initialControlState: {
         mode: CC.SINGLE,

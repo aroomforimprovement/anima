@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background } from './ControllerBtns';
+    Background, Next } from './ControllerBtns';
 import { ButtonGroup } from 'reactstrap';
 
 const Controller = ({create}) => {
@@ -14,6 +14,7 @@ const Controller = ({create}) => {
             <Redo />
             <FrameRate />
             <Background />
+            <Next />
         </ButtonGroup>
     );
 }

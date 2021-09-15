@@ -19,14 +19,21 @@ export const Creation = ({sketch}) => {
         console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DO_STROKE':{
-                let newUndos = state.undos;
-                newUndos.push(action.data);
+                let newUndos = [...state.undos];
+                let newRedos = [...state.redos];
+                let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
+                if(!isSameAsPrevious){
+                    newUndos.push(action.data);
+                }
+                if(state.undid.length > 0){
+                    newRedos = [];
+                }
                 return ({...state, undos: newUndos, 
-                    redid: [], undid:[] });
+                    redid: [], undid:[], redos: newRedos });
             }
             case 'UNDO_STROKE':{
-                let newRedos = state.redos;
-                let newUndos = state.undos;
+                let newRedos = [...state.redos];
+                let newUndos = [...state.undos];
                 const undid = newUndos.pop();
                 if(undid){
                     newRedos.push(undid);
@@ -36,8 +43,8 @@ export const Creation = ({sketch}) => {
                     undid: undid ? undid : [], redid: []});
             }
             case 'REDO_STROKE':{
-                let newRedos = state.redos;
-                let newUndos = state.undos;
+                let newRedos = [...state.redos];
+                let newUndos = [...state.undos];
                 const redid = newRedos.pop();
                 if(redid){
                     newUndos.push(redid);
@@ -60,6 +67,12 @@ export const Creation = ({sketch}) => {
             }
             case 'WIPE':{
                 return ({...state, redos: [], undos: [], redid:[], undid:[]});
+            }
+            case 'NEXT':{
+                const frame = state.undos.length > 0 ? [...state.undos] : [];
+                return ({...state, 
+                    anim:{...state["anim"],
+                    frames: [...state["anim"]["frames"], frame]}});
             }
             default:
                 console.log("reached DEFAULT");

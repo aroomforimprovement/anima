@@ -271,6 +271,13 @@ export const Redo = () => {
     );
 }
 
+export const Next = () => {
+    return(
+        <ControllerBtn dispatchType='NEXT'
+            btnText={'Next frame'} icon={SITE.icons.next} />
+    );
+}
+
 /**
  * seems like this should work to abstract the dropdowns but
  * it doesn't (menu opens but items don't respond to clicks)

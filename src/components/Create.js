@@ -51,7 +51,10 @@ const Create = () => {
                 return ({...state, drawBg: action.data});
             }
             case 'WIPE':{
-                return ({...state, wipe: action.data})
+                return ({...state, wipe: action.data});
+            }
+            case 'NEXT':{
+                return ({...state, next: action.data});
             }
             default:
                 return state;
