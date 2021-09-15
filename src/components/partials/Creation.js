@@ -63,7 +63,7 @@ export const Creation = ({sketch}) => {
                     bg: bg}});
             }
             case 'DRAW_BG':{
-                return (state);
+                return ({...state, undos: [], redos: [], undid: [], redid: []});
             }
             case 'WIPE':{
                 return ({...state, redos: [], undos: [], redid:[], undid:[]});
@@ -72,7 +72,9 @@ export const Creation = ({sketch}) => {
                 const frame = state.undos.length > 0 ? [...state.undos] : [];
                 return ({...state, 
                     anim:{...state["anim"],
-                    frames: [...state["anim"]["frames"], frame]}});
+                    frames: [...state["anim"]["frames"], frame]},
+                    undos: [], redos: [], undid: [], redid: [] 
+                });
             }
             default:
                 console.log("reached DEFAULT");

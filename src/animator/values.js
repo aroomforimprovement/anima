@@ -35,7 +35,6 @@ export const values = {
         undid:[],
         redid:[],
         lastFrame:[],
-        bgFrame:[],
     },
     red:  [185, 70, 70, 200],
     green: [70, 185, 70, 200],

@@ -54,12 +54,12 @@ export const sketch = (p5) => {
         if(props.controls.drawBg){
             dispatch({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
-            setBg();
+            drawBg();
         }
         if(props.controls.next){
             dispatch({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
-            setBg();
+            drawBg();
         }
     }
 
@@ -218,8 +218,8 @@ export const sketch = (p5) => {
         if(anim.lastFrame && anim.lastFrame.length > 0){
             drawFrame(anim.anim.bg);
         }
+        drawBg();
         if(anim.undos && anim.undos.length > 0){
-            setBg();
             drawFrame(anim.undos);
         }
     }
@@ -236,7 +236,7 @@ export const sketch = (p5) => {
         });
     }
 
-    const setBg = () => {
+    const drawBg = () => {
         setBgOverlay();
         if(anim.anim.bg && anim.anim.bg.length > 0){
             drawFrame(anim.anim.bg);
