@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import Controller from './partials/Controller';
+import { Controller, SaveController } from './partials/Controller';
 import { Jumbotron } from 'reactstrap';
 import { Creation } from './partials/Creation';
 import { sketch } from '../animator/sketch';
@@ -56,6 +56,9 @@ const Create = () => {
             case 'NEXT':{
                 return ({...state, next: action.data});
             }
+            case 'DOWNLOAD':{
+                return ({...state, download: action.data});
+            }
             default:
                 return state;
         }
@@ -71,6 +74,7 @@ const Create = () => {
                 <Jumbotron >
                     <Creation sketch={sketch} />
                 </Jumbotron>
+                <SaveController />
             </ControlContext.Provider>        
         </div>
     );

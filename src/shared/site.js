@@ -17,6 +17,7 @@ export const SITE = {
         "bg": process.env.REACT_APP_URL + '/assets/bg.svg',
         "saveBg": process.env.REACT_APP_URL + '/assets/save-bg.svg',
         "drawBg": process.env.REACT_APP_URL + '/assets/draw-bg.svg',
-        "next": process.env.REACT_APP_URL + '/assets/next-frame.svg'
+        "next": process.env.REACT_APP_URL + '/assets/next-frame.svg',
+        "download": process.env.REACT_APP_URL + '/assets/download.svg'
     }
 }

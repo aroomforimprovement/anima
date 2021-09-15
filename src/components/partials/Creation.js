@@ -58,9 +58,7 @@ export const Creation = ({sketch}) => {
             }
             case 'SAVE_BG':{
                 const bg = state.undos.length > 0 ? [...state.undos] : [];
-                return ({...state, 
-                    "anim": {...state["anim"], 
-                    bg: bg}});
+                return ({...state, bg: bg});
             }
             case 'DRAW_BG':{
                 return ({...state, undos: [], redos: [], undid: [], redid: []});
@@ -69,11 +67,16 @@ export const Creation = ({sketch}) => {
                 return ({...state, redos: [], undos: [], redid:[], undid:[]});
             }
             case 'NEXT':{
-                const frame = state.undos.length > 0 ? [...state.undos] : [];
+                const points = state.undos.length > 0 ? [...state.undos] : [];
+                const fid = state.fid; 
+                const newFid = state.fid + 1;
+                const animid = state.animid ? state.animid : '1234567890';
+                const bg = state.bg;
+                const frame = {fid: fid, animid: animid, points: points, bg: bg};
                 return ({...state, 
                     anim:{...state["anim"],
                     frames: [...state["anim"]["frames"], frame]},
-                    undos: [], redos: [], undid: [], redid: [] 
+                    undos: [], redos: [], undid: [], redid: [], fid: newFid 
                 });
             }
             default:

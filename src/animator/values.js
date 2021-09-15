@@ -15,6 +15,7 @@ export const values = {
         wipe: false,
         saveBg: false,
         drawBg: false,
+        download: false,
     },
     initialAnimState: {
         anim:{
@@ -28,13 +29,14 @@ export const values = {
             "size": 0,
             "privacy": 0,
             "frames": [],
-            "bg":[]
         },
         undos:[],
         redos:[],
         undid:[],
         redid:[],
+        bg:[],
         lastFrame:[],
+        fid: 0,
     },
     red:  [185, 70, 70, 200],
     green: [70, 185, 70, 200],

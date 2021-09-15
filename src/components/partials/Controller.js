@@ -1,9 +1,9 @@
 import React from 'react';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next } from './ControllerBtns';
+    Background, Next, Download } from './ControllerBtns';
 import { ButtonGroup } from 'reactstrap';
 
-const Controller = ({create}) => {
+export const Controller = () => {
 
     return(
         <ButtonGroup className='controller mt-1 mb-1' size='sm'>
@@ -19,4 +19,10 @@ const Controller = ({create}) => {
     );
 }
 
-export default Controller;
+export const SaveController = () => {
+    return(
+        <ButtonGroup className='controller mt-1 mb-1' size='sm'>
+            <Download />
+        </ButtonGroup>
+    );
+}

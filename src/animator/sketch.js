@@ -1,8 +1,16 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
 
+let CCapture;
+//import download from '@/../node_modules/ccapture.js/src/download.js' 
+//import '@/../node_modules/ccapture.js/src/gif.js'
+//import '@/../node_modules/ccapture.js/src/gif.worker.js'
+//import '@/../node_modules/ccapture.js/src/tar.js'
+//import '@/../node_modules/ccapture.js/src/Whammy.js'
+ 
+console.log(window);
 export const sketch = (p5) => {
-    let controls = values.initialControlState;
+    let controls = values.initialControlState; 
     let dispatch;
     let anim = values.initialAnimState;
     let updateAnim;
@@ -16,6 +24,7 @@ export const sketch = (p5) => {
         p5.createCanvas(600, 600);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
+        CCapture = window.CCapture;
     }
 
     p5.updateWithProps = (props) => {
@@ -60,6 +69,10 @@ export const sketch = (p5) => {
             dispatch({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
             drawBg();
+        }
+        if(props.controls.download){
+            dispatch({type: 'DOWNLOAD', data: false});
+            downloadAnimAsGif(anim.anim);
         }
     }
 
@@ -208,7 +221,7 @@ export const sketch = (p5) => {
     const wipeCurrentFrame = () => {
         p5.background(values.initialBgc);
         if(anim.lastFrame && anim.lastFrame.length > 0){
-            drawFrame(anim.bgFrame);
+            drawPoints(anim.bg);
         }
         setBgOverlay();
     }
@@ -216,16 +229,16 @@ export const sketch = (p5) => {
     const redrawCurrentFrame = () => {
         p5.background(values.initialBgc);
         if(anim.lastFrame && anim.lastFrame.length > 0){
-            drawFrame(anim.anim.bg);
+            drawPoints(anim.bg);
         }
         drawBg();
         if(anim.undos && anim.undos.length > 0){
-            drawFrame(anim.undos);
+            drawPoints(anim.undos);
         }
     }
 
-    const drawFrame = (frame) => {
-        frame.forEach((element) => {
+    const drawPoints = (points) => {
+        points.forEach((element) => {
             drawStroke(element);
         });
     }
@@ -238,8 +251,8 @@ export const sketch = (p5) => {
 
     const drawBg = () => {
         setBgOverlay();
-        if(anim.anim.bg && anim.anim.bg.length > 0){
-            drawFrame(anim.anim.bg);
+        if(anim.bg && anim.bg.length > 0){
+            drawPoints(anim.bg);
         }
     }
 
@@ -247,6 +260,47 @@ export const sketch = (p5) => {
         p5.background(values.bgc);
     }
 
+    /**
+     * 
+     *  DOWNLOAD / PREVIEW 
+     */
+    
+
+    const downloadAnimAsGif = async (a) => {
+        const capturer = new CCapture({format: 'gif',
+             workersPath: '/public/ccapture',
+             framerate: a.frate
+         });
+         capturer.start();
+         setBgOverlay();
+         setBgOverlay();
+         a.frames.forEach((f) => {
+            setFrameCaptured(f, capturer);
+         });
+         capturer.stop();
+         capturer.save((blob) => {
+            p5.saveAs(blob, anim.anim.name);
+         });
+     } 
+
+     const setFrameCaptured = async (f, capturer) => {
+         drawFrame(f, capturer)
+            .then((value) => {
+                let img = p5.get(0, 0, p5.width, p5.height);
+                img.loadPixels();
+                p5.image(img, 0, 0);
+                capturer.capture(document.getElementById('defaultCanvas0'))
+            }, (err) => { console.error(err)});
+     }
+     //uncaught rejection - fix this
+    const drawFrame = async (f) => {
+        return new Promise((resolve, reject) => {
+            setBgOverlay();
+            drawPoints(f.bg);
+            drawPoints(f.points);
+            resolve(true);
+        })
+    }
     /**
      * 
      *  DRAWING OBJ UTILS 
@@ -262,6 +316,8 @@ export const sketch = (p5) => {
             m: controls.mode
         }
     }
+
+
 
     /**
      *  LOGIC UTILS

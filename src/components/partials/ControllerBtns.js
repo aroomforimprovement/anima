@@ -278,6 +278,13 @@ export const Next = () => {
     );
 }
 
+export const Download = () => {
+    return(
+        <ControllerBtn dispatchType='DOWNLOAD'
+            btnText={'Download as gif'} icon={SITE.icons.download} />
+    );
+}
+
 /**
  * seems like this should work to abstract the dropdowns but
  * it doesn't (menu opens but items don't respond to clicks)
