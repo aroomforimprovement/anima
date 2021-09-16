@@ -96,6 +96,7 @@ export const Creation = ({sketch}) => {
                     <ReactP5Wrapper sketch={sketch} 
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim}
+                        id='animCanvas'
                         //onMouseOver={() => dispatch({type: 'ENABLE'})} 
                         //onMouseOut={() => dispatch({type: 'DISABLE'})} />
                     />

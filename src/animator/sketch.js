@@ -1,7 +1,10 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
+import { getByTitle } from '@testing-library/dom';
+import { saveAs } from 'file-saver';
 
 let CCapture;
+let Gif;
 //import download from '@/../node_modules/ccapture.js/src/download.js' 
 //import '@/../node_modules/ccapture.js/src/gif.js'
 //import '@/../node_modules/ccapture.js/src/gif.worker.js'
@@ -10,21 +13,26 @@ let CCapture;
  
 console.log(window);
 export const sketch = (p5) => {
+    let p5canvas = undefined;
     let controls = values.initialControlState; 
     let dispatch;
     let anim = values.initialAnimState;
     let updateAnim;
     let thisStroke = [];
     let isStroke = false;
-    
+    let capturer;
+    let gif;
     /**
      *  P5
      */
     p5.setup = () => {
-        p5.createCanvas(600, 600);
+        p5canvas = p5.createCanvas(600, 600);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
+        console.log(window);
         CCapture = window.CCapture;
+        Gif = window.GIF;
+
     }
 
     p5.updateWithProps = (props) => {
@@ -267,8 +275,8 @@ export const sketch = (p5) => {
     
 
     const downloadAnimAsGif = async (a) => {
-        const capturer = new CCapture({format: 'gif',
-             workersPath: '/public/ccapture',
+        capturer = new CCapture({format: 'gif',
+             workersPath: process.env.PUBLIC_URL + '/ccapture/',
              framerate: a.frate
          });
          capturer.start();
@@ -279,27 +287,24 @@ export const sketch = (p5) => {
          });
          capturer.stop();
          capturer.save((blob) => {
-            p5.saveAs(blob, anim.anim.name);
+             saveAs(blob, a.name);
          });
-     } 
+    
+    }
 
      const setFrameCaptured = async (f, capturer) => {
-         drawFrame(f, capturer)
-            .then((value) => {
-                let img = p5.get(0, 0, p5.width, p5.height);
+        drawFrame(f)
+                let img = p5.get(0, 0, 600, 600);
                 img.loadPixels();
                 p5.image(img, 0, 0);
-                capturer.capture(document.getElementById('defaultCanvas0'))
-            }, (err) => { console.error(err)});
+                capturer.capture(p5canvas.elt)
      }
-     //uncaught rejection - fix this
-    const drawFrame = async (f) => {
-        return new Promise((resolve, reject) => {
-            setBgOverlay();
-            drawPoints(f.bg);
-            drawPoints(f.points);
-            resolve(true);
-        })
+
+
+    const drawFrame = (f) => {
+        setBgOverlay();
+        drawPoints(f.bg);
+        drawPoints(f.points);
     }
     /**
      * 
@@ -363,3 +368,4 @@ export const sketch = (p5) => {
 		dispatch({type: 'PC', data: colour});
 	}
 }
+
