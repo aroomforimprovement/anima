@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { ControlContext, useControlContext } from '../Create';
+import { Preview } from './Preview';
 import { values } from '../../animator/values';
 
 
@@ -11,7 +13,7 @@ export const useAnimContext = () => {
 }
 
 export const Creation = ({sketch}) => {
-    
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const { controls, dispatch } = useControlContext();
     
     
@@ -79,6 +81,22 @@ export const Creation = ({sketch}) => {
                     undos: [], redos: [], undid: [], redid: [], fid: newFid 
                 });
             }
+            case 'PREVIEW':{
+                setIsPreviewOpen(true);
+                return({...state,
+                    isPreviewOpen: true});
+            }
+            case 'END_PREVIEW':{
+                setIsPreviewOpen(false);
+                return({...state,
+                    isPreviewOpen: false});
+            }
+            case 'PLAY_PREVIEW':{
+                return ({...state, 
+                    previewFile: URL.createObjectURL(action.data.blob), 
+                    previewName: action.data.name
+                });
+            }
             default:
                 console.log("reached DEFAULT");
                 return state;
@@ -87,6 +105,7 @@ export const Creation = ({sketch}) => {
     
     const [ anim, updateAnim ] = useReducer(animReducer, values.initialAnimState);
     const animState = { anim, updateAnim };
+    
     
     return(
         <div>
@@ -97,9 +116,18 @@ export const Creation = ({sketch}) => {
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim}
                         id='animCanvas'
-                        //onMouseOver={() => dispatch({type: 'ENABLE'})} 
-                        //onMouseOut={() => dispatch({type: 'DISABLE'})} />
+                        onMouseOver={() => dispatch({type: 'ENABLE'})} 
+                        onMouseOut={() => dispatch({type: 'DISABLE'})} 
                     />
+                    <Modal isOpen={isPreviewOpen} toggle={() => setIsPreviewOpen(true)}>
+                        <img src={anim.previewFile} alt={`Previewing ${anim.previewName}`}/>
+                        <ModalFooter>
+                            <p>{anim.previewName}</p>
+                            <Button size='sm' 
+                                onClick={() => dispatch({type: 'END_PREVIEW', data: true})}
+                            >Close</Button>
+                        </ModalFooter>
+                    </Modal >
                 </AnimContext.Provider>
                 )}
             </ControlContext.Consumer>

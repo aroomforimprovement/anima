@@ -16,6 +16,8 @@ export const values = {
         saveBg: false,
         drawBg: false,
         download: false,
+        preview: false,
+        endPreview: false,
     },
     initialAnimState: {
         anim:{
@@ -37,6 +39,7 @@ export const values = {
         bg:[],
         lastFrame:[],
         fid: 0,
+        isPreviewOpen: false,
     },
     red:  [185, 70, 70, 200],
     green: [70, 185, 70, 200],

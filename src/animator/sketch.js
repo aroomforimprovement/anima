@@ -80,7 +80,25 @@ export const sketch = (p5) => {
         }
         if(props.controls.download){
             dispatch({type: 'DOWNLOAD', data: false});
-            downloadAnimAsGif(anim.anim);
+            if(anim.anim.frames.length < 1){
+                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
+            }else{
+                downloadAnimAsGif(anim.anim);
+            }            
+        }
+        if(props.controls.preview){
+            dispatch({type: 'PREVIEW', data: false});
+            if(anim.anim.frames.length < 1){
+                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
+            }else{
+                updateAnim({type: 'PREVIEW', data: anim.anim});
+                dispatch({type: 'DISABLE', data: true});
+                previewAnim(anim.anim);
+            }
+        }
+        if(props.controls.endPreview){
+            dispatch({type: 'END_PREVIEW', data: false});
+            updateAnim({type: 'END_PREVIEW', data: false});
         }
     }
 
@@ -274,7 +292,15 @@ export const sketch = (p5) => {
      */
     
 
-    const downloadAnimAsGif = async (a) => {
+    const downloadAnimAsGif = (a) => {
+        renderAnim(a, 'DOWNLOAD');
+    }
+
+    const previewAnim = async (a) => {
+        renderAnim(a, 'PREVIEW');
+    }
+
+    const renderAnim = (a, type) => {
         capturer = new CCapture({format: 'gif',
              workersPath: process.env.PUBLIC_URL + '/ccapture/',
              framerate: a.frate
@@ -287,10 +313,20 @@ export const sketch = (p5) => {
          });
          capturer.stop();
          capturer.save((blob) => {
-             saveAs(blob, a.name);
+            if(type === 'PREVIEW'){
+                playPreview(blob, a.name);
+            }else if(type === 'DOWNLOAD'){
+                saveAs(blob, a.name);
+            }
          });
-    
     }
+
+    const playPreview = (blob, name) => {
+
+        updateAnim({type: 'PLAY_PREVIEW', data: {blob: blob, name: name}});
+    }
+
+    
 
      const setFrameCaptured = async (f, capturer) => {
         drawFrame(f)

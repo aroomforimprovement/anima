@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext } from 'react';
 import { Controller, SaveController } from './partials/Controller';
-import { Jumbotron } from 'reactstrap';
+import { Jumbotron, Modal } from 'reactstrap';
 import { Creation } from './partials/Creation';
 import { sketch } from '../animator/sketch';
 import { values } from '../animator/values';
@@ -58,6 +58,14 @@ const Create = () => {
             }
             case 'DOWNLOAD':{
                 return ({...state, download: action.data});
+            }
+            case 'PREVIEW':{
+                return ({...state, 
+                    preview: action.data,
+                    });
+            }
+            case 'END_PREVIEW':{
+                return ({...state, endPreview: action.data});
             }
             default:
                 return state;
