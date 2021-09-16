@@ -44,7 +44,13 @@ export const sketch = (p5) => {
         if(props.dispatch){ dispatch = props.dispatch; }
         if(props.anim){ anim = props.anim; }
         if(props.updateAnim){ updateAnim = props.updateAnim; }
-        
+        if(props.controls.enable){
+            dispatch({type: 'ENABLE', data: false});
+            updateAnim({type: 'ENABLED', data: true});
+        }else if(props.controls.disable){
+            dispatch({type: 'DISABLE', data: false});
+            updateAnim({type: 'ENABLED', data: false});
+        }
         if(controls.undo){
             dispatch({type: 'UNDO', data: false});
             updateAnim({type: 'UNDO_STROKE', data: true});
@@ -100,6 +106,10 @@ export const sketch = (p5) => {
             dispatch({type: 'END_PREVIEW', data: false});
             updateAnim({type: 'END_PREVIEW', data: false});
         }
+        if(props.controls.save){
+            dispatch({type: 'SAVE', data: false});
+            updateAnim({type: 'SAVE', data: true});
+        }
     }
 
     p5.draw = () => {
@@ -135,7 +145,7 @@ export const sketch = (p5) => {
     }
 
     const handlePressed = (x, y) => {
-        if(controls.enabled && !isStroke && isPointOnCanvas(x,y)){
+        if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
             return startStroke(x, y);
         }
         return false;
@@ -147,14 +157,14 @@ export const sketch = (p5) => {
     }
 
     const handleDragged = (x, y ) => {
-        if(controls.enabled && isStroke && isPointOnCanvas(x,y)){
+        if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
             return setPointDrawn(x, y);
         }
         return false;
     }
 
     const handleReleased = (x, y) => {
-        if(controls.enabled && isStroke && isPointOnCanvas(x,y)){
+        if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
             return endStroke(x, y);
         }
         return false;

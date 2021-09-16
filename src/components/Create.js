@@ -19,12 +19,10 @@ const Create = () => {
         console.log(action.type+':'+action.data);
         switch(action.type){
             case 'DISABLE':{
-                //console.log("Disable");
-                return ({...state, enabled: false});
+                return ({...state, disable: action.data});
             }
             case 'ENABLE':{
-                //console.log("Enable");
-                return ({...state, enabled: true});
+                return ({...state, enable: action.data});
             }
             case 'MODE':{
                 return ({...state, mode: action.data});
@@ -66,6 +64,9 @@ const Create = () => {
             }
             case 'END_PREVIEW':{
                 return ({...state, endPreview: action.data});
+            }
+            case 'SAVE':{
+                return ({...state, save: action.data});
             }
             default:
                 return state;

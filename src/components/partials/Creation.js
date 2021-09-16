@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ControlContext, useControlContext } from '../Create';
 import { Preview } from './Preview';
 import { values } from '../../animator/values';
@@ -14,12 +14,21 @@ export const useAnimContext = () => {
 
 export const Creation = ({sketch}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [isSaveOpen, setIsSaveOpen] = useState(false);
     const { controls, dispatch } = useControlContext();
+    
+    const saveAnimToAccount = (a) => {
+        console.log("saveAnimToAccount:");
+        console.dir(a);
+    }
     
     
     const animReducer = (state, action) => {
         console.log(action.type+':'+action.data);
         switch(action.type){
+            case 'ENABLED':{
+                return ({...state, enabled: action.data})
+            }
             case 'DO_STROKE':{
                 let newUndos = [...state.undos];
                 let newRedos = [...state.redos];
@@ -89,13 +98,30 @@ export const Creation = ({sketch}) => {
             case 'END_PREVIEW':{
                 setIsPreviewOpen(false);
                 return({...state,
-                    isPreviewOpen: false});
+                    isPreviewOpen: false, enabled: true});
             }
             case 'PLAY_PREVIEW':{
                 return ({...state, 
                     previewFile: URL.createObjectURL(action.data.blob), 
                     previewName: action.data.name
                 });
+            }
+            case 'NAME':{
+                return ({...state,
+                    anim: {...state["anim"], name: action.data}})
+            }
+            case 'SAVE':{
+                setIsSaveOpen(true);
+                return ({...state, enabled: false});
+            }
+            case 'SAVE_TO_ACCOUNT':{
+                saveAnimToAccount(state.anim);
+                setIsSaveOpen(false);
+                return ({...state, enabled: true});
+            }
+            case 'CANCEL_SAVE':{
+                setIsSaveOpen(false);
+                return({...state, enabled: true});
             }
             default:
                 console.log("reached DEFAULT");
@@ -106,6 +132,22 @@ export const Creation = ({sketch}) => {
     const [ anim, updateAnim ] = useReducer(animReducer, values.initialAnimState);
     const animState = { anim, updateAnim };
     
+
+
+    const handleSaveSubmission = (e) => {
+        updateAnim({type: 'SAVE_TO_ACCOUNT', data: true});
+        e.preventDefault();
+    }
+
+    const handleNameChange = (e) => {
+        console.log("handleNameChange: "+e.target.value);
+        updateAnim({type: 'NAME', data: e.target.value});
+    }
+
+    const handleCancelSave = (e) => {
+        updateAnim({type: 'CANCEL_SAVE', data: true});
+        e.preventDefault();
+    }
     
     return(
         <div>
@@ -116,11 +158,14 @@ export const Creation = ({sketch}) => {
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim}
                         id='animCanvas'
-                        onMouseOver={() => dispatch({type: 'ENABLE'})} 
-                        onMouseOut={() => dispatch({type: 'DISABLE'})} 
+                        onMouseOver={() => dispatch({type: 'ENABLE', data: true})} 
+                        onMouseOut={() => dispatch({type: 'DISABLE', data: true})} 
                     />
-                    <Modal isOpen={isPreviewOpen} toggle={() => setIsPreviewOpen(true)}>
-                        <img src={anim.previewFile} alt={`Previewing ${anim.previewName}`}/>
+                    <Modal isOpen={isPreviewOpen} toggle={() => setIsPreviewOpen(!isPreviewOpen)}
+                        onClose={() => {updateAnim ? updateAnim({type: 'ENABLED', data: true}): console.log('')}}
+                    
+                    >
+                        <img src={anim.previewFile} alt={`Previewing ${anim.previewName}`} />
                         <ModalFooter>
                             <p>{anim.previewName}</p>
                             <Button size='sm' 
@@ -128,6 +173,30 @@ export const Creation = ({sketch}) => {
                             >Close</Button>
                         </ModalFooter>
                     </Modal >
+
+                    <Modal isOpen={isSaveOpen} toggle={() => setIsSaveOpen(!isSaveOpen)}>
+                        <ModalHeader>Save your creation to your account</ModalHeader>
+                        <Form onSubmit={handleSaveSubmission}>
+                            <ModalBody>
+                                
+                                <FormGroup>
+                                    <Label for="name">Name your creation:</Label>
+                                    <Input type='text' id='name' name='name' autoFocus={true}
+                                        onChange={handleNameChange}/>
+                                </FormGroup>
+
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button className='btn btn-secondary'
+                                    onClick={handleCancelSave}
+                                >Cancel</Button>
+                                <Button className='btn btn-success'
+                                    type='submit' value='submit'
+                                    //onClick={handleSaveSubmission}
+                                >Save</Button>
+                            </ModalFooter>
+                        </Form>
+                    </Modal>
                 </AnimContext.Provider>
                 )}
             </ControlContext.Consumer>

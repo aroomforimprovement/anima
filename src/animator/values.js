@@ -8,7 +8,8 @@ export const values = {
         mode: CC.SINGLE,
         pc: [200, 200, 200, 200],
         ps: CC.PS_2,
-        enabled: true,
+        enable: false,
+        disable: false,
         undo: false,
         redo: false,
         frate: 8,
@@ -20,6 +21,7 @@ export const values = {
         endPreview: false,
     },
     initialAnimState: {
+        enabled: true,
         anim:{
             "animid": null,
             "userid": null,

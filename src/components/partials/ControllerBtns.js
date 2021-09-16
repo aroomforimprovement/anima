@@ -20,11 +20,11 @@ const ModeDropdown = () => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'MODE', data: val });
-        dispatch({ type: 'ENABLE' });
+        dispatch({ type: 'ENABLE', data: true });
     }
     
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
                 <ControllerDropdownItem 
                     title='SINGLE mode' func={() => handle(CC.SINGLE)}
                     iSrc={SITE.icons.single} text='Single'/>
@@ -58,10 +58,10 @@ const PenSizeDropdown = () => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'PS', data: val});
-        dispatch({ type: 'ENABLE' });
+        dispatch({ type: 'ENABLE', data: true });
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
                 <ControllerDropdownItem 
                     title='Pen size 1' func={() => handle(CC.PS_1)}
                     iSrc={SITE.icons.penSize} text='1'/>
@@ -105,10 +105,10 @@ const PenColourDropdown = () => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'PC', data: val});
-        dispatch({ type: 'ENABLE' });
+        dispatch({ type: 'ENABLE', data: true });
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='BG Solid' func={() => handle(values.bg_solid)}
                 iSrc={SITE.icons.penColour} text='BG Solid'/>
@@ -163,10 +163,10 @@ const FrameRateDropdown = () => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({ type: 'FRAME_RATE', data: val});
-        dispatch({ type: 'ENABLE' });
+        dispatch({ type: 'ENABLE', data: true });
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
                 <ControllerDropdownItem 
                     title='Frame rate 4' func={() => handle(4)}
                     iSrc={SITE.icons.penSize} text='4'/>
@@ -210,10 +210,10 @@ export const BackgroundDropdown = () => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
         dispatch({type: val, data: true});
-        dispatch({type: 'ENABLE'});
+        dispatch({type: 'ENABLE', data: true});
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE'})} onMouseOut={() => dispatch({type: 'ENABLE'})}>
+        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='Save background' func={() => handle('SAVE_BG')}
                 iSrc={SITE.icons.saveBg} text="Save this frame as background"/>
@@ -287,7 +287,7 @@ export const Download = () => {
 
 export const Save = () => {
     return(
-        <ControllerBtn dispatchType='SAVE_TO_ACCOUNT'
+        <ControllerBtn dispatchType='SAVE'
             btnText={'Save to account'} icon={SITE.icons.save} />
     );
 }
