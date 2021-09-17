@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+    FormGroup, Label, Input } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';
@@ -297,6 +298,23 @@ export const Preview = () => {
         <ControllerBtn dispatchType='PREVIEW'
             btnText={'Preview animation'} icon={SITE.icons.preview} />
     )
+}
+
+export const EnableShortcuts = () => {
+
+    const { dispatch } = useControlContext();
+    
+    const handleCheck = (e) => {
+        dispatch({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
+    }
+    return(
+        <FormGroup enableShortcuts>
+            <Label enableShortcuts>
+                <Input type='checkbox' onChange={handleCheck}/>{' '}
+                Enable keyboard shortcuts (<button onClick={() => console.error('Need to show shortcut info!')}>?</button>)
+            </Label>
+        </FormGroup>
+    );
 }
 
 /**

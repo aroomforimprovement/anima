@@ -10,6 +10,7 @@ export const values = {
         ps: CC.PS_2,
         enable: false,
         disable: false,
+        shortcutsEnabled: false,
         undo: false,
         redo: false,
         frate: 8,

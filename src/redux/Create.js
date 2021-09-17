@@ -21,6 +21,9 @@ export const controlReducer = (state, action) => {
         case 'ENABLE':{
             return ({...state, enable: action.data});
         }
+        case 'ENABLE_SHORTCUTS':{
+            return ({...state, shortcutsEnabled : action.data})
+        }
         case 'MODE':{
             return ({...state, mode: action.data});
         }

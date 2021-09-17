@@ -168,8 +168,8 @@ export const sketch = (p5) => {
     }
 
     p5.keyPressed = () => {
-        if(!isPointOnCanvas(p5.mouseX, p5.mouseY)){
-            console.warn('To use keyboard shortcuts, move pointer over drawing area');
+        if(!anim.enabled || !controls.shortcutsEnabled 
+            || !isPointOnCanvas(p5.mouseX, p5.mouseY)){
             return;
         }
         
