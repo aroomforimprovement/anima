@@ -197,6 +197,9 @@ export const sketch = (p5) => {
             case CC.TYPE_SIZE:
                 setPenSize(controlObj);
                 break;
+            case CC.TYPE_COLOUR:
+                setPenColour(controlObj);
+                break;
             default:
                 console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
         }
@@ -390,25 +393,8 @@ export const sketch = (p5) => {
     }
 
     const setPenColour = (controlObj) => {
-		//console.log("Creation.setPenColour(" + controlObj.n + ")");
-		let colour;
-		switch(controlObj.v){
-			case CC.BG_SOLID:
-			colour = this.bgc;
-			break;
-			case CC.BG_SHADE:
-			colour = this.bgs;
-			break;
-			case CC.FG_SOLID:
-			colour = this.fgc;
-			break;
-			case CC.FG_SHADE:
-			colour = this.fgs;
-			break;
-			default:
-			colour = p5.color(controlObj.arr[0], controlObj.arr[1], controlObj.arr[2], controlObj.arr[3]);
-		}
-		dispatch({type: 'PC', data: colour});
+		//const colour = p5.color(controlObj.arr[0], controlObj.arr[1], controlObj.arr[2], controlObj.arr[3]);
+		dispatch({type: 'PC', data: controlObj.arr});
 	}
 }
 
