@@ -1,13 +1,16 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
+    Form, FormGroup, Label, Input } from 'reactstrap';
 import { ControlContext, useControlContext } from '../Create';
-import { animReducer, initialAnimState } from '../../redux/Creation';
+import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 
 
-const AnimContext = createContext(values.initialAnimState)
+const apiUrl = process.env.REACT_APP_API_URL;
+
+const AnimContext = createContext(values.initialAnimState);
 
 export const useAnimContext = () => {
     return useContext(AnimContext);
@@ -15,13 +18,58 @@ export const useAnimContext = () => {
 
 
 export const Creation = () => {
+
     const { controls, dispatch } = useControlContext();
-    
-    const [ anim, updateAnim ] = useReducer(animReducer, initialAnimState);
+    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState);//startState);
     const animState = { anim, updateAnim };
+
+    const getSavedAnim = (id) => {
+        return fetch(`${apiUrl}anim/${id}`)
+            .then(response => {
+                if(response.ok){
+                    return response;
+                }else{
+                    console.error("response not ok");
+                }
+            }, error => {
+                console.error("error fetching anim" + error);
+            })
+            .then(response => response.json())
+            .then(response => {
+                //assign response to anim here
+                console.log("got anim");
+                console.dir(response);
+                if(anim.isSet){
+                    console.log("stop calling me!")
+                }else{
+                    updateAnim({type: 'SET_ANIM', data: response});
+                }
+                
+            })
+            .catch(err => console.log(err))
+            .finally(response => {
+                console.log("finally");
+                console.dir(response);
+            });
+    }
+
+    const getIdFromUrl = (url) => {
+        console.log("url="+url);
+        if(url.match(/(create\/)\w+/) && url.match(/(create\/)\w+/).length > -1){
+            console.log("create page is edit");
+            const id = url.substring(url.indexOf("create") + 6, url.length);
+            console.log("id="+id);
+            return id;
+        }    
+        return false;
+    }
+
     
-
-
+    const id = getIdFromUrl(window.location.href);
+    if(!anim.isSet && id){
+        getSavedAnim(id);
+    }
+    
     const handleSaveSubmission = (e) => {
         updateAnim({type: 'SAVE_TO_ACCOUNT', data: true});
         e.preventDefault();

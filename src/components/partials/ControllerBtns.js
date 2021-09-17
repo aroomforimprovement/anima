@@ -260,14 +260,14 @@ const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
 export const Undo = () => {
     return(
         <ControllerBtn dispatchType='UNDO' 
-            btnText={'Undo'} icon={SITE.icons.undo}/>
+            btnText={'Undo stroke'} icon={SITE.icons.undo}/>
     );
 }
 
 export const Redo = () => {
     return(
         <ControllerBtn dispatchType='REDO' 
-            btnText={'Redo'} icon={SITE.icons.redo}/>
+            btnText={'Redo stroke'} icon={SITE.icons.redo}/>
     );
 }
 

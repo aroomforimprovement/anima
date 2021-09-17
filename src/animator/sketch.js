@@ -1,6 +1,5 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { getByTitle } from '@testing-library/dom';
 import { saveAs } from 'file-saver';
 
 let CCapture;

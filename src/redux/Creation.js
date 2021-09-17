@@ -20,7 +20,8 @@ const getUserId = (animid) => {
     }
 }
 
-export const initialAnimState = {
+export const newAnimState = {
+    isSet: false,
     enabled: true,
     anim:{
         "animid": getNewAnimId(),
@@ -89,6 +90,9 @@ export const animReducer = (state, action) => {
     console.log(action.type+':'+action.data);
     
     switch(action.type){
+        case 'SET_ANIM':{
+            return ({...state, anim: action.data, isSet: true});
+        }
         case 'INIT_ANIM':{
             return ({...state, anim: action.data})
         }
