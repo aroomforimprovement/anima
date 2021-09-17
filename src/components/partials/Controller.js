@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next, Download, Save, Preview, EnableShortcuts } from './ControllerBtns';
+    Background, Next, Download, Save, Preview, EnableShortcuts,
+    Privacy } from './ControllerBtns';
 import { ButtonGroup } from 'reactstrap';
 
 export const Controller = () => {
@@ -26,6 +27,7 @@ export const SaveController = () => {
             <Download />
             <Preview />
             <EnableShortcuts />
+            <Privacy />
         </ButtonGroup>
     );
 }

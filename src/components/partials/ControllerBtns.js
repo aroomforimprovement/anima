@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
-    FormGroup, Label, Input } from 'reactstrap';
+    Form, FormGroup, Label, Input } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';
@@ -308,12 +308,52 @@ export const EnableShortcuts = () => {
         dispatch({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
     }
     return(
-        <FormGroup enableShortcuts>
-            <Label enableShortcuts>
+        <FormGroup check>
+            <Label check>
                 <Input type='checkbox' onChange={handleCheck}/>{' '}
                 Enable keyboard shortcuts (<button onClick={() => console.error('Need to show shortcut info!')}>?</button>)
             </Label>
         </FormGroup>
+    );
+}
+
+export const Privacy = () => {
+    const { dispatch } = useControlContext();
+    const [ checked, setChecked ] = useState(0);
+    const handleChange = (e) => {
+        setChecked(e.target.value);
+        dispatch({type: 'SET_PRIVACY', data: e.target.value});
+    }
+    return(
+        <Form>
+        <FormGroup tag='fieldset' >
+            <legend>Privacy</legend>
+            <FormGroup check>
+                <Label check>
+                    <Input type='radio' name='setPrivacy' value='0' 
+                        checked={checked == 0}
+                        onChange={handleChange}/>{' '}
+                    Public
+                </Label>
+            </FormGroup>
+            <FormGroup check>
+                <Label check>
+                    <Input type='radio' name='setPrivacy' value='1' disabled
+                        checked={checked == 1}
+                        onChange={handleChange}/>{' '}
+                    Permission
+                </Label>
+            </FormGroup>
+            <FormGroup check>
+                <Label check>
+                    <Input type='radio' name='setPrivacy' value='2' 
+                        checked={checked == 2}
+                        onChange={handleChange}/>{' '}
+                    Private
+                </Label>
+            </FormGroup>
+        </FormGroup>
+        </Form>
     );
 }
 
