@@ -1,16 +1,42 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Navbar, NavItem, NavbarToggler, NavbarBrand, Nav, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { SITE } from '../../shared/site';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const Header = ({isAuthenticated}) => {
+
+const Header = () => {
+    
+    const { isAuthenticated, isLoading, user } = useAuth0();
+    
+    const checkAuth = (auth) => {
+        console.log('checkAuth');
+        if(isAuthenticated && user){
+            console.log('writing auth');
+            const u = user.sub.replace('auth0|', '');
+            window.localStorage.setItem('userid', u);
+            window.localStorage.setItem('email', user.email);
+            window.localStorage.setItem('username', user.nickname);
+            window.localStorage.setItem('isAuth', true);
+        }else{
+            console.log('removing auth');
+            window.localStorage.removeItem('userid');
+            window.localStorage.removeItem('email');
+            window.localStorage.removeItem('username');
+        }
+    }
+    checkAuth(window.localStorage.getItem('isAuth'));
 
     const headerReducer = (state, action) => {
         console.log(action.type+":"+action.data);
         switch(action.type){
             case 'toggleNav':{
                 return ({...state, isNavOpen: !state.isNavOpen});
+            }
+            case 'checkAuth':{
+                checkAuth();
+                return (state);
             }
             default:
                 return state;
@@ -24,6 +50,12 @@ const Header = ({isAuthenticated}) => {
     const toggleNav = () => {
         dispatch({type: 'toggleNav', data: !state.isNavOpen})
     }
+    useEffect(() => {
+        if(!isLoading & (isAuthenticated)){
+            dispatch({type: 'checkAuth', data: isAuthenticated});
+        }
+    },[isLoading, isAuthenticated]);
+
 
     return(
         <div className='nav-area col-12'>

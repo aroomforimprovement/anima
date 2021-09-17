@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
 import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
@@ -7,8 +7,16 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 
 const Home = () => {
-    const {isAuthenticated} = useAuth0();
     
+    const { isAuthenticated, isLoading } = useAuth0();
+    const [ auth, setAuth ] = useState(window.localStorage.getItem('isAuth'));
+
+    useEffect(() => {
+        if(!isLoading){
+            setAuth(isAuthenticated);
+        }
+    },[isLoading, isAuthenticated]);
+
     return (
         <div className='container col-12 justify-content-center'>
             <Jumbotron className='jumbotron'>
@@ -28,9 +36,9 @@ const Home = () => {
                                     Create
                                 </button>
                         </NavLink>
-                        {isAuthenticated ? null : <LoginBtn size='btn-lg' href='/login'/>}
-                        {isAuthenticated ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
-                        {isAuthenticated ? null : <SignupBtn size='btn-lg' href='/signup' />}
+                        {auth ? null : <LoginBtn size='btn-lg' href='/login'/>}
+                        {auth ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
+                        {auth ? null : <SignupBtn size='btn-lg' href='/signup' />}
                     </div>
                 </div>
             </Jumbotron>

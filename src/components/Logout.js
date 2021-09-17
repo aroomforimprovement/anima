@@ -54,6 +54,7 @@ const Logout = () => {
                 localStorage.removeItem('userid');
                 localStorage.removeItem('username');
                 localStorage.removeItem('email');
+                localStorage.removeItem('isAuth');
                 return ({...state, user: {}, logout: action.data});
             }
             case 'setUser':{

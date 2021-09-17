@@ -19,9 +19,41 @@ export const Creation = () => {
     const [isSaveOpen, setIsSaveOpen] = useState(false);
     const { controls, dispatch } = useControlContext();
     
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const saveAnimToAccount = (a) => {
         console.log("saveAnimToAccount:");
         console.dir(a);
+        return fetch(`${apiUrl}anim`, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(a),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if(response.ok){ return response;
+            }else{ 
+                dispatch({type: 'setSaveFailed', data: true});
+                console.error("response not ok") }
+        }, error => { 
+            dispatch({type: 'setSaveFailed', data: true});
+            console.error("error fetching login");
+         }
+        )
+        .then(response => response.json())
+        .then(response => {   
+            dispatch(
+            {
+                type: 'setSave', 
+                data: response
+            })
+        }
+        ).catch(error => { console.error(error)})
+        .finally(response =>{ 
+            dispatch({type: 'setIsSaved', data: true})
+        });
     }
     
     const getNewAnimId = () => {

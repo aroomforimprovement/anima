@@ -66,6 +66,7 @@ const Login = () => {
                 localStorage.setItem('userid', action.data.userid);
                 localStorage.setItem('username', action.data.username);
                 localStorage.setItem('email', action.data.email);
+                localStorage.setItem('isAuth', true);
                 return ({...state, login: action.data, isRegistered: true});
             }
             default:
