@@ -19,6 +19,8 @@ export const values = {
         download: false,
         preview: false,
         endPreview: false,
+        isPreviewOpen: false,
+        isSaveOpen: false,
     },
     initialAnimState: {
         enabled: true,
