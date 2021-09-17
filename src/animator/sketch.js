@@ -172,12 +172,37 @@ export const sketch = (p5) => {
         return setPointDrawn(x, y);
     }
 
+    const setControlTriggered = (controlObj) => {
+        switch(controlObj.v){
+			case CC.NEXT:
+                dispatch({type: 'NEXT', data: true})
+    			break;
+			case CC.BG:
+                dispatch({type: 'DRAW_BG', data: true})
+		    	break;
+			case CC.SWITCH_PEN_BW:
+			    dispatch({type: 'SWITCH_PEN_BW', data: true});
+			break;
+			case CC.UNDO_STROKE:
+                dispatch({type: 'UNDO', data: true});
+                break;
+			case CC.REDO_STROKE:
+                dispatch({type: 'REDO', data: true});
+	    		break;
+            case CC.WIPE:
+                dispatch({type: 'WIPE', data: true});
+                break;
+            default:
+                console.log('no control found');
+		}
+    }
+
     p5.keyPressed = () => {
         if(!anim.enabled || !controls.shortcutsEnabled 
             || !isPointOnCanvas(p5.mouseX, p5.mouseY)){
             return;
         }
-        
+
         let controlObj;
         if(p5.key !== ''){
             CONTROLS.forEach((CONTROL_OBJ) => {
@@ -186,6 +211,7 @@ export const sketch = (p5) => {
                 }
             })
         }
+        
         if(!controlObj){
             console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
             return;
@@ -199,6 +225,9 @@ export const sketch = (p5) => {
                 break;
             case CC.TYPE_COLOUR:
                 setPenColour(controlObj);
+                break;
+            case CC.TYPE_TRIGGER:
+                setControlTriggered(controlObj);
                 break;
             default:
                 console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
