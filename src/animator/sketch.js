@@ -4,12 +4,6 @@ import { getByTitle } from '@testing-library/dom';
 import { saveAs } from 'file-saver';
 
 let CCapture;
-let Gif;
-//import download from '@/../node_modules/ccapture.js/src/download.js' 
-//import '@/../node_modules/ccapture.js/src/gif.js'
-//import '@/../node_modules/ccapture.js/src/gif.worker.js'
-//import '@/../node_modules/ccapture.js/src/tar.js'
-//import '@/../node_modules/ccapture.js/src/Whammy.js'
  
 console.log(window);
 export const sketch = (p5) => {
@@ -21,7 +15,7 @@ export const sketch = (p5) => {
     let thisStroke = [];
     let isStroke = false;
     let capturer;
-    let gif;
+
     /**
      *  P5
      */
@@ -31,7 +25,6 @@ export const sketch = (p5) => {
         p5.noStroke();
         console.log(window);
         CCapture = window.CCapture;
-        Gif = window.GIF;
 
     }
 
@@ -77,12 +70,12 @@ export const sketch = (p5) => {
         if(props.controls.drawBg){
             dispatch({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
-            drawBg();
+            drawBg(anim.bg);
         }
         if(props.controls.next){
             dispatch({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
-            drawBg();
+            drawBg(anim.bg);
         }
         if(props.controls.download){
             dispatch({type: 'DOWNLOAD', data: false});
@@ -267,7 +260,7 @@ export const sketch = (p5) => {
         if(anim.lastFrame && anim.lastFrame.length > 0){
             drawPoints(anim.bg);
         }
-        drawBg();
+        drawBg(anim.bg);
         if(anim.undos && anim.undos.length > 0){
             drawPoints(anim.undos);
         }
@@ -285,9 +278,9 @@ export const sketch = (p5) => {
         });
     }
 
-    const drawBg = () => {
+    const drawBg = (bg) => {
         setBgOverlay();
-        if(anim.bg && anim.bg.length > 0){
+        if(bg && bg.length > 0){
             drawPoints(anim.bg);
         }
     }

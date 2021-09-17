@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useReducer, useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
+import uuid from 'react-uuid';
 import { ControlContext, useControlContext } from '../Create';
-import { Preview } from './Preview';
+import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 
 
@@ -12,7 +13,8 @@ export const useAnimContext = () => {
     return useContext(AnimContext);
 }
 
-export const Creation = ({sketch}) => {
+
+export const Creation = () => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isSaveOpen, setIsSaveOpen] = useState(false);
     const { controls, dispatch } = useControlContext();
@@ -22,10 +24,51 @@ export const Creation = ({sketch}) => {
         console.dir(a);
     }
     
+    const getNewAnimId = () => {
+        return uuid();
+    }    
+    const getTempUserId = (animid) => {
+        return "temp_"+animid.substring(0, 19);
+    }
+    const getUserId = (animid) => {
+        const u = window.localStorage.getItem('userid');
+        if(u){
+            return u;
+        }else{
+            return getTempUserId(animid)
+        }
+    }
+
+    const initialAnimState = {
+        enabled: true,
+        anim:{
+            "animid": getNewAnimId(),
+            "userid": getUserId(getNewAnimId()),
+            "name": null,
+            "type": "animation",
+            "created": Date.now(),
+            "modified": Date.now(),
+            "frate": 8,
+            "size": 600,
+            "privacy": 0,
+            "frames": [],
+        },
+        undos:[],
+        redos:[],
+        undid:[],
+        redid:[],
+        bg:[],
+        lastFrame:[],
+        fid: 0,
+        isPreviewOpen: false,
+    }
     
     const animReducer = (state, action) => {
         console.log(action.type+':'+action.data);
         switch(action.type){
+            case 'INIT_ANIM':{
+                return ({...state, anim: action.data})
+            }
             case 'ENABLED':{
                 return ({...state, enabled: action.data})
             }
@@ -69,6 +112,7 @@ export const Creation = ({sketch}) => {
             }
             case 'SAVE_BG':{
                 const bg = state.undos.length > 0 ? [...state.undos] : [];
+                console.dir(bg)
                 return ({...state, bg: bg});
             }
             case 'DRAW_BG':{
@@ -84,10 +128,12 @@ export const Creation = ({sketch}) => {
                 const animid = state.animid ? state.animid : '1234567890';
                 const bg = state.bg;
                 const frame = {fid: fid, animid: animid, points: points, bg: bg};
+                const lastFrame = fid > 0 ? state.anim[fid-1] : null;
                 return ({...state, 
                     anim:{...state["anim"],
                     frames: [...state["anim"]["frames"], frame]},
-                    undos: [], redos: [], undid: [], redid: [], fid: newFid 
+                    undos: [], redos: [], undid: [], redid: [], fid: newFid,
+                    lastFrame: lastFrame,
                 });
             }
             case 'PREVIEW':{
@@ -129,7 +175,7 @@ export const Creation = ({sketch}) => {
         }
     }
     
-    const [ anim, updateAnim ] = useReducer(animReducer, values.initialAnimState);
+    const [ anim, updateAnim ] = useReducer(animReducer, initialAnimState);
     const animState = { anim, updateAnim };
     
 
@@ -158,13 +204,9 @@ export const Creation = ({sketch}) => {
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim}
                         id='animCanvas'
-                        onMouseOver={() => dispatch({type: 'ENABLE', data: true})} 
-                        onMouseOut={() => dispatch({type: 'DISABLE', data: true})} 
                     />
-                    <Modal isOpen={isPreviewOpen} toggle={() => setIsPreviewOpen(!isPreviewOpen)}
-                        onClose={() => {updateAnim ? updateAnim({type: 'ENABLED', data: true}): console.log('')}}
-                    
-                    >
+
+                    <Modal isOpen={isPreviewOpen} toggle={() => setIsPreviewOpen(!isPreviewOpen)}>
                         <img src={anim.previewFile} alt={`Previewing ${anim.previewName}`} />
                         <ModalFooter>
                             <p>{anim.previewName}</p>
@@ -192,7 +234,6 @@ export const Creation = ({sketch}) => {
                                 >Cancel</Button>
                                 <Button className='btn btn-success'
                                     type='submit' value='submit'
-                                    //onClick={handleSaveSubmission}
                                 >Save</Button>
                             </ModalFooter>
                         </Form>

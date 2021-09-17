@@ -2,7 +2,6 @@ import React, { createContext, useReducer, useContext } from 'react';
 import { Controller, SaveController } from './partials/Controller';
 import { Jumbotron, Modal } from 'reactstrap';
 import { Creation } from './partials/Creation';
-import { sketch } from '../animator/sketch';
 import { values } from '../animator/values';
 import { CC, CONTROLS }  from '../animator/controls';
 
@@ -81,7 +80,7 @@ const Create = () => {
             <ControlContext.Provider value={controlState}>
                 <Controller />
                 <Jumbotron >
-                    <Creation sketch={sketch} />
+                    <Creation />
                 </Jumbotron>
                 <SaveController />
             </ControlContext.Provider>        
