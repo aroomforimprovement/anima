@@ -191,6 +191,10 @@ export const animReducer = (state, action) => {
         case 'CANCEL_SAVE':{
             return({...state, enabled: true, isSaveOpen: false});
         }
+        case 'PRIVACY':{
+            return({...state, anim:{...state["anim"],
+                privacy: action.data}})
+        }
         default:
             console.log("reached DEFAULT");
             return state;

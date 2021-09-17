@@ -4,7 +4,6 @@ import { saveAs } from 'file-saver';
 
 let CCapture;
  
-console.log(window);
 export const sketch = (p5) => {
     let p5canvas = undefined;
     let controls = values.initialControlState; 
@@ -101,6 +100,12 @@ export const sketch = (p5) => {
         if(props.controls.save){
             dispatch({type: 'SAVE', data: false});
             updateAnim({type: 'SAVE', data: true});
+        }
+        if(props.controls.privacy !== null){
+            const p = props.controls.privacy;
+            updateAnim({type: 'PRIVACY', data: p});
+            dispatch({type: 'PRIVACY', data: null});
+            
         }
     }
 

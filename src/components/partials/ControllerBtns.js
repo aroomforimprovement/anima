@@ -322,7 +322,7 @@ export const Privacy = () => {
     const [ checked, setChecked ] = useState(0);
     const handleChange = (e) => {
         setChecked(e.target.value);
-        dispatch({type: 'SET_PRIVACY', data: e.target.value});
+        dispatch({type: 'PRIVACY', data: parseInt(e.target.value)});
     }
     return(
         <Form>
@@ -331,6 +331,7 @@ export const Privacy = () => {
             <FormGroup check>
                 <Label check>
                     <Input type='radio' name='setPrivacy' value='0' 
+                        // eslint-disable-next-line eqeqeq
                         checked={checked == 0}
                         onChange={handleChange}/>{' '}
                     Public
@@ -339,6 +340,7 @@ export const Privacy = () => {
             <FormGroup check>
                 <Label check>
                     <Input type='radio' name='setPrivacy' value='1' disabled
+                        // eslint-disable-next-line eqeqeq
                         checked={checked == 1}
                         onChange={handleChange}/>{' '}
                     Permission
@@ -347,6 +349,7 @@ export const Privacy = () => {
             <FormGroup check>
                 <Label check>
                     <Input type='radio' name='setPrivacy' value='2' 
+                        // eslint-disable-next-line eqeqeq
                         checked={checked == 2}
                         onChange={handleChange}/>{' '}
                     Private

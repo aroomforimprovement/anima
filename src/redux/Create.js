@@ -58,15 +58,16 @@ export const controlReducer = (state, action) => {
             return ({...state, download: action.data});
         }
         case 'PREVIEW':{
-            return ({...state, 
-                preview: action.data,
-                });
+            return ({...state, preview: action.data});
         }
         case 'END_PREVIEW':{
             return ({...state, endPreview: action.data});
         }
         case 'SAVE':{
             return ({...state, save: action.data});
+        }
+        case 'PRIVACY':{
+            return ({...state, privacy: action.data});
         }
         default:
             return state;
