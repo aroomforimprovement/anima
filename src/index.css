@@ -188,3 +188,18 @@ code {
 .btn-shortcuts-info{
   text-align:justify;
 }
+
+.create-info{
+  text-align: start;
+}
+.create-info p{
+  font-size: small;
+  text-align:start;
+  display:inline-block;
+  color:rgb(131, 131, 131);
+}
+
+.create-info span{
+  font-size: small;
+  color:rgb(131, 131, 131);
+}

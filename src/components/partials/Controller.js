@@ -1,8 +1,8 @@
 import React from 'react';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next, Download, Save, Preview, EnableShortcuts,
-    Privacy } from './ControllerBtns';
-import { ButtonGroup, Row, Col, ButtonToolbar } from 'reactstrap';
+    Background, Next, Download, Save, Preview, EnableShortcuts } from './ControllerBtns';
+import { CreateInfo } from './CreateInfo';
+
 
 export const Controller = () => {
 
@@ -31,8 +31,13 @@ export const SaveController = () => {
                         <div className='col col-sm-3 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Download /></div>
                         <div className='col col-sm-3 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
                 </div>
-                <div className='col col-6 col-md-5 col-lg-3'>    
+                <div className='col col-6 col-md-5 col-lg-4 col-xl-3'>    
+                    <div className='row'>
                     <div ><EnableShortcuts id='enable-shortcuts'/></div>
+                    </div>
+                    <div className='row'>
+                        <CreateInfo />
+                    </div>
                 </div>
             </div>
         </div>
