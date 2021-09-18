@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useControlContext } from '../Create'; 
 import { CC } from '../../animator/controls';
+import { SITE } from '../../shared/site';
 
 export const CreateInfo = () => {
     
@@ -33,4 +34,25 @@ export const CreateInfo = () => {
         </div>
 
     );
+}
+
+export const ShortcutInfo = () => {
+    //styling the reactstrap modal doesn't seem to do anything :(
+    const list = SITE.shortcuts.map((obj, i) => {
+        return(
+            <div className='container shortcut-info-item'>
+                <li key={obj.key} className='row'>
+                    <p className='col col-2'>{obj.key}</p>
+                    <p className='col col-2'>=</p>
+                    <p className='col col-8'>{obj.text}</p>
+                </li>
+            </div>
+        );
+    });
+    return(
+        <ul className='list-unstyled'>
+            {list}
+        </ul>
+    );
+    
 }

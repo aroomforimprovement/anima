@@ -236,6 +236,21 @@ code {
   color:rgb(172, 172, 172);
 }
 
+.shortcut-info{
+  background-color: rgb(119, 119, 119) !important;
+}
+.shortcut-info p{
+  font-size: small;
+}
+
+.shortcut-info-item li p {
+  font-size: x-small;
+}
+
+.warn{
+  color:rgb(173, 2, 2);
+}
+
 #defaultCanvas0{
   border-radius:10px;
   padding:10px;

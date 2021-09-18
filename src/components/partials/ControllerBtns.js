@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
-    Form, FormGroup, Label, Input } from 'reactstrap';
+    Form, FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';
 import { CC, CONTROLS } from '../../animator/controls';
+import { ShortcutInfo } from './CreateInfo';
 
 
 const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
@@ -98,10 +99,8 @@ export const PenSize = () => {
 
     //pretty hacky - would need to reorganise the CONTROLS object
     const handleSizeChange = () => {
-        console.log("HANDLE SIZE CHANGE: ");
         CONTROLS.forEach((controlObj) => {
             if(controlObj.t === CC.TYPE_SIZE){
-                console.log("controlObj.t: "+controlObj.size);
                 if(controlObj.v === controls.ps){
                     setSize(parseInt(controlObj.n.substring(3,4)));
                     return;
@@ -181,9 +180,6 @@ export const PenColour = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     
     const handleColourChange = () => {
-        
-        console.log('controls.pc' + controls.pc);
-        
         switch(controls.pc){
             case values.red: setColour('red'); break;
             case values.green: setColour('green'); break;
@@ -367,7 +363,8 @@ export const Preview = () => {
 export const EnableShortcuts = () => {
 
     const { dispatch } = useControlContext();
-    
+    const [isOpen, setIsOpen] = useState(false);
+
     const handleCheck = (e) => {
         dispatch({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
     }
@@ -376,9 +373,24 @@ export const EnableShortcuts = () => {
             <form check>
                 <input type='checkbox' onChange={handleCheck}/>{' '} 
                 <label className='shortcuts-label'check>
-                    Enable keyboard shortcuts (<span type='button' className='fa fa-question-circle' onClick={() => console.error('Need to show shortcut info!')}></span>)
+                    Enable keyboard shortcuts (<span type='button' 
+                        className='fa fa-question-circle' 
+                        onClick={() => setIsOpen(true)}></span>)
                 </label>
-                               
+                <Modal isOpen={isOpen} className='shortcut-info'>
+                    <ModalHeader>
+                        <p>
+                            With shortcuts enabled, you can trigger the following controls
+                            with the following keys:
+                        </p>
+                        <p className='warn'>Only enabled while the cursor is over the drawing area.</p>
+                        <p className='warn'>The pen colour icon doesn't change colour when using shortcuts.</p>
+                    </ModalHeader>
+                    <ModalBody>
+                        <ShortcutInfo/>
+                    </ModalBody>
+                    <ModalFooter><Button onClick={() => setIsOpen(false)}>Close</Button></ModalFooter>
+                </Modal>            
             </form>
         </div>
     );

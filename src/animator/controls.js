@@ -25,7 +25,7 @@ export const CONTROLS =
 	{k : 'b', v : CC.BLUE, n : "BLUE", arr : [120, 210, 230, 200], t : CC.TYPE_COLOUR},
 	{k : 'y', v : CC.YELLOW, n : "YELLOW", arr : [255, 255, 100, 200], t : CC.TYPE_COLOUR},
 	{k : 'o', v : CC.ORANGE, n : "ORANGE", arr : [242, 149, 0, 200], t : CC.TYPE_COLOUR},
-	{k : 'j', v : CC.CYAN, n : "CYAN", arr : [0, 238, 242, 200], t : CC.TYPE_COLOUR},
+	{k : 'c', v : CC.CYAN, n : "CYAN", arr : [0, 238, 242, 200], t : CC.TYPE_COLOUR},
 	{k : 'p', v : CC.PURPLE, n : "PURPLE", arr : [127, 0, 181, 200], t : CC.TYPE_COLOUR},
 	{k : 'd', v : CC.PINK, n : "PINK", arr : [242, 92, 162, 200], t : CC.TYPE_COLOUR},
     {k : '1', v : CC.PS_1, size : 2, n : "PS_1", t : CC.TYPE_SIZE},
