@@ -1,9 +1,9 @@
 html{
-  background-color: rgb(63, 63, 63);
+  background-color: rgb(73, 73, 73);
 }
 body {
   margin: 0px;
-  background-color: rgb(63, 63, 63);
+  background-color: rgb(73, 73, 73);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -166,7 +166,7 @@ code {
   border-width: 10px;
 }
 
-.shortcuts-label{
+.shortcuts-label {
   font-size:small;
   color:silver;
 }
@@ -196,10 +196,16 @@ code {
   font-size: small;
   text-align:start;
   display:inline-block;
-  color:rgb(131, 131, 131);
+  color:rgb(172, 172, 172);
 }
 
 .create-info span{
   font-size: small;
-  color:rgb(131, 131, 131);
+  color:rgb(172, 172, 172);
+}
+
+#defaultCanvas0{
+  border-radius:10px;
+  padding:10px;
+  background-color: rgb(42, 42, 42);
 }

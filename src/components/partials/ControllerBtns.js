@@ -309,10 +309,11 @@ export const EnableShortcuts = () => {
     return(
         <div className='shortcuts-group'>
             <form check>
+                <input type='checkbox' onChange={handleCheck}/>{' '} 
                 <label className='shortcuts-label'check>
-                    <input type='checkbox' onChange={handleCheck}/>{' '}
                     Enable keyboard shortcuts (<span type='button' className='fa fa-question-circle' onClick={() => console.error('Need to show shortcut info!')}></span>)
                 </label>
+                               
             </form>
         </div>
     );
