@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
     Form, FormGroup, Label, Input } from 'reactstrap';
 import { SITE } from '../../shared/site';
@@ -7,11 +7,12 @@ import { useControlContext } from '../Create';
 import { CC, CONTROLS } from '../../animator/controls';
 
 
-const ControllerDropdownItem = ({title, func, iSrc, text}) => {
+const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
+    const classes = `dropicon ${c}`;
     return(
         <DropdownItem title={title} 
             onClick={func} >
-            <img src={iSrc} alt={title} />
+            <img src={iSrc} alt={title} className={classes}/>
             <span ></span> {text}       
         </DropdownItem>
     );
@@ -96,11 +97,9 @@ export const PenSize = () => {
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <div className='btn-container'>
-            <DropdownToggle >
-                
-                    <img src={SITE.icons.penSize} alt='Pen size' />
-                
-            </DropdownToggle>
+                <DropdownToggle >
+                    <img src={SITE.icons.penSize} alt='Pen size' />                
+                </DropdownToggle>
             </div>
             <div className='btn-caption'>{controls.ps}</div>
             <PenSizeDropdown />
@@ -118,49 +117,88 @@ const PenColourDropdown = () => {
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='BG Solid' func={() => handle(values.bg_solid)}
-                iSrc={SITE.icons.penColour} text='BG Solid'/>
+                iSrc={SITE.icons.penColour} c='black' text='BG Solid'/>
             <ControllerDropdownItem 
                 title='BG Shade' func={() => handle(values.bg_shade)}
-                iSrc={SITE.icons.penColour} text='BG Shade'/>
+                iSrc={SITE.icons.penColour} c='black' text='BG Shade'/>
             <ControllerDropdownItem 
                 title='FG Solid' func={() => handle(values.fg_solid)}
-                iSrc={SITE.icons.penColour} text='FG Solid'/>
+                iSrc={SITE.icons.penColour} c='white' text='FG Solid'/>
             <ControllerDropdownItem 
                 title='FG Shade' func={() => handle(values.fg_shade)}
-                iSrc={SITE.icons.penColour} text='FG Shade'/>
+                iSrc={SITE.icons.penColour} c='white' text='FG Shade'/>
             <ControllerDropdownItem 
                 title='Red' func={() => handle(values.red)}
-                iSrc={SITE.icons.penColour} text='Red'/>
+                iSrc={SITE.icons.penColour} c='red' text='Red'/>
             <ControllerDropdownItem 
                 title='Green' func={() => handle(values.green)}
-                iSrc={SITE.icons.penColour} text='Green'/>
+                iSrc={SITE.icons.penColour} c='green' text='Green'/>
             <ControllerDropdownItem 
                 title='Blue' func={() => handle(values.blue)}
-                iSrc={SITE.icons.penColour} text='Blue'/>
+                iSrc={SITE.icons.penColour} c='blue' text='Blue'/>
             <ControllerDropdownItem 
                 title='Yellow' func={() => handle(values.yellow)}
-                iSrc={SITE.icons.penColour} text='Yellow'/>
+                iSrc={SITE.icons.penColour} c='yellow' text='Yellow'/>
             <ControllerDropdownItem 
                 title='Cyan' func={() => handle(values.cyan)}
-                iSrc={SITE.icons.penColour} text='Cyan'/>
+                iSrc={SITE.icons.penColour} c='cyan' text='Cyan'/>
             <ControllerDropdownItem 
                 title='Purple' func={() => handle(values.purple)}
-                iSrc={SITE.icons.penColour} text='Purple'/>
+                iSrc={SITE.icons.penColour} c='purple' text='Purple'/>
             <ControllerDropdownItem 
                 title='Pink' func={() => handle(values.pink)}
-                iSrc={SITE.icons.penColour} text='Pink'/>
+                iSrc={SITE.icons.penColour} c='pink' text='Pink'/>
         </DropdownMenu>  
     );
 }
  
 export const PenColour = () => {
+    const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
+    const [colour, setColour] = useState([200, 200, 200, 200])
+
     const toggle = () => setIsOpen(prevState => !prevState);
+    
+    const handleColourChange = () => {
+        
+        console.log('controls.pc' + controls.pc);
+        
+        switch(controls.pc){
+            case values.red: setColour('red'); break;
+            case values.green: setColour('green'); break;
+            case values.blue: setColour('blue'); break;
+            case values.yellow: setColour('yellow'); break;
+            case values.orange: setColour('orange'); break;
+            case values.cyan: setColour('cyan'); break;
+            case values.purple: setColour('purple'); break;
+            case values.bg_solid:
+            case values.bg_shade: 
+                setColour('black');
+                    break;
+            case values.fg_solid: 
+            case values.fg_shade: 
+                setColour('white');
+                    break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        handleColourChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[controls.pc]);
+    const classes = `btn-colour-caption ${colour}`;
+        
     return(
+        
         <Dropdown isOpen={isOpen} toggle={toggle} >
-            <DropdownToggle >
-                <img src={SITE.icons.penColour} alt='Pen size'/>
-            </DropdownToggle>
+            <div className='btn-colour-container'>
+                <DropdownToggle >
+                    <img src={SITE.icons.penColour} alt='Pen size'/>
+                </DropdownToggle>
+                <div className={classes}></div>
+            </div>
             <PenColourDropdown />
         </Dropdown>
     );

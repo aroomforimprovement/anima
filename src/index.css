@@ -156,6 +156,23 @@ code {
   left: 10px;
 }
 
+.btn-colour-container{
+  position:relative;
+  text-align: center;
+}
+
+.btn-colour-caption{
+  position: absolute;
+  font-size:x-small;
+  color:black;
+  background-color:white;
+  border-radius: 2.5px;
+  width: 100%;
+  height: 5px;
+  bottom: 7px;
+  left: 7px;
+}
+
 .privacy-group{
   float:left;
 }
@@ -174,12 +191,14 @@ code {
 }
 
 .shortcuts-group{
-  margin-top:1em;
+  margin-top:0.5em;
   border-color:rgb(0, 0, 0);
   border-width: 10px;
+  text-align:end;
 }
 
 .shortcuts-label {
+  text-align:start;
   font-size:small;
   color:silver;
 }
@@ -203,7 +222,7 @@ code {
 }
 
 .create-info{
-  text-align: start;
+  text-align: end;
 }
 .create-info p{
   font-size: small;
@@ -221,4 +240,48 @@ code {
   border-radius:10px;
   padding:10px;
   background-color: rgb(42, 42, 42);
+}
+
+.dropicon{
+  border-radius: 5px;
+}
+
+.red{
+  background-color: rgb(185, 70, 70, 200);
+}
+.green{
+  background-color: rgb(70, 185, 70, 200);
+}
+.blue{
+  background-color: rgb(120, 210, 230, 200);
+}
+.yellow{
+  background-color: rgb(255, 255, 100, 200);
+}
+.orange{
+  background-color: rgb(242, 149, 0, 200);
+}
+.cyan{
+  background-color: rgb(0, 238, 242, 200);
+}
+.purple{
+  background-color: rgb(127, 0, 181, 200);
+}
+.pink{
+  background-color: rgb(242, 92, 162, 200);
+}
+.white{
+  background-color: rgb(220, 220, 220, 200);
+}
+.black{
+  background-color: rgb(20, 20, 20, 200);
+}
+.bg_solid{
+  background-color: rgb(20, 20, 20, 200);
+}
+.bg_solid{
+  background-color: rgb(20, 20, 20, 200);
+}
+.bg_solid{
+  background-color: rgb(20, 20, 20, 200);
 }
