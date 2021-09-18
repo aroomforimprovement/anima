@@ -63,7 +63,8 @@ export const sketch = (p5) => {
         }
         if(props.controls.saveBg){
             dispatch({type: 'SAVE_BG', data: false});
-            updateAnim({type: 'SAVE_BG'})
+            updateAnim({type: 'SAVE_BG', data: true});
+            updateAnim({type: 'DRAW_BG', data: true});
         }
         if(props.controls.drawBg){
             dispatch({type: 'DRAW_BG', data: false});
@@ -422,7 +423,6 @@ export const sketch = (p5) => {
     }
 
     const setPenColour = (controlObj) => {
-		//const colour = p5.color(controlObj.arr[0], controlObj.arr[1], controlObj.arr[2], controlObj.arr[3]);
 		dispatch({type: 'PC', data: controlObj.arr});
 	}
 }

@@ -94,14 +94,35 @@ export const PenSize = () => {
     const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
+    const [size, setSize] = useState(1);
+
+    //pretty hacky - would need to reorganise the CONTROLS object
+    const handleSizeChange = () => {
+        console.log("HANDLE SIZE CHANGE: ");
+        CONTROLS.forEach((controlObj) => {
+            if(controlObj.t === CC.TYPE_SIZE){
+                console.log("controlObj.t: "+controlObj.size);
+                if(controlObj.v === controls.ps){
+                    setSize(parseInt(controlObj.n.substring(3,4)));
+                    return;
+                }
+            }
+        });
+    }
+
+    useEffect(() => {
+        handleSizeChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[controls.ps]);
+
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <div className='btn-container'>
                 <DropdownToggle >
-                    <img src={SITE.icons.penSize} alt='Pen size' />                
+                    <img src={SITE.icons.penSize} alt='Pen size'/>              
                 </DropdownToggle>
             </div>
-            <div className='btn-caption'>{controls.ps}</div>
+            <div className='btn-caption'>{size}</div>
             <PenSizeDropdown />
         </Dropdown>
     );
