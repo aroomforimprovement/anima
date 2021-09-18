@@ -326,7 +326,7 @@ export const Privacy = () => {
         dispatch({type: 'PRIVACY', data: parseInt(e.target.value)});
     }
     return(
-        <Form >
+        <div className='col col-xs-4 col-sm-7 ms-xs-1 ms-sm-2'>
         <FormGroup tag='fieldset' >
             <div className='row privacy-group'>
                 <FormGroup check className='col'>
@@ -358,7 +358,7 @@ export const Privacy = () => {
                 </FormGroup>
             </div>
         </FormGroup>
-        </Form>
+        </div>
     );
 }
 
