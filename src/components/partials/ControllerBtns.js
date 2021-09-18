@@ -4,7 +4,7 @@ import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';
-import { CC } from '../../animator/controls';
+import { CC, CONTROLS } from '../../animator/controls';
 
 
 const ControllerDropdownItem = ({title, func, iSrc, text}) => {
@@ -90,13 +90,19 @@ const PenSizeDropdown = () => {
 }
 
 export const PenSize = () => {
+    const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
+            <div className='btn-container'>
             <DropdownToggle >
-                <img src={SITE.icons.penSize} alt='Pen size'/>
+                
+                    <img src={SITE.icons.penSize} alt='Pen size' />
+                
             </DropdownToggle>
+            </div>
+            <div className='btn-caption'>{controls.ps}</div>
             <PenSizeDropdown />
         </Dropdown>
     );

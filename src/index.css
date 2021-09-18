@@ -143,6 +143,19 @@ code {
   display:inline-block;
 }
 
+.btn-container{
+  position: relative;
+  text-align: center;
+}
+
+.btn-caption{
+  position: absolute;
+  font-size:x-small;
+  color:black;
+  bottom: 2px;
+  left: 10px;
+}
+
 .privacy-group{
   float:left;
 }
