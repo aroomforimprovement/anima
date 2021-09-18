@@ -90,15 +90,15 @@ code {
 
 @media only screen and (max-width: 576px) {
   .controller img{
-    width:20px;
-    height:20px;
-    margin:0px;
+    width:30px;
+    height:30px;
     padding:0px;
     display:inline-block;
   }
   .controller button{
     width:45px;
     height:45px;
+    padding:0px;
     display:inline-block;
   }
 }
@@ -110,23 +110,37 @@ code {
 }
 
 
-@media only screen and (max-width: 380px){
-  .controller button, img{
-    width:15px;
-    height:15px;
+@media only screen and (max-width: 390px){
+  .controller img{
+    width:25px;
+    height:25px;
     display:inline-block;
   }
+  .controller button{
+    width:30px;
+    height:30px;
+    padding:0px;
+    margin:0px;
+    display:inline-block;
+  }
+  .save-controller img{
+    width:25px;
+    height:25px;
+    display:inline-block;
+  }
+  .save-controller button{
+    width:35px;
+    height:35px;
+    padding:0px;
+    display:inline-block;
+  }
+  
 }
 
 .btn-ctl {
   border-radius: 5px;
   border-color:rgb(42, 42, 42);
   display:inline-block;
-}
-
-#enable-shortcuts Form FormGroup legend{
-  font-size: smaller;
-  
 }
 
 .privacy-group{
