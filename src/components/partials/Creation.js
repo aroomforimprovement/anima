@@ -6,7 +6,7 @@ import { ControlContext, useControlContext } from '../Create';
 import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
-
+import { Privacy } from './ControllerBtns';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -112,15 +112,14 @@ export const Creation = () => {
                         <ModalHeader>Save your creation to your account</ModalHeader>
                         <Form onSubmit={handleSaveSubmission}>
                             <ModalBody>
-                                
                                 <FormGroup>
-                                    <Label for="name">Name your creation:</Label>
+                                    <Label htmlFor="name">Name your creation:</Label>
                                     <Input type='text' id='name' name='name' autoFocus={true}
                                         onChange={handleNameChange}/>
                                 </FormGroup>
-
                             </ModalBody>
                             <ModalFooter>
+                            <Privacy id='create-privacy-control'/>
                                 <Button className='btn btn-secondary'
                                     onClick={handleCancelSave}
                                 >Cancel</Button>

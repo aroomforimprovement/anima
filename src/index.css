@@ -1,3 +1,6 @@
+html{
+  background-color: rgb(63, 63, 63);
+}
 body {
   margin: 0px;
   background-color: rgb(63, 63, 63);
@@ -13,9 +16,6 @@ code {
     monospace;
 }
 
-body > #root > div {
-  height:100vh;
-}
 
 .site-header {
   position: absolute;
@@ -77,9 +77,77 @@ body > #root > div {
   display: block;
 }
 
+.controller {
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.controller img{
+  width:30px;
+  height:30px;
+}
+
+@media only screen and (max-width: 576px) {
+  .controller img{
+    width:20px;
+    height:20px;
+    display:inline-block;
+  }
+}
 
 .btn-ctl {
   border-radius: 5px;
   border-color:rgb(42, 42, 42);
+  display:inline-block;
 }
 
+#enable-shortcuts Form FormGroup legend{
+  font-size: smaller;
+  
+}
+
+.privacy-group{
+  float:left;
+}
+
+.privacy-heading{
+  color: rgb(179, 179, 179);
+  text-align: left;
+  display:inline-block;
+  font-size: smaller;
+}
+
+.privacy-label{
+  font-size:small;
+  text-align: right;
+  display:block;
+}
+
+.shortcuts-group{
+  margin-top:1em;
+  border-color:rgb(0, 0, 0);
+  border-width: 10px;
+}
+
+.shortcuts-label{
+  font-size:small;
+}
+
+.create-options{
+  overflow: auto;
+}
+
+.cont-left{
+  margin-left:auto;
+  margin-right:0px;
+}
+
+.cont-right{
+  margin-left:0px;
+  margin-right:auto;
+}
+
+.btn-shortcuts-info{
+  text-align:justify;
+}

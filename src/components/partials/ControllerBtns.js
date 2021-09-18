@@ -12,7 +12,7 @@ const ControllerDropdownItem = ({title, func, iSrc, text}) => {
         <DropdownItem title={title} 
             onClick={func} >
             <img src={iSrc} alt={title} />
-            <span className='menu-text' ></span> {text}       
+            <span ></span> {text}       
         </DropdownItem>
     );
 }
@@ -46,7 +46,7 @@ export const Mode = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
-        <Dropdown isOpen={isOpen} toggle={toggle} >
+        <Dropdown isOpen={isOpen} toggle={toggle}>
             <DropdownToggle >
                 <img src={SITE.icons.drawingMode} alt='Drawing Mode'/>
             </DropdownToggle>
@@ -93,7 +93,7 @@ export const PenSize = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
-        <Dropdown isOpen={isOpen} toggle={toggle}>
+        <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
                 <img src={SITE.icons.penSize} alt='Pen size'/>
             </DropdownToggle>
@@ -151,7 +151,7 @@ export const PenColour = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
-        <Dropdown isOpen={isOpen} toggle={toggle}>
+        <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
                 <img src={SITE.icons.penColour} alt='Pen size'/>
             </DropdownToggle>
@@ -198,7 +198,7 @@ export const FrameRate = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
-        <Dropdown isOpen={isOpen} toggle={toggle}>
+        <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
                 <img src={SITE.icons.frate} alt='Frame rate'/>
             </DropdownToggle>
@@ -232,7 +232,7 @@ export const Background = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
-        <Dropdown isOpen={isOpen} toggle={toggle}>
+        <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
                 <img src={SITE.icons.bg} alt='Background'/>
             </DropdownToggle>
@@ -241,15 +241,14 @@ export const Background = () => {
     ); 
 }
 
-
 const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { dispatch } = useControlContext();
     const handle = () => {
         dispatch({type: dispatchType, data: true});
     }
     return(
-        <div >
-            <Button type='button' 
+        <div>
+            <Button type='button'
                 title={btnText} onClick={() => handle()}>
                 <img src={icon} alt={btnText} />
             </Button>
@@ -308,12 +307,14 @@ export const EnableShortcuts = () => {
         dispatch({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
     }
     return(
-        <FormGroup check>
-            <Label check>
-                <Input type='checkbox' onChange={handleCheck}/>{' '}
-                Enable keyboard shortcuts (<button onClick={() => console.error('Need to show shortcut info!')}>?</button>)
-            </Label>
-        </FormGroup>
+        <div className='shortcuts-group'>
+            <form check>
+                <label className='shortcuts-label'check>
+                    <input type='checkbox' onChange={handleCheck}/>{' '}
+                    Enable keyboard shortcuts (<span type='button' className='fa fa-question-circle' onClick={() => console.error('Need to show shortcut info!')}></span>)
+                </label>
+            </form>
+        </div>
     );
 }
 
@@ -325,36 +326,37 @@ export const Privacy = () => {
         dispatch({type: 'PRIVACY', data: parseInt(e.target.value)});
     }
     return(
-        <Form>
+        <Form >
         <FormGroup tag='fieldset' >
-            <legend>Privacy</legend>
-            <FormGroup check>
-                <Label check>
-                    <Input type='radio' name='setPrivacy' value='0' 
-                        // eslint-disable-next-line eqeqeq
-                        checked={checked == 0}
-                        onChange={handleChange}/>{' '}
-                    Public
-                </Label>
-            </FormGroup>
-            <FormGroup check>
-                <Label check>
-                    <Input type='radio' name='setPrivacy' value='1' disabled
-                        // eslint-disable-next-line eqeqeq
-                        checked={checked == 1}
-                        onChange={handleChange}/>{' '}
-                    Permission
-                </Label>
-            </FormGroup>
-            <FormGroup check>
-                <Label check>
-                    <Input type='radio' name='setPrivacy' value='2' 
-                        // eslint-disable-next-line eqeqeq
-                        checked={checked == 2}
-                        onChange={handleChange}/>{' '}
-                    Private
-                </Label>
-            </FormGroup>
+            <div className='row privacy-group'>
+                <FormGroup check className='col'>
+                    <Label check className='privacy-label'>
+                        <Input type='radio' name='setPrivacy' value='0' 
+                            // eslint-disable-next-line eqeqeq
+                            checked={checked == 0}
+                            onChange={handleChange}/>{' '}
+                        <span >Public</span>
+                    </Label>
+                </FormGroup >
+                <FormGroup check className='col'>
+                    <Label check className='privacy-label'>
+                        <Input type='radio' name='setPrivacy' value='1' disabled
+                            // eslint-disable-next-line eqeqeq
+                            checked={checked == 1}
+                            onChange={handleChange}/>{' '}
+                        <span>Permission</span>
+                    </Label>
+                </FormGroup>
+                <FormGroup check className='col'>
+                    <Label check  className='privacy-label'>
+                        <Input type='radio' name='setPrivacy' value='2' 
+                            // eslint-disable-next-line eqeqeq
+                            checked={checked == 2}
+                            onChange={handleChange}/>{' '}
+                        <span >Private</span>
+                    </Label>
+                </FormGroup>
+            </div>
         </FormGroup>
         </Form>
     );
