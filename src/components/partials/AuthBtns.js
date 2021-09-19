@@ -17,17 +17,7 @@ export const LoginBtn = (props) => {
             type='button' 
             className={classes}
             >Login</button>
-
-    /**
-    const { loginWithRedirect } = useAuth0();
-    return <button 
-            onClick={() => loginWithRedirect(
-                {redirectUri: url}
-            )}
-            type='button' 
-            className={classes}
-            >Login</button>
-      */                   
+               
 }
 
 export const LogoutBtn = (props) => {
