@@ -123,7 +123,7 @@ const Login = () => {
     }else if(state.isRegistered && localStorage.getItem('userid')){
         return(
            // <Loading message="redirect blocked" />
-            <Redirect to='/'/>
+            <Redirect to='/create'/>
         );
     }
     return(

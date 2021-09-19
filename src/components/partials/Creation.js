@@ -44,7 +44,6 @@ export const Creation = () => {
                 }else{
                     updateAnim({type: 'SET_ANIM', data: response});
                 }
-                
             })
             .catch(err => console.log(err))
             .finally(response => {
@@ -71,6 +70,7 @@ export const Creation = () => {
     }
     
     const handleSaveSubmission = (e) => {
+        updateAnim({type: 'USERID', data: true});
         updateAnim({type: 'SAVE_TO_ACCOUNT', data: true});
         e.preventDefault();
     }

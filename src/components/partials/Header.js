@@ -24,6 +24,7 @@ const Header = () => {
             window.localStorage.removeItem('userid');
             window.localStorage.removeItem('email');
             window.localStorage.removeItem('username');
+            window.localStorage.removeItem('isAuth');
         }
     }
     checkAuth(window.localStorage.getItem('isAuth'));
@@ -51,7 +52,7 @@ const Header = () => {
         dispatch({type: 'toggleNav', data: !state.isNavOpen})
     }
     useEffect(() => {
-        if(!isLoading & (isAuthenticated)){
+        if(!isLoading && isAuthenticated){
             dispatch({type: 'checkAuth', data: isAuthenticated});
         }
     },[isLoading, isAuthenticated]);
@@ -62,7 +63,7 @@ const Header = () => {
             <Navbar dark expand='md'>
                 <div className='container'>
                     <NavbarToggler onClick={toggleNav} /> 
-                    <NavbarBrand className='mr-auto' href='/'>
+                    <NavbarBrand className='mr-auto' href='/home'>
                         <img src={logo} height='40px' width='40px'
                             alt={SITE.name}/>
                     </NavbarBrand>            

@@ -13,7 +13,7 @@ import { Loading } from './partials/Loading';
 
 const Main = () => {
   
-    let history = useHistory();
+    const {history} = useHistory();
     
     
 
@@ -36,7 +36,7 @@ const Main = () => {
                 <Route path='/collection' history={history} component={CollectionPage} />
                 <Route path='/browse' history={history} component={BrowsePage} />
                 
-                <Redirect to='./home' />
+                <Redirect to='/home' history={history}/>
             </Switch>
             <Footer />
         </div>

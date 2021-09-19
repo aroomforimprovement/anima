@@ -195,6 +195,14 @@ export const animReducer = (state, action) => {
             return({...state, anim:{...state["anim"],
                 privacy: action.data}})
         }
+        case 'USERID':{
+            const u = window.locationStorage.getItem('userid');
+            if(!u){
+                u = state.anim.userid;
+            }
+            return({...state, anim:{...state["anim"],
+                userid: u}})
+        }
         default:
             console.log("reached DEFAULT");
             return state;
