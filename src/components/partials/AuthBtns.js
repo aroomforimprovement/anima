@@ -4,6 +4,21 @@ import { useAuth0 } from '@auth0/auth0-react';
 export const LoginBtn = (props) => {
     const classes = `btn btn-secondary ${props.size} m-1`;
     const url = `${process.env.REACT_APP_URL}login`;
+    
+    const { loginWithPopup } = useAuth0();
+
+    const loginPop = async () => {
+        loginWithPopup(
+            {redirectUri: url}
+            );
+    }
+    return <button 
+            onClick={() => loginPop()}
+            type='button' 
+            className={classes}
+            >Login</button>
+
+    /**
     const { loginWithRedirect } = useAuth0();
     return <button 
             onClick={() => loginWithRedirect(
@@ -12,7 +27,7 @@ export const LoginBtn = (props) => {
             type='button' 
             className={classes}
             >Login</button>
-                        
+      */                   
 }
 
 export const LogoutBtn = (props) => {

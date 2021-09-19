@@ -30,6 +30,7 @@ export const Creation = () => {
                     return response;
                 }else{
                     console.error("response not ok");
+                    console.dir(response);
                 }
             }, error => {
                 console.error("error fetching anim" + error);
@@ -56,7 +57,7 @@ export const Creation = () => {
         console.log("url="+url);
         if(url.match(/(create\/)\w+/) && url.match(/(create\/)\w+/).length > -1){
             console.log("create page is edit");
-            const id = url.substring(url.indexOf("create") + 6, url.length);
+            const id = url.substring(url.indexOf("create") + 7, url.length);
             console.log("id="+id);
             return id;
         }    
