@@ -57,7 +57,7 @@ export const newAnimState = {
  */
 export const animReducer = (state, action) => {
     
-    const saveAnimToAccount = (a) => {
+    const saveAnimToAccount = (a, t) => {
         console.log("saveAnimToAccount:");
         console.dir(a);
         return fetch(`${apiUrl}anim`, {
@@ -65,6 +65,7 @@ export const animReducer = (state, action) => {
             mode: 'cors',
             body: JSON.stringify(a),
             headers: {
+                Authorization: `Bearer ${t}`,
                 'Content-Type': 'application/json',
             }
         })
@@ -185,7 +186,7 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true});
         }
         case 'SAVE_TO_ACCOUNT':{
-            saveAnimToAccount(state.anim);
+            saveAnimToAccount(state.anim, action.data);
             return ({...state, enabled: true, isSaveOpen: false});
         }
         case 'CANCEL_SAVE':{

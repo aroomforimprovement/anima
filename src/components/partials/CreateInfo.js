@@ -37,7 +37,7 @@ export const CreateInfo = () => {
 }
 
 export const ShortcutInfo = () => {
-    //styling the reactstrap modal doesn't seem to do anything :(
+    //styling the reactstrap modal doesn't seem to do anything :(r
     const list = SITE.shortcuts.map((obj, i) => {
         return(
             <div className='container shortcut-info-item'>

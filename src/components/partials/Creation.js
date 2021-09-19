@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer, useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
     Form, FormGroup, Label, Input } from 'reactstrap';
@@ -7,6 +7,7 @@ import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 import { Privacy } from './ControllerBtns';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -19,12 +20,29 @@ export const useAnimContext = () => {
 
 export const Creation = () => {
 
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const [ access, setAccess ] = useState(null);
+    
+    
+    useEffect(() => {
+        const setAccessToken = async () => {
+            setAccess(await getAccessTokenSilently());
+        }
+        if(isAuthenticated){
+            setAccessToken();
+        }
+    },[isAuthenticated, getAccessTokenSilently]);
+
+
     const { controls, dispatch } = useControlContext();
     const [ anim, updateAnim ] = useReducer(animReducer, newAnimState);//startState);
     const animState = { anim, updateAnim };
-
     const getSavedAnim = (id) => {
-        return fetch(`${apiUrl}anim/${id}`)
+        return fetch(`${apiUrl}anim/${id}`,{
+                headers: {
+                    Authorization: `Bearer ${access}`,
+                }
+            })
             .then(response => {
                 if(response.ok){
                     return response;
@@ -72,7 +90,7 @@ export const Creation = () => {
     
     const handleSaveSubmission = (e) => {
         updateAnim({type: 'USERID', data: true});
-        updateAnim({type: 'SAVE_TO_ACCOUNT', data: true});
+        updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
         e.preventDefault();
     }
 
@@ -107,7 +125,6 @@ export const Creation = () => {
                             >Close</Button>
                         </ModalFooter>
                     </Modal >
-
                     <Modal isOpen={anim.isSaveOpen} 
                         toggle={() => updateAnim({type: 'setIsOpen', data: !anim.isSaveOpen})}>
                         <ModalHeader>Save your creation to your account</ModalHeader>
