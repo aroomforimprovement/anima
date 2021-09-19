@@ -196,7 +196,7 @@ export const animReducer = (state, action) => {
                 privacy: action.data}})
         }
         case 'USERID':{
-            const u = window.locationStorage.getItem('userid');
+            const u = window.localStorage.getItem('userid');
             if(!u){
                 u = state.anim.userid;
             }
