@@ -4,7 +4,7 @@ import { SITE } from '../shared/site';
 import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
 import { NavLink } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { Loading } from './partials/Loading';
 
 const Home = () => {
     
@@ -36,9 +36,9 @@ const Home = () => {
                                     Create
                                 </button>
                         </NavLink>
-                        {auth ? null : <LoginBtn size='btn-lg' href='/login'/>}
-                        {auth ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
-                        {auth ? null : <SignupBtn size='btn-lg' href='/signup' />}
+                        {isLoading ? <Loading /> : isAuthenticated ? null : <LoginBtn size='btn-lg' href='/login'/>}
+                        {isLoading ? <Loading /> : isAuthenticated ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
+                        {isLoading ? <Loading /> : isAuthenticated ? null : <SignupBtn size='btn-lg' href='/signup' />}
                     </div>
                 </div>
             </Jumbotron>

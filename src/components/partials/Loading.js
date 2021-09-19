@@ -2,8 +2,8 @@ import React from 'react';
 
 export const Loading = ({message}) => {
     return(
-        <div className='col-12'>
-            <span className='fa fa-spinner fa-pulse fa-3x fa-fw'></span>
+        <div className='loading col-1'>
+            <span className='fa fa-spinner fa-pulse fa-1x fa-fw'></span>
             <p>{message}</p>
         </div>
     );

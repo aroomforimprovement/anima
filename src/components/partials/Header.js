@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { Navbar, NavItem, NavbarToggler, NavbarBrand, Nav, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
+import { Loading } from './Loading';
 import { SITE } from '../../shared/site';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -74,11 +75,11 @@ const Header = () => {
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
                                 </NavLink>
                             </NavItem>
-                            <NavItem className='nav-item nav-i'>
+                            {isLoading ? <Loading /> : isAuthenticated ? <NavItem className='nav-item nav-i'>
                                 <NavLink className='nav-link' to='/collection'>
                                     <span className='fa fa-film fa-md m-1'></span> Collection
                                 </NavLink>
-                            </NavItem>
+                            </NavItem> : null}
                             <NavItem className='nav-item nav-i'>
                                 <NavLink className='nav-link' to='/browse'>
                                     <span className='fa fa-eye fa-md m-1'></span> Browse
@@ -88,13 +89,13 @@ const Header = () => {
                         <div className='auth-nav-wrapper'>
                             <Nav className='auth-nav' navbar >
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
+                                    {isLoading ? <Loading /> : isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
+                                    {isLoading ? <Loading /> : isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
+                                    {isLoading ? <Loading /> : isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
                                 </NavItem>
                             </Nav>
                         </div>

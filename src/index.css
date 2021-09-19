@@ -57,6 +57,10 @@ code {
   text-align: left;
 }
 
+.loading {
+  display:inline-block;
+}
+
 .home-page-heading {
   padding-top: 1.5em;
   padding-bottom: 1em;
