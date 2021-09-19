@@ -241,14 +241,14 @@ code {
 }
 
 .shortcut-info{
-  background-color: rgb(119, 119, 119) !important;
+  background-color: rgb(117, 21, 21) !important;
 }
 .shortcut-info p{
   font-size: small;
 }
 
 .shortcut-info-item li p {
-  font-size: x-small;
+  font-size: small;
 }
 
 .warn{
