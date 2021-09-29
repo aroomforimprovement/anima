@@ -87,17 +87,19 @@ const Header = () => {
                             </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>
+                            {isLoading ? <Loading /> :
                             <Nav className='auth-nav' navbar >
                                 <NavItem className='nav-item nav-i'>
-                                    {isLoading ? <Loading /> : isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
+                                    {isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isLoading ? <Loading /> : isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
+                                    {isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isLoading ? <Loading /> : isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
+                                    {isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
                                 </NavItem>
                             </Nav>
+                            }
                         </div>
                     </Collapse>
                 </div>

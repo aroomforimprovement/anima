@@ -27,6 +27,7 @@ export const Creation = () => {
     useEffect(() => {
         const setAccessToken = async () => {
             setAccess(await getAccessTokenSilently());
+            console.log("ACCESS: " + access);
         }
         if(isAuthenticated){
             setAccessToken();
