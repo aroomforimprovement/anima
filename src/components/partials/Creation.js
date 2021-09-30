@@ -27,12 +27,11 @@ export const Creation = () => {
     useEffect(() => {
         const setAccessToken = async () => {
             setAccess(await getAccessTokenSilently());
-            console.log("ACCESS: " + access);
         }
         if(isAuthenticated){
             setAccessToken();
         }
-    },[isAuthenticated, getAccessTokenSilently]);
+    },[isAuthenticated, getAccessTokenSilently, access]);
 
 
     const { controls, dispatch } = useControlContext();
