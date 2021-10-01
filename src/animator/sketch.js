@@ -106,6 +106,7 @@ export const sketch = (p5) => {
             const p = props.controls.privacy;
             updateAnim({type: 'PRIVACY', data: p});
             dispatch({type: 'PRIVACY', data: null});
+            dispatch({type: 'SET_PRIVACY', data: p});
             
         }
     }

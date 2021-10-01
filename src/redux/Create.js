@@ -69,6 +69,9 @@ export const controlReducer = (state, action) => {
         case 'PRIVACY':{
             return ({...state, privacy: action.data});
         }
+        case 'SET_PRIVACY':{
+            return ({...state, currentPrivacy: action.data});
+        }
         default:
             return state;
     }

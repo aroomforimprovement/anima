@@ -397,8 +397,8 @@ export const EnableShortcuts = () => {
 }
 
 export const Privacy = () => {
-    const { dispatch } = useControlContext();
-    const [ checked, setChecked ] = useState(0);
+    const { controls, dispatch } = useControlContext();
+    const [ checked, setChecked ] = useState(controls.currentPrivacy);
     const handleChange = (e) => {
         setChecked(e.target.value);
         dispatch({type: 'PRIVACY', data: parseInt(e.target.value)});

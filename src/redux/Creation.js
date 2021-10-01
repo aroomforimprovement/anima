@@ -19,6 +19,17 @@ const getUserId = (animid) => {
         return getTempUserId(animid)
     }
 }
+const getTempUsername = () => {
+    return "Unknown";
+}
+const getUsername = () => {
+    const username = window.localStorage.getItem('username');
+    if(username){
+        return username;
+    }else{
+        return getTempUsername();
+    }
+}
 
 export const newAnimState = {
     isSet: false,
@@ -26,6 +37,7 @@ export const newAnimState = {
     anim:{
         "animid": getNewAnimId(),
         "userid": getUserId(getNewAnimId()),
+        "username": getUsername(),
         "name": null,
         "type": "animation",
         "created": Date.now(),

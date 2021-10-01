@@ -22,12 +22,15 @@ export const values = {
         endPreview: false,
         isPreviewOpen: false,
         isSaveOpen: false,
+        privacy: 0,
+        currentPrivacy: 0
     },
     initialAnimState: {
         enabled: true,
         anim:{
             "animid": null,
             "userid": null,
+            "username": null,
             "name": null,
             "type": "animation",
             "created": null,
