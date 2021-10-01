@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { SITE } from "../../shared/site";
+import { Modal, ModalFooter, Button } from "reactstrap";
 import { useControlContext } from "../Create";
+import { ReactP5Wrapper } from "react-p5-wrapper";
+import { sketch } from "../../animator/sketch";
 
 export const CollectionItem = ({anim}) => {
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
     const handlePreview = (e) => {
-
+        setIsPreviewOpen(true);
     }
 
     const handleDownload = (e) => {
@@ -54,7 +58,19 @@ export const CollectionItem = ({anim}) => {
                     </div>
                 </div>
             </div>
-            
+            <Modal isOpen={isPreviewOpen} 
+                toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
+                <img src={anim.previewFile} alt={`Previewing ${anim.name}`} />
+                <ModalFooter>
+                    <p>{anim.name}</p>
+                    <Button size='sm' 
+                        onClick={() => setIsPreviewOpen(false)}
+                    >Close</Button>
+                </ModalFooter>
+            </Modal >
+            <div hidden={true}>
+                <ReactP5Wrapper sketch={sketch} preview={true} anim={anim} id='animCanvas'/>
+            </div>
         </div>
     );
 }

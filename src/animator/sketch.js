@@ -1,9 +1,8 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { saveAs } from 'file-saver';
+import { downloadAnimAsGif, drawPoint, drawPoints, previewAnim } from './anim-util';
 
-let CCapture;
- 
+
 export const sketch = (p5) => {
     let p5canvas = undefined;
     let controls = values.initialControlState; 
@@ -12,7 +11,7 @@ export const sketch = (p5) => {
     let updateAnim;
     let thisStroke = [];
     let isStroke = false;
-    let capturer;
+
 
     /**
      *  P5
@@ -21,9 +20,6 @@ export const sketch = (p5) => {
         p5canvas = p5.createCanvas(600, 600);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
-        console.log(window);
-        CCapture = window.CCapture;
-
     }
 
     p5.updateWithProps = (props) => {
@@ -81,7 +77,7 @@ export const sketch = (p5) => {
             if(anim.anim.frames.length < 1){
                 alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
             }else{
-                downloadAnimAsGif(anim.anim);
+                downloadAnimAsGif(anim.anim, p5canvas, p5);
             }            
         }
         if(props.controls.preview){
@@ -91,7 +87,7 @@ export const sketch = (p5) => {
             }else{
                 updateAnim({type: 'PREVIEW', data: anim.anim});
                 dispatch({type: 'DISABLE', data: true});
-                previewAnim(anim.anim);
+                previewAnim(anim.anim, p5canvas, p5);
             }
         }
         if(props.controls.endPreview){
@@ -241,37 +237,10 @@ export const sketch = (p5) => {
      * DRAWING ACTIONS 
      */
 
-    const drawPoint = (p) => {
-        p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
-        switch(p.m)
-        {
-            case CC.SINGLE:
-                p5.ellipse(p.x, p.y, p.ps, p.ps);
-                break;
-            case CC.MIRROR:
-                p5.ellipse(p.x, p.y, p.ps, p.ps);
-				p5.ellipse(p5.width - p.x, p.y, p.ps, p.ps);
-                break;
-            case CC.LAKE:
-                p5.ellipse(p.x, p.y, p.ps, p.ps);
-				p5.ellipse(p.x, p5.height - p.y, p.ps, p.ps);
-                break;
-            case CC.QUAD:
-                p5.ellipse(p.x, p.y, p.ps, p.ps);
-				p5.ellipse(p.x, p5.height - p.y, p.ps, p.ps);
-				p5.ellipse(p5.width - p.x, p5.height - p.y, p.ps, p.ps);
-				p5.ellipse(p5.width - p.x, p.y, p.ps, p.ps);
-                break;
-                default:
-                    console.warn('drawing mode has been set to a an invalid value');
-                    return false;        
-        }
-        return true;
-    }
 
     const setPointDrawn = (x, y) => {
             let p = getPointObj(x, y);
-            if(drawPoint(p)){
+            if(drawPoint(p, p5)){
                 thisStroke.push(p);
                 if(!isStroke){
                     //save and clear stroke
@@ -288,7 +257,7 @@ export const sketch = (p5) => {
     const wipeCurrentFrame = () => {
         p5.background(values.initialBgc);
         if(anim.lastFrame && anim.lastFrame.length > 0){
-            drawPoints(anim.bg);
+            drawPoints(anim.bg, p5);
         }
         setBgOverlay();
     }
@@ -296,30 +265,19 @@ export const sketch = (p5) => {
     const redrawCurrentFrame = () => {
         p5.background(values.initialBgc);
         if(anim.lastFrame && anim.lastFrame.length > 0){
-            drawPoints(anim.bg);
+            drawPoints(anim.bg, p5);
         }
         drawBg(anim.bg);
         if(anim.undos && anim.undos.length > 0){
-            drawPoints(anim.undos);
+            drawPoints(anim.undos, p5);
         }
     }
 
-    const drawPoints = (points) => {
-        points.forEach((element) => {
-            drawStroke(element);
-        });
-    }
-
-    const drawStroke = (stroke) => {
-        stroke.forEach((element) => {
-            drawPoint(element);
-        });
-    }
 
     const drawBg = (bg) => {
         setBgOverlay();
         if(bg && bg.length > 0){
-            drawPoints(anim.bg);
+            drawPoints(anim.bg, p5);
         }
     }
 
@@ -332,57 +290,6 @@ export const sketch = (p5) => {
      *  DOWNLOAD / PREVIEW 
      */
     
-
-    const downloadAnimAsGif = (a) => {
-        renderAnim(a, 'DOWNLOAD');
-    }
-
-    const previewAnim = async (a) => {
-        renderAnim(a, 'PREVIEW');
-    }
-
-    const renderAnim = (a, type) => {
-        capturer = new CCapture({format: 'gif',
-             workersPath: process.env.PUBLIC_URL + '/ccapture/',
-             framerate: a.frate
-         });
-         capturer.start();
-         setBgOverlay();
-         setBgOverlay();
-         a.frames.forEach((f) => {
-            setFrameCaptured(f, capturer);
-         });
-         capturer.stop();
-         capturer.save((blob) => {
-            if(type === 'PREVIEW'){
-                playPreview(blob, a.name);
-            }else if(type === 'DOWNLOAD'){
-                saveAs(blob, a.name);
-            }
-         });
-    }
-
-    const playPreview = (blob, name) => {
-
-        updateAnim({type: 'PLAY_PREVIEW', data: {blob: blob, name: name}});
-    }
-
-    
-
-     const setFrameCaptured = async (f, capturer) => {
-        drawFrame(f)
-                let img = p5.get(0, 0, 600, 600);
-                img.loadPixels();
-                p5.image(img, 0, 0);
-                capturer.capture(p5canvas.elt)
-     }
-
-
-    const drawFrame = (f) => {
-        setBgOverlay();
-        drawPoints(f.bg);
-        drawPoints(f.points);
-    }
     /**
      * 
      *  DRAWING OBJ UTILS 
