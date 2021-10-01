@@ -1,9 +1,9 @@
 import React from 'react';
-import { Problem } from './partials/Problem';
+import Collection from './Collection';
 
 const Browse = () => {
     return(
-        <Problem message={"Page is not implemented"}/>
+        <Collection />
     );
 }
 

@@ -72,7 +72,6 @@ export const Creation = () => {
     }
 
     const getIdFromUrl = (url) => {
-        console.log("url="+url);
         if(url.match(/(create\/)\w+/) && url.match(/(create\/)\w+/).length > -1){
             console.log("create page is edit");
             const id = url.substring(url.indexOf("create") + 7, url.length);

@@ -76,7 +76,7 @@ const Header = () => {
                                 </NavLink>
                             </NavItem>
                             {isLoading ? <Loading /> : isAuthenticated ? <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link' to='/collection'>
+                                <NavLink className='nav-link' to={`/collection/${window.localStorage.getItem('userid')}`}>
                                     <span className='fa fa-film fa-md m-1'></span> Collection
                                 </NavLink>
                             </NavItem> : null}
