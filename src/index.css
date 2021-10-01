@@ -251,6 +251,14 @@ code {
   font-size: smaller;
 }
 
+.coll-item{
+
+}
+
+.coll-item-detail{
+  text-align: start;
+}
+
 .warn{
   color:rgb(173, 2, 2);
 }
