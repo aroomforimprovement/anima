@@ -198,6 +198,8 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true});
         }
         case 'SAVE_TO_ACCOUNT':{
+            let anim = {...state.anim};
+            anim.username = window.localStorage.getItem('username') ? window.localStorage.getItem('username') : "Unknown";
             saveAnimToAccount(state.anim, action.data);
             return ({...state, enabled: true, isSaveOpen: false});
         }
