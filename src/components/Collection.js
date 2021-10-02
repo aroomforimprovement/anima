@@ -6,11 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 const apiUrl = process.env.REACT_APP_API_URL;
 const INIT_COLLECTION_STATE = {collection: [{"name":"nothing"}], id: false, isSet: false};
 
-const CollectionPreviewContext = createContext({previewFile : null});
 
-export const useCollectionPreviewContext = () => {
-    return useContext(CollectionPreviewContext);
-}
 
 const Collection = () => {
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -19,18 +15,8 @@ const Collection = () => {
     const [isSet, setIsSet] = useState(false);
     const [isBrowse, setIsBrowse] = useState(false);
 
-    const collectionPreviewInitialState = {previewFile: null}
-    const collectionPreviewReducer = (state, action) => {
-        switch(action.type){
-            case 'SET_PREVIEW_FILE':{
-                return ({...state, previewFile: action.data});
-            }
-            default:
-                break;
-        }
-    }
-    const [collectionPreviewState, collectionPreviewDispatch] = useReducer(collectionPreviewReducer, collectionPreviewInitialState);
-
+   
+    
     const collectionReducer = (state, action) => {
         console.log("collectionReducer: " + action.type + ":" + action.data);
         
@@ -114,7 +100,7 @@ const Collection = () => {
             if(window.location.href.indexOf('browse') > -1){
                 setIsBrowse(true);
             }
-        } 
+        }
         if(isAuthenticated && access && collectionState.id && !isSet){
             console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
             setCollectionState({type: 'GET_COLLECTION', data: collectionState.id});
@@ -143,7 +129,9 @@ const Collection = () => {
         
     return(
         <div className='container'>
-            {collectionItems}
+            <div className='col col-12 collection'>
+                {collectionItems}
+            </div>
         </div>
     );
 }
