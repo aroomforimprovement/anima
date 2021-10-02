@@ -17,12 +17,13 @@ export const CollectionItem = ({anim}) => {
     const collectionItemReducer = (state, action) => {
         switch(action.type){
             case 'SET_PREVIEW_FILE':{
+                const previewFile = URL.createObjectURL(action.data.blob);
+                console.dir(previewFile);
                 return ({...state, 
-                    previewFile: URL.createObjectURL(action.data.blob), 
+                    previewFile: previewFile, 
                     previewName: action.data.name  
                 });
             }
-            
             default:
                 break;
         }
@@ -50,8 +51,10 @@ export const CollectionItem = ({anim}) => {
         <div className='col col-12 col-sm-5 col-md-3 m-1 border border-black rounded coll-item'>
             <div className='row'>
                 
-                <img src=''//collectionItemState.previewFile} loading all the previews disables the UI 
-                    alt={anim.name} className='col col-11 border mt-2 ms-2'></img>
+            <video loop autoPlay> 
+                <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+            
+            </video>
             </div>
             <div className='row'>
                 <div className='col col-12 mt-2 ms-2'>
@@ -88,7 +91,10 @@ export const CollectionItem = ({anim}) => {
         </div>
         <Modal size='lg' isOpen={isPreviewOpen} 
             toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
-            <img src={collectionItemState.previewFile} alt={`Previewing ${anim.name}`} />
+            <video controls loop autoPlay> 
+                <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+            
+            </video>
             <ModalFooter>
                 <p>{anim.name}</p>
                 <Button size='sm' 
@@ -98,12 +104,17 @@ export const CollectionItem = ({anim}) => {
             {//putting this outside the modal will load the preview to be available
             //immediately for the thumbnail but it freezes the ui
             }
-            <div hidden={true}>
-            <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
-                collectionItemDispatch={collectionItemDispatch} />
-            </div> 
+            
         </Modal > 
-          
+        {
+            collectionItemState.previewFile 
+            ? <div></div>
+            :
+            <div hidden={true}>    
+                <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
+                    collectionItemDispatch={collectionItemDispatch} />
+            </div>
+            } 
     </div>
     );
 }

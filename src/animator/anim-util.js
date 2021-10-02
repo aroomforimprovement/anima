@@ -82,8 +82,8 @@ export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch) => {
 
 export const renderAnim = (a, type, p5canvas, p5, collectionItemDispatch) =>{
     const CCapture = window.CCapture; 
-    let capturer = new CCapture({format: 'gif',
-        workersPath: process.env.PUBLIC_URL + '/ccapture/',
+    let capturer = new CCapture({format: 'webm',
+//        workersPath: process.env.PUBLIC_URL + '/ccapture/',
         framerate: a.frate
     });
     capturer.start();
@@ -115,7 +115,7 @@ export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
 }
 
 export const drawBg = (bg, p5) => {
-    setBgOverlay();
+    setBgOverlay(p5);
     if(bg && bg.length > 0){
         drawPoints(bg, p5);
     }
