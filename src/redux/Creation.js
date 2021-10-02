@@ -184,7 +184,7 @@ export const animReducer = (state, action) => {
             return({...state,
                 isPreviewOpen: false, enabled: true});
         }
-        case 'PLAY_PREVIEW':{
+        case 'SET_PREVIEW_FILE':{
             return ({...state, 
                 previewFile: URL.createObjectURL(action.data.blob), 
                 previewName: action.data.name

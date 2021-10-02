@@ -87,7 +87,7 @@ export const sketch = (p5) => {
             }else{
                 updateAnim({type: 'PREVIEW', data: anim.anim});
                 dispatch({type: 'DISABLE', data: true});
-                previewAnim(anim.anim, p5canvas, p5);
+                previewAnim(anim.anim, p5canvas, p5, updateAnim);
             }
         }
         if(props.controls.endPreview){

@@ -57,12 +57,19 @@ export const drawStroke = (stroke, p5) => {
         drawPoint(element, p5);
     });
 }
-
-export const playPreview = (blob, name, collectionItemDispatch) => {
-    collectionItemDispatch({
-        type: 'SET_PREVIEW_FILE', 
-        data: {blob : blob, name: name}
-    });
+/**
+ * 
+ * @param {*} blob 
+ * @param {*} name 
+ * @param {f} dispatch will be either updateAnim or collectionItemDispatch
+ */
+export const playPreview = (blob, name, dispatch) => {
+    if(dispatch){
+        dispatch({
+            type: 'SET_PREVIEW_FILE', 
+            data: {blob : blob, name: name}
+        });    
+    }
 }
 
 export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch) => {
