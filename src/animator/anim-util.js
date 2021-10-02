@@ -1,10 +1,15 @@
 import { values } from './values';
 import { CC } from './controls';
 import { saveAs } from 'file-saver';
+import { bindActionCreators } from 'redux';
 
 
 export const downloadAnimAsGif = (a, p5canvas, p5) => {
-    renderAnim(a, 'DOWNLOAD', p5canvas, p5);
+    try{
+        renderAnim(a, 'DOWNLOAD', p5canvas, p5);
+    }catch(err){
+        console.error(err);
+    }
 }
 
 export const drawFrame = (f, p5) => {
@@ -53,15 +58,22 @@ export const drawStroke = (stroke, p5) => {
     });
 }
 
-export const playPreview = (blob, name) => {
-    //todo
+export const playPreview = (blob, name, collectionItemDispatch) => {
+    collectionItemDispatch({
+        type: 'SET_PREVIEW_FILE', 
+        data: {blob : blob, name: name}
+    });
 }
 
-export const previewAnim = async (a, p5canvas, p5) => {
-    renderAnim(a, 'PREVIEW', p5canvas, p5);
+export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch) => {
+    try{
+        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch);
+    }catch(err){
+        console.error(err);
+    }
 }
 
-export const renderAnim = (a, type, p5canvas, p5) =>{
+export const renderAnim = (a, type, p5canvas, p5, collectionItemDispatch) =>{
     const CCapture = window.CCapture; 
     let capturer = new CCapture({format: 'gif',
         workersPath: process.env.PUBLIC_URL + '/ccapture/',
@@ -76,7 +88,7 @@ export const renderAnim = (a, type, p5canvas, p5) =>{
     capturer.stop();
     capturer.save((blob) => {
         if(type === 'PREVIEW'){
-            playPreview(blob, a.name);
+            playPreview(blob, a.name, collectionItemDispatch);
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);
         }
@@ -93,4 +105,11 @@ export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
     img.loadPixels();
     p5.image(img, 0, 0);
     capturer.capture(p5canvas.elt)
+}
+
+export const drawBg = (bg, p5) => {
+    setBgOverlay();
+    if(bg && bg.length > 0){
+        drawPoints(bg, p5);
+    }
 }

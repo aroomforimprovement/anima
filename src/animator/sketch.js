@@ -1,6 +1,6 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { downloadAnimAsGif, drawPoint, drawPoints, previewAnim } from './anim-util';
+import { downloadAnimAsGif, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 
 
 export const sketch = (p5) => {
@@ -274,16 +274,7 @@ export const sketch = (p5) => {
     }
 
 
-    const drawBg = (bg) => {
-        setBgOverlay();
-        if(bg && bg.length > 0){
-            drawPoints(anim.bg, p5);
-        }
-    }
 
-    const setBgOverlay = () => {
-        p5.background(values.bgc);
-    }
 
     /**
      * 

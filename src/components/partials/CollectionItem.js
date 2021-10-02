@@ -1,12 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useContext, useReducer, useEffect } from "react";
 import { SITE } from "../../shared/site";
 import { Modal, ModalFooter, Button } from "reactstrap";
-import { useControlContext } from "../Create";
 import { ReactP5Wrapper } from "react-p5-wrapper";
-import { sketch } from "../../animator/sketch";
+import { preview } from "../../animator/preview";
+
+const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
+const CollectionItemContext = createContext(collectionItemInitialState);
+
+export const useCollectionItemwContext = () => {
+    return useContext(CollectionItemContext);
+}
 
 export const CollectionItem = ({anim}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    
+    const collectionItemReducer = (state, action) => {
+        switch(action.type){
+            case 'SET_PREVIEW_FILE':{
+                return ({...state, 
+                    previewFile: URL.createObjectURL(action.data.blob), 
+                    previewName: action.data.name  
+                });
+            }
+            case 'HIDE_CANVAS':{
+                return ({...state, hidden: action.data});
+            }
+            default:
+                break;
+        }
+    }
+
+    const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
+    
+    useEffect(() => {
+        console.log("useEffect");
+        console.log(collectionItemState.previewFile);
+        if(collectionItemState.previewFile){
+            collectionItemDispatch({type: 'HIDE_CANVAS', data: true});
+        }
+    },[collectionItemState.previewFile]);
 
     const handlePreview = (e) => {
         setIsPreviewOpen(true);
@@ -19,7 +51,7 @@ export const CollectionItem = ({anim}) => {
     return(
         <div className='container col col-6 col-lg-8 border border-black rounded coll-item'>
             <div className='row'>
-                <img src='' alt={anim.name}
+                <img src={collectionItemState.previewFile} alt={anim.name}
                     className='col col-2 border mt-2 ms-2'></img>
                 <div className='col col-6 mt-2'>
                     <h5 >{anim.name}</h5>
@@ -60,17 +92,19 @@ export const CollectionItem = ({anim}) => {
             </div>
             <Modal isOpen={isPreviewOpen} 
                 toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
-                <img src={anim.previewFile} alt={`Previewing ${anim.name}`} />
+                <img src={collectionItemState.previewFile} alt={`Previewing ${anim.name}`} />
                 <ModalFooter>
                     <p>{anim.name}</p>
                     <Button size='sm' 
                         onClick={() => setIsPreviewOpen(false)}
                     >Close</Button>
                 </ModalFooter>
-            </Modal >
-            <div hidden={true}>
-                <ReactP5Wrapper sketch={sketch} preview={true} anim={anim} id='animCanvas'/>
+                <div hidden={true}>
+                <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
+                    collectionItemDispatch={collectionItemDispatch} />
             </div>
+            </Modal >
+            
         </div>
     );
 }
