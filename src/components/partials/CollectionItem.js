@@ -4,6 +4,7 @@ import { Modal, ModalFooter, Button } from "reactstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../animator/preview";
 import { Loading } from './Loading';
+import LazyLoad from "react-lazyload";
 
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
 const CollectionItemContext = createContext(collectionItemInitialState);
@@ -49,7 +50,9 @@ export const CollectionItem = ({anim}) => {
     }
 
     return(
-        <div className='col col-12 col-sm-5 col-md-3 m-1 border border-black rounded coll-item'>
+        <LazyLoad height={200} offset={100} 
+        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1 border border-black rounded coll-item'>
+        <div >
             <div className='row'>
             {
                 collectionItemState.previewFile ?
@@ -118,5 +121,6 @@ export const CollectionItem = ({anim}) => {
             </div>
             } 
     </div>
+    </LazyLoad>
     );
 }
