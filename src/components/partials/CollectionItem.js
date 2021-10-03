@@ -3,6 +3,7 @@ import { SITE } from "../../shared/site";
 import { Modal, ModalFooter, Button } from "reactstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../animator/preview";
+import { Loading } from './Loading';
 
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
 const CollectionItemContext = createContext(collectionItemInitialState);
@@ -50,11 +51,13 @@ export const CollectionItem = ({anim}) => {
     return(
         <div className='col col-12 col-sm-5 col-md-3 m-1 border border-black rounded coll-item'>
             <div className='row'>
-                
+            {
+                collectionItemState.previewFile ?
             <video loop autoPlay> 
                 <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-            
-            </video>
+            </video> :
+            <Loading />
+            }
             </div>
             <div className='row'>
                 <div className='col col-12 mt-2 ms-2'>
@@ -63,7 +66,7 @@ export const CollectionItem = ({anim}) => {
                 </div>
                 <div className='row'>
                     <div className='col col-5 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
-                    <div className='col col-5 ms-2'><small>{anim.created}</small></div>
+                    <div className='col col-5 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
                 </div>
             <div className='col col-12'>
                 <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
@@ -91,20 +94,19 @@ export const CollectionItem = ({anim}) => {
         </div>
         <Modal size='lg' isOpen={isPreviewOpen} 
             toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
+            {
+                collectionItemState.previewFile ?
             <video controls loop autoPlay> 
                 <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-            
-            </video>
+            </video> :
+            <Loading />
+            }
             <ModalFooter>
                 <p>{anim.name}</p>
                 <Button size='sm' 
                     onClick={() => setIsPreviewOpen(false)}
                 >Close</Button>
             </ModalFooter>
-            {//putting this outside the modal will load the preview to be available
-            //immediately for the thumbnail but it freezes the ui
-            }
-            
         </Modal > 
         {
             collectionItemState.previewFile 

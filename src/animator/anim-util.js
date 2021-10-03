@@ -1,7 +1,6 @@
 import { values } from './values';
 import { CC } from './controls';
 import { saveAs } from 'file-saver';
-import { bindActionCreators } from 'redux';
 
 
 export const downloadAnimAsGif = (a, p5canvas, p5) => {

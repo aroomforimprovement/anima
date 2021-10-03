@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useReducer, useContext, createContext } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { Loading } from './partials/Loading';
 
 const apiUrl = process.env.REACT_APP_API_URL;
-const INIT_COLLECTION_STATE = {collection: [{"name":"nothing"}], id: false, isSet: false};
+const INIT_COLLECTION_STATE = {collection: null, id: false, isSet: false};
 
 
 
 const Collection = () => {
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const [access, setAccess] = useState(null);
-    const [currentCollection, setCollection] = useState(INIT_COLLECTION_STATE.collection);
+    const [currentCollection, setCollection] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const [isBrowse, setIsBrowse] = useState(false);
 
@@ -120,11 +120,12 @@ const Collection = () => {
     },[isAuthenticated, getAccessTokenSilently, access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
 
 
-    const collectionItems = currentCollection.map((anim, i) => {
+    const collectionItems = currentCollection ? currentCollection.map((anim, i) => {
             return(
                 <CollectionItem key={i} anim={anim}/>
                 );
-        }) 
+        }) :
+        <Loading />
             
         
     return(

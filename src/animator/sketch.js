@@ -65,12 +65,12 @@ export const sketch = (p5) => {
         if(props.controls.drawBg){
             dispatch({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
-            drawBg(anim.bg);
+            drawBg(anim.bg, p5);
         }
         if(props.controls.next){
             dispatch({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
-            drawBg(anim.bg);
+            drawBg(anim.bg, p5);
         }
         if(props.controls.download){
             dispatch({type: 'DOWNLOAD', data: false});

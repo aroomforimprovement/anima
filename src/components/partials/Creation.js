@@ -116,8 +116,10 @@ export const Creation = () => {
 
                     <Modal isOpen={anim.isPreviewOpen} 
                         toggle={() => updateAnim({type: 'setIsPreviewOpen', data: !anim.isPreviewOpen})}>
-                        <img src={anim.previewFile} alt={`Previewing ${anim.previewName}`} />
-                        <ModalFooter>
+                            <video controls loop autoPlay> 
+                                <source src={anim.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                            </video>
+                       <ModalFooter>
                             <p>{anim.previewName}</p>
                             <Button size='sm' 
                                 onClick={() => dispatch({type: 'END_PREVIEW', data: true})}
