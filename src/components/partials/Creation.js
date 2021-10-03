@@ -134,7 +134,7 @@ export const Creation = () => {
                                 <FormGroup>
                                     <Label htmlFor="name">Name your creation:</Label>
                                     <Input type='text' id='name' name='name' autoFocus={true}
-                                        onChange={handleNameChange}/>
+                                        onChange={handleNameChange} value={anim.anim.name}/>
                                 </FormGroup>
                             </ModalBody>
                             <ModalFooter>
