@@ -8,6 +8,7 @@ import Logout from './Logout';
 import Create from './Create';
 import Collection from './Collection';
 import Browse from './Browse';
+import Account from './Account';
 
 const Main = () => {
   
@@ -21,6 +22,7 @@ const Main = () => {
     const CreatePage = () => { return <Create /> }
     const CollectionPage = () => { return <Collection /> }
     const BrowsePage = () => { return <Browse /> }
+    const AccountPage = () => { return <Account />}
 
         
     return (
@@ -33,7 +35,7 @@ const Main = () => {
                 <Route path='/create' history={history} component={CreatePage} />
                 <Route path='/collection' history={history} component={CollectionPage} />
                 <Route path='/browse' history={history} component={BrowsePage} />
-                
+                <Route path='/account' history={history} component={AccountPage} />
                 <Redirect to='/home' history={history}/>
             </Switch>
             <Footer />

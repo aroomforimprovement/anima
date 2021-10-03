@@ -98,6 +98,14 @@ const Header = () => {
                                 <NavItem className='nav-item nav-i'>
                                     {isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
                                 </NavItem>
+                                <NavItem>
+                                    {isAuthenticated 
+                                        ? <NavLink className='nav-link rounded-circle border border-secondary ms-3 px-2 py-1' 
+                                            to='/account' >
+                                            <span className='fa fa-user '>{' '}</span>    
+                                        </NavLink> 
+                                        : null}
+                                </NavItem>
                             </Nav>
                             }
                         </div>

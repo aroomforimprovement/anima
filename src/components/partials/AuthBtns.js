@@ -47,3 +47,4 @@ export const SignupBtn = (props) => {
             >Sign up</button>
 
 }
+
