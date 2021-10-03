@@ -1,12 +1,11 @@
-
-//import { ControlContext, useControlContext } from '../components/Create';
-import uuid from 'react-uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const getNewAnimId = () => {
-    return uuid();
+    console.log("getNewAnimId");
+    return uuidv4();
 }    
 const getTempUserId = (animid) => {
     return "temp_"+animid.substring(0, 19);
@@ -31,30 +30,34 @@ const getUsername = () => {
     }
 }
 
-export const newAnimState = {
-    isSet: false,
-    enabled: true,
-    anim:{
-        "animid": getNewAnimId(),
-        "userid": getUserId(getNewAnimId()),
-        "username": getUsername(),
-        "name": null,
-        "type": "animation",
-        "created": Date.now(),
-        "modified": Date.now(),
-        "frate": 8,
-        "size": 600,
-        "privacy": 0,
-        "frames": [],
-    },
-    undos:[],
-    redos:[],
-    undid:[],
-    redid:[],
-    bg:[],
-    lastFrame:[],
-    fid: 0,
-    isPreviewOpen: false,
+export const newAnimState = () => {
+    const animid = getNewAnimId();
+    const userid = getUserId(getNewAnimId());
+    return {
+        isSet: false,
+        enabled: true,
+        anim:{
+            "animid": animid,
+            "userid": userid,
+            "username": getUsername(),
+            "name": null,
+            "type": "animation",
+            "created": Date.now(),
+            "modified": Date.now(),
+            "frate": 8,
+            "size": 600,
+            "privacy": 0,
+            "frames": [],
+        },
+        undos:[],
+        redos:[],
+        undid:[],
+        redid:[],
+        bg:[],
+        lastFrame:[],
+        fid: 0,
+        isPreviewOpen: false,
+    }
 }
 
 /**
