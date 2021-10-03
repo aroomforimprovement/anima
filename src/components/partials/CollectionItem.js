@@ -51,7 +51,7 @@ export const CollectionItem = ({anim}) => {
 
     return(
         <LazyLoad height={200} offset={100} 
-        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1 border border-black rounded coll-item'>
+        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1  rounded coll-item'>
         <div >
             <div className='row'>
             {
@@ -68,8 +68,8 @@ export const CollectionItem = ({anim}) => {
                     <div className='coll-item-username' ><small>by {anim.username}</small></div>
                 </div>
                 <div className='row'>
-                    <div className='col col-5 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
-                    <div className='col col-5 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
+                    <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
+                    <div className='col col-8 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
                 </div>
             <div className='col col-12'>
                 <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
