@@ -37,6 +37,7 @@ export const Creation = () => {
     const { controls, dispatch } = useControlContext();
     const [ anim, updateAnim ] = useReducer(animReducer, newAnimState());//startState);
     const animState = { anim, updateAnim };
+    
     const getSavedAnim = (id) => {
         return fetch(`${apiUrl}anim/${id}`,{
                 headers: {
