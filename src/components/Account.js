@@ -1,14 +1,15 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { values } from '../animator/values';
 import { SITE } from '../shared/site';
+import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Account = () => {
     const [access, setAccess] = useState(null);
     const { isLoading, isAuthenticated, getAccessTokenSilently, user } = useAuth0(); 
-    
+    const [hideNameEdit, setHideNameEdit] = useState(true);
+
     const accountReducer = (state, action) => {
         switch(action.type){
             case 'SET_ACCOUNT_INFO':
@@ -63,8 +64,15 @@ const Account = () => {
         }
     }
 
-    const handleEditUsername = () => {
+    const handleEditUsername = (e) => {
         console.log("handleEditUsername");
+        setHideNameEdit(!hideNameEdit);
+    }
+
+    const handleUpdateName = (e) => {
+        console.log("handleUpdateName");
+        e.preventDefault();
+
     }
 
     const handleAcceptNotice = (i) => {
@@ -80,7 +88,7 @@ const Account = () => {
     }
 
     const handleDeleteContact = (i) => {
-
+        console.log("handleDeleteContact");
     }
 
 
@@ -136,17 +144,26 @@ const Account = () => {
         : <div>Nobody here</div>
 
     return(
-        <div className='container'>
-            <div className='row'>
-                <div className='col col-2'>
+        <div className='container account-page'>
+            <div className='row mt-4 border border-black m-2'>
+                <div className='col-3'>
                     Display name:
                 </div>
-                <div className='col col-6'>
-                    {state.username}
+                <div className='col col-8'>
+                    <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
+                    <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
+                        <FormGroup >
+                            <InputGroup>
+                                <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
+                                <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
+                                <Button size='sm' color='primary'>Save</Button>
+                            </InputGroup>
+                        </FormGroup>
+                    </Form>
                 </div>
-                <div className='fa fa-edit'
+                <div className='col col-1 fa fa-edit mt-1'
                     onClick={handleEditUsername}>
-                    {' '}
+                    {''}
                 </div>
             </div>
             <div className='row'>

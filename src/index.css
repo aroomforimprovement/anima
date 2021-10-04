@@ -305,6 +305,11 @@ code {
   background: linear-gradient(45deg, rgb(220, 220, 220), rgb(250, 250, 250));
 }
 
+.account-page{
+  text-align: start;
+  display:inline-block;
+}
+
 .warn{
   color:rgb(173, 2, 2);
 }
