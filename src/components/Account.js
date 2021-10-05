@@ -2,6 +2,8 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
+import { Loading } from './partials/Loading';
+
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -9,6 +11,7 @@ const Account = () => {
     const [access, setAccess] = useState(null);
     const { isLoading, isAuthenticated, getAccessTokenSilently, user } = useAuth0(); 
     const [hideNameEdit, setHideNameEdit] = useState(true);
+    const [isNameUpdating, setIsNameUpdating] = useState(false);
 
     const accountReducer = (state, action) => {
         switch(action.type){
@@ -17,8 +20,11 @@ const Account = () => {
                     userid: action.data.userid,
                     username: action.data.username,
                     notices: action.data.notices,
-                    contacts: action.data.contacts
+                    contacts: action.data.contacts,
+                    isSet: true,
                 });
+            case 'SET_DISPLAY_NAME':
+                return ({...state, username: action.data});
             default:
                 break;
         }
@@ -36,23 +42,41 @@ const Account = () => {
         .then(response => {
             if(response.ok){
                 return response;
-            }else{
-                console.error("response not ok");
-                console.dir(response);
             }
         }, error => {
             console.error("error fetching anim " + error);
         })
         .then(response => response.json())
         .then(response => {
-            console.log("got account info");
-            console.dir(response);
             dispatch({type: 'SET_ACCOUNT_INFO', data: response});
         })
         .catch(err => console.error(err))
-        .finally(response => {
-            console.log("finally");
-            console.dir(response);
+    }
+
+    const updateDisplayName = (id, name) => {
+        return fetch(`${apiUrl}collection`, {
+            method: 'PUT',
+            mode: 'cors',
+            body: JSON.stringify({userid: id, username: name, verb: 'update'}),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${access}`,
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                return response
+            }
+        }, error => {
+            console.error("error fetching login");
+        })
+        .then(response => response.json())
+        .then(response => {
+            dispatch({type: 'SET_DISPLAY_NAME', data: name});
+            setIsNameUpdating(false);
+        })
+        .catch((error) => {
+            console.error(error);
         })
     }
 
@@ -72,7 +96,9 @@ const Account = () => {
     const handleUpdateName = (e) => {
         console.log("handleUpdateName");
         e.preventDefault();
-
+        setIsNameUpdating(true);
+        updateDisplayName(state.userid, e.target.displayName.value);
+        setHideNameEdit(true);
     }
 
     const handleAcceptNotice = (i) => {
@@ -150,16 +176,22 @@ const Account = () => {
                     Display name:
                 </div>
                 <div className='col col-8'>
-                    <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
-                    <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
-                        <FormGroup >
-                            <InputGroup>
-                                <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
-                                <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
-                                <Button size='sm' color='primary'>Save</Button>
-                            </InputGroup>
-                        </FormGroup>
-                    </Form>
+                    {isNameUpdating 
+                    ? <Loading /> 
+                    :
+                    <div>
+                        <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
+                        <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
+                            <FormGroup >
+                                <InputGroup>
+                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
+                                    <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
+                                    <Button size='sm' color='primary'>Save</Button>
+                                </InputGroup>
+                            </FormGroup>
+                        </Form>
+                    </div>
+                    }
                 </div>
                 <div className='col col-1 fa fa-edit mt-1'
                     onClick={handleEditUsername}>
