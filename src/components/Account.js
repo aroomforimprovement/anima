@@ -27,6 +27,10 @@ const Account = () => {
                 });
             case 'SET_DISPLAY_NAME':
                 return ({...state, username: action.data});
+            case 'DELETE_NOTICE':
+                let notices = [...state.notices]
+                notices = notices.splice(action.data, 1);
+                return ({...state, notices: notices});
             default:
                 break;
         }
@@ -82,7 +86,7 @@ const Account = () => {
         })
     }
 
-    const deleteNotice = (notice) => {
+    const deleteNotice = (notice, i) => {
         notice.verb = 'delete';
         return fetch(`${apiUrl}collection`, {
             method: 'PUT',
@@ -102,9 +106,9 @@ const Account = () => {
         })
         .then(response => response.json())
         .then(response => {
-            //do something
-            console.log("deleteNotice: response:")
-            console.dir(response);
+            if(response.modifiedCount > 0){
+                dispatch({type: 'DELETE_NOTICE', data: i});
+            }
         })
     }
 
@@ -137,13 +141,13 @@ const Account = () => {
     const handleRejectNotice = (i) => {
         console.log("handleRejectNotice");
         console.dir(state.notices[i]);
-        deleteNotice(state.notices[i]);
+        deleteNotice(state.notices[i], i);
     }
 
     const handleVisitContact = (i) => {
         console.log("handleVisitContact");
         const id = state.contacts[i].userid;
-        //window.location.href = `/collection/${id}`;
+        window.location.href = `/collection/${id}`;
     }
 
     const handleDeleteContact = (i) => {
