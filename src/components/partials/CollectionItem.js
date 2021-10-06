@@ -34,11 +34,7 @@ export const CollectionItem = ({anim}) => {
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
     
     useEffect(() => {
-        console.log("useEffect");
-        console.log(collectionItemState.previewFile);
-        //if(collectionItemState.previewFile){
-        //    collectionItemDispatch({type: 'HIDE_CANVAS', data: true});
-        //}
+        
     },[collectionItemState.previewFile]);
 
     const handlePreview = (e) => {

@@ -112,6 +112,43 @@ const Account = () => {
         })
     }
 
+    const addContact = (notice, i) => {
+        console.log("addContact:");
+        console.dir(notice);
+        let body = {
+            userid: notice.userid,
+            thisUsername: notice.username,
+            contacts: [
+                {
+                    userid: notice.reqUserid,
+                    username: notice.reqUsername
+                }
+            ],
+            verb: 'update'
+        }
+        return fetch(`${apiUrl}collection`, {
+            method: 'PUT',
+            mode: 'cors',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access}`,
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+        }, error => {
+            console.error(error);
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.dir(response);
+            deleteNotice(state.notices[i], i);
+        });
+    }
+
     const getAccountId = () => {
         if(user){
             return user.sub.replace('auth0|', '');
@@ -136,6 +173,8 @@ const Account = () => {
     const handleAcceptNotice = (i) => {
         console.log("handleAcceptNotice");
         console.dir(state.notices[i]);
+        //only handling contact req for the moment
+        addContact(state.notices[i], i);
     }
 
     const handleRejectNotice = (i) => {

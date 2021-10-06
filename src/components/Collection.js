@@ -71,6 +71,20 @@ const Collection = () => {
 
     }
 
+    const isContact = (id) => {
+        if(collectionState && collectionState.collection 
+            && collectionState.collection.contacts){
+                for(let i = 0; i < collectionState.collection.contacts.length; i++){
+                    if(collectionState.collection.contacts[i].userid === id){
+                        console.log("isContact:TRUE");
+                        return true;
+                    }
+                }
+                return false;
+        }
+        return false;
+    }
+
     const handleAddContact = (e) => {
         addContactRequest();
     }
@@ -117,17 +131,13 @@ const Collection = () => {
                     }
                 }
             })
-            .catch(err => console.log(err))
-            .finally(response => {
-                console.log("finally");
-                console.dir(response);
-            })
+            .catch(err => console.error(err));
         }
 
         const getIdFromUrl = (url) => {
-            console.log("url="+url);
+            //console.log("url="+url);
             if(url.match(/(collection\/)\w+/) && url.match(/(collection\/)\w+/).length > -1){
-                console.log("collection page has id");
+                //console.log("collection page has id");
                 const id = url.substring(url.indexOf("collection") + 11, url.length);
                 return id;
             }    
@@ -137,7 +147,7 @@ const Collection = () => {
         switch(action.type){
             case 'SET_ID':{
                 const id = getIdFromUrl(window.location.href);
-                console.log('SET_ID...' + id);
+                //console.log('SET_ID...' + id);
                 return({...state, id: id});
             }
             case 'GET_COLLECTION':{
@@ -165,18 +175,18 @@ const Collection = () => {
             }
         }
         if(isAuthenticated && access && collectionState.id && !isSet){
-            console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
+            //console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
             setCollectionState({type: 'GET_COLLECTION', data: collectionState.id});
             setIsSet(true);
         }else if(isAuthenticated && access && !isSet && isBrowse){
-            console.log("useEffect: isAuthenticated && access && !isSet && isBrowse");
+            //console.log("useEffect: isAuthenticated && access && !isSet && isBrowse");
             setCollectionState({type: 'GET_COLLECTION', data: false});
             setIsSet(true);
         }else if(isAuthenticated && access){
-            console.log("useEffect: isAuthenticated && access");
+            //console.log("useEffect: isAuthenticated && access");
             setCollectionState({type: 'SET_ID', data: true});
         }else if(isAuthenticated){
-            console.log("useEffect: isAuthenticated");
+            //console.log("useEffect: isAuthenticated");
             setAccessToken();
         }
     },[isAuthenticated, getAccessTokenSilently, access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
@@ -195,7 +205,7 @@ const Collection = () => {
             <h5 className='col'>
                 {username}
             </h5>
-            {isOwn ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
+            {isOwn || isContact(userid) ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
                 onClick={handleAddContact}>{'Add as contact'}</button>}
         </div>
     </div>
