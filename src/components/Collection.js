@@ -9,13 +9,70 @@ const INIT_COLLECTION_STATE = {collection: null, id: false, isSet: false};
 
 
 const Collection = () => {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently, } = useAuth0();
     const [access, setAccess] = useState(null);
     const [currentCollection, setCollection] = useState(null);
+    const [username, setUsername] = useState(null);
+    const [userid, setUserid] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const [isBrowse, setIsBrowse] = useState(false);
+    const [isOwn, setIsOwn] = useState(true);
 
-   
+    const addContactRequest = () => {
+        //TODO shouldn't get the username from localstorage, 
+        //it won't match the displayname - whole thing needs fixin
+        const thisUsername = window.localStorage.getItem('username');
+        const thisUserid = window.localStorage.getItem('userid');
+        console.log("addContactRequest: "+ userid + ":" + username);
+        return fetch(`${apiUrl}collection`, {
+            method: 'PUT',
+            mode: 'cors',
+            body: JSON.stringify({
+                userid: thisUserid,
+                thisUsername: thisUsername,
+                notices: [
+                    {
+                        userid: userid, 
+                        username: username, 
+                        reqUserid: thisUserid,
+                        reqUsername: thisUsername,
+                        message: `Hi ${username},\nUser ${thisUsername} wants to add you as a contact.
+                            \n`,
+                        actions: {
+                            accept: thisUserid,
+                            reject: false
+                        }
+                    }
+                ],
+                verb: 'update'
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access}`,
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+        }, error => {
+            console.error(error);
+        })
+        .then(response => response.json())
+        .then(response => {
+            //do something
+            console.log("RESPONSE from addContactRequest");
+            console.dir(response);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+
+    }
+
+    const handleAddContact = (e) => {
+        addContactRequest();
+    }
     
     const collectionReducer = (state, action) => {
         console.log("collectionReducer: " + action.type + ":" + action.data);
@@ -50,6 +107,13 @@ const Collection = () => {
                     setCollection(response);
                 }else{
                     setCollection(response.anims);
+                    setUsername(response.username);
+                    setUserid(response.userid);
+                    if(response.userid === window.localStorage.getItem('userid')){
+                        setIsOwn(true);
+                    }else{
+                        setIsOwn(false);
+                    }
                 }
             })
             .catch(err => console.log(err))
@@ -82,8 +146,6 @@ const Collection = () => {
             default:
                 break;
         }
-        console.log("STATE COLLECTION: ");
-        console.dir(state.collection);
     }
 
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
@@ -116,7 +178,6 @@ const Collection = () => {
             console.log("useEffect: isAuthenticated");
             setAccessToken();
         }
-        
     },[isAuthenticated, getAccessTokenSilently, access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
 
 
@@ -126,10 +187,22 @@ const Collection = () => {
                 );
         }) :
         <Loading />
-            
+    
+    const collectionHeading = username
+    ? <div className='container collection-header mt-4 mb-4'>
+        <div className='row'>
+            <h5 className='col'>
+                {username}
+            </h5>
+            {isOwn ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
+                onClick={handleAddContact}>{'Add as contact'}</button>}
+        </div>
+    </div>
+    : <div></div>
         
     return(
         <div className='container'>
+                {collectionHeading}
             <div className='col col-12 collection'>
                 {collectionItems}
             </div>

@@ -254,6 +254,10 @@ code {
 .collection{
 }
 
+.collection-header{
+  text-align: start;
+}
+
 .coll-item {
   display:inline-block;
   background-color: rgb(223, 223, 223);

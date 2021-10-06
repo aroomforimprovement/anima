@@ -16,6 +16,8 @@ const Account = () => {
     const accountReducer = (state, action) => {
         switch(action.type){
             case 'SET_ACCOUNT_INFO':
+                console.log('SET_ACCOUNT_INFO: ');
+                console.dir(action.data);
                 return({...state, 
                     userid: action.data.userid,
                     username: action.data.username,
@@ -111,6 +113,8 @@ const Account = () => {
 
     const handleVisitContact = (i) => {
         console.log("handleVisitContact");
+        const id = state.contacts[i].userid;
+        //window.location.href = `/collection/${id}`;
     }
 
     const handleDeleteContact = (i) => {
@@ -135,9 +139,14 @@ const Account = () => {
 
     const notices = state.notices && state.notices.length > 0 
         ? state.notices.map((notice, i) => {
+            
+            const link = `/collection/${notice.actions.accept}`;
             return(
                 <div className='container notice' key={i}>
                     <div>{notice.message}</div>
+                    <a href={link} target='_blank' rel='noreferrer' alt='Visit the requester profile'>
+                        Check out their profile
+                    </a>
                     <button className='btn btn-outline-secondary btn-sm'
                         onClick={() => handleRejectNotice(i)}>
                         <img src={SITE.icons.wipe} alt={`Reject`} />
@@ -155,7 +164,7 @@ const Account = () => {
         ? state.contacts.map((contact, i) => {
             return(
                 <div className='container contact' key={i}>
-                    <div>{contact.name}</div>
+                    <div>{contact.username}</div>
                     <button className='btn btn-outline-success btn-sm'
                         onClick={() => handleVisitContact(i)}>
                         <img src={SITE.icons.preview} alt={`Visit ${contact.name}`}/>
