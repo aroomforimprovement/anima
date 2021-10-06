@@ -144,9 +144,48 @@ const Account = () => {
         })
         .then(response => response.json())
         .then(response => {
+            console.dir("addContact response:");
             console.dir(response);
             deleteNotice(state.notices[i], i);
         });
+    }
+
+    const deleteContact = (contact) => {
+        console.log("deleteContact");
+        console.dir(contact);
+        let body = {
+            userid: window.localStorage.getItem('userid'),
+            username: window.localStorage.getItem('username'),
+            contacts: [
+                {
+                    userid: contact.userid,
+                    username: contact.username
+                }
+            ],
+            verb: 'delete'
+        }
+        return fetch(`${apiUrl}collection`, {
+            method: 'PUT',
+            mode: 'cors',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access}`
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+        }, error => {
+            console.error(error);
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.dir(response);
+            //do something
+        })
+        .catch(err => console.error(err));
     }
 
     const getAccountId = () => {
@@ -191,6 +230,7 @@ const Account = () => {
 
     const handleDeleteContact = (i) => {
         console.log("handleDeleteContact");
+        deleteContact(state.contacts[i]);
     }
 
 
