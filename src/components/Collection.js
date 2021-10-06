@@ -36,6 +36,7 @@ const Collection = () => {
                         username: username, 
                         reqUserid: thisUserid,
                         reqUsername: thisUsername,
+                        type: 'contact',
                         message: `Hi ${username},\nUser ${thisUsername} wants to add you as a contact.
                             \n`,
                         actions: {

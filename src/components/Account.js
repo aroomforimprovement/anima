@@ -70,7 +70,7 @@ const Account = () => {
                 return response
             }
         }, error => {
-            console.error("error fetching login");
+            console.error(error);
         })
         .then(response => response.json())
         .then(response => {
@@ -79,6 +79,32 @@ const Account = () => {
         })
         .catch((error) => {
             console.error(error);
+        })
+    }
+
+    const deleteNotice = (notice) => {
+        notice.verb = 'delete';
+        return fetch(`${apiUrl}collection`, {
+            method: 'PUT',
+            mode: 'cors',
+            body: JSON.stringify(notice),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${access}`,
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+        }, error => {
+            console.error(error);
+        })
+        .then(response => response.json())
+        .then(response => {
+            //do something
+            console.log("deleteNotice: response:")
+            console.dir(response);
         })
     }
 
@@ -105,10 +131,13 @@ const Account = () => {
 
     const handleAcceptNotice = (i) => {
         console.log("handleAcceptNotice");
+        console.dir(state.notices[i]);
     }
 
     const handleRejectNotice = (i) => {
         console.log("handleRejectNotice");
+        console.dir(state.notices[i]);
+        deleteNotice(state.notices[i]);
     }
 
     const handleVisitContact = (i) => {
