@@ -61,7 +61,7 @@ export const CollectionItem = ({anim}) => {
             <div className='row'>
                 <div className='col col-12 mt-2 ms-2'>
                     <div >{anim.name}</div>
-                    <div className='coll-item-username' ><small>by {anim.username}</small></div>
+                    <div className='coll-item-username' ><small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small></div>
                 </div>
                 <div className='row'>
                     <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
