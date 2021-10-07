@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import { Switch, Route, Redirect, withRouter, useHistory } from 'react-router-dom';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
@@ -9,13 +9,21 @@ import Create from './Create';
 import Collection from './Collection';
 import Browse from './Browse';
 import Account from './Account';
+import { mainReducer } from '../redux/Main';
+const MainContext = createContext({});
+
+export const useMainContext = () => {
+    return useContext(MainContext);
+}
 
 const Main = () => {
-  
+
+
+    const [mainState, mainDispatch] = useReducer(mainReducer, {});
+    const stateOfMain = { mainState, mainDispatch };
+
     const {history} = useHistory();
     
-    
-
     const HomePage = () => { return <Home /> }
     const LoginPage = () => { return <Login /> }
     const LogoutPage = () => { return <Logout /> }
@@ -27,18 +35,20 @@ const Main = () => {
         
     return (
         <div>
-            <Header />
-            <Switch>
-                <Route path='/home' history={history} component={HomePage} />
-                <Route path='/login' history={history} component={LoginPage} />
-                <Route path='/logout' history={history} component={LogoutPage} />
-                <Route path='/create' history={history} component={CreatePage} />
-                <Route path='/collection' history={history} component={CollectionPage} />
-                <Route path='/browse' history={history} component={BrowsePage} />
-                <Route path='/account' history={history} component={AccountPage} />
-                <Redirect to='/home' history={history}/>
-            </Switch>
-            <Footer />
+            <MainContext.Provider value={stateOfMain}>
+                <Header />
+                <Switch>
+                    <Route path='/home' history={history} component={HomePage} />
+                    <Route path='/login' history={history} component={LoginPage} />
+                    <Route path='/logout' history={history} component={LogoutPage} />
+                    <Route path='/create' history={history} component={CreatePage} />
+                    <Route path='/collection' history={history} component={CollectionPage} />
+                    <Route path='/browse' history={history} component={BrowsePage} />
+                    <Route path='/account' history={history} component={AccountPage} />
+                    <Redirect to='/home' history={history}/>
+                </Switch>
+                <Footer />
+            </MainContext.Provider>
         </div>
     );
 }

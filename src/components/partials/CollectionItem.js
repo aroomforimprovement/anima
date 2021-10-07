@@ -47,7 +47,7 @@ export const CollectionItem = ({anim}) => {
 
     return(
         <LazyLoad height={200} offset={100} 
-        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1  rounded coll-item'>
+        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1 rounded coll-item'>
         <div >
             <div className='row'>
             {

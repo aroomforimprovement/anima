@@ -5,30 +5,12 @@ import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../../shared/site';
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { useMainContext } from '../Main';
 
 const Header = () => {
     
     const { isAuthenticated, isLoading, user } = useAuth0();
-    
-    const checkAuth = (auth) => {
-        console.log('checkAuth');
-        if(isAuthenticated && user){
-            console.log('writing auth');
-            const u = user.sub.replace('auth0|', '');
-            window.localStorage.setItem('userid', u);
-            window.localStorage.setItem('email', user.email);
-            window.localStorage.setItem('username', user.nickname);
-            window.localStorage.setItem('isAuth', true);
-        }else{
-            console.log('removing auth');
-            window.localStorage.removeItem('userid');
-            window.localStorage.removeItem('email');
-            window.localStorage.removeItem('username');
-            window.localStorage.removeItem('isAuth');
-        }
-    }
-    checkAuth(window.localStorage.getItem('isAuth'));
+    const { mainState, mainDispatch } = useMainContext();
 
     const headerReducer = (state, action) => {
         console.log(action.type+":"+action.data);
@@ -37,7 +19,10 @@ const Header = () => {
                 return ({...state, isNavOpen: !state.isNavOpen});
             }
             case 'checkAuth':{
-                checkAuth();
+                mainDispatch({
+                    type: 'CHECK_AUTH',
+                    data: action.data
+                });
                 return (state);
             }
             default:
@@ -53,10 +38,15 @@ const Header = () => {
         dispatch({type: 'toggleNav', data: !state.isNavOpen})
     }
     useEffect(() => {
-        if(!isLoading && isAuthenticated){
-            dispatch({type: 'checkAuth', data: isAuthenticated});
+        if(!isLoading){
+            dispatch({
+                type: 'checkAuth', 
+                data: {
+                    isAuthenticated: isAuthenticated,
+                    user: user
+                }});
         }
-    },[isLoading, isAuthenticated]);
+    },[isLoading, isAuthenticated, user]);
 
 
     return(
