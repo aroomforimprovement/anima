@@ -3,7 +3,7 @@ import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-import { accountReducer, getAccountInfo, updateDisplayName } from '../redux/Account';
+import { accountReducer, getAccountInfo, deleteContact, updateDisplayName } from '../redux/Account';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,11 +17,6 @@ const Account = () => {
 
     const [state, dispatch] = useReducer(accountReducer, {});
     
-    
-    
-
-    
-
     const deleteNotice = (notice, i) => {
         notice.verb = 'delete';
         return fetch(`${apiUrl}collection`, {
@@ -86,43 +81,7 @@ const Account = () => {
         });
     }
 
-    const deleteContact = (contact) => {
-        console.log("deleteContact");
-        console.dir(contact);
-        let body = {
-            userid: mainState.user.userid,
-            username: mainState.user.username,
-            contacts: [
-                {
-                    userid: contact.userid,
-                    username: contact.username
-                }
-            ],
-            verb: 'delete'
-        }
-        return fetch(`${apiUrl}collection`, {
-            method: 'PUT',
-            mode: 'cors',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${mainState.user.access}`
-            }
-        })
-        .then(response => {
-            if(response.ok){
-                return response;
-            }
-        }, error => {
-            console.error(error);
-        })
-        .then(response => response.json())
-        .then(response => {
-            console.dir(response);
-            //do something
-        })
-        .catch(err => console.error(err));
-    }
+    
 
     const getAccountId = () => {
         if(mainState.user){
@@ -172,7 +131,11 @@ const Account = () => {
 
     const handleDeleteContact = (i) => {
         console.log("handleDeleteContact");
-        deleteContact(state.contacts[i]);
+        deleteContact(state.contacts[i], mainState.user.userid, 
+            mainState.user.username, mainState.user.access)
+            .then((response) => {
+                console.log("should toast to this");
+            });;
     }
 
     const setAccountInfo = async () => {

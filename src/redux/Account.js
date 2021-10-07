@@ -14,6 +14,37 @@ export const getAccountInfo = (id, access) => {
     }).catch(err => console.error(err))
 }
 
+export const deleteContact = (contact, userid, username, access) => {
+    console.log("deleteContact");
+    console.dir(contact);
+    let body = {
+        userid: userid,
+        username: username,
+        contacts: [
+            {
+                userid: contact.userid,
+                username: contact.username
+            }
+        ],
+        verb: 'delete'
+    }
+    return fetch(`${apiUrl}collection`, {
+        method: 'PUT',
+        mode: 'cors',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access}`
+        }
+    }).then(response => {
+        if(response.ok){
+            return response.json();
+        }
+    }, error => {
+        console.error(error);
+    }).catch(err => console.error(err));
+}
+
 export const updateDisplayName = (id, name, access) => {
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
