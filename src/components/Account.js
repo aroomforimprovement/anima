@@ -3,13 +3,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
+import { useMainContext } from './Main';
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Account = () => {
-    const [access, setAccess] = useState(null);
-    const { isLoading, isAuthenticated, getAccessTokenSilently, user } = useAuth0(); 
+
+    const { mainState, mainDispatch } = useMainContext();
     const [hideNameEdit, setHideNameEdit] = useState(true);
     const [isNameUpdating, setIsNameUpdating] = useState(false);
 
@@ -26,6 +27,7 @@ const Account = () => {
                     isSet: true,
                 });
             case 'SET_DISPLAY_NAME':
+                mainDispatch({type: 'SET_USERNAME', data: action.data});
                 return ({...state, username: action.data});
             case 'DELETE_NOTICE':
                 let notices = [...state.notices]
@@ -42,7 +44,7 @@ const Account = () => {
     const getAccountInfo = (id) => {
         return fetch(`${apiUrl}collection/${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${mainState.user.access}`
             }   
         })
         .then(response => {
@@ -66,7 +68,7 @@ const Account = () => {
             body: JSON.stringify({userid: id, username: name, verb: 'update'}),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${access}`,
+                Authorization: `Bearer ${mainState.user.access}`,
             }
         })
         .then(response => {
@@ -94,7 +96,7 @@ const Account = () => {
             body: JSON.stringify(notice),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access}`,
+                'Authorization': `Bearer ${mainState.user.access}`,
             }
         })
         .then(response => {
@@ -132,7 +134,7 @@ const Account = () => {
             body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access}`,
+                'Authorization': `Bearer ${mainState.user.access}`,
             }
         })
         .then(response => {
@@ -170,7 +172,7 @@ const Account = () => {
             body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access}`
+                'Authorization': `Bearer ${mainState.user.access}`
             }
         })
         .then(response => {
@@ -189,10 +191,10 @@ const Account = () => {
     }
 
     const getAccountId = () => {
-        if(user){
-            return user.sub.replace('auth0|', '');
+        if(mainState.user){
+            return mainState.user.userid;
         }else{
-            console.log("no user");
+            console.error("no user");
         }
     }
 
@@ -234,17 +236,7 @@ const Account = () => {
     }
 
 
-    useEffect(() => {
-        const setAccessToken = async () => {
-            setAccess(await getAccessTokenSilently());
-        }
-        if(!isLoading && isAuthenticated){
-            setAccessToken();
-        }
-    },[isAuthenticated, isLoading, getAccessTokenSilently, access]);
-
-    if(!state.isSet && access){
-        //get user id
+    if(!state.isSet && mainState.user && mainState.user.access){
         const id = getAccountId();
         getAccountInfo(id);
     }
