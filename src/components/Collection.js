@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './partials/Loading';
+import { useMainContext } from './Main';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const INIT_COLLECTION_STATE = {collection: null, id: false, isSet: false};
@@ -9,8 +9,8 @@ const INIT_COLLECTION_STATE = {collection: null, id: false, isSet: false};
 
 
 const Collection = () => {
-    const { isAuthenticated, getAccessTokenSilently, } = useAuth0();
-    const [access, setAccess] = useState(null);
+    const { mainState, mainDispatch } = useMainContext();
+
     const [currentCollection, setCollection] = useState(null);
     const [username, setUsername] = useState(null);
     const [userid, setUserid] = useState(null);
@@ -49,7 +49,7 @@ const Collection = () => {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access}`,
+                'Authorization': `Bearer ${mainState.access}`,
             }
         })
         .then(response => {
@@ -101,7 +101,7 @@ const Collection = () => {
             }
             return fetch(url, {
                 headers: {
-                    Authorization: `Bearer ${access}`
+                    Authorization: `Bearer ${mainState.user.access}`
                 }
             })
             .then(response => {
@@ -162,34 +162,33 @@ const Collection = () => {
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
 
     useEffect(() => {
-        console.log("IS_AUTHENTICATED: " + isAuthenticated);
+        console.dir(mainState);
+        console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
+        console.log("ACCESS: " + mainState.user.access);
         console.log("ID: " + collectionState.id);
         console.log("isSet: " + isSet);
         console.log("isBrowse: " + isBrowse);
-        const setAccessToken = async () => {
-            setAccess(await getAccessTokenSilently());
-        }
+        
         if(!isSet && !isBrowse){
             if(window.location.href.indexOf('browse') > -1){
                 setIsBrowse(true);
             }
         }
-        if(isAuthenticated && access && collectionState.id && !isSet){
+        if(mainState.user.isAuth && mainState.user.access && collectionState.id && !isSet){
             //console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
             setCollectionState({type: 'GET_COLLECTION', data: collectionState.id});
             setIsSet(true);
-        }else if(isAuthenticated && access && !isSet && isBrowse){
+        }else if(mainState.user.isAuth && mainState.user.access && !isSet && isBrowse){
             //console.log("useEffect: isAuthenticated && access && !isSet && isBrowse");
             setCollectionState({type: 'GET_COLLECTION', data: false});
             setIsSet(true);
-        }else if(isAuthenticated && access){
+        }else if(mainState.user.isAuth && mainState.user.access){
             //console.log("useEffect: isAuthenticated && access");
             setCollectionState({type: 'SET_ID', data: true});
-        }else if(isAuthenticated){
-            //console.log("useEffect: isAuthenticated");
-            setAccessToken();
+        }else{
+            console.log("Not Authenticated - no implementation yet");
         }
-    },[isAuthenticated, getAccessTokenSilently, access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
+    },[mainState, mainState.isAuthenticated, mainState.access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
 
 
     const collectionItems = currentCollection ? currentCollection.map((anim, i) => {

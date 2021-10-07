@@ -9,12 +9,20 @@ export const mainReducer = (state, action) => {
                 const user = action.data.user;
                 const userid = user.sub.replace('auth0|', '');
                 storedUser = {userid: userid, email: user.email,
-                    username: user.nickname, isAuth: true}
+                    username: user.nickname, isAuth: true, 
+                    access: state.user.access ? state.user.access : null}
             }
             return({...state, user: storedUser});
         }
         case 'SET_ACCESS':{
-            return({...state, access: action.data});
+            let user = {};
+            if(state.user){
+                user = {...state.user};
+            }
+            user.access = action.data
+            console.log("User in SET_ACCESS");
+            console.dir(user);
+            return({...state, user: user});
         }
         default:
             break;

@@ -36,18 +36,24 @@ const Main = () => {
     return (
         <div>
             <MainContext.Provider value={stateOfMain}>
-                <Header />
-                <Switch>
-                    <Route path='/home' history={history} component={HomePage} />
-                    <Route path='/login' history={history} component={LoginPage} />
-                    <Route path='/logout' history={history} component={LogoutPage} />
-                    <Route path='/create' history={history} component={CreatePage} />
-                    <Route path='/collection' history={history} component={CollectionPage} />
-                    <Route path='/browse' history={history} component={BrowsePage} />
-                    <Route path='/account' history={history} component={AccountPage} />
-                    <Redirect to='/home' history={history}/>
-                </Switch>
-                <Footer />
+                <MainContext.Consumer>
+                    {() => (
+                    <div>
+                        <Header />
+                        <Switch>
+                            <Route path='/home' history={history} component={HomePage} />
+                            <Route path='/login' history={history} component={LoginPage} />
+                            <Route path='/logout' history={history} component={LogoutPage} />
+                            <Route path='/create' history={history} component={CreatePage} />
+                            <Route path='/collection' history={history} component={CollectionPage} />
+                            <Route path='/browse' history={history} component={BrowsePage} />
+                            <Route path='/account' history={history} component={AccountPage} />
+                            <Redirect to='/home' history={history}/>
+                        </Switch>
+                        <Footer />
+                    </div>
+                    )}
+                </MainContext.Consumer>
             </MainContext.Provider>
         </div>
     );

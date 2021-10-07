@@ -48,18 +48,19 @@ const Header = () => {
         const setAccessToken = async () => {
             dispatch({type: 'setAccess', data: await getAccessTokenSilently()});
         }
-        if(!isLoading){
+        
+        if(isAuthenticated && !state.isSet){
+            setAccessToken();
+        }else if(!isLoading && !mainState.isAuth){
             dispatch({
                 type: 'checkAuth', 
                 data: {
                     isAuthenticated: isAuthenticated,
                     user: user
-                }});
+                }
+            });
         }
-        if(isAuthenticated && !state.isSet){
-            setAccessToken();
-        }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, state.isSet]);
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, state.isSet, mainState.isAuth]);
 
 
     return(
@@ -78,8 +79,8 @@ const Header = () => {
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
                                 </NavLink>
                             </NavItem>
-                            {isLoading ? <Loading /> : isAuthenticated ? <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link' to={`/collection/${window.localStorage.getItem('userid')}`}>
+                            {isLoading ? <Loading /> : mainState.user && mainState.user.isAuth ? <NavItem className='nav-item nav-i'>
+                                <NavLink className='nav-link' to={`/collection/${mainState.user.userid}`}>
                                     <span className='fa fa-film fa-md m-1'></span> Collection
                                 </NavLink>
                             </NavItem> : null}
