@@ -35,7 +35,7 @@ export const Creation = () => {
 
 
     const { controls, dispatch } = useControlContext();
-    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState());//startState);
+    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState());
     const animState = { anim, updateAnim };
     
     const getSavedAnim = (id) => {

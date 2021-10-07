@@ -156,8 +156,8 @@ const Account = () => {
         console.log("deleteContact");
         console.dir(contact);
         let body = {
-            userid: window.localStorage.getItem('userid'),
-            username: window.localStorage.getItem('username'),
+            userid: mainState.user.userid,
+            username: mainState.user.username,
             contacts: [
                 {
                     userid: contact.userid,

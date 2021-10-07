@@ -19,10 +19,8 @@ const Collection = () => {
     const [isOwn, setIsOwn] = useState(true);
 
     const addContactRequest = () => {
-        //TODO shouldn't get the username from localstorage, 
-        //it won't match the displayname - whole thing needs fixin
-        const thisUsername = window.localStorage.getItem('username');
-        const thisUserid = window.localStorage.getItem('userid');
+        const thisUsername = mainState.user.username;
+        const thisUserid = mainState.user.userid;
         console.log("addContactRequest: "+ userid + ":" + username);
         return fetch(`${apiUrl}collection`, {
             method: 'PUT',
@@ -124,7 +122,7 @@ const Collection = () => {
                     setCollection(response.anims);
                     setUsername(response.username);
                     setUserid(response.userid);
-                    if(response.userid === window.localStorage.getItem('userid')){
+                    if(response.userid === mainState.user.userid){
                         setIsOwn(true);
                     }else{
                         setIsOwn(false);
