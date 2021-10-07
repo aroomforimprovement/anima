@@ -9,11 +9,11 @@ import { useMainContext } from '../Main';
 
 const Header = () => {
     
-    const { isAuthenticated, isLoading, user } = useAuth0();
+    const { isAuthenticated, isLoading, user, getAccessTokenSilently } = useAuth0();
     const { mainState, mainDispatch } = useMainContext();
 
     const headerReducer = (state, action) => {
-        console.log(action.type+":"+action.data);
+        console.debug(action.type+":"+action.data);
         switch(action.type){
             case 'toggleNav':{
                 return ({...state, isNavOpen: !state.isNavOpen});
@@ -23,7 +23,14 @@ const Header = () => {
                     type: 'CHECK_AUTH',
                     data: action.data
                 });
-                return (state);
+                return(state);
+            }
+            case 'setAccess':{
+                mainDispatch({
+                    type: 'SET_ACCESS',
+                    data: action.data
+                });
+                return ({...state, isSet: true});
             }
             default:
                 return state;
@@ -38,6 +45,9 @@ const Header = () => {
         dispatch({type: 'toggleNav', data: !state.isNavOpen})
     }
     useEffect(() => {
+        const setAccessToken = async () => {
+            dispatch({type: 'setAccess', data: await getAccessTokenSilently()});
+        }
         if(!isLoading){
             dispatch({
                 type: 'checkAuth', 
@@ -46,7 +56,10 @@ const Header = () => {
                     user: user
                 }});
         }
-    },[isLoading, isAuthenticated, user]);
+        if(isAuthenticated && !state.isSet){
+            setAccessToken();
+        }
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, state.isSet]);
 
 
     return(

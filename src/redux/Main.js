@@ -2,7 +2,7 @@
 export const mainReducer = (state, action) => {
     console.debug(`mainReducer: ${action.type}:${action.data}`);
     switch (action.type) {
-        case 'CHECK_AUTH':
+        case 'CHECK_AUTH':{
             //should get really get display name from db (or update on auth0)
             let storedUser = {isAuth: false};
             if(action.data.isAuthenticated){
@@ -12,6 +12,10 @@ export const mainReducer = (state, action) => {
                     username: user.nickname, isAuth: true}
             }
             return({...state, user: storedUser});
+        }
+        case 'SET_ACCESS':{
+            return({...state, access: action.data});
+        }
         default:
             break;
     }

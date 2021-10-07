@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer, useContext, createContext } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './partials/Loading';
