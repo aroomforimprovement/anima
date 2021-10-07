@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useReducer, useState } from 'react';
 import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-
+import { accountReducer, getAccountInfo, updateDisplayName } from '../redux/Account';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -14,79 +13,14 @@ const Account = () => {
     const [hideNameEdit, setHideNameEdit] = useState(true);
     const [isNameUpdating, setIsNameUpdating] = useState(false);
 
-    const accountReducer = (state, action) => {
-        switch(action.type){
-            case 'SET_ACCOUNT_INFO':
-                console.log('SET_ACCOUNT_INFO: ');
-                console.dir(action.data);
-                return({...state, 
-                    userid: action.data.userid,
-                    username: action.data.username,
-                    notices: action.data.notices,
-                    contacts: action.data.contacts,
-                    isSet: true,
-                });
-            case 'SET_DISPLAY_NAME':
-                mainDispatch({type: 'SET_USERNAME', data: action.data});
-                return ({...state, username: action.data});
-            case 'DELETE_NOTICE':
-                let notices = [...state.notices]
-                notices = notices.splice(action.data, 1);
-                return ({...state, notices: notices});
-            default:
-                break;
-        }
-    }
+    
 
     const [state, dispatch] = useReducer(accountReducer, {});
     
     
-    const getAccountInfo = (id) => {
-        return fetch(`${apiUrl}collection/${id}`, {
-            headers: {
-                Authorization: `Bearer ${mainState.user.access}`
-            }   
-        })
-        .then(response => {
-            if(response.ok){
-                return response;
-            }
-        }, error => {
-            console.error("error fetching anim " + error);
-        })
-        .then(response => response.json())
-        .then(response => {
-            dispatch({type: 'SET_ACCOUNT_INFO', data: response});
-        })
-        .catch(err => console.error(err))
-    }
+    
 
-    const updateDisplayName = (id, name) => {
-        return fetch(`${apiUrl}collection`, {
-            method: 'PUT',
-            mode: 'cors',
-            body: JSON.stringify({userid: id, username: name, verb: 'update'}),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${mainState.user.access}`,
-            }
-        })
-        .then(response => {
-            if(response.ok){
-                return response
-            }
-        }, error => {
-            console.error(error);
-        })
-        .then(response => response.json())
-        .then(response => {
-            dispatch({type: 'SET_DISPLAY_NAME', data: name});
-            setIsNameUpdating(false);
-        })
-        .catch((error) => {
-            console.error(error);
-        })
-    }
+    
 
     const deleteNotice = (notice, i) => {
         notice.verb = 'delete';
@@ -203,11 +137,17 @@ const Account = () => {
         setHideNameEdit(!hideNameEdit);
     }
 
-    const handleUpdateName = (e) => {
+    const handleUpdateName = async (e) => {
         console.log("handleUpdateName");
         e.preventDefault();
         setIsNameUpdating(true);
-        updateDisplayName(state.userid, e.target.displayName.value);
+        updateDisplayName(state.userid, e.target.displayName.value, mainState.user.access)
+        .then((name) => {
+            dispatch({type: 'SET_DISPLAY_NAME', data: name});
+            mainDispatch({type: 'SET_USERNAME', data: name});
+            setIsNameUpdating(false);
+        });
+        
         setHideNameEdit(true);
     }
 
@@ -235,10 +175,13 @@ const Account = () => {
         deleteContact(state.contacts[i]);
     }
 
-
-    if(!state.isSet && mainState.user && mainState.user.access){
+    const setAccountInfo = async () => {
         const id = getAccountId();
-        getAccountInfo(id);
+        const response = await getAccountInfo(id, mainState.user.access);
+        dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+    }
+    if(!state.isSet && mainState.user && mainState.user.access){
+        setAccountInfo();
     }
 
     const notices = state.notices && state.notices.length > 0 

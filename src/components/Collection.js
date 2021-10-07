@@ -161,8 +161,10 @@ const Collection = () => {
 
     useEffect(() => {
         console.dir(mainState);
-        console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
-        console.log("ACCESS: " + mainState.user.access);
+        if(mainState.user){
+            console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
+            console.log("ACCESS: " + mainState.user.access);
+        }
         console.log("ID: " + collectionState.id);
         console.log("isSet: " + isSet);
         console.log("isBrowse: " + isBrowse);
@@ -172,15 +174,15 @@ const Collection = () => {
                 setIsBrowse(true);
             }
         }
-        if(mainState.user.isAuth && mainState.user.access && collectionState.id && !isSet){
+        if(mainState.user && mainState.user.isAuth && mainState.user.access && collectionState.id && !isSet){
             //console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
             setCollectionState({type: 'GET_COLLECTION', data: collectionState.id});
             setIsSet(true);
-        }else if(mainState.user.isAuth && mainState.user.access && !isSet && isBrowse){
+        }else if(mainState.user && mainState.user.isAuth && mainState.user.access && !isSet && isBrowse){
             //console.log("useEffect: isAuthenticated && access && !isSet && isBrowse");
             setCollectionState({type: 'GET_COLLECTION', data: false});
             setIsSet(true);
-        }else if(mainState.user.isAuth && mainState.user.access){
+        }else if(mainState.user && mainState.user.isAuth && mainState.user.access){
             //console.log("useEffect: isAuthenticated && access");
             setCollectionState({type: 'SET_ID', data: true});
         }else{
