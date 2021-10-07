@@ -1,5 +1,38 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
+export const addContact = (notice, i, access) => {
+    console.log("addContact:");
+    console.dir(notice);
+    let body = {
+        userid: notice.userid,
+        thisUsername: notice.username,
+        contacts: [
+            {
+                userid: notice.reqUserid,
+                username: notice.reqUsername
+            }
+        ],
+        verb: 'update'
+    }
+    return fetch(`${apiUrl}collection`, {
+        method: 'PUT',
+        mode: 'cors',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access}`,
+        }
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }
+    }, error => {
+        console.error(error);
+    })
+    .catch((err) => console.log(err));
+}
+
 export const getAccountInfo = (id, access) => {
     return fetch(`${apiUrl}collection/${id}`, {
         headers: {
@@ -43,6 +76,27 @@ export const deleteContact = (contact, userid, username, access) => {
     }, error => {
         console.error(error);
     }).catch(err => console.error(err));
+}
+
+export const deleteNotice = (notice, i, access) => {
+    notice.verb = 'delete';
+    return fetch(`${apiUrl}collection`, {
+        method: 'PUT',
+        mode: 'cors',
+        body: JSON.stringify(notice),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access}`,
+        }
+    })
+    .then(response => {
+        if(response.ok){
+            return response.json();
+        }
+    }, error => {
+        console.error(error);
+    })
+    .catch((err) => console.error(err));
 }
 
 export const updateDisplayName = (id, name, access) => {
