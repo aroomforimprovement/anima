@@ -2,43 +2,35 @@ import React, { useEffect, useState, useReducer } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-
+import { collectionReducer, getCollection } from '../redux/Collection';
 const apiUrl = process.env.REACT_APP_API_URL;
-const INIT_COLLECTION_STATE = {collection: null, id: false, isSet: false};
+
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false};
 
 
 
 const Collection = () => {
     const { mainState, mainDispatch } = useMainContext();
 
-    const [currentCollection, setCollection] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [userid, setUserid] = useState(null);
-    const [isSet, setIsSet] = useState(false);
-    const [isBrowse, setIsBrowse] = useState(false);
-    const [isOwn, setIsOwn] = useState(true);
 
     const addContactRequest = () => {
-        const thisUsername = mainState.user.username;
-        const thisUserid = mainState.user.userid;
-        console.log("addContactRequest: "+ userid + ":" + username);
+        console.log("addContactRequest: "+ collectionState.userid + ":" + collectionState.username);
         return fetch(`${apiUrl}collection`, {
             method: 'PUT',
             mode: 'cors',
             body: JSON.stringify({
-                userid: thisUserid,
-                thisUsername: thisUsername,
+                userid: mainState.user.userid,
+                thisUsername: mainState.user.username,
                 notices: [
                     {
-                        userid: userid, 
-                        username: username, 
-                        reqUserid: thisUserid,
-                        reqUsername: thisUsername,
+                        userid: collectionState.userid, 
+                        username: collectionState.username, 
+                        reqUserid: mainState.user.userid,
+                        reqUsername: mainState.user.username,
                         type: 'contact',
-                        message: `Hi ${username},\nUser ${thisUsername} wants to add you as a contact.
-                            \n`,
+                        message: `Hi ${collectionState.username},\nuser ${mainState.user.username} wants to add you as a contact.`,
                         actions: {
-                            accept: thisUserid,
+                            accept: mainState.user.userid,
                             reject: false
                         }
                     }
@@ -47,28 +39,20 @@ const Collection = () => {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${mainState.access}`,
+                'Authorization': `Bearer ${mainState.user.access}`,
             }
         })
         .then(response => {
             if(response.ok){
-                return response;
+                return response.json();
             }
         }, error => {
             console.error(error);
-        })
-        .then(response => response.json())
-        .then(response => {
-            //do something
-            console.log("RESPONSE from addContactRequest");
-            console.dir(response);
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.error(error);
         })
-
     }
-
+    //contacts isn't a part of collection here, this won't work
     const isContact = (id) => {
         if(collectionState && collectionState.collection 
             && collectionState.collection.contacts){
@@ -87,124 +71,64 @@ const Collection = () => {
         addContactRequest();
     }
     
-    const collectionReducer = (state, action) => {
-        console.log("collectionReducer: " + action.type + ":" + action.data);
-        
-        const getCollection = (id) => {
-            let url;
-            if(isBrowse){
-                url = `${apiUrl}collection`;
-            }else{
-                url = `${apiUrl}collection/${id}`;
-            }
-            return fetch(url, {
-                headers: {
-                    Authorization: `Bearer ${mainState.user.access}`
-                }
-            })
-            .then(response => {
-                if(response.ok){
-                    return response;
-                }else{
-                    console.error("response not ok");
-                    console.dir(response);
-                }
-            }, error => {
-                console.error("error fetching collection: " + error);
-            })
-            .then(response => response.json())
-            .then(response => {
-                console.log("got collection");
-                console.dir(response);
-                if(isBrowse){
-                    setCollection(response);
-                }else{
-                    setCollection(response.anims);
-                    setUsername(response.username);
-                    setUserid(response.userid);
-                    if(response.userid === mainState.user.userid){
-                        setIsOwn(true);
-                    }else{
-                        setIsOwn(false);
-                    }
-                }
-            })
-            .catch(err => console.error(err));
-        }
 
-        const getIdFromUrl = (url) => {
-            //console.log("url="+url);
-            if(url.match(/(collection\/)\w+/) && url.match(/(collection\/)\w+/).length > -1){
-                //console.log("collection page has id");
-                const id = url.substring(url.indexOf("collection") + 11, url.length);
-                return id;
-            }    
-            return false;
-        }
-
-        switch(action.type){
-            case 'SET_ID':{
-                const id = getIdFromUrl(window.location.href);
-                //console.log('SET_ID...' + id);
-                return({...state, id: id});
-            }
-            case 'GET_COLLECTION':{
-                getCollection(action.data);
-                return (state);
-            }
-            default:
-                break;
-        }
-    }
 
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
+    console.log("collectionState");
+    console.dir(collectionState);
 
     useEffect(() => {
-        console.dir(mainState);
         if(mainState.user){
             console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
             console.log("ACCESS: " + mainState.user.access);
         }
         console.log("ID: " + collectionState.id);
-        console.log("isSet: " + isSet);
-        console.log("isBrowse: " + isBrowse);
+        console.log("isSet: " + collectionState.isSet);
+        console.log("isBrowse: " + collectionState.isBrowse);
         
-        if(!isSet && !isBrowse){
+        if(!collectionState.isSet && !collectionState.isBrowse){
             if(window.location.href.indexOf('browse') > -1){
-                setIsBrowse(true);
+                setCollectionState({type: 'SET_IS_BROWSE', data: true});
             }
         }
-        if(mainState.user && mainState.user.isAuth && mainState.user.access && collectionState.id && !isSet){
-            //console.log("useEffect: isAuthenticated && access && collectionState.id && !isSet");
-            setCollectionState({type: 'GET_COLLECTION', data: collectionState.id});
-            setIsSet(true);
-        }else if(mainState.user && mainState.user.isAuth && mainState.user.access && !isSet && isBrowse){
-            //console.log("useEffect: isAuthenticated && access && !isSet && isBrowse");
-            setCollectionState({type: 'GET_COLLECTION', data: false});
-            setIsSet(true);
+        if(mainState.user && mainState.user.isAuth && mainState.user.access && collectionState.id && !collectionState.isSet){
+            getCollection(collectionState.id, collectionState.isBrowse, mainState.user.access)
+                .then((response) => {
+                    if(collectionState.isBrowse){
+                        setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
+                    }else{
+                        setCollectionState({type: 'SET_COLLECTION', data: {anims: response.anims,
+                            username: response.username, userid: response.userid,
+                            isOwn: response.userid === mainState.user.userid, isSet: true}});
+                    }
+                });
+        }else if(mainState.user && mainState.user.isAuth && mainState.user.access && !collectionState.isSet && collectionState.isBrowse){
+            getCollection(false, collectionState.isBrowse, mainState.user.access)
+                .then((response) => {
+                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
+                });
         }else if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            //console.log("useEffect: isAuthenticated && access");
             setCollectionState({type: 'SET_ID', data: true});
         }else{
             console.log("Not Authenticated - no implementation yet");
         }
-    },[mainState, mainState.isAuthenticated, mainState.access, collectionState.id, isSet, collectionState.collection, currentCollection, isBrowse]);
+    },[mainState.user.isAuth, mainState.access, collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);
 
 
-    const collectionItems = currentCollection ? currentCollection.map((anim, i) => {
+    const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {
             return(
                 <CollectionItem key={i} anim={anim}/>
                 );
         }) :
         <Loading />
     
-    const collectionHeading = username
+    const collectionHeading = collectionState.username
     ? <div className='container collection-header mt-4 mb-4'>
         <div className='row'>
             <h5 className='col'>
-                {username}
+                {collectionState.username}
             </h5>
-            {isOwn || isContact(userid) ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
+            {collectionState.isOwn || isContact(collectionState.userid) ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
                 onClick={handleAddContact}>{'Add as contact'}</button>}
         </div>
     </div>
