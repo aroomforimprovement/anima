@@ -1,57 +1,17 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-import { collectionReducer, getCollection } from '../redux/Collection';
+import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false};
-
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
 
 
 const Collection = () => {
     const { mainState, mainDispatch } = useMainContext();
 
-
-    const addContactRequest = () => {
-        console.log("addContactRequest: "+ collectionState.userid + ":" + collectionState.username);
-        return fetch(`${apiUrl}collection`, {
-            method: 'PUT',
-            mode: 'cors',
-            body: JSON.stringify({
-                userid: mainState.user.userid,
-                thisUsername: mainState.user.username,
-                notices: [
-                    {
-                        userid: collectionState.userid, 
-                        username: collectionState.username, 
-                        reqUserid: mainState.user.userid,
-                        reqUsername: mainState.user.username,
-                        type: 'contact',
-                        message: `Hi ${collectionState.username},\nuser ${mainState.user.username} wants to add you as a contact.`,
-                        actions: {
-                            accept: mainState.user.userid,
-                            reject: false
-                        }
-                    }
-                ],
-                verb: 'update'
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${mainState.user.access}`,
-            }
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        }, error => {
-            console.error(error);
-        }).catch((error) => {
-            console.error(error);
-        })
-    }
     //contacts isn't a part of collection here, this won't work
     const isContact = (id) => {
         if(collectionState && collectionState.collection 
@@ -68,15 +28,21 @@ const Collection = () => {
     }
 
     const handleAddContact = (e) => {
-        addContactRequest();
+        addContactRequest(collectionState.userid, collectionState.username, 
+            mainState.user.username, mainState.user.userid, mainState.user.access)
+            .then((response) => {
+                //should check and set this on page load as well - would have to retrieve contacts and notices from target collection on fetch
+                setCollectionState({type: 'SET_CONTACT_REQ_ENABLED', data: false})
+            });
     }
     
-
 
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     console.log("collectionState");
     console.dir(collectionState);
-
+    console.log("mainState");
+    console.dir(mainState);
+    
     useEffect(() => {
         if(mainState.user){
             console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
@@ -112,7 +78,7 @@ const Collection = () => {
         }else{
             console.log("Not Authenticated - no implementation yet");
         }
-    },[mainState.user.isAuth, mainState.access, collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);
+    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {
