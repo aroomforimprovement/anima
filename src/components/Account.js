@@ -1,11 +1,10 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
 import { addContact, accountReducer, getAccountInfo, deleteContact, deleteNotice, updateDisplayName } from '../redux/Account';
 
-const apiUrl = process.env.REACT_APP_API_URL;
 
 const Account = () => {
 
@@ -15,6 +14,10 @@ const Account = () => {
 
     const [state, dispatch] = useReducer(accountReducer, {});
     
+    useEffect(() => {
+
+    },[mainState.user.notices, mainState.user.contacts, state.notices, state.contacts]);
+
     const getAccountId = () => {
         if(mainState.user){
             return mainState.user.userid;
