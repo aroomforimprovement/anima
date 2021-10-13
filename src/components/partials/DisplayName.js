@@ -32,20 +32,21 @@ export const DisplayName = () => {
     }
 
     return(
-        <div className='row mt-4 border border-black m-2'>
-            <div className='col-3'>
+        <div className='row mt-5 mb-5'>
+            <div className='col text-wrap'>
                 Display name:
             </div>
-            <div className='col col-8'>
+            <div className='col'>
                 {isNameUpdating 
                 ? <Loading /> 
                 :
                 <div>
-                    <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
+                    <div hidden={!hideNameEdit}
+                        className='display-name'>{state.username}</div>
                         <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
                             <FormGroup >
                                 <InputGroup>
-                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
+                                    <Input bsSize='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
                                     <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
                                     <Button size='sm' color='primary'>Save</Button>
                                 </InputGroup>
@@ -54,7 +55,7 @@ export const DisplayName = () => {
                     </div>
                 }
             </div>
-            <div className='col col-1 fa fa-edit mt-1'
+            <div className='col fa fa-edit mt-1'
                 onClick={handleEditUsername}>
                     {''}
                 </div>

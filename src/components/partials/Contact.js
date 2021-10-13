@@ -26,7 +26,7 @@ export const Contact = ({contact, i}) => {
     }
 
     return(
-        <div className='container contact' key={i}>
+        <div className='container contact'>
             <div>{contact.username}</div>
             <button className='btn btn-outline-success btn-sm'
                 onClick={() => handleVisitContact(i)}>

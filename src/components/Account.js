@@ -45,7 +45,8 @@ const Account = () => {
             
             const link = `/collection/${notice.actions.accept}`;
             return(
-                <Notice notice={notice} i={i} link={link}/>
+                <Notice notice={notice} link={link} i={i} key={i}
+                    />
             );
         })
         : <div>Nothing to report</div>
@@ -53,7 +54,7 @@ const Account = () => {
     const contacts = state.contacts && state.contacts.length > 0
         ? state.contacts.map((contact, i) => {
             return(
-                <Contact contact={contact} i={i} />
+                <Contact contact={contact} i={i} key={i} />
             );
         }) 
         : <div>Nobody here</div>
@@ -66,11 +67,11 @@ const Account = () => {
                         <div>
                             <DisplayName />
                             <div className='row'>
-                                <div className='col col-2'>Notifications</div>
-                                <div className='col col-8'>{notices}</div>
+                                <div className='col col-2 col-lg-1'>Notifications:</div>
+                                <div className='container'><div className='row'>{notices}</div></div>
                             </div>
                             <div className='row'>
-                                <div className='col col-2'>Contacts</div>
+                                <div className='col col-2'>Contacts:</div>
                                 <div className='col col-8'>{contacts}</div>
                             </div>
                         </div>

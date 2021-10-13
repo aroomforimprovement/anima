@@ -290,6 +290,12 @@ code {
   background: linear-gradient(45deg, rgb(150, 150, 150), rgb(200, 200, 200));
 }
 
+.coll-item-btns a{
+  background: linear-gradient(45deg, rgb(150, 150, 150), rgb(200, 200, 200));
+  padding-left:1%;
+  padding-right: 1%;  
+}
+
 .coll-item-btns img{
   height: 30px;
   width: 30px;
@@ -312,6 +318,15 @@ code {
 .account-page{
   text-align: start;
   display:inline-block;
+}
+
+.display-name{
+  font-size:large;
+}
+
+.notice{
+  background: rgb(2,0,36);
+background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(94,94,94,1) 0%, rgba(0,0,0,1) 100%);
 }
 
 .warn{
