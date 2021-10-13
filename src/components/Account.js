@@ -3,6 +3,7 @@ import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
 import { Notice } from './partials/Notice';
+import { Contact } from './partials/Contact';
 import { useMainContext } from './Main';
 import { accountReducer, getAccountInfo, deleteContact, updateDisplayName } from '../redux/Account';
 
@@ -52,25 +53,6 @@ const Account = () => {
         setHideNameEdit(true);
     }
 
-
-
-    
-
-    const handleVisitContact = (i) => {
-        console.log("handleVisitContact");
-        const id = state.contacts[i].userid;
-        window.location.href = `/collection/${id}`;
-    }
-
-    const handleDeleteContact = (i) => {
-        console.log("handleDeleteContact");
-        deleteContact(state.contacts[i], mainState.user.userid, 
-            mainState.user.username, mainState.user.access)
-            .then((response) => {
-                console.log("should toast to this");
-            });;
-    }
-
     const setAccountInfo = async () => {
         const id = getAccountId();
         const response = await getAccountInfo(id, mainState.user.access);
@@ -93,17 +75,7 @@ const Account = () => {
     const contacts = state.contacts && state.contacts.length > 0
         ? state.contacts.map((contact, i) => {
             return(
-                <div className='container contact' key={i}>
-                    <div>{contact.username}</div>
-                    <button className='btn btn-outline-success btn-sm'
-                        onClick={() => handleVisitContact(i)}>
-                        <img src={SITE.icons.preview} alt={`Visit ${contact.name}`}/>
-                    </button>
-                    <button className='btn btn-outline-danger btn-sm'
-                        onClick={() => handleDeleteContact(i)}>
-                        <img src={SITE.icons.wipe} alt={`Delete ${contact.name} from contacts`}/>
-                    </button>
-                </div>
+                <Contact contact={contact} i={i} />
             );
         }) 
         : <div>Nobody here</div>

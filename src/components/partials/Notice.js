@@ -6,7 +6,8 @@ import { addContact, deleteNotice } from '../../redux/Account';
 
 
 export const Notice = ({notice, i, link}) => {
-    const { mainState, mainDispatch } = useMainContext();    
+
+    const { mainState } = useMainContext();    
     const { state, dispatch } = useAccountContext();
 
 
