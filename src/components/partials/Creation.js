@@ -7,7 +7,7 @@ import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 import { Privacy } from './ControllerBtns';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useMainContext } from '../Main';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -20,23 +20,22 @@ export const useAnimContext = () => {
 
 export const Creation = () => {
 
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-    const [ access, setAccess ] = useState(null);
-    
-    
-    useEffect(() => {
-        const setAccessToken = async () => {
-            setAccess(await getAccessTokenSilently());
-        }
-        if(isAuthenticated){
-            setAccessToken();
-        }
-    },[isAuthenticated, getAccessTokenSilently, access]);
+    const { mainState, mainDispatch } = useMainContext();
 
+    const [ access, setAccess ] = useState(null);
 
     const { controls, dispatch } = useControlContext();
     const [ anim, updateAnim ] = useReducer(animReducer, newAnimState());
     const animState = { anim, updateAnim };
+
+    useEffect(() => {
+        if(mainState.user && mainState.user.isAuth && mainState.user.access){
+            setAccess(mainState.user.access);
+            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
+        }
+
+
+    },[mainState.user]);
     
     const getSavedAnim = (id) => {
         return fetch(`${apiUrl}anim/${id}`,{

@@ -95,7 +95,7 @@ const Collection = () => {
                 {collectionState.username}
             </h5>
             {collectionState.isOwn || isContact(collectionState.userid) ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
-                onClick={handleAddContact}>{'Add as contact'}</button>}
+                onClick={handleAddContact} enabled={mainState.contactReqEnabled}>{'Add as contact'}</button>}
         </div>
     </div>
     : <div></div>

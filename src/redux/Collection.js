@@ -86,7 +86,7 @@ export const collectionReducer = (state, action) => {
                 userid: action.data.userid, isOwn: action.data.isOwn, isSet: action.data.isSet});
         }
         case 'SET_CONTACT_REQ_ENABLED':{
-            return({...state, constactReqEnabled: action.data});
+            return({...state, contactReqEnabled: action.data});
         }
         case 'SET_IS_BROWSE':{
             return ({...state, isBrowse: action.data})

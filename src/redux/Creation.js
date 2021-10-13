@@ -112,6 +112,12 @@ export const animReducer = (state, action) => {
         case 'INIT_ANIM':{
             return ({...state, anim: action.data})
         }
+        case 'UPDATE_ANIM_USER':{
+            let anim = {...state.anim};
+            anim.userid = action.data.userid;
+            anim.username = action.data.username;
+            return ({...state, anim});
+        }
         case 'ENABLED':{
             return ({...state, enabled: action.data})
         }
