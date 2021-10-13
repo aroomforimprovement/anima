@@ -1,10 +1,16 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, createContext, useContext } from 'react';
 import { SITE } from '../shared/site';
 import { Button, Form, FormGroup, Input, InputGroup } from 'reactstrap';
 import { Loading } from './partials/Loading';
+import { Notice } from './partials/Notice';
 import { useMainContext } from './Main';
-import { addContact, accountReducer, getAccountInfo, deleteContact, deleteNotice, updateDisplayName } from '../redux/Account';
+import { accountReducer, getAccountInfo, deleteContact, updateDisplayName } from '../redux/Account';
 
+const AccountContext = createContext({});
+
+export const useAccountContext = () => {
+    return useContext(AccountContext);
+}
 
 const Account = () => {
 
@@ -13,6 +19,7 @@ const Account = () => {
     const [isNameUpdating, setIsNameUpdating] = useState(false);
 
     const [state, dispatch] = useReducer(accountReducer, {});
+    const stateOfAccount = { state, dispatch };
     
     useEffect(() => {
 
@@ -45,26 +52,9 @@ const Account = () => {
         setHideNameEdit(true);
     }
 
-    const handleAcceptNotice = (i) => {
-        console.log("handleAcceptNotice");
-        console.dir(state.notices[i]);
-        //only handling contact req for the moment
-        addContact(state.notices[i], i, mainState.user.access)
-        .then((response) => {
-            deleteNotice(state.notices[i], i, mainState.user.access);
-        });
-    }
 
-    const handleRejectNotice = (i) => {
-        console.log("handleRejectNotice");
-        console.dir(state.notices[i]);
-        deleteNotice(state.notices[i], i, mainState.user.access)
-            .then((response) => {
-                if(response.modifiedCount > 0){
-                    dispatch({type: 'DELETE_NOTICE', data: i});
-                }
-            });
-    }
+
+    
 
     const handleVisitContact = (i) => {
         console.log("handleVisitContact");
@@ -95,20 +85,7 @@ const Account = () => {
             
             const link = `/collection/${notice.actions.accept}`;
             return(
-                <div className='container notice' key={i}>
-                    <div>{notice.message}</div>
-                    <a href={link} target='_blank' rel='noreferrer' alt='Visit the requester profile'>
-                        Check out their profile
-                    </a>
-                    <button className='btn btn-outline-secondary btn-sm'
-                        onClick={() => handleRejectNotice(i)}>
-                        <img src={SITE.icons.wipe} alt={`Reject`} />
-                    </button>
-                    <button className='btn btn-outline-primary btn-sm'
-                        onClick={() => handleAcceptNotice(i)}>
-                        <img src={SITE.icons.save} alt={`Accept`} />
-                    </button>
-                </div>
+                <Notice notice={notice} i={i} link={link}/>
             );
         })
         : <div>Nothing to report</div>
@@ -133,41 +110,49 @@ const Account = () => {
 
     return(
         <div className='container account-page'>
-            <div className='row mt-4 border border-black m-2'>
-                <div className='col-3'>
-                    Display name:
-                </div>
-                <div className='col col-8'>
-                    {isNameUpdating 
-                    ? <Loading /> 
-                    :
-                    <div>
-                        <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
-                        <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
-                            <FormGroup >
-                                <InputGroup>
-                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
-                                    <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
-                                    <Button size='sm' color='primary'>Save</Button>
-                                </InputGroup>
-                            </FormGroup>
-                        </Form>
-                    </div>
-                    }
-                </div>
-                <div className='col col-1 fa fa-edit mt-1'
-                    onClick={handleEditUsername}>
-                    {''}
-                </div>
-            </div>
-            <div className='row'>
-                <div className='col col-2'>Notifications</div>
-                <div className='col col-8'>{notices}</div>
-            </div>
-            <div className='row'>
-                <div className='col col-2'>Contacts</div>
-                <div className='col col-8'>{contacts}</div>
-            </div>
+            <AccountContext.Provider value={stateOfAccount} >
+                <AccountContext.Consumer>
+                    {() => (
+                        <div>
+                            <div className='row mt-4 border border-black m-2'>
+                                <div className='col-3'>
+                                    Display name:
+                                </div>
+                                <div className='col col-8'>
+                                    {isNameUpdating 
+                                    ? <Loading /> 
+                                    :
+                                    <div>
+                                        <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
+                                        <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
+                                            <FormGroup >
+                                                <InputGroup>
+                                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
+                                                    <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
+                                                    <Button size='sm' color='primary'>Save</Button>
+                                                </InputGroup>
+                                            </FormGroup>
+                                        </Form>
+                                    </div>
+                                    }
+                                </div>
+                                <div className='col col-1 fa fa-edit mt-1'
+                                    onClick={handleEditUsername}>
+                                    {''}
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className='col col-2'>Notifications</div>
+                                <div className='col col-8'>{notices}</div>
+                            </div>
+                            <div className='row'>
+                                <div className='col col-2'>Contacts</div>
+                                <div className='col col-8'>{contacts}</div>
+                            </div>
+                        </div>
+                    )}
+                </AccountContext.Consumer>
+            </AccountContext.Provider>
         </div>
     );
 }
