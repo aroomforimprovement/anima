@@ -33,31 +33,31 @@ export const DisplayName = () => {
 
     return(
         <div className='row mt-4 border border-black m-2'>
-                                <div className='col-3'>
-                                    Display name:
-                                </div>
-                                <div className='col col-8'>
-                                    {isNameUpdating 
-                                    ? <Loading /> 
-                                    :
-                                    <div>
-                                        <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
-                                        <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
-                                            <FormGroup >
-                                                <InputGroup>
-                                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
-                                                    <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
-                                                    <Button size='sm' color='primary'>Save</Button>
-                                                </InputGroup>
-                                            </FormGroup>
-                                        </Form>
-                                    </div>
-                                    }
-                                </div>
-                                <div className='col col-1 fa fa-edit mt-1'
-                                    onClick={handleEditUsername}>
-                                    {''}
-                                </div>
-                            </div>
+            <div className='col-3'>
+                Display name:
+            </div>
+            <div className='col col-8'>
+                {isNameUpdating 
+                ? <Loading /> 
+                :
+                <div>
+                    <div hidden={!hideNameEdit}><strong >{state.username}</strong></div>
+                        <Form onSubmit={handleUpdateName} hidden={hideNameEdit}>
+                            <FormGroup >
+                                <InputGroup>
+                                    <Input size='sm' type='text' name='displayName' id='displayName' defaultValue={state.username}/>
+                                    <Button size='sm' color='secondary' onClick={handleEditUsername}>Cancel</Button>
+                                    <Button size='sm' color='primary'>Save</Button>
+                                </InputGroup>
+                            </FormGroup>
+                        </Form>
+                    </div>
+                }
+            </div>
+            <div className='col col-1 fa fa-edit mt-1'
+                onClick={handleEditUsername}>
+                    {''}
+                </div>
+            </div>
     );
 }

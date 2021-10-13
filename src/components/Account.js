@@ -30,7 +30,6 @@ const Account = () => {
             console.error("no user");
         }
     }
-
     
     const setAccountInfo = async () => {
         const id = getAccountId();
