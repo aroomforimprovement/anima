@@ -325,9 +325,53 @@ code {
 }
 
 .notice{
-  background: rgb(2,0,36);
-background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(94,94,94,1) 0%, rgba(0,0,0,1) 100%);
+  position:relative;
+  background: rgb(224,224,224);
+  background: linear-gradient(90deg, rgba(224,224,224,1) 0%, rgba(162,162,162,1) 0%, rgba(208,208,208,1) 100%);
 }
+
+.contact{
+  background: rgb(224,224,224);
+  background: linear-gradient(90deg, rgba(224,224,224,1) 0%, rgba(162,162,162,1) 0%, rgba(208,208,208,1) 100%);
+}
+
+.contact-name{
+  font-size:larger;
+}
+
+.end-zone{
+  text-align: end;
+}
+
+.float-middle{
+  position:absolute;
+  top:30%;
+  right:0%;
+}
+
+@media only screen and (max-width: 576px){
+  .float-middle{
+    position:relative;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (min-width: 768px){
+  .float-middle{
+    position:relative;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (min-width: 992px){
+  .float-middle{
+    position:absolute;
+    top:30%;
+    right:0%;
+  }
+}
+
+
 
 .warn{
   color:rgb(173, 2, 2);

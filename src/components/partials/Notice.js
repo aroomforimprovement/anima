@@ -32,14 +32,21 @@ export const Notice = ({notice, i, link}) => {
             });
     }
 
+    const handleVisitContact = (i) => {
+        console.log("handleVisitContact");
+        const id = state.contacts[i].userid;
+        window.location.href = `/collection/${id}`;
+    }
+
     return(
-        <div className='col col-10 col-md-5 notice rounded ms-2 me-1 mt-2 mb-2'>
+        <div className='col col-10 col-md-5 notice rounded ms-2 me-1 mt-2 mb-2 border border-primary shadow'>
             <div className='row'>
-                <div className='col col-12 col-sm-7 col-md-12 col-lg-7 mt-2 mb-3'>{notice.message}</div>
-                <div className='col col-12 col-sm-5 col-md-12 col-lg-5 coll-item-btns mt-3 mb-3'>
-                    <a className='btn btn-outline-primary btn-sm mx-1' href={link} target='_blank' rel='noreferrer' alt='Visit the requester profile'>
-                        <img src={SITE.icons.preview} alt='Check out their profile' />
-                    </a>
+                <div className='col col-12 col-sm-7 col-md-12 col-lg-5 mt-2 mb-3'>{notice.message}</div>
+                <div className='col col-12 col-sm-5 col-md-12 col-lg-6 coll-item-btns end-zone float-middle'>
+                <button className='btn btn-outline-primary btn-sm mx-1'
+                        onClick={() => handleVisitContact(i)}>
+                        <img src={SITE.icons.preview} alt={`Visit requester`}/>
+                    </button>
                     <button className='btn btn-outline-danger btn-sm mx-1'
                         onClick={() => handleRejectNotice(i)}>
                         <img src={SITE.icons.wipe} alt={`Reject`} />

@@ -67,12 +67,12 @@ const Account = () => {
                         <div>
                             <DisplayName />
                             <div className='row'>
-                                <div className='col col-2 col-lg-1'>Notifications:</div>
+                                <div >Notifications:</div>
                                 <div className='container'><div className='row'>{notices}</div></div>
                             </div>
                             <div className='row'>
-                                <div className='col col-2'>Contacts:</div>
-                                <div className='col col-8'>{contacts}</div>
+                                <div >Contacts:</div>
+                                <div className='container'><div className='row'>{contacts}</div></div>
                             </div>
                         </div>
                     )}

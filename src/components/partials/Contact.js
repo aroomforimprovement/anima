@@ -26,16 +26,20 @@ export const Contact = ({contact, i}) => {
     }
 
     return(
-        <div className='container contact'>
-            <div>{contact.username}</div>
-            <button className='btn btn-outline-success btn-sm'
-                onClick={() => handleVisitContact(i)}>
-                <img src={SITE.icons.preview} alt={`Visit ${contact.name}`}/>
-            </button>
-            <button className='btn btn-outline-danger btn-sm'
-                onClick={() => handleDeleteContact(i)}>
-                <img src={SITE.icons.wipe} alt={`Delete ${contact.name} from contacts`}/>
-            </button>
+        <div className='col col-10 col-md-5 col-lg-5 contact border border-success rounded shadow m-2 py-3'>
+            <div className='row m-1'>
+                <div className='col col-6 col-sm-8 col-md-6 contact-name'>{contact.username}</div>
+                <div className='col col-6 col-sm-4 col-md-6 coll-item-btns end-zone'>
+                    <button className='btn btn-outline-primary btn-sm mx-1'
+                        onClick={() => handleVisitContact(i)}>
+                        <img src={SITE.icons.preview} alt={`Visit ${contact.name}`}/>
+                    </button>
+                    <button className='btn btn-outline-danger btn-sm mx-1'
+                        onClick={() => handleDeleteContact(i)}>
+                        <img src={SITE.icons.wipe} alt={`Delete ${contact.name} from contacts`}/>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
