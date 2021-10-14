@@ -94,19 +94,19 @@ const Header = () => {
                             {isLoading ? <Loading /> :
                             <Nav className='auth-nav' navbar >
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <LoginBtn size='btn-sm' href='/login' />}
+                                    {isAuthenticated ? null : <LoginBtn size='btn-sm mt-2' href='/login' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? <LogoutBtn size='btn-sm' href='/logout' /> : null}
+                                    {isAuthenticated ? <LogoutBtn size='btn-sm mt-2' href='/logout' /> : null}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <SignupBtn size='btn-sm' href='/signup' />}
+                                    {isAuthenticated ? null : <SignupBtn size='btn-sm mt-2' href='/signup' />}
                                 </NavItem>
-                                <NavItem>
+                                <NavItem className='nav-item nav-i ms-3'>
                                     {isAuthenticated 
-                                        ? <NavLink className='nav-link rounded-circle border border-secondary ms-3 px-2 py-1' 
+                                        ? <NavLink className='nav-link account-nav mt-1 mt-md-0 border rounded-circle' 
                                             to='/account' >
-                                            <span className='fa fa-user '>{' '}</span>    
+                                            <span className='fa fa-md fa-user text-center'>{''}</span> 
                                         </NavLink> 
                                         : null}
                                 </NavItem>

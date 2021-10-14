@@ -57,6 +57,33 @@ code {
   text-align: left;
 }
 
+.account-nav{
+  min-width:40px;
+  max-width:40px;
+  max-height: 40px;
+}
+.account-nav span{
+  font-size: large;
+  min-width:40px;
+  max-height: 40px;
+}
+
+@media only screen and (min-width: 768px) {
+  .account-nav{
+    min-width:40px;
+    height: 40px;
+    position:relative;
+  }
+
+  .account-nav span{
+    position:absolute;
+    font-size: large;
+    left:-5%;
+    top:25%;
+  }
+}
+
+
 .loading {
   display:inline-block;
 }
