@@ -55,7 +55,7 @@ export const DisplayName = () => {
                     </div>
                 }
             </div>
-            <div className='col fa fa-edit mt-1'
+            <div className='col fa fa-edit mt-1 edit-name'
                 onClick={handleEditUsername}>
                     {''}
                 </div>
