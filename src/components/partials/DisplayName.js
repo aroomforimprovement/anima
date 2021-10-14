@@ -33,10 +33,10 @@ export const DisplayName = () => {
 
     return(
         <div className='row mt-5 mb-5'>
-            <div className='col text-wrap'>
+            <div className='col col-3 mt-1 small'>
                 Display name:
             </div>
-            <div className='col'>
+            <div className='col col-8'>
                 {isNameUpdating 
                 ? <Loading /> 
                 :

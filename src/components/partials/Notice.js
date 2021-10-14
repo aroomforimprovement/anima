@@ -39,7 +39,7 @@ export const Notice = ({notice, i, link}) => {
     }
 
     return(
-        <div className='col col-10 col-md-5 notice rounded ms-2 me-1 mt-2 mb-2 border border-primary shadow'>
+        <div className='col col-10 col-md-5 notice rounded ms-2 me-1 mt-2 mb-2 border border-primary'>
             <div className='row'>
                 <div className='col col-12 col-sm-7 col-md-12 col-lg-5 mt-2 mb-3'>{notice.message}</div>
                 <div className='col col-12 col-sm-5 col-md-12 col-lg-6 coll-item-btns end-zone float-middle'>
