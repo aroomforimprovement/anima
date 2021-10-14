@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, createContext, useContext } from 'react';
+import React, { useEffect, useReducer, createContext, useContext, useState } from 'react';
 import { Notice } from './partials/Notice';
 import { Contact } from './partials/Contact';
 import { DisplayName } from './partials/DisplayName';
@@ -12,7 +12,8 @@ export const useAccountContext = () => {
 }
 
 const Account = () => {
-
+    const [hideNotices, setHideNotices] = useState(true);
+    const [hideContacts, setHideContacts] = useState(true);
     const { mainState } = useMainContext();
 
 
@@ -38,6 +39,14 @@ const Account = () => {
     }
     if(!state.isSet && mainState.user && mainState.user.access){
         setAccountInfo();
+    }
+
+    const handleShowContacts = () => {
+        setHideContacts(!hideContacts);
+    }
+
+    const handleShowNotices = () => {
+        setHideNotices(!hideNotices);
     }
 
     const notices = state.notices && state.notices.length > 0 
@@ -66,13 +75,19 @@ const Account = () => {
                     {() => (
                         <div>
                             <DisplayName />
-                            <div className='row'>
-                                <div >Notifications:</div>
-                                <div className='container'><div className='row'>{notices}</div></div>
+                            <div className='row notices'>
+                                <div className='notices-header' 
+                                    onClick={handleShowNotices}>Notifications:</div>
+                                <div className='container' hidden={hideNotices}>
+                                    <div className='row mb-4'>{notices}</div>
+                                </div>
                             </div>
-                            <div className='row'>
-                                <div >Contacts:</div>
-                                <div className='container'><div className='row'>{contacts}</div></div>
+                            <div className='row notices'>
+                                <div className='contacts-header' 
+                                    onClick={handleShowContacts}>Contacts:</div>
+                                <div className='container' hidden={hideContacts}>
+                                    <div className='row'>{contacts}</div>
+                                </div>
                             </div>
                         </div>
                     )}
