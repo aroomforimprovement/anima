@@ -97,13 +97,16 @@ export const CollectionItem = ({anim}) => {
                 toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
                 {
                     collectionItemState.previewFile ?
-                <video controls loop autoPlay> 
-                    <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-                </video> :
+                    <video controls loop autoPlay className='p-2'> 
+                        <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                    </video> 
+                :
                 <Loading />
                 }
                 <ModalFooter>
-                    <p>{anim.name}</p>
+                    <div className='preview-name'>
+                        <span >{anim.name}</span>
+                    </div>
                     <Button size='sm' 
                         onClick={() => setIsPreviewOpen(false)}
                     >Close</Button>
@@ -117,7 +120,7 @@ export const CollectionItem = ({anim}) => {
                     <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
                         collectionItemDispatch={collectionItemDispatch} />
                 </div>
-                } 
+            } 
         </div>
     </LazyLoad>
     );

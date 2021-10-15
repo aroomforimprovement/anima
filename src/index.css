@@ -355,6 +355,10 @@ code {
   background: linear-gradient(45deg, rgb(220, 220, 220), rgb(200, 200, 200));
 }
 
+.preview-name, span{
+  text-align:start;
+}
+
 .account-page{
   text-align: start;
   display:inline-block;
