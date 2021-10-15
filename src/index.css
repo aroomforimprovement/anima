@@ -279,11 +279,9 @@ code {
   font-size: smaller;
 }
 
-.collection{
-}
-
-.collection-header{
+.collection-header h5{
   text-align: start;
+  font-size: xx-large;
 }
 
 .coll-item {
@@ -304,6 +302,11 @@ code {
 
 .coll-item a{
   color:black;
+}
+
+.coll-item-name{
+  font-size:large;
+  font-weight: bolder;
 }
 
 .coll-item-detail{
@@ -358,6 +361,8 @@ code {
 .preview-name, span{
   text-align:start;
 }
+
+
 
 .account-page{
   text-align: start;

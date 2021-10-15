@@ -48,21 +48,23 @@ export const CollectionItem = ({anim}) => {
     }
 
     return(
-        <LazyLoad height={400} offset={100} 
+        <LazyLoad height={300} offset={100} 
             className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
             <div >
                 <div className='row'>
                 {
-                    collectionItemState.previewFile ?
+                collectionItemState.previewFile 
+                ?
                 <video loop autoPlay className='rounded p-0'> 
                     <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-                </video> :
+                </video> 
+                :
                 <Loading />
                 }
                 </div>
                 <div className='row'>
                     <div className='col col-12 mt-2 ms-2'>
-                        <div >{anim.name}</div>
+                        <div className='coll-item-name'>{anim.name}</div>
                         <div className='coll-item-username' ><small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small></div>
                     </div>
                     <div className='row'>

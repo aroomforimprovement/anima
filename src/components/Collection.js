@@ -91,11 +91,18 @@ const Collection = () => {
     const collectionHeading = collectionState.username
     ? <div className='container collection-header mt-4 mb-4'>
         <div className='row'>
-            <h5 className='col'>
+            <h5 className='col col-8'>
                 {collectionState.username}
             </h5>
-            {collectionState.isOwn || isContact(collectionState.userid) ? <div></div> : <button className='col col-1 btn btn-sm fa fa-users'
-                onClick={handleAddContact} enabled={mainState.contactReqEnabled}>{'Add as contact'}</button>}
+            {
+            collectionState.isOwn || isContact(collectionState.userid) 
+            ? 
+            <div></div> 
+            : 
+            <button className='col btn btn-outline-light btn-sm fa fa-users'
+                onClick={handleAddContact} enabled={mainState.contactReqEnabled}>{'Add as contact'}
+            </button>
+            }
         </div>
     </div>
     : <div></div>
