@@ -5,6 +5,8 @@ import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../animator/preview";
 import { Loading } from './Loading';
 import LazyLoad from "react-lazyload";
+import { saveAs } from 'file-saver';
+
 
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
 const CollectionItemContext = createContext(collectionItemInitialState);
@@ -42,17 +44,17 @@ export const CollectionItem = ({anim}) => {
     }
 
     const handleDownload = (e) => {
-
+       saveAs(collectionItemState.previewFile, anim.name);
     }
 
     return(
         <LazyLoad height={400} offset={100} 
-        className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1 rounded coll-item'>
+            className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
             <div >
                 <div className='row'>
                 {
                     collectionItemState.previewFile ?
-                <video loop autoPlay> 
+                <video loop autoPlay className='rounded p-0'> 
                     <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                 </video> :
                 <Loading />
@@ -65,7 +67,7 @@ export const CollectionItem = ({anim}) => {
                     </div>
                     <div className='row'>
                         <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
-                        <div className='col col-8 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
+                        <div className='col col-8 ms-2 coll-item-date'><small>{new Date(anim.created).toDateString()}</small></div>
                     </div>
                 <div className='col col-12'>
                     <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>

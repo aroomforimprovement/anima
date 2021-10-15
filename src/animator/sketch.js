@@ -1,6 +1,6 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
-import { downloadAnimAsGif, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
+import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 
 
 export const sketch = (p5) => {
@@ -77,7 +77,7 @@ export const sketch = (p5) => {
             if(anim.anim.frames.length < 1){
                 alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
             }else{
-                downloadAnimAsGif(anim.anim, p5canvas, p5);
+                downloadAnimAsWebm(anim.anim, p5canvas, p5);
             }            
         }
         if(props.controls.preview){

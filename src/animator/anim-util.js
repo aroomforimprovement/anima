@@ -3,7 +3,7 @@ import { CC } from './controls';
 import { saveAs } from 'file-saver';
 
 
-export const downloadAnimAsGif = (a, p5canvas, p5) => {
+export const downloadAnimAsWebm = (a, p5canvas, p5) => {
     try{
         renderAnim(a, 'DOWNLOAD', p5canvas, p5);
     }catch(err){

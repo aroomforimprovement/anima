@@ -10,7 +10,7 @@ const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: f
 
 
 const Collection = () => {
-    const { mainState, mainDispatch } = useMainContext();
+    const { mainState } = useMainContext();
 
     //contacts isn't a part of collection here, this won't work
     const isContact = (id) => {

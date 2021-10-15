@@ -20,7 +20,7 @@ export const useAnimContext = () => {
 
 export const Creation = () => {
 
-    const { mainState, mainDispatch } = useMainContext();
+    const { mainState } = useMainContext();
 
     const [ access, setAccess ] = useState(null);
 
