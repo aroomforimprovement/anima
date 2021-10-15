@@ -26,7 +26,7 @@ export const Contact = ({contact, i}) => {
     }
 
     return(
-        <div className='col col-10 col-md-5 col-lg-5 contact border border-success rounded m-2 py-3'>
+        <div className='col col-10 col-md-5 col-lg-5 contact rounded m-2 py-3'>
             <div className='row m-1'>
                 <div className='col col-6 col-sm-8 col-md-6 contact-name'>{contact.username}</div>
                 <div className='col col-6 col-sm-4 col-md-6 coll-item-btns end-zone'>
