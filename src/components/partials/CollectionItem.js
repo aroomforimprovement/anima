@@ -46,77 +46,77 @@ export const CollectionItem = ({anim}) => {
     }
 
     return(
-        <LazyLoad height={200} offset={100} 
+        <LazyLoad height={400} offset={100} 
         className='col col-12 col-sm-5 col-md-3 col-lg-3 m-1 rounded coll-item'>
-        <div >
-            <div className='row'>
-            {
-                collectionItemState.previewFile ?
-            <video loop autoPlay> 
-                <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-            </video> :
-            <Loading />
-            }
-            </div>
-            <div className='row'>
-                <div className='col col-12 mt-2 ms-2'>
-                    <div >{anim.name}</div>
-                    <div className='coll-item-username' ><small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small></div>
+            <div >
+                <div className='row'>
+                {
+                    collectionItemState.previewFile ?
+                <video loop autoPlay> 
+                    <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                </video> :
+                <Loading />
+                }
                 </div>
                 <div className='row'>
-                    <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
-                    <div className='col col-8 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
-                </div>
-            <div className='col col-12'>
-                <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
-                    <div className='col col-4 col-md-3'>
-                        <button className='btn btn-outline-secondary'>
-                            <a href={`/create/${anim.animid}`} alt='edit'>
-                                <img src={SITE.icons.penColour} alt='edit' />
-                            </a>   
-                        </button>
+                    <div className='col col-12 mt-2 ms-2'>
+                        <div >{anim.name}</div>
+                        <div className='coll-item-username' ><small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small></div>
                     </div>
-                    <div className='col col-4 col-md-3'>
-                        <button className='btn btn-outline-secondary'
-                            onClick={handlePreview}>
-                                <img src={SITE.icons.preview} alt='preview'></img>
-                        </button>
+                    <div className='row'>
+                        <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
+                        <div className='col col-8 ms-2'><small>{new Date(anim.created).toDateString()}</small></div>
                     </div>
-                    <div className='col col-4 col-md-3'>
-                        <button className='btn btn-outline-secondary'
-                            onClick={handleDownload}>
-                            <img src={SITE.icons.download} alt='download'></img>
-                        </button>
+                <div className='col col-12'>
+                    <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
+                        <div className='col col-4 col-md-3'>
+                            <button className='btn btn-outline-secondary'>
+                                <a href={`/create/${anim.animid}`} alt='edit'>
+                                    <img src={SITE.icons.penColour} alt='edit' />
+                                </a>   
+                            </button>
+                        </div>
+                        <div className='col col-4 col-md-3'>
+                            <button className='btn btn-outline-secondary'
+                                onClick={handlePreview}>
+                                    <img src={SITE.icons.preview} alt='preview'></img>
+                            </button>
+                        </div>
+                        <div className='col col-4 col-md-3'>
+                            <button className='btn btn-outline-secondary'
+                                onClick={handleDownload}>
+                                <img src={SITE.icons.download} alt='download'></img>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <Modal size='lg' isOpen={isPreviewOpen} 
-            toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
+            <Modal size='lg' isOpen={isPreviewOpen} 
+                toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
+                {
+                    collectionItemState.previewFile ?
+                <video controls loop autoPlay> 
+                    <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                </video> :
+                <Loading />
+                }
+                <ModalFooter>
+                    <p>{anim.name}</p>
+                    <Button size='sm' 
+                        onClick={() => setIsPreviewOpen(false)}
+                    >Close</Button>
+                </ModalFooter>
+            </Modal > 
             {
-                collectionItemState.previewFile ?
-            <video controls loop autoPlay> 
-                <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-            </video> :
-            <Loading />
-            }
-            <ModalFooter>
-                <p>{anim.name}</p>
-                <Button size='sm' 
-                    onClick={() => setIsPreviewOpen(false)}
-                >Close</Button>
-            </ModalFooter>
-        </Modal > 
-        {
-            collectionItemState.previewFile 
-            ? <div></div>
-            :
-            <div hidden={true}>    
-                <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
-                    collectionItemDispatch={collectionItemDispatch} />
-            </div>
-            } 
-    </div>
+                collectionItemState.previewFile 
+                ? <div></div>
+                :
+                <div hidden={true}>    
+                    <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
+                        collectionItemDispatch={collectionItemDispatch} />
+                </div>
+                } 
+        </div>
     </LazyLoad>
     );
 }
