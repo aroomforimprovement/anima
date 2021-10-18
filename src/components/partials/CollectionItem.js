@@ -6,6 +6,7 @@ import { preview } from "../../animator/preview";
 import { Loading } from './Loading';
 import LazyLoad from "react-lazyload";
 import { saveAs } from 'file-saver';
+import { useMainContext } from "../Main";
 
 
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
@@ -17,6 +18,8 @@ export const useCollectionItemwContext = () => {
 
 export const CollectionItem = ({anim}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+    const { mainState } = useMainContext();
     
     const collectionItemReducer = (state, action) => {
         switch(action.type){
@@ -73,13 +76,15 @@ export const CollectionItem = ({anim}) => {
                     </div>
                 <div className='col col-12'>
                     <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
-                        <div className='col col-4 col-md-3'>
+                        { mainState.user && anim.userid === mainState.user.userid
+                        ? <div className='col col-4 col-md-3'>
                             <button className='btn btn-outline-secondary'>
                                 <a href={`/create/${anim.animid}`} alt='edit'>
                                     <img src={SITE.icons.penColour} alt='edit' />
                                 </a>   
                             </button>
-                        </div>
+                        </div> :
+                        <div></div>}
                         <div className='col col-4 col-md-3'>
                             <button className='btn btn-outline-secondary'
                                 onClick={handlePreview}>
