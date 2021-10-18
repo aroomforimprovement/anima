@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 export const LoginBtn = (props) => {
     const classes = `btn btn-secondary ${props.size} m-1`;
-    const url = `${process.env.REACT_APP_URL}login`;
+    const url = `${process.env.REACT_APP_URL}/login`;
     
     const { loginWithPopup } = useAuth0();
 
@@ -22,7 +22,7 @@ export const LoginBtn = (props) => {
 
 export const LogoutBtn = (props) => {
     const classes = `btn btn-outline-secondary ${props.size} m-1`;
-    const url = `${process.env.REACT_APP_URL}logout`;
+    const url = `${process.env.REACT_APP_URL}/logout`;
     const { logout } = useAuth0();
     return <button 
             onClick={() => logout({returnTo: url})}
@@ -35,7 +35,7 @@ export const LogoutBtn = (props) => {
 
 export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
-    const url = `${process.env.REACT_APP_URL}login`;
+    const url = `${process.env.REACT_APP_URL}/login`;
     const { loginWithRedirect } = useAuth0();
     return <button
             onClick={() => loginWithRedirect(
