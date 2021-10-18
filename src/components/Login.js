@@ -1,12 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './partials/Loading';
 import { Problem } from './partials/Problem';
 import { Redirect } from 'react-router';
+import { useMainContext } from './Main';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
+
+    const { mainState, mainDispatch } = useMainContext();
 
     const putLogin = (login) => {
         console.log('putLogin'); 
@@ -63,10 +65,6 @@ const Login = () => {
             }
             case 'setLogin':{
                 console.dir('setLogin: ', action.data);
-                localStorage.setItem('userid', action.data.userid);
-                localStorage.setItem('username', action.data.username);
-                localStorage.setItem('email', action.data.email);
-                localStorage.setItem('isAuth', true);
                 return ({...state, login: action.data, isRegistered: true});
             }
             default:
@@ -74,7 +72,6 @@ const Login = () => {
         }
     }
 
-    const {user, isAuthenticated, isLoading} = useAuth0();
     const [state, dispatch] = useReducer(loginReducer, {
         isLoaded: false,
         isSending: false,
@@ -92,23 +89,22 @@ const Login = () => {
         if(state.isRegistered){
             return;
         }
-        if(isLoading){
+        if(!mainState){
             return;
         }else if(!state.isLoaded){
             dispatch({type: 'setIsLoaded', data: true});
-        }else if(state.isLoaded && isAuthenticated && user &&  !state.isSending && !state.isFailed){
-            console.dir('useEffect, user: ', user);
+        }else if(state.isLoaded && (mainState && mainState.user && mainState.user.isAuth) &&  !state.isSending && !state.isFailed){
+            console.dir('useEffect, user: ', mainState.user);
             dispatch({type: 'setIsSending', data: true});
             dispatch({type: 'putLogin', data: { 
-                userid: user.sub.replace('auth0|', ''),
-                email: user.email,
-                username: user.nickname
+                userid: mainState.user.userid,
+                email: mainState.user.email,
+                username: mainState.user.nickname
             }});
         }
-    }, [isLoading, user, isAuthenticated, state.isLoaded, 
-        state.isSending, state.isRegistered, state.isFailed]);
+    }, [mainState, state.isFailed, state.isLoaded, state.isRegistered, state.isSending]);
     
-    if(isLoading){
+    if(!mainState){
         return(
             <Loading message={"Loading authentication..."} />
         );
@@ -120,7 +116,7 @@ const Login = () => {
         return(
             <Problem message={"It looks like there was a problem with your login"} />
         );
-    }else if(state.isRegistered && localStorage.getItem('userid')){
+    }else if(state.isRegistered && mainState.user.userid){
         return(
            // <Loading message="redirect blocked" />
             <Redirect to='/create'/>
