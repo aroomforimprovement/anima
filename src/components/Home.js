@@ -3,19 +3,18 @@ import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
 import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
 import { NavLink } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './partials/Loading';
+import { useMainContext } from './Main';
 
 const Home = () => {
     
-    const { isAuthenticated, isLoading } = useAuth0();
-    const [ auth, setAuth ] = useState(window.localStorage.getItem('isAuth'));
+    const { mainState } = useMainContext();
+    const [isSet, setIsSet] = useState();
 
     useEffect(() => {
-        if(!isLoading){
-            setAuth(isAuthenticated);
-        }
-    },[isLoading, isAuthenticated]);
+        console.debug(mainState.user);
+        setIsSet(true);
+    }, [mainState.user])
 
     return (
         <div className='container col-12 justify-content-center'>
@@ -36,9 +35,9 @@ const Home = () => {
                                     Create
                                 </button>
                         </NavLink>
-                        {isLoading ? <Loading /> : isAuthenticated ? null : <LoginBtn size='btn-lg' href='/login'/>}
-                        {isLoading ? <Loading /> : isAuthenticated ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
-                        {isLoading ? <Loading /> : isAuthenticated ? null : <SignupBtn size='btn-lg' href='/signup' />}
+                        {!mainState ? <Loading /> : (mainState && mainState.user && mainState.user.isAuth) ? null : <LoginBtn size='btn-lg' href='/login'/>}
+                        {!mainState ? <Loading /> : (mainState && mainState.user && mainState.user.isAuth) ? <LogoutBtn size='btn-lg' href='/logout'/> : null}
+                        {!mainState ? <Loading /> : (mainState && mainState.user && mainState.user.isAuth) ? null : <SignupBtn size='btn-lg' href='/signup' />}
                     </div>
                 </div>
             </Jumbotron>

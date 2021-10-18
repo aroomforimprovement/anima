@@ -1,67 +1,26 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, NavItem, NavbarToggler, NavbarBrand, Nav, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../../shared/site';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useMainContext } from '../Main';
 
 const Header = () => {
     
-    const { isAuthenticated, isLoading, user, getAccessTokenSilently } = useAuth0();
-    const { mainState, mainDispatch } = useMainContext();
-
-    const headerReducer = (state, action) => {
-        console.debug(action.type+":"+action.data);
-        switch(action.type){
-            case 'toggleNav':{
-                return ({...state, isNavOpen: !state.isNavOpen});
-            }
-            case 'checkAuth':{
-                mainDispatch({
-                    type: 'CHECK_AUTH',
-                    data: action.data
-                });
-                return(state);
-            }
-            case 'setAccess':{
-                mainDispatch({
-                    type: 'SET_ACCESS',
-                    data: action.data
-                });
-                return ({...state, isSet: true});
-            }
-            default:
-                return state;
-        }
-    }
-
-    const [state, dispatch] = useReducer(headerReducer, {isNavOpen: false});
-    
+    const { mainState } = useMainContext();
+    const [isNavOpen, setIsNavOpen] = useState(false);
+    const [isSet, setIsSet] = useState(false);
     const logo = process.env.REACT_APP_URL + '/assets/site-logo.svg'
     
     const toggleNav = () => {
-        dispatch({type: 'toggleNav', data: !state.isNavOpen})
+        setIsNavOpen(!isNavOpen);
     }
-    useEffect(() => {
-        const setAccessToken = async () => {
-            dispatch({type: 'setAccess', data: await getAccessTokenSilently()});
-        }
-        
-        if(isAuthenticated && !state.isSet){
-            setAccessToken();
-        }else if(!isLoading && !mainState.isAuth){
-            dispatch({
-                type: 'checkAuth', 
-                data: {
-                    isAuthenticated: isAuthenticated,
-                    user: user
-                }
-            });
-        }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, state.isSet, mainState.isAuth]);
 
+    useEffect(() => {
+        console.debug(mainState.user);
+        setIsSet(true);
+    }, [mainState.user])
 
     return(
         <div className='nav-area col-12'>
@@ -72,14 +31,14 @@ const Header = () => {
                         <img src={logo} height='40px' width='40px'
                             alt={SITE.name}/>
                     </NavbarBrand>            
-                    <Collapse isOpen={state.isNavOpen} navbar>
+                    <Collapse isOpen={isNavOpen} navbar>
                         <Nav className='col-10 col-md-9' navbar>
                             <NavItem className='nav-item nav-i'>
                                 <NavLink className='nav-link' to='/create'>
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
                                 </NavLink>
                             </NavItem>
-                            {isLoading ? <Loading /> : mainState.user && mainState.user.isAuth ? <NavItem className='nav-item nav-i'>
+                            {!mainState ? <Loading /> : mainState.user && mainState.user.isAuth ? <NavItem className='nav-item nav-i'>
                                 <NavLink className='nav-link' to={`/collection/${mainState.user.userid}`}>
                                     <span className='fa fa-film fa-md m-1'></span> Collection
                                 </NavLink>
@@ -91,19 +50,19 @@ const Header = () => {
                             </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>
-                            {isLoading ? <Loading /> :
+                            {!mainState ? <Loading /> :
                             <Nav className='auth-nav' navbar >
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <LoginBtn size='btn-sm mt-2' href='/login' />}
+                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? null : <LoginBtn size='btn-sm mt-2' href='/login' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? <LogoutBtn size='btn-sm mt-2' href='/logout' /> : null}
+                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? <LogoutBtn size='btn-sm mt-2' href='/logout' /> : null}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {isAuthenticated ? null : <SignupBtn size='btn-sm mt-2' href='/signup' />}
+                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? null : <SignupBtn size='btn-sm mt-2' href='/signup' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i ms-3'>
-                                    {isAuthenticated 
+                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) 
                                         ? <NavLink className='nav-link account-nav mt-1 mt-md-0 border rounded-circle' 
                                             to='/account' >
                                             <span className='fa fa-md fa-user text-center'>{''}</span> 

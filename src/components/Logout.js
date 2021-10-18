@@ -7,7 +7,7 @@ import { Redirect } from 'react-router';
 const apiUrl = process.env.REACT_APP_API_URL
 
 const Logout = () => {
-
+    return(<Redirect to='/'/>);
     const putLogout = (logout) => {
         console.log('putLogout');
         return fetch(`${apiUrl}logout`, {

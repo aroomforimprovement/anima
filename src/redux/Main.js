@@ -10,7 +10,7 @@ export const mainReducer = (state, action) => {
                 const userid = user.sub.replace('auth0|', '');
                 storedUser = {userid: userid, email: user.email,
                     username: user.nickname, isAuth: true, 
-                    access: state.user.access ? state.user.access : null}
+                    access: (state.user && state.user.access) ? state.user.access : null}
             }
             return({...state, user: storedUser});
         }

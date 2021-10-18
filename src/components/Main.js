@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { Switch, Route, Redirect, withRouter, useHistory } from 'react-router-dom';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
@@ -10,6 +10,7 @@ import Collection from './Collection';
 import Browse from './Browse';
 import Account from './Account';
 import { mainReducer } from '../redux/Main';
+import { useAuth0 } from '@auth0/auth0-react';
 const MainContext = createContext({});
 
 export const useMainContext = () => {
@@ -18,7 +19,7 @@ export const useMainContext = () => {
 
 const Main = () => {
 
-
+    const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {});
     const stateOfMain = { mainState, mainDispatch };
 
@@ -32,6 +33,23 @@ const Main = () => {
     const BrowsePage = () => { return <Browse /> }
     const AccountPage = () => { return <Account />}
 
+    useEffect(() => {
+        const setAccessToken = async () => {
+            mainDispatch({type: 'SET_ACCESS', data: await getAccessTokenSilently()})
+        }
+
+        if(!isLoading && !mainState.user){
+            mainDispatch({
+                type: 'CHECK_AUTH',
+                data: {
+                    isAuthenticated: isAuthenticated,
+                    user: user
+                }
+            })
+        }else if(isAuthenticated && !mainState.access){
+            setAccessToken();
+        }
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth]);
         
     return (
         <div>
