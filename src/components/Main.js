@@ -46,10 +46,10 @@ const Main = () => {
                     user: user
                 }
             })
-        }else if(isAuthenticated && !mainState.access){
+        }else if(isAuthenticated && mainState.user && !mainState.user.access){
             setAccessToken();
         }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth]);
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user]);
         
     return (
         <div>
