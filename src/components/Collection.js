@@ -75,8 +75,12 @@ const Collection = () => {
                 });
         }else if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setCollectionState({type: 'SET_ID', data: true});
-        }else{
+        }else if(collectionState.isBrowse){
             console.log("Not Authenticated - no implementation yet");
+            getCollection(false, collectionState.isBrowse, false)
+                .then((response) => {
+                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response}});
+                })
         }
     },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);
 

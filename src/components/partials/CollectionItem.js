@@ -12,7 +12,7 @@ import { useMainContext } from "../Main";
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
 const CollectionItemContext = createContext(collectionItemInitialState);
 
-export const useCollectionItemwContext = () => {
+export const useCollectionItemContext = () => {
     return useContext(CollectionItemContext);
 }
 
