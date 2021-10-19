@@ -8,7 +8,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
 
-    const { mainState, mainDispatch } = useMainContext();
+    const { mainState  } = useMainContext();
 
     const putLogin = (login) => {
         console.log('putLogin'); 

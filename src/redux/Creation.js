@@ -10,10 +10,9 @@ const getNewAnimId = () => {
 const getTempUserId = (animid) => {
     return "temp_"+animid.substring(0, 19);
 }
-const getUserId = (animid) => {
-    const u = window.localStorage.getItem('userid');
-    if(u){
-        return u;
+const getUserId = (userid, animid) => {
+    if(userid){
+        return userid;
     }else{
         return getTempUserId(animid)
     }
@@ -21,8 +20,7 @@ const getUserId = (animid) => {
 const getTempUsername = () => {
     return "Unknown";
 }
-const getUsername = () => {
-    const username = window.localStorage.getItem('username');
+const getUsername = (username) => {
     if(username){
         return username;
     }else{
@@ -30,16 +28,16 @@ const getUsername = () => {
     }
 }
 
-export const newAnimState = () => {
+export const newAnimState = (user) => {
     const animid = getNewAnimId();
-    const userid = getUserId(getNewAnimId());
+    const userid = getUserId(user ? user.userid : false, getNewAnimId());
     return {
         isSet: false,
         enabled: true,
         anim:{
             "animid": animid,
             "userid": userid,
-            "username": getUsername(),
+            "username": getUsername(user ? user.username : false),
             "name": null,
             "type": "animation",
             "created": Date.now(),
@@ -77,14 +75,12 @@ export const animReducer = (state, action) => {
         console.log("saveTempAnim:");
         console.dir(anim);
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
+        return anim.id;
     }
 
     const saveAnimToAccount = (anim, access) => {
         console.log("saveAnimToAccount:");
         console.dir(anim);
-        if(!access){
-            return saveTempAnim(anim);
-        }
         return fetch(`${apiUrl}anim`, {
             method: 'POST',
             mode: 'cors',
@@ -217,8 +213,15 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true});
         }
         case 'SAVE_TO_ACCOUNT':{
-            saveAnimToAccount(state.anim, action.data);
-            return ({...state, enabled: true, isSaveOpen: false});
+            console.debug('SAVE_TO_ACCOUNT');
+            let temp = false;
+            if(!action.data){
+                saveTempAnim(state.anim);
+                temp = state.anim.animid;
+            }else{
+                saveAnimToAccount(state.anim, action.data);
+            }
+            return ({...state, enabled: true, isSaveOpen: false, temp: temp});
         }
         case 'CANCEL_SAVE':{
             return({...state, enabled: true, isSaveOpen: false});
@@ -228,12 +231,8 @@ export const animReducer = (state, action) => {
                 privacy: action.data}})
         }
         case 'USERID':{
-            let u = window.localStorage.getItem('userid');
-            if(!u){
-                u = state.anim.userid;
-            }
             return({...state, anim:{...state["anim"],
-                userid: u}})
+                userid: state.anim.userid}})
         }
         default:
             console.log("reached DEFAULT");

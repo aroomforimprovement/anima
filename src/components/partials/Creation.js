@@ -8,6 +8,7 @@ import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 import { Privacy } from './ControllerBtns';
 import { useMainContext } from '../Main';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -25,17 +26,31 @@ export const Creation = () => {
     const [ access, setAccess ] = useState(null);
 
     const { controls, dispatch } = useControlContext();
-    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState());
+    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState(mainState.user));
     const animState = { anim, updateAnim };
 
+    const { loginWithPopup } = useAuth0();
+
     useEffect(() => {
+        console.log("Creation: useEffect: anim:");
+        console.dir(anim ? anim : "No anim");
+        const redirectAfterTempSave = (temp) => {
+            loginWithPopup(
+                {
+                    redirectUri: `${process.env.REACT_APP_URL}/create/${temp}`
+                }
+            )
+        }
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setAccess(mainState.user.access);
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
         }
+        if(anim.temp){
+            console.log("Creation: useEffect: anim.temp");
+            redirectAfterTempSave(anim.temp);
+        }
 
-
-    },[mainState.user]);
+    },[mainState.user, anim.temp, loginWithPopup, anim]);
     
     const getSavedAnim = (id) => {
         return fetch(`${apiUrl}anim/${id}`,{
