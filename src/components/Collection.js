@@ -4,8 +4,6 @@ import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
 import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
 
-const apiUrl = process.env.REACT_APP_API_URL;
-
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
 
 

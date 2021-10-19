@@ -2,16 +2,21 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const getCollection = (id, isBrowse, access) => {
     let url;
+    let req = {
+        method: 'GET',
+        mode: 'cors'
+    };
     if(isBrowse){
         url = `${apiUrl}collection`;
     }else{
         url = `${apiUrl}collection/${id}`;
     }
-    return fetch(url, {
-        headers: {
+    if(access){
+        req.headers = {
             Authorization: `Bearer ${access}`
         }
-    })
+    }
+    return fetch(url, req)
     .then(response => {
         if(response.ok){
             return response.json();
