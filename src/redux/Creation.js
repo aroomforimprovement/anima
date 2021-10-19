@@ -72,15 +72,25 @@ export const newAnimState = () => {
  */
 export const animReducer = (state, action) => {
     
-    const saveAnimToAccount = (a, t) => {
+    //save anim and send to auth
+    const saveTempAnim = (anim) => {
+        console.log("saveTempAnim:");
+        console.dir(anim);
+        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
+    }
+
+    const saveAnimToAccount = (anim, access) => {
         console.log("saveAnimToAccount:");
-        console.dir(a);
+        console.dir(anim);
+        if(!access){
+            return saveTempAnim(anim);
+        }
         return fetch(`${apiUrl}anim`, {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(a),
+            body: JSON.stringify(anim),
             headers: {
-                Authorization: `Bearer ${t}`,
+                Authorization: `Bearer ${access}`,
                 'Content-Type': 'application/json',
             }
         })
@@ -207,8 +217,6 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true});
         }
         case 'SAVE_TO_ACCOUNT':{
-            let anim = {...state.anim};
-            anim.username = window.localStorage.getItem('username') ? window.localStorage.getItem('username') : "Unknown";
             saveAnimToAccount(state.anim, action.data);
             return ({...state, enabled: true, isSaveOpen: false});
         }
