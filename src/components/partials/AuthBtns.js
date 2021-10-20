@@ -10,7 +10,7 @@ export const LoginBtn = (props) => {
     const loginPop = async () => {
         loginWithPopup(
             {redirectUri: url}
-            );
+        );
     }
     return <button 
             onClick={() => loginPop()}
@@ -21,7 +21,7 @@ export const LoginBtn = (props) => {
 }
 
 export const LogoutBtn = (props) => {
-    const classes = `btn btn-outline-secondary ${props.size} m-1`;
+    const classes = `btn btn-secondary ${props.size} m-1`;
     const url = `${process.env.REACT_APP_URL}/logout`;
     const { logout } = useAuth0();
     return <button 

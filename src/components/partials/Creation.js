@@ -22,35 +22,38 @@ export const useAnimContext = () => {
 export const Creation = () => {
 
     const { mainState } = useMainContext();
-
+    
     const [ access, setAccess ] = useState(null);
 
     const { controls, dispatch } = useControlContext();
-    const [ anim, updateAnim ] = useReducer(animReducer, newAnimState(mainState.user));
+    const initAnimState = newAnimState(mainState.user);
+    const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
 
     const { loginWithPopup } = useAuth0();
 
+    const tempSave = () => {
+        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
+    }
+    const redirectAfterTempSave = (temp) => {
+        //updateAnim({type: 'SET_TEMP', data: false});
+        tempSave();
+        loginWithPopup(
+            {
+                screen_hint: 'signup',
+                redirectUri: `${process.env.REACT_APP_URL}/login`
+            }
+        )
+    }
+    
     useEffect(() => {
-        console.log("Creation: useEffect: anim:");
-        console.dir(anim ? anim : "No anim");
-        const redirectAfterTempSave = (temp) => {
-            loginWithPopup(
-                {
-                    redirectUri: `${process.env.REACT_APP_URL}/create/${temp}`
-                }
-            )
-        }
+        
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setAccess(mainState.user.access);
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
         }
-        if(anim.temp){
-            console.log("Creation: useEffect: anim.temp");
-            redirectAfterTempSave(anim.temp);
-        }
 
-    },[mainState.user, anim.temp, loginWithPopup, anim]);
+    },[mainState.user]);
     
     const getSavedAnim = (id) => {
         return fetch(`${apiUrl}anim/${id}`,{
@@ -98,13 +101,27 @@ export const Creation = () => {
 
     
     const id = getIdFromUrl(window.location.href);
-    if(!anim.isSet && id){
+    if(!anim.isSet && window.localStorage.getItem('tempAnim')){
+        let anim = JSON.parse(window.localStorage.getItem('tempAnim'));
+        window.localStorage.removeItem('tempAnim');
+        anim.userid = mainState.user.userid;
+        anim.username = mainState.user.username;
+        console.log("SETTING ANIM in the wild");  
+        updateAnim({type: 'SET_ANIM', data: anim});
+        //updateAnim({type: 'SAVE_TO_ACCOUNT', data: access})
+    }else if(!anim.isSet && id){
         getSavedAnim(id);
     }
     
+    
     const handleSaveSubmission = (e) => {
+        
         updateAnim({type: 'USERID', data: true});
-        updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
+        if(access){
+            updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
+        }else{
+            redirectAfterTempSave(anim.temp);
+        }
         e.preventDefault();
     }
 

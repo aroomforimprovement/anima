@@ -11,13 +11,17 @@ const Login = () => {
     const { mainState  } = useMainContext();
 
     const putLogin = (login) => {
-        console.log('putLogin'); 
+        console.log('putLogin');
+        console.dir(login);
+        console.dir(login.access);
         return fetch(`${apiUrl}login`, {
             method: 'PUT',
             mode: 'cors',
             body: JSON.stringify(login),
             headers: {
+                Authorization: `Bearer ${login.access}`,
                 'Content-Type': 'application/json',
+                'Origin': process.env.REACT_APP_URL
             },
         })
         .then(response => {
@@ -57,9 +61,9 @@ const Login = () => {
                 return ({...state, isRegistered: action.data});
             }
             case 'setIsFailed':{
-                return ({...state, isFailed: action.data});
+                return ({...state, isFailed: action.data, isSending: !action.data});
             }
-            case 'putLogin':{               
+            case 'putLogin':{
                 putLogin(action.data);
                 return state;
             }
@@ -93,13 +97,13 @@ const Login = () => {
             return;
         }else if(!state.isLoaded){
             dispatch({type: 'setIsLoaded', data: true});
-        }else if(state.isLoaded && (mainState && mainState.user && mainState.user.isAuth) &&  !state.isSending && !state.isFailed){
+        }else if(state.isLoaded && (mainState && mainState.user && mainState.user.isAuth && mainState.user.access) &&  !state.isSending && !state.isFailed){
             console.dir('useEffect, user: ', mainState.user);
             dispatch({type: 'setIsSending', data: true});
             dispatch({type: 'putLogin', data: { 
                 userid: mainState.user.userid,
                 email: mainState.user.email,
-                username: mainState.user.nickname
+                username: mainState.user.nickname, access: mainState.user.access
             }});
         }
     }, [mainState, state.isFailed, state.isLoaded, state.isRegistered, state.isSending]);

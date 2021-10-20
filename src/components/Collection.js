@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
+import { collectionReducer, addContactRequest, getCollection, getIdFromUrl } from '../redux/Collection';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
 
@@ -73,11 +73,16 @@ const Collection = () => {
                 });
         }else if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setCollectionState({type: 'SET_ID', data: true});
-        }else if(collectionState.isBrowse){
-            console.log("Not Authenticated - no implementation yet");
+        }else if(mainState.user && !collectionState.isBrowse &&  !mainState.user.isAuth && !collectionState.isSet){
+            const id = getIdFromUrl(window.location.href);
+            getCollection(id, collectionState.isBrowse, false)
+                .then((response) => {
+                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response.anims, isSet: true}});
+                });
+        }else if(collectionState.isBrowse  && !collectionState.isSet){
             getCollection(false, collectionState.isBrowse, false)
                 .then((response) => {
-                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response}});
+                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, iSet: true}});
                 })
         }
     },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);

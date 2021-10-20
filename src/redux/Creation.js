@@ -113,7 +113,10 @@ export const animReducer = (state, action) => {
     
     switch(action.type){
         case 'SET_ANIM':{
-            return ({...state, anim: action.data, isSet: true});
+            return ({...state, anim: action.data, isSet: true, temp: false});
+        }
+        case 'SET_TEMP':{
+            return({...state, temp: action.data});
         }
         case 'INIT_ANIM':{
             return ({...state, anim: action.data})
@@ -215,10 +218,10 @@ export const animReducer = (state, action) => {
         case 'SAVE_TO_ACCOUNT':{
             console.debug('SAVE_TO_ACCOUNT');
             let temp = false;
-            if(!action.data){
+            if(!action.data && !window.localStorage.getItem('tempAnim')){
                 saveTempAnim(state.anim);
                 temp = state.anim.animid;
-            }else{
+            }else if(action.data){
                 saveAnimToAccount(state.anim, action.data);
             }
             return ({...state, enabled: true, isSaveOpen: false, temp: temp});
