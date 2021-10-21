@@ -56,6 +56,7 @@ export const Creation = () => {
     },[mainState.user]);
     
     const getSavedAnim = (id) => {
+        console.log("getSavedAnim");
         return fetch(`${apiUrl}anim/${id}`,{
                 headers: {
                     Authorization: `Bearer ${access}`,
@@ -101,15 +102,9 @@ export const Creation = () => {
 
     
     const id = getIdFromUrl(window.location.href);
-    if(!anim.isSet && window.localStorage.getItem('tempAnim')){
-        let anim = JSON.parse(window.localStorage.getItem('tempAnim'));
-        window.localStorage.removeItem('tempAnim');
-        anim.userid = mainState.user.userid;
-        anim.username = mainState.user.username;
-        console.log("SETTING ANIM in the wild");  
-        updateAnim({type: 'SET_ANIM', data: anim});
-        //updateAnim({type: 'SAVE_TO_ACCOUNT', data: access})
-    }else if(!anim.isSet && id){
+    
+    if(!anim.isSet && id){
+        console.log('!anim.isSet && id');
         getSavedAnim(id);
     }
     

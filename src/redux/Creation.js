@@ -97,7 +97,7 @@ export const animReducer = (state, action) => {
                 console.error("response not ok") }
         }, error => { 
             //dispatch({type: 'setSaveFailed', data: true});
-            console.error("error fetching login");
+            console.error("error saving anim");
          }
         )
         .catch(error => { console.error(error)})

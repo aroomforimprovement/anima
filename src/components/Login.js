@@ -44,6 +44,32 @@ const Login = () => {
         });
     }
 
+    const saveAnimToAccount = (anim, access) => {
+        return fetch(`${apiUrl}anim`, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(anim),
+            headers: {
+                Authorization: `Bearer ${access}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                console.log('anim saved ok ' + response.json);
+                dispatch({type: 'setIsSaved', data: true});
+                dispatch({type: 'setIsSaving', data: false});
+                
+            }else{
+                console.log('response not ok');
+            }
+        }, error => {
+            console.error('error saving anim');
+            dispatch({type: 'setSaveFailed'});
+        })
+        .catch(error => {console.error(error)});
+    }
+
     const loginReducer = (state, action) => {
         console.log(action.type+':'+action.data);
         switch(action.type){
@@ -65,7 +91,26 @@ const Login = () => {
             }
             case 'setLogin':{
                 console.dir('setLogin: ', action.data);
-                return ({...state, login: action.data, isRegistered: true});
+                return ({...state, login: action.data, isRegistered: true, isSending: false});
+            }
+            case 'setAnim':{
+                let anim = action.data;
+                anim.userid = mainState.user.userid;
+                anim.username = mainState.user.username;
+                return({...state, anim: action.data});
+            }
+            case 'setIsSaving':{
+                return({...state, isSaving: action.data});
+            }
+            case 'setIsSaved':{
+                return({...state, isSaved: action.data});
+            }
+            case 'setSaveFailed':{
+                return({...state, isSaving: false, saveFailed: true});
+            }
+            case 'setTempAnimSaved':{
+                saveAnimToAccount(action.data, mainState.user.access);
+                return({...state, isSaving: true});
             }
             default:
                 return state;
@@ -78,6 +123,10 @@ const Login = () => {
         isRegistered: false,
         isFailed: false,
         login: {},
+        isSaved: false,
+        isSaving: false,
+        saveFailed: false,
+        anim: false
     });
     
 
@@ -86,6 +135,9 @@ const Login = () => {
         console.log('isSending: ' + state.isSending);
         console.log('isRegistered: ' + state.isRegistered);
         console.log('isFailed: ' + state.isFailed);
+        console.log('isSaved: ' + state.isSaved);
+        console.log('isSaving: ' + state.isSaving);
+        console.dir('anim: ' + state.anim);
         if(state.isRegistered){
             return;
         }
@@ -102,7 +154,11 @@ const Login = () => {
                 username: mainState.user.nickname, access: mainState.user.access
             }});
         }
-    }, [mainState, state.isFailed, state.isLoaded, state.isRegistered, state.isSending]);
+        if(state.anim && !state.isSaved && !state.isSaving){
+            console.log("trying to get here");
+            dispatch({type: 'setTempAnimSaved', data: state.anim});
+        }
+    }, [mainState, state.anim, state.isFailed, state.isLoaded, state.isRegistered, state.isSending, state.isSaving, state.isSaved]);
     
     if(!mainState){
         return(
@@ -116,14 +172,28 @@ const Login = () => {
         return(
             <Problem message={"It looks like there was a problem with your login"} />
         );
-    }else if(state.isRegistered && mainState.user.userid){
+    }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
+        dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
+        window.localStorage.removeItem('tempAnim');
+        return <Loading message={"Saving your animation..."} />
+    }else if(state.anim && !state.isSaving){
+        dispatch({type: 'setTempAnimSaved', data: state.anim});
+        return <Loading message={"Saving your animation..."} />
+    }else if(state.anim && !state.isSaved){
+        return <Loading message={"Saving your animation..."} />
+    }else if(state.isSaved){
+        const animid = state.anim.animid;
         return(
-           // <Loading message="redirect blocked" />
-            <Redirect to='/create'/>
+            <Redirect to={`/create/${animid}`} />
+        );
+    }else if(state.isRegistered && mainState.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
+        return(
+            <Loading message="redirect blocked" />
+           // <Redirect to='/create'/>
         );
     }
     return(
-        <Loading message={"Something something..."} />
+        <Loading message={"Getting you all set up..."} />
     )
 }
 
