@@ -29,7 +29,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "set HTTPS=true&&set SSL_CRT_FILE=certs/local.serv.pem&&set SSL_KEY_FILE=certs/local.serv-key.pem&&react-scripts start",
+    "start": "set HTTPS=true&&set SSL_CRT_FILE=certs/localserv.pem&&set SSL_KEY_FILE=certs/localserv-key.pem&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "comp-test": "./node_modules/.bin/mocha --require babel-register ./test/components",

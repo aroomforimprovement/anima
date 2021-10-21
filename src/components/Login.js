@@ -191,6 +191,7 @@ const Login = () => {
            <Redirect to='/create'/>
         );
     }
+    
     return(
         <Loading message={"Getting you all set up..."} />
     )

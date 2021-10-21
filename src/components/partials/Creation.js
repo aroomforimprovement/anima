@@ -9,6 +9,7 @@ import { values } from '../../animator/values';
 import { Privacy } from './ControllerBtns';
 import { useMainContext } from '../Main';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Redirect } from 'react-router';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -29,6 +30,7 @@ export const Creation = () => {
     const initAnimState = newAnimState(mainState.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
+    const [hasTemp, setHasTemp] = useState(false);
 
     const { loginWithPopup } = useAuth0();
 
@@ -41,19 +43,18 @@ export const Creation = () => {
         loginWithPopup(
             {
                 screen_hint: 'signup',
-                redirectUri: `${process.env.REACT_APP_URL}/login`
+                redirect_uri: `${process.env.REACT_APP_URL}/login`
             }
         )
     }
-    
+
     useEffect(() => {
-        
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setAccess(mainState.user.access);
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
         }
 
-    },[mainState.user]);
+    },[mainState.user, hasTemp]);
     
     const getSavedAnim = (id) => {
         console.log("getSavedAnim");
@@ -128,6 +129,12 @@ export const Creation = () => {
     const handleCancelSave = (e) => {
         updateAnim({type: 'CANCEL_SAVE', data: true});
         e.preventDefault();
+    }
+
+    if(window.localStorage.getItem('tempAnim')){
+        return(
+            <Redirect to='/login'/>
+        );
     }
     
     return(
