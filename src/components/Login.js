@@ -153,7 +153,7 @@ const Login = () => {
             dispatch({type: 'putLogin', data: { 
                 userid: mainState.user.userid,
                 email: mainState.user.email,
-                username: mainState.user.nickname, access: mainState.user.access
+                username: mainState.user.name, access: mainState.user.access
             }});
         }
         if(state.anim && !state.isSaved && !state.isSaving){
