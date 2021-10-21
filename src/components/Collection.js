@@ -7,7 +7,7 @@ import { collectionReducer, addContactRequest, getCollection, getIdFromUrl } fro
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
 
 
-const Collection = () => {
+const Collection = ({browse}) => {
     const { mainState } = useMainContext();
 
     //contacts isn't a part of collection here, this won't work
@@ -51,7 +51,7 @@ const Collection = () => {
         console.log("isBrowse: " + collectionState.isBrowse);
         
         if(!collectionState.isSet && !collectionState.isBrowse){
-            if(window.location.href.indexOf('browse') > -1){
+            if(browse){
                 setCollectionState({type: 'SET_IS_BROWSE', data: true});
             }
         }
@@ -82,10 +82,10 @@ const Collection = () => {
         }else if(collectionState.isBrowse  && !collectionState.isSet){
             getCollection(false, collectionState.isBrowse, false)
                 .then((response) => {
-                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, iSet: true}});
+                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
                 })
         }
-    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet]);
+    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet, browse]);
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {

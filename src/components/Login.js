@@ -128,7 +128,6 @@ const Login = () => {
         saveFailed: false,
         anim: false
     });
-    
 
     useEffect(() => {
         console.log("Login: useEffect");
@@ -188,8 +187,8 @@ const Login = () => {
         );
     }else if(state.isRegistered && mainState.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
         return(
-            <Loading message="redirect blocked" />
-           // <Redirect to='/create'/>
+            //<Loading message="redirect blocked" />
+           <Redirect to='/create'/>
         );
     }
     return(

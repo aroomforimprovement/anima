@@ -4,7 +4,7 @@ import Collection from './Collection';
 const Browse = () => {
     return(
         <div className='mt-5'>
-        <Collection />
+        <Collection browse={true}/>
         </div>
     );
 }
