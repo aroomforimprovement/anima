@@ -39,8 +39,10 @@ export const SignupBtn = (props) => {
     const { loginWithRedirect } = useAuth0();
     return <button
             onClick={() => loginWithRedirect(
-                {screen_hint: 'signup',
-                redirectUri: url}
+                {
+                    screen_hint: 'signup',
+                    redirectUri: url
+                }
             )}
             type='button'
             className={classes}

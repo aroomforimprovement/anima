@@ -91,7 +91,7 @@ export const animReducer = (state, action) => {
             }
         })
         .then(response => {
-            if(response.ok){ return response;
+            if(response.ok){ console.log("anim saved ok " + response.json());
             }else{ 
                 //dispatch({type: 'setSaveFailed', data: true});
                 console.error("response not ok") }
@@ -100,14 +100,7 @@ export const animReducer = (state, action) => {
             console.error("error fetching login");
          }
         )
-        .then(response => response.json())
-        .then(response => {   
-            //dispatch({type: 'setSave', data: response})
-        }
-        ).catch(error => { console.error(error)})
-        .finally(response =>{ 
-            //dispatch({type: 'setIsSaved', data: true})
-        });
+        .catch(error => { console.error(error)})
     }
     console.log(action.type+':'+action.data);
     

@@ -12,20 +12,24 @@ const Login = () => {
 
     const putLogin = (login) => {
         console.log('putLogin');
-        console.dir(login);
-        console.dir(login.access);
+        //console.dir(login);
+        console.log(login.access);
         return fetch(`${apiUrl}login`, {
-            method: 'PUT',
+            method: 'POST',
             mode: 'cors',
             body: JSON.stringify(login),
             headers: {
                 Authorization: `Bearer ${login.access}`,
-                'Content-Type': 'application/json',
-                'Origin': process.env.REACT_APP_URL
+                'Content-Type': 'application/json'
             },
         })
         .then(response => {
-            if(response.ok){ return response;
+            if(response.ok){ 
+                dispatch(
+                    {
+                        type: 'setLogin', 
+                        data: login
+                    });
             }else{ 
                 dispatch({type: 'setIsFailed', data: true});
                 console.error("response not ok") }
@@ -34,17 +38,9 @@ const Login = () => {
             console.error("error fetching login");
          }
         )
-        .then(response => response.json())
-        .then(response => {   
-            dispatch(
-            {
-                type: 'setLogin', 
-                data: login
-            })
-        }
-        ).catch(error => { console.error(error)})
-        .finally(response =>{ 
-            dispatch({type: 'setIsRegistered', data: true})
+        .catch(error => { 
+            dispatch({type: 'setIsFailed', data: true});
+            console.error(error)
         });
     }
 
