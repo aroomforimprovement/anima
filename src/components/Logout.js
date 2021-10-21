@@ -27,7 +27,8 @@ const Logout = () => {
         .catch(error => { console.log(error) })
         .finally(response =>{ 
             dispatch({type: 'setLogout', data: response});
-            dispatch({type: 'setIsRegistered', data: true})
+            dispatch({type: 'setIsRegistered', data: true});
+            dispatch({type: 'setIsSending', data: false});
         });
     }
 

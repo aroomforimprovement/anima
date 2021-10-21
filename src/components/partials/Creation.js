@@ -42,10 +42,9 @@ export const Creation = () => {
         tempSave();
         loginWithPopup(
             {
-                screen_hint: 'signup',
-                redirect_uri: `${process.env.REACT_APP_URL}/login`
+                screen_hint: 'signup'
             }
-        )
+        ).then(() => {window.location.href = '/login'});
     }
 
     useEffect(() => {

@@ -91,6 +91,9 @@ const Login = () => {
             }
             case 'setLogin':{
                 console.dir('setLogin: ', action.data);
+                window.localStorage.setItem('userid', action.data.userid);
+                window.localStorage.setItem('username', action.data.username);
+                window.localStorage.setItem('email', action.data.email);
                 return ({...state, login: action.data, isRegistered: true, isSending: false});
             }
             case 'setAnim':{
@@ -191,7 +194,7 @@ const Login = () => {
            <Redirect to='/create'/>
         );
     }
-    
+
     return(
         <Loading message={"Getting you all set up..."} />
     )
