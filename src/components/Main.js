@@ -11,6 +11,7 @@ import Browse from './Browse';
 import Account from './Account';
 import { mainReducer } from '../redux/Main';
 import { useAuth0 } from '@auth0/auth0-react';
+import { getAccountInfo } from '../redux/Account';
 const MainContext = createContext({});
 
 export const useMainContext = () => {
@@ -48,8 +49,16 @@ const Main = () => {
             })
         }else if(isAuthenticated && mainState.user && !mainState.user.access){
             setAccessToken();
+        }else if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
+            getAccountInfo(mainState.user.userid, mainState.user.access)
+                .then((result) => {
+                    mainDispatch({
+                        type: 'SET_ACCOUNT_INFO',
+                        data: result
+                    })
+                });
         }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user]);
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user, mainState.notices]);
         
     return (
         <div>

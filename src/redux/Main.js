@@ -29,6 +29,12 @@ export const mainReducer = (state, action) => {
             user.username = action.data;
             return({...state, user: user});
         }
+        case 'SET_ACCOUNT_INFO':{
+            console.log('SET_ACCOUNT_INFO');
+            console.dir(action.data);
+            return({...state, contacts: action.data.contacts, notices: action.data.notices, 
+                user: {...state.user, username: action.data.username}});
+        }
         default:
             break;
     }

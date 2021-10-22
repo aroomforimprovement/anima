@@ -10,16 +10,15 @@ const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: f
 const Collection = ({browse}) => {
     const { mainState } = useMainContext();
 
-    //contacts isn't a part of collection here, this won't work
     const isContact = (id) => {
-        if(collectionState && collectionState.collection 
-            && collectionState.collection.contacts){
-                for(let i = 0; i < collectionState.collection.contacts.length; i++){
-                    if(collectionState.collection.contacts[i].userid === id){
+        if(mainState && mainState.contacts){
+                for(let i = 0; i < mainState.contacts.length; i++){
+                    if(mainState.contacts[0].userid === id){
                         console.log("isContact:TRUE");
                         return true;
                     }
                 }
+                console.log('isContact:FALSE');
                 return false;
         }
         return false;
@@ -49,7 +48,8 @@ const Collection = ({browse}) => {
         console.log("ID: " + collectionState.id);
         console.log("isSet: " + collectionState.isSet);
         console.log("isBrowse: " + collectionState.isBrowse);
-        
+        console.log("mainState.contacts: ")
+        console.dir(mainState.contacts);
         if(!collectionState.isSet && !collectionState.isBrowse){
             if(browse){
                 setCollectionState({type: 'SET_IS_BROWSE', data: true});
@@ -85,7 +85,7 @@ const Collection = ({browse}) => {
                     setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
                 })
         }
-    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet, browse]);
+    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet, browse, mainState.contacts]);
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {

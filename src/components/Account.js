@@ -21,8 +21,13 @@ const Account = () => {
     const stateOfAccount = { state, dispatch };
     
     useEffect(() => {
-
-    },[mainState.user.notices, mainState.user.contacts, state.notices, state.contacts]);
+        console.log("mainState.user:");
+        console.dir(mainState.user);
+        console.log("state.notices:");
+        console.dir(state.notices);
+        console.log("state.contacts:");
+        console.dir(state.contacts);
+    },[mainState.user, mainState.user.notices, mainState.user.contacts, state.notices, state.contacts]);
 
     const getAccountId = () => {
         if(mainState.user){
@@ -34,8 +39,11 @@ const Account = () => {
     
     const setAccountInfo = async () => {
         const id = getAccountId();
-        const response = await getAccountInfo(id, mainState.user.access);
-        dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+        getAccountInfo(id, mainState.user.access)
+            .then((response) => {
+                dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+            });
+        
     }
     if(!state.isSet && mainState.user && mainState.user.access){
         setAccountInfo();
@@ -54,8 +62,7 @@ const Account = () => {
             
             const link = `/collection/${notice.actions.accept}`;
             return(
-                <Notice notice={notice} link={link} i={i} key={i}
-                    />
+                <Notice notice={notice} link={link} i={i} key={i}/>
             );
         })
         : <div>Nothing to report</div>
