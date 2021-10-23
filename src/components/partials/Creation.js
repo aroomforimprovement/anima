@@ -30,65 +30,8 @@ export const Creation = () => {
     const initAnimState = newAnimState(mainState.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
-    const [hasTemp, setHasTemp] = useState(false);
 
     const { loginWithPopup } = useAuth0();
-
-    const tempSave = () => {
-        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
-    }
-    const redirectAfterTempSave = (temp) => {
-        //updateAnim({type: 'SET_TEMP', data: false});
-        tempSave();
-        loginWithPopup(
-            {
-                screen_hint: 'signup'
-            }
-        ).then(() => {window.location.href = '/login'});
-    }
-
-    useEffect(() => {
-        if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            setAccess(mainState.user.access);
-            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
-        }
-
-    },[mainState.user, hasTemp]);
-    
-    const getSavedAnim = (id) => {
-        console.log("getSavedAnim");
-        return fetch(`${apiUrl}anim/${id}`,{
-                headers: {
-                    Authorization: `Bearer ${access}`,
-                }
-            })
-            .then(response => {
-                if(response.ok){
-                    return response;
-                }else{
-                    console.error("response not ok");
-                    console.dir(response);
-                }
-            }, error => {
-                console.error("error fetching anim" + error);
-            })
-            .then(response => response.json())
-            .then(response => {
-                //assign response to anim here
-                console.log("got anim");
-                console.dir(response);
-                if(anim.isSet){
-                    console.log("stop calling me!")
-                }else{
-                    updateAnim({type: 'SET_ANIM', data: response});
-                }
-            })
-            .catch(err => console.log(err))
-            .finally(response => {
-                console.log("finally");
-                console.dir(response);
-            });
-    }
 
     const getIdFromUrl = (url) => {
         if(url.match(/(create\/)\w+/) && url.match(/(create\/)\w+/).length > -1){
@@ -103,10 +46,70 @@ export const Creation = () => {
     
     const id = getIdFromUrl(window.location.href);
     
-    if(!anim.isSet && id){
-        console.log('!anim.isSet && id');
-        getSavedAnim(id);
+    const tempSave = () => {
+        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
     }
+    const redirectAfterTempSave = (temp) => {
+        //updateAnim({type: 'SET_TEMP', data: false});
+        tempSave();
+        loginWithPopup(
+            {
+                screen_hint: 'signup'
+            }
+        ).then(() => {window.location.href = '/login'});
+    }
+
+    useEffect(() => {
+        const getSavedAnim = (id) => {
+            console.log("getSavedAnim");
+            return fetch(`${apiUrl}anim/${id}`,{
+                    headers: {
+                        Authorization: `Bearer ${access}`,
+                    }
+                })
+                .then(response => {
+                    if(response.ok){
+                        return response;
+                    }else{
+                        console.error("response not ok");
+                        console.dir(response);
+                    }
+                }, error => {
+                    console.error("error fetching anim" + error);
+                })
+                .then(response => response.json())
+                .then(response => {
+                    //assign response to anim here
+                    console.log("got anim");
+                    console.dir(response);
+                    if(anim.isSet){
+                        console.log("stop calling me!")
+                    }else{
+                        updateAnim({type: 'SET_ANIM', data: response});
+                    }
+                })
+                .catch(err => console.log(err))
+                .finally(response => {
+                    console.log("finally");
+                    console.dir(response);
+                });
+        }
+        if(mainState.user && mainState.user.isAuth && mainState.user.access){
+            setAccess(mainState.user.access);
+            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
+        }
+        if(!anim.isSet && id && mainState.user && access){
+            console.log('!anim.isSet && id', access);
+            
+            getSavedAnim(id);
+        }
+    },[anim.isSet, id, mainState.user, access]);
+    
+
+
+
+    
+    
     
     
     const handleSaveSubmission = (e) => {

@@ -11,7 +11,7 @@ export const sketch = (p5) => {
     let updateAnim;
     let thisStroke = [];
     let isStroke = false;
-
+    let isMounted = false;
 
     /**
      *  P5
@@ -23,14 +23,15 @@ export const sketch = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
+        isMounted = true;
         console.log("PROP CONTROLS:");
         console.dir(props.controls);
         console.log("PROP ANIM: ");
         console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
-        if(props.dispatch){ dispatch = props.dispatch; }
+        if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ anim = props.anim; }
-        if(props.updateAnim){ updateAnim = props.updateAnim; }
+        if(props.updateAnim && !updateAnim){ updateAnim = props.updateAnim; }
         if(props.controls.enable){
             dispatch({type: 'ENABLE', data: false});
             updateAnim({type: 'ENABLED', data: true});
@@ -105,6 +106,7 @@ export const sketch = (p5) => {
             dispatch({type: 'SET_PRIVACY', data: p});
             
         }
+        return () => { isMounted = false};
     }
 
     p5.draw = () => {
@@ -173,7 +175,7 @@ export const sketch = (p5) => {
     const setControlTriggered = (controlObj) => {
         switch(controlObj.v){
 			case CC.NEXT:
-                dispatch({type: 'NEXT', data: true})
+                isMounted ? dispatch({type: 'NEXT', data: true}) : console.log("unmounted");
     			break;
 			case CC.BG:
                 dispatch({type: 'DRAW_BG', data: true})
@@ -244,8 +246,13 @@ export const sketch = (p5) => {
                 thisStroke.push(p);
                 if(!isStroke){
                     //save and clear stroke
-                    updateAnim({type: 'DO_STROKE', data: thisStroke});
-                    thisStroke = [];   
+                    if(isMounted){
+                        updateAnim({type: 'DO_STROKE', data: thisStroke});
+                        thisStroke = []; 
+                    }else{
+                        console.warn("unmounted while doing stroke");
+                    }
+                     
                 }
             }else{
                 return false;
