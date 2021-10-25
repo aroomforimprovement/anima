@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { SITE } from "../../shared/site";
 import { Modal, ModalFooter, Button } from "reactstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
@@ -10,52 +10,54 @@ import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
 
 
-const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
-const CollectionItemContext = createContext(collectionItemInitialState);
+const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false, deleted: false}
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const useCollectionItemContext = () => {
-    return useContext(CollectionItemContext);
-}
 
 export const CollectionItem = ({anim}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const { mainState } = useMainContext();
     const { setCollectionState } = useCollectionContext();
 
-    const deleteAnim = (animid) => {
-        return fetch(`${apiUrl}anim/${animid}`, {
-            method: 'DELETE',
-            mode: 'cors',
-            headers: {
-                Authorization: mainState.user.access ? `Bearer ${mainState.user.access}` : undefined,
-                'Content-Type': 'application/json'
+
+    const collectionItemReducer = (state, action) => {
+        
+        const deleteAnim = async (animid) => {
+            const url = `${apiUrl}anim/${animid}`;
+            const req = {
+                method: 'DELETE',
+                mode: 'cors'
             }
-        }).then(response => {
-            if(response.ok){
-                console.log("anim deleted ok ");
-                setCollectionState({type: 'DELETE_ANIM', data: animid});
-            }else{
-                console.log("response not ok");
+            if(mainState.user.access){
+                req.headers = {
+                    Authorization: `Bearer ${mainState.user.access}`,
+                    'Content-Type': 'application/json'
+                }
             }
-        }, error => {
-            console.error(error);
-        }).catch(error => { console.error(error);})
-    }
-    const collectionItemReducer = async (state, action) => {
+            return fetch(url, req).then(response => {
+                if(response.ok){
+                    console.log("anim deleted ok ");
+                    setCollectionState({type: 'DELETE_ANIM', data: animid});
+                }else{
+                    console.log("response not ok");
+                }
+            }, error => {
+                console.error(error);
+            }).catch(error => { console.error(error);})
+        }
+
         switch(action.type){
             case 'SET_PREVIEW_FILE':{
                 const previewFile = URL.createObjectURL(action.data.blob);
-                console.dir(previewFile);
                 return ({...state, 
                     previewFile: previewFile, 
-                    previewName: action.data.name  
+                    previewName: action.data.name
                 });
             }
             case 'DELETE_ANIM':{
-                await deleteAnim(anim.animid)
-                return(state);
+                deleteAnim(anim.animid);
+                return({...state, deleted: true});
             }
             default:
                 break;
@@ -63,10 +65,6 @@ export const CollectionItem = ({anim}) => {
     }
 
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
-    
-    useEffect(() => {
-        
-    },[collectionItemState.previewFile]);
 
     const handlePreview = (e) => {
         setIsPreviewOpen(true);
@@ -78,11 +76,16 @@ export const CollectionItem = ({anim}) => {
 
     const handleDelete = (e) => {
         collectionItemDispatch({type: 'DELETE_ANIM', data: true});
-        
     }
 
+    
+    useEffect(() => {
+
+    },[collectionItemState.previewFile]);
+
+
     return(
-        <LazyLoad height={300} offset={100} 
+        <LazyLoad height={300} offset={10} //hidden={collectionItemState.deleted}
             className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
             <div >
                 <div className='row'>
@@ -106,7 +109,7 @@ export const CollectionItem = ({anim}) => {
                         <div className='col col-8 ms-2 coll-item-date'><small>{new Date(anim.created).toDateString()}</small></div>
                     </div>
                 <div className='col col-12'>
-                    <div className='row coll-item-btns ms-md-2 ms-lg-4 mt-1 mb-1'>
+                    <div className='row coll-item-btns ms-md-1 ms-lg-2 mt-1 mb-1'>
                         { mainState.user && anim.userid === mainState.user.userid
                         ? <div className='col col-4 col-md-3'>
                             <button className='btn btn-outline-secondary'>
@@ -158,8 +161,7 @@ export const CollectionItem = ({anim}) => {
                     >Close</Button>
                 </ModalFooter>
             </Modal > 
-            {
-                collectionItemState.previewFile 
+            {collectionItemState.previewFile 
                 ? <div></div>
                 :
                 <div hidden={true}>    

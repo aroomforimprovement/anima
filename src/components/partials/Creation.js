@@ -106,12 +106,6 @@ export const Creation = () => {
     },[anim.isSet, id, mainState.user, access]);
     
 
-
-
-    
-    
-    
-    
     const handleSaveSubmission = (e) => {
         
         updateAnim({type: 'USERID', data: true});

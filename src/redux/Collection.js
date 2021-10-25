@@ -87,6 +87,9 @@ export const collectionReducer = (state, action) => {
             //console.log('SET_ID...' + id);
             return({...state, id: id});
         }
+        case 'SET':{
+            return({...state, isSet: action.data})
+        }
         case 'SET_COLLECTION':{
             return({...state, anims: action.data.anims, username: action.data.username,
                 userid: action.data.userid, isOwn: action.data.isOwn, isSet: action.data.isSet});
@@ -99,8 +102,6 @@ export const collectionReducer = (state, action) => {
         }
         case 'DELETE_ANIM':{
             let anims = [...state.anims];
-            console.warn('DELETE_ANIM');
-            console.dir(anims);
             const anim = anims.filter(a => {return a.animid === action.data});
             const newAnims = arrayRemove(anims, anim[0]);
             return({...state, anims: newAnims});

@@ -75,6 +75,7 @@ const Collection = ({browse}) => {
             }
         }
         if(mainState.user && mainState.user.isAuth && mainState.user.access && collectionState.id && !collectionState.isSet){
+            setCollectionState({type: 'SET', data: true});
             getCollection(collectionState.id, collectionState.isBrowse, mainState.user.access)
                 .then((response) => {
                     if(collectionState.isBrowse){
@@ -86,6 +87,7 @@ const Collection = ({browse}) => {
                     }
                 });
         }else if(mainState.user && mainState.user.isAuth && mainState.user.access && !collectionState.isSet && collectionState.isBrowse){
+            setCollectionState({type: 'SET', data: true});
             getCollection(false, collectionState.isBrowse, mainState.user.access)
                 .then((response) => {
                     setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
@@ -94,11 +96,13 @@ const Collection = ({browse}) => {
             setCollectionState({type: 'SET_ID', data: true});
         }else if(mainState.user && !collectionState.isBrowse &&  !mainState.user.isAuth && !collectionState.isSet){
             const id = getIdFromUrl(window.location.href);
+            setCollectionState({type: 'SET', data: true});
             getCollection(id, collectionState.isBrowse, false)
                 .then((response) => {
                     setCollectionState({type: 'SET_COLLECTION', data: {anims: response.anims, isSet: true}});
                 });
         }else if(collectionState.isBrowse  && !collectionState.isSet){
+            setCollectionState({type: 'SET', data: true});
             getCollection(false, collectionState.isBrowse, false)
                 .then((response) => {
                     setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
