@@ -8,8 +8,9 @@ const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: f
 
 
 const Collection = ({browse}) => {
+   
     const { mainState } = useMainContext();
-
+   
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
@@ -20,6 +21,18 @@ const Collection = ({browse}) => {
                 }
                 console.log('isContact:FALSE');
                 return false;
+        }
+        return false;
+    }
+    const isContactRequested = (id) => {
+        if(mainState && mainState.notices){
+            for(let i = 0; i < mainState.notices.length; i++){
+                if(mainState.notices[i].type.indexOf('pending-contact') > -1){
+                    if(mainState.notices[i].targetUserid === id){
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -102,12 +115,12 @@ const Collection = ({browse}) => {
                 {collectionState.username}
             </h5>
             {
-            collectionState.isOwn || isContact(collectionState.userid) 
+            collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
             ? 
             <div></div> 
             : 
             <button className='col btn btn-outline-light btn-sm fa fa-users'
-                onClick={handleAddContact} enabled={mainState.contactReqEnabled}>{'Add as contact'}
+                onClick={handleAddContact} hidden={!collectionState.contactReqEnabled}>{'Add as contact'}
             </button>
             }
         </div>

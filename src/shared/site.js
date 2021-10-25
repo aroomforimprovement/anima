@@ -1,7 +1,7 @@
 export const SITE = {
-    "name": "Animator",
-    "home_heading": "Welcome to Animator",
-    "home_sub_heading" : "Animation without the patience",
+    "name": "Anima",
+    "home_heading": "ANIMA",
+    "home_sub_heading" : "Old-timey Animation Online",
     "icons": {
         "drawingMode": process.env.REACT_APP_URL + '/assets/drawing-mode.svg',
         "single": process.env.REACT_APP_URL + '/assets/mode-single.svg',

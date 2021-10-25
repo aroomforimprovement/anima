@@ -239,7 +239,6 @@ export const sketch = (p5) => {
      * DRAWING ACTIONS 
      */
 
-
     const setPointDrawn = (x, y) => {
             let p = getPointObj(x, y);
             if(drawPoint(p, p5)){
