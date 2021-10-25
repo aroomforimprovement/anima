@@ -1,16 +1,20 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useContext, createContext } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
 import { collectionReducer, addContactRequest, getCollection, getIdFromUrl } from '../redux/Collection';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
+const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
+export const useCollectionContext = () => {
+    return useContext(CollectionContext);
+}
 
 const Collection = ({browse}) => {
    
     const { mainState } = useMainContext();
-   
+    
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
@@ -48,6 +52,8 @@ const Collection = ({browse}) => {
     
 
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
+    const stateOfCollection = { collectionState, setCollectionState };
+
     console.log("collectionState");
     console.dir(collectionState);
     console.log("mainState");
@@ -128,11 +134,19 @@ const Collection = ({browse}) => {
     : <div></div>
         
     return(
-        <div className='container'>
-                {collectionHeading}
-            <div className='col col-12 collection'>
-                {collectionItems}
-            </div>
+        <div>
+            <CollectionContext.Provider value={stateOfCollection}>
+                <CollectionContext.Consumer>
+                    {() => (
+                    <div className='container'>
+                        {collectionHeading}
+                        <div className='col col-12 collection'>
+                            {collectionItems}
+                        </div>
+                    </div>  
+                    )}
+                </CollectionContext.Consumer>
+            </CollectionContext.Provider>
         </div>
     );
 }

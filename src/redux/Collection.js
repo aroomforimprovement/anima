@@ -1,3 +1,5 @@
+import { arrayRemove } from "../utils/utils";
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const getCollection = (id, isBrowse, access) => {
@@ -94,6 +96,14 @@ export const collectionReducer = (state, action) => {
         }
         case 'SET_IS_BROWSE':{
             return ({...state, isBrowse: action.data})
+        }
+        case 'DELETE_ANIM':{
+            let anims = [...state.anims];
+            console.warn('DELETE_ANIM');
+            console.dir(anims);
+            const anim = anims.filter(a => {return a.animid === action.data});
+            const newAnims = arrayRemove(anims, anim[0]);
+            return({...state, anims: newAnims});
         }
         default:
             break;

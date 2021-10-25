@@ -7,10 +7,13 @@ import { Loading } from './Loading';
 import LazyLoad from "react-lazyload";
 import { saveAs } from 'file-saver';
 import { useMainContext } from "../Main";
+import { useCollectionContext } from "../Collection";
 
 
 const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false}
 const CollectionItemContext = createContext(collectionItemInitialState);
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export const useCollectionItemContext = () => {
     return useContext(CollectionItemContext);
@@ -18,10 +21,29 @@ export const useCollectionItemContext = () => {
 
 export const CollectionItem = ({anim}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-
     const { mainState } = useMainContext();
-    
-    const collectionItemReducer = (state, action) => {
+    const { setCollectionState } = useCollectionContext();
+
+    const deleteAnim = (animid) => {
+        return fetch(`${apiUrl}anim/${animid}`, {
+            method: 'DELETE',
+            mode: 'cors',
+            headers: {
+                Authorization: mainState.user.access ? `Bearer ${mainState.user.access}` : undefined,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if(response.ok){
+                console.log("anim deleted ok ");
+                setCollectionState({type: 'DELETE_ANIM', data: animid});
+            }else{
+                console.log("response not ok");
+            }
+        }, error => {
+            console.error(error);
+        }).catch(error => { console.error(error);})
+    }
+    const collectionItemReducer = async (state, action) => {
         switch(action.type){
             case 'SET_PREVIEW_FILE':{
                 const previewFile = URL.createObjectURL(action.data.blob);
@@ -30,6 +52,10 @@ export const CollectionItem = ({anim}) => {
                     previewFile: previewFile, 
                     previewName: action.data.name  
                 });
+            }
+            case 'DELETE_ANIM':{
+                await deleteAnim(anim.animid)
+                return(state);
             }
             default:
                 break;
@@ -48,6 +74,11 @@ export const CollectionItem = ({anim}) => {
 
     const handleDownload = (e) => {
        saveAs(collectionItemState.previewFile, anim.name);
+    }
+
+    const handleDelete = (e) => {
+        collectionItemDispatch({type: 'DELETE_ANIM', data: true});
+        
     }
 
     return(
@@ -97,6 +128,14 @@ export const CollectionItem = ({anim}) => {
                                 <img src={SITE.icons.download} alt='download'></img>
                             </button>
                         </div>
+                        { mainState.user && anim.userid === mainState.user.userid
+                        ? <div className='col col-4 col-md-3'>
+                            <button className='btn btn-outline-secondary'
+                                onClick={handleDelete}>
+                                <img src={SITE.icons.wipe} alt='delete'></img>
+                            </button>
+                        </div>
+                        : <div></div>}
                     </div>
                 </div>
             </div>
