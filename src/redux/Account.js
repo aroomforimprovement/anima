@@ -1,3 +1,5 @@
+import { arrayRemove } from "../utils/utils";
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const addContact = (notice, i, access) => {
@@ -136,8 +138,10 @@ export const accountReducer = (state, action) => {
             return ({...state, username: action.data});
         case 'DELETE_NOTICE':
             let notices = [...state.notices]
-            notices = notices.splice(action.data, 1);
-            return ({...state, notices: notices});
+            const notice = notices[action.data];
+            const newNotices = arrayRemove(notices, notice);
+            
+            return ({...state, notices: newNotices});
         default:
             break;
     }

@@ -17,7 +17,12 @@ export const Notice = ({notice, i, link}) => {
         //only handling contact req for the moment
         addContact(state.notices[i], i, mainState.user.access)
         .then((response) => {
-            deleteNotice(state.notices[i], i, mainState.user.access);
+            deleteNotice(state.notices[i], i, mainState.user.access)
+                .then((response) => {
+                    if(response.ok){
+                        dispatch({type: 'DELETE_NOTICE', data: i})
+                    }
+                });
         });
     }
 
