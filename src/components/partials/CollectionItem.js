@@ -109,9 +109,9 @@ export const CollectionItem = ({anim}) => {
                         <div className='col col-8 ms-2 coll-item-date'><small>{new Date(anim.created).toDateString()}</small></div>
                     </div>
                 <div className='col col-12'>
-                    <div className='row coll-item-btns ms-md-1 ms-lg-2 mt-1 mb-1'>
+                    <div className='row coll-item-btns mt-1 mb-1'>
                         { mainState.user && anim.userid === mainState.user.userid
-                        ? <div className='col col-4 col-md-3'>
+                        ? <div className='col col-3'>
                             <button className='btn btn-outline-secondary'>
                                 <a href={`/create/${anim.animid}`} alt='edit'>
                                     <img src={SITE.icons.penColour} alt='edit' />
@@ -119,20 +119,20 @@ export const CollectionItem = ({anim}) => {
                             </button>
                         </div> :
                         <div></div>}
-                        <div className='col col-4 col-md-3'>
+                        <div className='col col-3'>
                             <button className='btn btn-outline-secondary'
                                 onClick={handlePreview}>
                                     <img src={SITE.icons.preview} alt='preview'></img>
                             </button>
                         </div>
-                        <div className='col col-4 col-md-3'>
+                        <div className='col col-3'>
                             <button className='btn btn-outline-secondary'
                                 onClick={handleDownload}>
                                 <img src={SITE.icons.download} alt='download'></img>
                             </button>
                         </div>
                         { mainState.user && anim.userid === mainState.user.userid
-                        ? <div className='col col-4 col-md-3'>
+                        ? <div className='col col-3'>
                             <button className='btn btn-outline-secondary'
                                 onClick={handleDelete}>
                                 <img src={SITE.icons.wipe} alt='delete'></img>
