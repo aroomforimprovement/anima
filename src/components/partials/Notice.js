@@ -31,7 +31,7 @@ export const Notice = ({notice, i, link}) => {
         console.dir(state.notices[i]);
         deleteNotice(state.notices[i], i, mainState.user.access)
             .then((response) => {
-                if(response.modifiedCount > 0){
+                if(response.ok){
                     dispatch({type: 'DELETE_NOTICE', data: i});
                 }
             });

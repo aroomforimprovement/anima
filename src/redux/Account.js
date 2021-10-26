@@ -136,12 +136,19 @@ export const accountReducer = (state, action) => {
         case 'SET_DISPLAY_NAME':
             
             return ({...state, username: action.data});
-        case 'DELETE_NOTICE':
-            let notices = [...state.notices]
+        case 'DELETE_NOTICE':{
+            let notices = [...state.notices];
             const notice = notices[action.data];
             const newNotices = arrayRemove(notices, notice);
             
             return ({...state, notices: newNotices});
+        }
+        case 'DELETE_CONTACT':{
+            let contacts = [...state.contacts];
+            const contact = contacts[action.data];
+            const newContacts = arrayRemove(contacts, contact);
+            return ({...state, contacts: newContacts});
+        }
         default:
             break;
     }

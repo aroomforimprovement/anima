@@ -8,7 +8,7 @@ import { deleteContact } from '../../redux/Account';
 export const Contact = ({contact, i}) => {
     
     const { mainState } = useMainContext();
-    const { state } = useAccountContext();
+    const { state, dispatch } = useAccountContext();
 
     const handleVisitContact = (i) => {
         console.log("handleVisitContact");
@@ -21,6 +21,9 @@ export const Contact = ({contact, i}) => {
         deleteContact(state.contacts[i], mainState.user.userid, 
             mainState.user.username, mainState.user.access)
             .then((response) => {
+                if(response.ok){
+                    dispatch({type: 'DELETE_CONTACT', data: i});
+                }
                 console.log("should toast to this");
             });;
     }
