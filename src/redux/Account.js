@@ -73,6 +73,7 @@ export const deleteContact = (contact, userid, username, access) => {
         }
     }).then(response => {
         if(response.ok){
+            console.log("response ok, contact deleted");
             return response.json();
         }
     }, error => {
@@ -92,9 +93,7 @@ export const deleteNotice = (notice, i, access) => {
         }
     })
     .then(response => {
-        if(response.ok){
-            return response.json();
-        }
+        return response;
     }, error => {
         console.error(error);
     })
@@ -139,8 +138,7 @@ export const accountReducer = (state, action) => {
         case 'DELETE_NOTICE':{
             let notices = [...state.notices];
             const notice = notices[action.data];
-            const newNotices = arrayRemove(notices, notice);
-            
+            const newNotices = arrayRemove(notices, notice); 
             return ({...state, notices: newNotices});
         }
         case 'DELETE_CONTACT':{
