@@ -21,9 +21,7 @@ export const Contact = ({contact, i}) => {
         deleteContact(state.contacts[i], mainState.user.userid, 
             mainState.user.username, mainState.user.access)
                 .then((response) => {
-                    console.log("RESPONSE");
-                    console.dir(response);
-                    if(response.ok){
+                    if(response && response.ok){
                         dispatch({type: 'DELETE_CONTACT', data: i});
                     }
                     console.log("should toast to this");

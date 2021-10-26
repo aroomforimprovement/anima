@@ -22,7 +22,7 @@ export const Notice = ({notice, i, link}) => {
         .then((response) => {
             deleteNotice(state.notices[i], i, mainState.user.access)
                 .then((response) => {
-                    if(response.ok){
+                    if(response && response.ok){
                         dispatch({type: 'DELETE_NOTICE', data: i})
                     }
                 });
@@ -34,7 +34,7 @@ export const Notice = ({notice, i, link}) => {
         console.dir(state.notices[i]);
         deleteNotice(state.notices[i], i, mainState.user.access)
             .then((response) => {
-                if(response.ok){
+                if(response && response.ok){
                     dispatch({type: 'DELETE_NOTICE', data: i});
                 }
             });

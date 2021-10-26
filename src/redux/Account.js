@@ -26,9 +26,7 @@ export const addContact = (notice, i, access) => {
         }
     })
     .then(response => {
-        if(response.ok){
-            return response.json();
-        }
+        return response;
     }, error => {
         console.error(error);
     })
