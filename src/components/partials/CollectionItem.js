@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useEffect } from "react";
 import { SITE } from "../../shared/site";
-import { Modal, ModalFooter, Button } from "reactstrap";
+import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../animator/preview";
 import { Loading } from './Loading';
@@ -142,7 +142,7 @@ export const CollectionItem = ({anim}) => {
                     </div>
                 </div>
             </div>
-            <Modal size='lg' isOpen={isPreviewOpen} 
+            <Modal size='lg' show={isPreviewOpen} 
                 toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
                 {
                     collectionItemState.previewFile ?
@@ -152,14 +152,14 @@ export const CollectionItem = ({anim}) => {
                 :
                 <Loading />
                 }
-                <ModalFooter>
+                <Modal.Footer>
                     <div className='preview-name'>
                         <span >{anim.name}</span>
                     </div>
                     <Button size='sm' 
                         onClick={() => setIsPreviewOpen(false)}
                     >Close</Button>
-                </ModalFooter>
+                </Modal.Footer>
             </Modal > 
             {collectionItemState.previewFile 
                 ? <div></div>

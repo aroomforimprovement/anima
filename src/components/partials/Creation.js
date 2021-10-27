@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useEffect, useReducer, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useReducer, useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
-    Form, FormGroup, Label, Input } from 'reactstrap';
+import { Form, Modal, Button } from 'react-bootstrap';
 import { ControlContext, useControlContext } from '../Create';
 import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
@@ -127,6 +126,17 @@ export const Creation = () => {
         e.preventDefault();
     }
 
+    const NameInput = () => {
+        //name component holds focus now, not ideal
+        const inputRef = useRef();
+        useEffect(() => {inputRef.current && inputRef.current.focus()});
+        return(
+            <Form.Control type='text' id='name' name='name' autoFocus={true}
+                onChange={handleNameChange} ref={inputRef} 
+                value={anim.anim.name ? anim.anim.name : undefined}/>
+        );
+    }
+
     if(window.localStorage.getItem('tempAnim')){
         return(
             <Redirect to='/login'/>
@@ -141,33 +151,30 @@ export const Creation = () => {
                     <ReactP5Wrapper sketch={sketch} 
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim}
-                        id='animCanvas'
-                    />
-
-                    <Modal isOpen={anim.isPreviewOpen} 
+                        id='animCanvas' />
+                    <Modal show={anim.isPreviewOpen} 
                         toggle={() => updateAnim({type: 'setIsPreviewOpen', data: !anim.isPreviewOpen})}>
                             <video controls loop autoPlay> 
                                 <source src={anim.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                             </video>
-                       <ModalFooter>
+                       <Modal.Footer>
                             <p>{anim.previewName}</p>
                             <Button size='sm' 
                                 onClick={() => dispatch({type: 'END_PREVIEW', data: true})}
                             >Close</Button>
-                        </ModalFooter>
+                        </Modal.Footer>
                     </Modal >
-                    <Modal isOpen={anim.isSaveOpen} 
+                    <Modal show={anim.isSaveOpen} 
                         toggle={() => updateAnim({type: 'setIsOpen', data: !anim.isSaveOpen})}>
-                        <ModalHeader>Save your creation to your account</ModalHeader>
+                        <Modal.Header>Save your creation to your account</Modal.Header>
                         <Form onSubmit={handleSaveSubmission}>
-                            <ModalBody>
-                                <FormGroup>
-                                    <Label htmlFor="name">Name your creation:</Label>
-                                    <Input type='text' id='name' name='name' autoFocus={true}
-                                        onChange={handleNameChange} value={anim.anim.name ? anim.anim.name : undefined}/>
-                                </FormGroup>
-                            </ModalBody>
-                            <ModalFooter>
+                            <Modal.Body>
+                                <Form.Group>
+                                    <Form.Label htmlFor="name">Name your creation:</Form.Label>
+                                    <NameInput />
+                                </Form.Group>
+                            </Modal.Body>
+                            <Modal.Footer>
                             <Privacy id='create-privacy-control'/>
                                 <Button className='btn btn-secondary'
                                     onClick={handleCancelSave}
@@ -175,7 +182,7 @@ export const Creation = () => {
                                 <Button className='btn btn-success'
                                     type='submit' value='submit'
                                 >Save</Button>
-                            </ModalFooter>
+                            </Modal.Footer>
                         </Form>
                     </Modal>
                 </AnimContext.Provider>
