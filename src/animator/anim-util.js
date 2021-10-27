@@ -63,8 +63,6 @@ export const drawStroke = (stroke, p5) => {
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
 export const playPreview = (blob, name, dispatch) => {
-    console.log("playPreview: BLOB:");
-    console.dir(blob);
     if(dispatch){
         dispatch({
             type: 'SET_PREVIEW_FILE', 
@@ -95,9 +93,7 @@ export const renderAnim = (a, type, p5canvas, p5, collectionItemDispatch) =>{
     });
     capturer.stop();
     capturer.save((blob) => {
-        console.log('BLOB:');
-        console.dir(blob);
-        if(type === 'PREVIEW'){
+       if(type === 'PREVIEW'){
             playPreview(blob, a.name, collectionItemDispatch);
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);

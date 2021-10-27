@@ -143,10 +143,11 @@ export const CollectionItem = ({anim}) => {
                 </div>
             </div>
             <Modal size='lg' show={isPreviewOpen} 
-                toggle={() => {setIsPreviewOpen(!isPreviewOpen)}}>
+                onShow={() => {setIsPreviewOpen(true)}}
+                onHide={() => {setIsPreviewOpen(false)}}>
                 {
                     collectionItemState.previewFile ?
-                    <video controls loop autoPlay className='p-2'> 
+                    <video controls loop autoPlay muted className='p-2'> 
                         <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                     </video> 
                 :

@@ -153,7 +153,8 @@ export const Creation = () => {
                         anim={anim} updateAnim={updateAnim}
                         id='animCanvas' />
                     <Modal show={anim.isPreviewOpen} 
-                        toggle={() => updateAnim({type: 'setIsPreviewOpen', data: !anim.isPreviewOpen})}>
+                        onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}
+                        onHide={() => updateAnim({type: 'setIsPreviewOpen', data: false})}>
                             <video controls loop autoPlay> 
                                 <source src={anim.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                             </video>
@@ -165,7 +166,8 @@ export const Creation = () => {
                         </Modal.Footer>
                     </Modal >
                     <Modal show={anim.isSaveOpen} 
-                        toggle={() => updateAnim({type: 'setIsOpen', data: !anim.isSaveOpen})}>
+                        onShow={() => updateAnim({type: 'setIsOpen', data: true})}
+                        onHide={() => updateAnim({type: 'setIsOpen', data: false})}>
                         <Modal.Header>Save your creation to your account</Modal.Header>
                         <Form onSubmit={handleSaveSubmission}>
                             <Modal.Body>
