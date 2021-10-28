@@ -56,7 +56,7 @@ const Main = () => {
                     mainDispatch({
                         type: 'SET_ACCOUNT_INFO',
                         data: result
-                    })
+                    });
                 });
         }else if(!isLoading && !isAuthenticated && !mainState.isSet){
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});

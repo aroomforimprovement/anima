@@ -62,13 +62,12 @@ export const drawStroke = (stroke, p5) => {
  * @param {*} name 
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
-export const playPreview = (blob, name, dispatch, index, setCollectionState) => {
+export const playPreview = async (blob, name, dispatch, index, setCollectionState) => {
     if(dispatch){
-        dispatch({
+        await dispatch({
             type: 'SET_PREVIEW_FILE', 
             data: {blob : blob, name: name}
         });    
-        setCollectionState ? setCollectionState({type: 'SET_INDEX', data: index+1}) : console.log('no collection state');
     }
 }
 
@@ -98,7 +97,12 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     console.log("Capture took "+duration);
     capturer.save((blob) => {
        if(type === 'PREVIEW'){
-            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState);
+            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState)
+                .then(() => {
+                    setCollectionState 
+                    ? setCollectionState({type: 'SET_INDEX', data: index+1}) 
+                    : console.log('no collection state');
+                });;
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);
         }

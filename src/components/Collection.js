@@ -87,11 +87,10 @@ const Collection = ({browse}) => {
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
-            return(
-                <CollectionItem key={index} index={index} anim={anim}/>
-                );
-        }) :
-        <Loading />
+        return(
+            <CollectionItem key={index} index={index} anim={anim}/>
+            );
+    }) : <Loading />
     
     const collectionHeading = collectionState.username
     ? <div className='container collection-header mt-4 mb-4'>
@@ -114,6 +113,7 @@ const Collection = ({browse}) => {
         
     return(
         <div>
+            {mainState.isSet && collectionState.anims ?
             <CollectionContext.Provider value={stateOfCollection}>
                 <CollectionContext.Consumer>
                     {() => (
@@ -126,7 +126,9 @@ const Collection = ({browse}) => {
                     )}
                 </CollectionContext.Consumer>
             </CollectionContext.Provider>
-        </div>
+            :
+            <Loading />}
+        </div> 
     );
 }
 
