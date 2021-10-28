@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
 import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
@@ -9,12 +9,6 @@ import { useMainContext } from './Main';
 const Home = () => {
     
     const { mainState } = useMainContext();
-    const [isSet, setIsSet] = useState();
-
-    useEffect(() => {
-        console.debug(mainState.user);
-        setIsSet(true);
-    }, [mainState.user])
 
     return (
         <div className='container col-12 justify-content-center'>

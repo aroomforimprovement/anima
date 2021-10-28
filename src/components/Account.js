@@ -27,7 +27,7 @@ const Account = () => {
         console.dir(state.notices);
         console.log("state.contacts:");
         console.dir(state.contacts);
-    },[mainState.user, mainState.user.notices, mainState.user.contacts, state.notices, state.contacts]);
+    },[mainState.user, state.notices, state.contacts]);
 
     const getAccountId = () => {
         if(mainState.user){

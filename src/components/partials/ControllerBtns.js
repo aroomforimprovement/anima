@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
-    Form, FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+    FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { SITE } from '../../shared/site';
 import { values } from '../../animator/values';
 import { useControlContext } from '../Create';

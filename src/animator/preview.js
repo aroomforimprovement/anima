@@ -12,10 +12,7 @@ export const preview = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
-        console.log("updateWithProps");
-        console.dir(props);
         if(props.anim && p5 && props.anim.name !== 'nothing'){
-            console.log("calling previewAnim");
             previewAnim(props.anim, p5canvas, p5, props.collectionItemDispatch);
         }
     }

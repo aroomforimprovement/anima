@@ -19,7 +19,7 @@ export const useAnimContext = () => {
 }
 
 
-export const Creation = () => {
+export const Creation = ({edit, splat}) => {
 
     const { mainState } = useMainContext();
     
@@ -31,19 +31,6 @@ export const Creation = () => {
     const animState = { anim, updateAnim };
 
     const { loginWithPopup } = useAuth0();
-
-    const getIdFromUrl = (url) => {
-        if(url.match(/(create\/)\w+/) && url.match(/(create\/)\w+/).length > -1){
-            console.log("create page is edit");
-            const id = url.substring(url.indexOf("create") + 7, url.length);
-            console.log("id="+id);
-            return id;
-        }    
-        return false;
-    }
-
-    
-    const id = getIdFromUrl(window.location.href);
     
     const tempSave = () => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
@@ -97,12 +84,12 @@ export const Creation = () => {
             setAccess(mainState.user.access);
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
         }
-        if(!anim.isSet && id && mainState.user && access){
+        if(!anim.isSet && splat && mainState.user && access){
             console.log('!anim.isSet && id', access);
             
-            getSavedAnim(id);
+            getSavedAnim(splat);
         }
-    },[anim.isSet, id, mainState.user, access]);
+    },[anim.isSet, splat, mainState.user, access]);
     
 
     const handleSaveSubmission = (e) => {

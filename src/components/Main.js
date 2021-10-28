@@ -7,7 +7,6 @@ import Login from './Login';
 import Logout from './Logout';
 import Create from './Create';
 import Collection from './Collection';
-import Browse from './Browse';
 import Account from './Account';
 import { mainReducer } from '../redux/Main';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -29,9 +28,10 @@ const Main = () => {
     const HomePage = () => { return <Home /> }
     const LoginPage = () => { return <Login /> }
     const LogoutPage = () => { return <Logout /> }
-    const CreatePage = () => { return <Create /> }
-    const CollectionPage = () => { return <Collection /> }
-    const BrowsePage = () => { return <Browse /> }
+    const CreatePage = () => { return <Create edit={false} /> }
+    const EditPage = () => { return <Create edit={true} />}
+    const CollectionPage = () => { return <Collection browse={false}/> }
+    const BrowsePage = () => { return <Collection browse={true} /> }
     const AccountPage = () => { return <Account />}
 
     useEffect(() => {
@@ -52,13 +52,16 @@ const Main = () => {
         }else if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
             getAccountInfo(mainState.user.userid, mainState.user.access)
                 .then((result) => {
+                    result.isSet = true;
                     mainDispatch({
                         type: 'SET_ACCOUNT_INFO',
                         data: result
                     })
                 });
+        }else if(!isLoading && !isAuthenticated && !mainState.isSet){
+            mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
         }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user, mainState.notices]);
+    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user, mainState.notices, mainState.isSet]);
         
     return (
         <div>
@@ -68,13 +71,16 @@ const Main = () => {
                     <div>
                         <Header />
                         <Switch>
+                            <Route path='/account' history={history} component={AccountPage} />
+                            <Route path='/browse' history={history} component={BrowsePage} />
+                            <Route path='/collection/*' history={history} component={CollectionPage} />
+                            <Route path='/collection' history={history} component={BrowsePage} />
+                            <Route path='/create/*' history={history} component={EditPage} />
+                            <Route path='/create' history={history} component={CreatePage} />
                             <Route path='/home' history={history} component={HomePage} />
                             <Route path='/login' history={history} component={LoginPage} />
                             <Route path='/logout' history={history} component={LogoutPage} />
-                            <Route path='/create' history={history} component={CreatePage} />
-                            <Route path='/collection' history={history} component={CollectionPage} />
-                            <Route path='/browse' history={history} component={BrowsePage} />
-                            <Route path='/account' history={history} component={AccountPage} />
+                            <Route path='/' history={history} component={HomePage} />
                             <Redirect to='/home' history={history}/>
                         </Switch>
                         <Footer />

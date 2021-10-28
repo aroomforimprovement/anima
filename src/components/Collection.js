@@ -1,9 +1,10 @@
-import React, { useEffect, useReducer, useContext, createContext } from 'react';
+import React, { useReducer, useContext, createContext, useEffect } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
-import { collectionReducer, addContactRequest, getCollection, getIdFromUrl } from '../redux/Collection';
-
+import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
+import { useAsyncEffect } from 'use-async-effect';
+import { useParams } from 'react-router';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
@@ -14,6 +15,8 @@ export const useCollectionContext = () => {
 const Collection = ({browse}) => {
    
     const { mainState } = useMainContext();
+    const splat = useParams()[0];
+    
     
     const isContact = (id) => {
         if(mainState && mainState.contacts){
@@ -54,61 +57,35 @@ const Collection = ({browse}) => {
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
 
-    console.log("collectionState");
-    console.dir(collectionState);
-    console.log("mainState");
-    console.dir(mainState);
     
-    useEffect(() => {
-        if(mainState.user){
-            console.log("IS_AUTHENTICATED: " + mainState.user.isAuth);
-            console.log("ACCESS: " + mainState.user.access);
+
+    useEffect( () => {
+        console.log("mounted");
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const setCollection = async (data) => {
+            console.log("setCollection");
+            setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
-        console.log("ID: " + collectionState.id);
-        console.log("isSet: " + collectionState.isSet);
-        console.log("isBrowse: " + collectionState.isBrowse);
-        console.log("mainState.contacts: ")
-        console.dir(mainState.contacts);
-        if(!collectionState.isSet && !collectionState.isBrowse){
-            if(browse){
-                setCollectionState({type: 'SET_IS_BROWSE', data: true});
-            }
-        }
-        if(mainState.user && mainState.user.isAuth && mainState.user.access && collectionState.id && !collectionState.isSet){
-            setCollectionState({type: 'SET', data: true});
-            getCollection(collectionState.id, collectionState.isBrowse, mainState.user.access)
+        if(!collectionState.isSet && mainState.isSet){
+            //if(isMounted()) setCollectionState({type: 'SET', data: true});
+            const access = mainState.user ? mainState.user.access : undefined
+            getCollection(splat, browse, access, signal)
                 .then((response) => {
-                    if(collectionState.isBrowse){
-                        setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
+                    if(browse){
+                        setCollection({anims: response, isSet: true});
                     }else{
-                        setCollectionState({type: 'SET_COLLECTION', data: {anims: response.anims,
+                        setCollection({anims: response.anims, isSet: true,
                             username: response.username, userid: response.userid,
-                            isOwn: response.userid === mainState.user.userid, isSet: true}});
+                            isOwn: response.userid === mainState.user.userid});
                     }
-                });
-        }else if(mainState.user && mainState.user.isAuth && mainState.user.access && !collectionState.isSet && collectionState.isBrowse){
-            setCollectionState({type: 'SET', data: true});
-            getCollection(false, collectionState.isBrowse, mainState.user.access)
-                .then((response) => {
-                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
-                });
-        }else if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            setCollectionState({type: 'SET_ID', data: true});
-        }else if(mainState.user && !collectionState.isBrowse &&  !mainState.user.isAuth && !collectionState.isSet){
-            const id = getIdFromUrl(window.location.href);
-            setCollectionState({type: 'SET', data: true});
-            getCollection(id, collectionState.isBrowse, false)
-                .then((response) => {
-                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response.anims, isSet: true}});
-                });
-        }else if(collectionState.isBrowse  && !collectionState.isSet){
-            setCollectionState({type: 'SET', data: true});
-            getCollection(false, collectionState.isBrowse, false)
-                .then((response) => {
-                    setCollectionState({type: 'SET_COLLECTION', data: {anims: response, isSet: true}});
-                })
+                }).catch((error) => {console.error(error)});
         }
-    },[collectionState.id, collectionState.anims, mainState.user, collectionState.isBrowse, collectionState.isSet, browse, mainState.contacts]);
+        return () => {
+            console.log("cleanup");
+            controller.abort();
+        }
+    },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat]);
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {

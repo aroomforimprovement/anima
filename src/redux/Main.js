@@ -33,7 +33,7 @@ export const mainReducer = (state, action) => {
             console.log('SET_ACCOUNT_INFO');
             console.dir(action.data);
             return({...state, contacts: action.data.contacts, notices: action.data.notices, 
-                user: {...state.user, username: action.data.username}});
+                user: {...state.user, username: action.data.username}, isSet: action.data.isSet});
         }
         default:
             break;

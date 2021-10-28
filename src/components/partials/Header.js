@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navbar, NavItem, NavbarToggler, NavbarBrand, Nav, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
@@ -10,17 +10,12 @@ const Header = () => {
     
     const { mainState } = useMainContext();
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [isSet, setIsSet] = useState(false);
     const logo = process.env.REACT_APP_URL + '/assets/site-logo.svg'
     
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
     }
 
-    useEffect(() => {
-        console.debug(mainState.user);
-        setIsSet(true);
-    }, [mainState.user])
 
     return(
         <div className='nav-area col-12'>

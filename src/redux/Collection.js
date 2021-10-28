@@ -2,11 +2,13 @@ import { arrayRemove } from "../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const getCollection = (id, isBrowse, access) => {
+export const getCollection = async (id, isBrowse, access, signal) => {
     let url;
     let req = {
         method: 'GET',
-        mode: 'cors'
+        mode: 'cors',
+        signal: signal,
+        headers: {}
     };
     if(isBrowse){
         url = `${apiUrl}collection`;
@@ -18,7 +20,7 @@ export const getCollection = (id, isBrowse, access) => {
             Authorization: `Bearer ${access}`
         }
     }
-    return fetch(url, req)
+    return await fetch(url, req)
     .then(response => {
         if(response.ok){
             return response.json();
@@ -67,7 +69,7 @@ export const addContactRequest = (userid, username, requsername, requserid, acce
         console.error(error);
     })
 }
-
+/**
 export const getIdFromUrl = (url) => {
     //console.log("url="+url);
     if(url.match(/(collection\/)\w+/) && url.match(/(collection\/)\w+/).length > -1){
@@ -77,16 +79,12 @@ export const getIdFromUrl = (url) => {
     }    
     return false;
 }
+*/
 
 export const collectionReducer = (state, action) => {
     console.log("collectionReducer: " + action.type + ":" + action.data);
 
     switch(action.type){
-        case 'SET_ID':{
-            const id = getIdFromUrl(window.location.href);
-            //console.log('SET_ID...' + id);
-            return({...state, id: id});
-        }
         case 'SET':{
             return({...state, isSet: action.data})
         }
@@ -96,9 +94,6 @@ export const collectionReducer = (state, action) => {
         }
         case 'SET_CONTACT_REQ_ENABLED':{
             return({...state, contactReqEnabled: action.data});
-        }
-        case 'SET_IS_BROWSE':{
-            return ({...state, isBrowse: action.data})
         }
         case 'DELETE_ANIM':{
             let anims = [...state.anims];
