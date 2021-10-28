@@ -3,9 +3,8 @@ import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
 import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
-import { useAsyncEffect } from 'use-async-effect';
 import { useParams } from 'react-router';
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true};
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
@@ -68,7 +67,6 @@ const Collection = ({browse}) => {
             setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
         if(!collectionState.isSet && mainState.isSet){
-            //if(isMounted()) setCollectionState({type: 'SET', data: true});
             const access = mainState.user ? mainState.user.access : undefined
             getCollection(splat, browse, access, signal)
                 .then((response) => {
@@ -88,9 +86,9 @@ const Collection = ({browse}) => {
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat]);
 
 
-    const collectionItems = collectionState.anims ? collectionState.anims.map((anim, i) => {
+    const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
             return(
-                <CollectionItem key={i} anim={anim}/>
+                <CollectionItem key={index} index={index} anim={anim}/>
                 );
         }) :
         <Loading />

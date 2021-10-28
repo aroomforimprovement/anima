@@ -15,10 +15,10 @@ const collectionItemInitialState = {previewFile: null, previewName: null, hidden
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-export const CollectionItem = ({anim}) => {
+export const CollectionItem = ({anim, index}) => {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const { mainState } = useMainContext();
-    const { setCollectionState } = useCollectionContext();
+    const { collectionState, setCollectionState } = useCollectionContext();
 
 
     const collectionItemReducer = (state, action) => {
@@ -52,7 +52,7 @@ export const CollectionItem = ({anim}) => {
                 const previewFile = URL.createObjectURL(action.data.blob);
                 return ({...state, 
                     previewFile: previewFile, 
-                    previewName: action.data.name
+                    previewName: action.data.name,
                 });
             }
             case 'DELETE_ANIM':{
@@ -81,24 +81,27 @@ export const CollectionItem = ({anim}) => {
     
     useEffect(() => {
 
-    },[collectionItemState.previewFile]);
+    },[collectionItemState.previewFile, collectionState.index]);
 
 
     return(
-        <LazyLoad height={300} offset={10} //hidden={collectionItemState.deleted}
+        <LazyLoad height={300} offset={10} once
             className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
+        <div>  
+              
             <div >
+            {collectionItemState.previewFile 
+            ?
                 <div className='row'>
-                {
-                collectionItemState.previewFile 
-                ?
-                <video loop autoPlay className='rounded p-0'> 
+                
+                <video autoPlay loop className='rounded p-0'> 
                     <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                 </video> 
-                :
-                <Loading />
-                }
+         
                 </div>
+                       :
+                       <Loading />
+                       }
                 <div className='row'>
                     <div className='col col-12 mt-2 ms-2'>
                         <div className='coll-item-name'>{anim.name}</div>
@@ -142,6 +145,8 @@ export const CollectionItem = ({anim}) => {
                     </div>
                 </div>
             </div>
+        </div>
+        
             <Modal size='lg' show={isPreviewOpen} 
                 onShow={() => {setIsPreviewOpen(true)}}
                 onHide={() => {setIsPreviewOpen(false)}}>
@@ -166,8 +171,10 @@ export const CollectionItem = ({anim}) => {
                 ? <div></div>
                 :
                 <div hidden={true}>    
-                    <ReactP5Wrapper sketch={preview} anim={anim}  id='previewCanvas'
-                        collectionItemDispatch={collectionItemDispatch} />
+                    <ReactP5Wrapper sketch={preview} anim={anim} index={index} id='previewCanvas'
+                        collectionItemDispatch={collectionItemDispatch}
+                        collectionState={collectionState}
+                        setCollectionState={setCollectionState} />
                 </div>
             } 
         </div>

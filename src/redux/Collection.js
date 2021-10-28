@@ -101,6 +101,9 @@ export const collectionReducer = (state, action) => {
             const newAnims = arrayRemove(anims, anim[0]);
             return({...state, anims: newAnims});
         }
+        case 'SET_INDEX':{
+            return({...state, index: action.data})
+        }
         default:
             break;
     }

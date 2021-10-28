@@ -62,39 +62,43 @@ export const drawStroke = (stroke, p5) => {
  * @param {*} name 
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
-export const playPreview = (blob, name, dispatch) => {
+export const playPreview = (blob, name, dispatch, index, setCollectionState) => {
     if(dispatch){
         dispatch({
             type: 'SET_PREVIEW_FILE', 
             data: {blob : blob, name: name}
         });    
+        setCollectionState ? setCollectionState({type: 'SET_INDEX', data: index+1}) : console.log('no collection state');
     }
 }
 
-export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch) => {
+export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch, index, setCollectionState) => {
     try{
-        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch);
+        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch, index, setCollectionState);
     }catch(err){
         console.error(err);
     }
 }
 
-export const renderAnim = (a, type, p5canvas, p5, collectionItemDispatch) =>{
+export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState) =>{
     const CCapture = window.CCapture; 
     let capturer = new CCapture({format: 'webm',
 //        workersPath: process.env.PUBLIC_URL + '/ccapture/',
         framerate: a.frate
     });
     capturer.start();
+    const startTime = performance.now();
     setBgOverlay(p5);
     setBgOverlay(p5);
     a.frames.forEach((f) => {
        setFrameCaptured(f, capturer, p5canvas, p5);
     });
     capturer.stop();
+    const duration = performance.now() - startTime;
+    console.log("Capture took "+duration);
     capturer.save((blob) => {
        if(type === 'PREVIEW'){
-            playPreview(blob, a.name, collectionItemDispatch);
+            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState);
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);
         }
