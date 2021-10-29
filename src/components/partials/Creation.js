@@ -137,16 +137,16 @@ export const Creation = ({edit, splat}) => {
                 <AnimContext.Provider value={animState}>
                     <ReactP5Wrapper sketch={sketch} 
                         controls={controls} dispatch={dispatch}
-                        anim={anim} updateAnim={updateAnim}
-                        id='animCanvas' />
+                        anim={anim} updateAnim={updateAnim} index={'temp'}
+                        id='animCanvas' clip={false}/>
                     <Modal show={anim.isPreviewOpen} 
                         onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}
                         onHide={() => updateAnim({type: 'setIsPreviewOpen', data: false})}>
                             <video controls loop autoPlay> 
-                                <source src={anim.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                                <source src={anim.viewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                             </video>
                        <Modal.Footer>
-                            <p>{anim.previewName}</p>
+                            <p>{anim.viewName}</p>
                             <Button size='sm' 
                                 onClick={() => dispatch({type: 'END_PREVIEW', data: true})}
                             >Close</Button>

@@ -201,6 +201,12 @@ export const animReducer = (state, action) => {
                 previewName: action.data.name
             });
         }
+        case 'SET_VIEW_FILE':{
+            return({...state, 
+                viewFile: URL.createObjectURL(action.data.blob),
+                viewName: action.data.name
+            });     
+        }
         case 'NAME':{
             return ({...state,
                 anim: {...state["anim"], name: action.data}})

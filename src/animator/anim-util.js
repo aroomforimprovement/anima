@@ -62,12 +62,17 @@ export const drawStroke = (stroke, p5) => {
  * @param {*} name 
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
-export const playPreview = async (blob, name, dispatch, index, setCollectionState) => {
-    if(dispatch){
+export const playPreview = async (blob, name, dispatch, index, setCollectionState, clip) => {
+    if(dispatch && clip){
         await dispatch({
             type: 'SET_PREVIEW_FILE', 
             data: {blob : blob, name: name}
         });  
+    }else if(dispatch){
+        await dispatch({
+            type: 'SET_VIEW_FILE',
+            data: {blob: blob, name: name}
+        })
     }
 }
 
@@ -102,7 +107,7 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     console.log("Capture took "+duration);
     capturer.save((blob) => {
        if(type === 'PREVIEW'){
-            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState)
+            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
                 .then(() => {
                 if(setCollectionState){
                     if(document.getElementById(`previewCanvas_${index}`)){

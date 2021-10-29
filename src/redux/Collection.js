@@ -69,17 +69,6 @@ export const addContactRequest = (userid, username, requsername, requserid, acce
         console.error(error);
     })
 }
-/**
-export const getIdFromUrl = (url) => {
-    //console.log("url="+url);
-    if(url.match(/(collection\/)\w+/) && url.match(/(collection\/)\w+/).length > -1){
-        //console.log("collection page has id");
-        const id = url.substring(url.indexOf("collection") + 11, url.length);
-        return id;
-    }    
-    return false;
-}
-*/
 
 export const collectionReducer = (state, action) => {
     console.log("collectionReducer: " + action.type + ":" + action.data);

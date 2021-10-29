@@ -10,7 +10,8 @@ import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
 
 
-const collectionItemInitialState = {previewFile: null, previewName: null, hidden: false, deleted: false}
+const collectionItemInitialState = {viewFile: null, viewName: null, 
+    previewFile: null, previewName: null, hidden: false, deleted: false}
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -55,6 +56,13 @@ export const CollectionItem = ({anim, index}) => {
                     previewName: action.data.name,
                 });
             }
+            case 'SET_VIEW_FILE':{
+                const viewFile = URL.createObjectURL(action.data.blob);
+                return({...state,
+                    viewFile: viewFile,
+                    viewName: action.data.name
+                });
+            }
             case 'DELETE_ANIM':{
                 deleteAnim(anim.animid);
                 return({...state, deleted: true});
@@ -80,77 +88,86 @@ export const CollectionItem = ({anim, index}) => {
 
     
     useEffect(() => {
-
-    },[collectionItemState.previewFile, collectionState.index]);
+        
+    },[collectionItemState.previewFile, collectionState.index, collectionItemState.viewFile, isPreviewOpen]);
 
 
     return(
         <div className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
-        {mainState.isSet ?
-        <LazyLoad height={300} offset={10} once
-            >
-            <div>    
-                <div >
-                {collectionItemState.previewFile 
-                ?
-                    <div className='row'>
+            {mainState.isSet ? <LazyLoad height={300} offset={10} once>
+                <div>    
+                    <div >
+                    {collectionItemState.previewFile 
+                    ? <div className='row'>
                         <video autoPlay loop className='rounded p-0'> 
                             <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                         </video> 
                     </div>
-               : <Loading /> }
-                <div className='row'>
-                    <div className='col col-12 mt-2 ms-2'>
-                        <div className='coll-item-name'>{anim.name}</div>
-                        <div className='coll-item-username' ><small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small></div>
-                    </div>
+                    : <Loading /> }
                     <div className='row'>
-                        <div className='col col-2 ms-2'><small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small></div>
-                        <div className='col col-8 ms-2 coll-item-date'><small>{new Date(anim.created).toDateString()}</small></div>
+                        <div className='col col-12 mt-2 ms-2'>
+                            <div className='coll-item-name'>{anim.name}</div>
+                            <div className='coll-item-username' >
+                                <small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small>
+                            </div>
+                        </div>
+                        <div className='row'>
+                        <div className='col col-2 ms-2'>
+                            <small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small>
+                        </div>
+                        <div className='col col-8 ms-2 coll-item-date'>
+                            <small>{new Date(anim.created).toDateString()}</small>
+                        </div>
                     </div>
-                <div className='col col-12'>
-                    <div className='row coll-item-btns mt-1 mb-1'>
-                        { mainState.user && anim.userid === mainState.user.userid
-                        ? <div className='col col-3'>
-                            <button className='btn btn-outline-secondary'>
-                                <a href={`/create/${anim.animid}`} alt='edit'>
-                                    <img src={SITE.icons.penColour} alt='edit' />
-                                </a>   
-                            </button>
-                        </div> :
-                        <div></div>}
-                        <div className='col col-3'>
-                            <button className='btn btn-outline-secondary'
-                                onClick={handlePreview}>
-                                    <img src={SITE.icons.preview} alt='preview'></img>
-                            </button>
+                    <div className='col col-12'>
+                        <div className='row coll-item-btns mt-1 mb-1'>
+                            { mainState.user && anim.userid === mainState.user.userid
+                            ? <div className='col col-3'>
+                                <button className='btn btn-outline-secondary'>
+                                    <a href={`/create/${anim.animid}`} alt='edit'>
+                                        <img src={SITE.icons.penColour} alt='edit' />
+                                    </a>   
+                                </button>
+                            </div> :
+                            <div></div>}
+                            <div className='col col-3'>
+                                <button className='btn btn-outline-secondary'
+                                    onClick={handlePreview}>
+                                        <img src={SITE.icons.preview} alt='preview'></img>
+                                </button>
+                            </div>
+                            <div className='col col-3'>
+                                <button className='btn btn-outline-secondary'
+                                    onClick={handleDownload}>
+                                    <img src={SITE.icons.download} alt='download'></img>
+                                </button>
+                            </div>
+                            { mainState.user && anim.userid === mainState.user.userid
+                            ? <div className='col col-3'>
+                                <button className='btn btn-outline-secondary'
+                                    onClick={handleDelete}>
+                                    <img src={SITE.icons.wipe} alt='delete'></img>
+                                </button>
+                            </div>
+                            : <div></div>}
                         </div>
-                        <div className='col col-3'>
-                            <button className='btn btn-outline-secondary'
-                                onClick={handleDownload}>
-                                <img src={SITE.icons.download} alt='download'></img>
-                            </button>
-                        </div>
-                        { mainState.user && anim.userid === mainState.user.userid
-                        ? <div className='col col-3'>
-                            <button className='btn btn-outline-secondary'
-                                onClick={handleDelete}>
-                                <img src={SITE.icons.wipe} alt='delete'></img>
-                            </button>
-                        </div>
-                        : <div></div>}
                     </div>
                 </div>
             </div>
-        </div>
-        
             <Modal size='lg' show={isPreviewOpen} 
                 onShow={() => {setIsPreviewOpen(true)}}
                 onHide={() => {setIsPreviewOpen(false)}}>
+                {isPreviewOpen && !collectionItemState.viewFile 
+                ?  
+                <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
+                    collectionItemDispatch={collectionItemDispatch}
+                    collectionState={collectionState}
+                    setCollectionState={setCollectionState} clip={false}/>
+                : <div></div>}
                 {
-                    collectionItemState.previewFile ?
+                    collectionItemState.viewFile ?
                     <video controls loop autoPlay muted className='p-2'> 
-                        <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
+                        <source src={collectionItemState.viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
                     </video> 
                 :
                 <Loading />
