@@ -44,11 +44,12 @@ const Login = () => {
         });
     }
 
-    const saveAnimToAccount = (anim, access) => {
-        return fetch(`${apiUrl}anim`, {
+    const saveAnimToAccount = async (anim, access, signal) => {
+        return await fetch(`${apiUrl}anim`, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify(anim),
+            signal: signal,
             headers: {
                 Authorization: `Bearer ${access}`,
                 'Content-Type': 'application/json',
@@ -56,10 +57,8 @@ const Login = () => {
         })
         .then(response => {
             if(response.ok){
-                console.log('anim saved ok ' + response.json);
-                dispatch({type: 'setIsSaved', data: true});
-                dispatch({type: 'setIsSaving', data: false});
-                
+                console.log("response ok");
+                return response;
             }else{
                 console.log('response not ok');
             }
@@ -107,8 +106,7 @@ const Login = () => {
             case 'setSaveFailed':{
                 return({...state, isSaving: false, saveFailed: true});
             }
-            case 'setTempAnimSaved':{
-                saveAnimToAccount(action.data, mainState.user.access);
+            case 'setTempAnimSaving':{
                 return({...state, isSaving: true});
             }
             default:
@@ -143,7 +141,7 @@ const Login = () => {
             }, signal).then(() => {console.log("then")}).catch((error) => {console.error(error)});
         }
         return () => {
-            console.log("abort");
+            console.log("abort login");
             controller.abort();
         }
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
@@ -155,10 +153,25 @@ const Login = () => {
     },[state.isLoaded, mainState.isSet]);
 
     useEffect(() => {
-        if(state.anim && !state.isSaved && !state.isSaving){
-            dispatch({type: 'setTempAnimSaved', data: state.anim});
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const saveAnimToAccountCall = async (anim, access) => {
+            await saveAnimToAccount(anim, access, signal).then(() => {
+                dispatch({type: 'setIsSaved', data: true});
+                dispatch({type: 'setIsSaving', data: false});
+            }).catch((error) => {console.error(error);});
         }
-    }, [state.anim, state.isFailed, state.isSaving, state.isSaved]);
+        if(state.anim && !state.isSaved && !state.isSaving){
+            //dispatch({type: 'setIsSaving', data: true});
+            saveAnimToAccountCall(state.anim, mainState.user.access, signal);
+        }
+
+        return () => {
+            console.log("abort save");
+            controller.abort();
+        }
+    }, [state.anim, state.isFailed, state.isSaving, state.isSaved, mainState.user]);
     
     if(!mainState){
         return(
@@ -175,13 +188,13 @@ const Login = () => {
     }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
         dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
         window.localStorage.removeItem('tempAnim');
-        return <Loading message={"Saving your animation..."} />
-    }else if(state.anim && !state.isSaving){
-        dispatch({type: 'setTempAnimSaved', data: state.anim});
-        return <Loading message={"Saving your animation..."} />
+        return <Loading message={"Saving your animation...1"} />
+    }else if(state.anim && !state.isSaving && !state.isSaved){
+        //dispatch({type: 'setTempAnimSaving', data: state.anim});
+        return <Loading message={"Saving your animation...2"} />
     }else if(state.anim && !state.isSaved){
-        return <Loading message={"Saving your animation..."} />
-    }else if(state.isSaved){
+        return <Loading message={"Saving your animation...3"} />
+    }else if(state.isSaved && !state.isSaving){
         const animid = state.anim.animid;
         return(
             //<Loading message="redirect blocked" />

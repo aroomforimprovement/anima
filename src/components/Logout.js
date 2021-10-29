@@ -88,7 +88,6 @@ const Logout = () => {
             }).catch((error) => {console.error(error);});
         }
         if(state.isLoaded && !state.isRegistered && !state.isFailed && !state.isSending){
-            dispatch({type: 'setIsSending', data: true});
             putLogoutCall(signal)
         }
         return () => {
