@@ -14,8 +14,7 @@ export const preview = (p5) => {
     p5.updateWithProps = (props) => {
         if(props.anim && p5 && props.anim.name !== 'nothing' 
             && props.collectionState && props.collectionState.index === props.index){
-                console.log(props.index);
-            previewAnim(props.anim, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState);
+            previewAnim(props.anim, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
         }
     }
     

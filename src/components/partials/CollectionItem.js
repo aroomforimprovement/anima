@@ -171,7 +171,7 @@ export const CollectionItem = ({anim, index}) => {
                     <ReactP5Wrapper sketch={preview} anim={anim} index={index} id={`previewCanvas_${index}`}
                         collectionItemDispatch={collectionItemDispatch}
                         collectionState={collectionState}
-                        setCollectionState={setCollectionState} />
+                        setCollectionState={setCollectionState} clip={true}/>
                 </div>
             } 
         </div>

@@ -71,15 +71,15 @@ export const playPreview = async (blob, name, dispatch, index, setCollectionStat
     }
 }
 
-export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch, index, setCollectionState) => {
+export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip) => {
     try{
-        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch, index, setCollectionState);
+        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip);
     }catch(err){
         console.error(err);
     }
 }
 
-export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState) =>{
+export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip) =>{
     const CCapture = window.CCapture; 
     let capturer = new CCapture({format: 'webm',
 //        workersPath: process.env.PUBLIC_URL + '/ccapture/',
@@ -89,7 +89,12 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     const startTime = performance.now();
     setBgOverlay(p5);
     setBgOverlay(p5);
-    a.frames.forEach((f) => {
+    let frames = [...a.frames];
+    if(clip && frames.length > 4){
+        frames = frames.splice(0, 4);
+        console.dir("frames:"+frames);
+    }
+    frames.forEach((f) => {
        setFrameCaptured(f, capturer, p5canvas, p5);
     });
     capturer.stop();
