@@ -10,13 +10,13 @@ const Login = () => {
 
     const { mainState  } = useMainContext();
 
-    const putLogin = (login) => {
+    const putLogin = async (login, signal) => {
         console.log('putLogin');
-        //console.dir(login);
         console.log(login.access);
-        return fetch(`${apiUrl}login`, {
+        return await fetch(`${apiUrl}login`, {
             method: 'POST',
             mode: 'cors',
+            signal: signal,
             body: JSON.stringify(login),
             headers: {
                 Authorization: `Bearer ${login.access}`,
@@ -133,34 +133,36 @@ const Login = () => {
     });
 
     useEffect(() => {
-        console.log("Login: useEffect");
-        console.log('isSending: ' + state.isSending);
-        console.log('isRegistered: ' + state.isRegistered);
-        console.log('isFailed: ' + state.isFailed);
-        console.log('isSaved: ' + state.isSaved);
-        console.log('isSaving: ' + state.isSaving);
-        console.dir('anim: ' + state.anim);
-        if(state.isRegistered){
-            return;
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const putLoginCall = async (login) => {
+            await putLogin(login);
         }
-        if(!mainState){
-            return;
-        }else if(!state.isLoaded){
-            dispatch({type: 'setIsLoaded', data: true});
-        }else if(state.isLoaded && (mainState && mainState.user && mainState.user.isAuth && mainState.user.access) &&  !state.isSending && !state.isFailed){
-            console.dir('useEffect, user: ', mainState.user);
+        if(!state.isRegistered && state.isLoaded && (mainState && mainState.user && mainState.user.access) && !state.isSending && !state.isFailed){
             dispatch({type: 'setIsSending', data: true});
-            dispatch({type: 'putLogin', data: { 
+            putLoginCall({ 
                 userid: mainState.user.userid,
                 email: mainState.user.email,
-                username: mainState.user.name, access: mainState.user.access
-            }});
+                username: mainState.user.name, access: mainState.user.access,
+            }, signal).then(() => {console.log("then")}).catch((error) => {console.error(error)});
         }
+        return () => {
+            console.log("abort");
+            controller.abort();
+        }
+    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
+
+    useEffect(() => {
+         if(!state.isLoaded && mainState.isSet){
+            dispatch({type: 'setIsLoaded', data: true});
+         }       
+    },[state.isLoaded, mainState.isSet]);
+
+    useEffect(() => {
         if(state.anim && !state.isSaved && !state.isSaving){
-            console.log("trying to get here");
             dispatch({type: 'setTempAnimSaved', data: state.anim});
         }
-    }, [mainState, state.anim, state.isFailed, state.isLoaded, state.isRegistered, state.isSending, state.isSaving, state.isSaved]);
+    }, [state.anim, state.isFailed, state.isSaving, state.isSaved]);
     
     if(!mainState){
         return(
@@ -186,11 +188,12 @@ const Login = () => {
     }else if(state.isSaved){
         const animid = state.anim.animid;
         return(
+            //<Loading message="redirect blocked" />
             <Redirect to={`/create/${animid}`} />
         );
     }else if(state.isRegistered && mainState.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
         return(
-            //<Loading message="redirect blocked" />
+           //<Loading message="redirect blocked" />
            <Redirect to='/create'/>
         );
     }
