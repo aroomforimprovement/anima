@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../../shared/site';
-import { useMainContext } from '../Main';
+import { useMainContext } from '../../App';
 
 const Header = () => {
     

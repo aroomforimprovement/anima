@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, createContext, useContext, useState } fro
 import { Notice } from './partials/Notice';
 import { Contact } from './partials/Contact';
 import { DisplayName } from './partials/DisplayName';
-import { useMainContext } from './Main';
+import { useMainContext } from '../App';
 import { accountReducer, getAccountInfo } from '../redux/Account';
 
 const AccountContext = createContext({});

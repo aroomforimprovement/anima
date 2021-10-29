@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMainContext } from '../Main';
+import { useMainContext } from '../../App';
 import { useAccountContext } from '../Account';
 import { updateDisplayName } from '../../redux/Account';
 import { Loading } from './Loading';

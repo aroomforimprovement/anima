@@ -1,7 +1,7 @@
 import React, { useReducer, useContext, createContext, useEffect } from 'react';
 import { CollectionItem } from './partials/CollectionItem';
 import { Loading } from './partials/Loading';
-import { useMainContext } from './Main';
+import { useMainContext } from '../App';
 import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
 import { useParams } from 'react-router';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};

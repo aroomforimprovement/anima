@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect, withRouter, useHistory } from 'react-router-dom';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
@@ -8,20 +8,11 @@ import Logout from './Logout';
 import Create from './Create';
 import Collection from './Collection';
 import Account from './Account';
-import { mainReducer } from '../redux/Main';
-import { useAuth0 } from '@auth0/auth0-react';
-import { getAccountInfo } from '../redux/Account';
-const MainContext = createContext({});
-
-export const useMainContext = () => {
-    return useContext(MainContext);
-}
+import { useMainContext } from '../App';
 
 const Main = () => {
 
-    const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-    const [mainState, mainDispatch] = useReducer(mainReducer, {});
-    const stateOfMain = { mainState, mainDispatch };
+    const {mainState } = useMainContext();
 
     const {history} = useHistory();
     
@@ -34,40 +25,11 @@ const Main = () => {
     const BrowsePage = () => { return <Collection browse={true} /> }
     const AccountPage = () => { return <Account />}
 
-    useEffect(() => {
-        const setAccessToken = async () => {
-            mainDispatch({type: 'SET_ACCESS', data: await getAccessTokenSilently()})
-        }
-
-        if(!isLoading && !mainState.user){
-            mainDispatch({
-                type: 'CHECK_AUTH',
-                data: {
-                    isAuthenticated: isAuthenticated,
-                    user: user
-                }
-            })
-        }else if(isAuthenticated && mainState.user && !mainState.user.access){
-            setAccessToken();
-        }else if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
-            getAccountInfo(mainState.user.userid, mainState.user.access)
-                .then((result) => {
-                    result.isSet = true;
-                    mainDispatch({
-                        type: 'SET_ACCOUNT_INFO',
-                        data: result
-                    });
-                });
-        }else if(!isLoading && !isAuthenticated && !mainState.isSet){
-            mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
-        }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user, mainState.notices, mainState.isSet]);
-        
     return (
         <div>
-            <MainContext.Provider value={stateOfMain}>
-                <MainContext.Consumer>
-                    {() => (
+            {//mainState.isSet ?
+            <div>
+                
                     <div>
                         <Header />
                         <Switch>
@@ -84,10 +46,12 @@ const Main = () => {
                             <Redirect to='/home' history={history}/>
                         </Switch>
                         <Footer />
+                        
                     </div>
-                    )}
-                </MainContext.Consumer>
-            </MainContext.Provider>
+                
+            </div>
+            //: <div></div>
+        }
         </div>
     );
 }
