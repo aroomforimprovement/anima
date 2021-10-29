@@ -85,8 +85,10 @@ export const CollectionItem = ({anim, index}) => {
 
 
     return(
+        <div className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
+        {mainState.isSet ?
         <LazyLoad height={300} offset={10} once
-            className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
+            >
             <div>    
                 <div >
                 {collectionItemState.previewFile 
@@ -162,7 +164,7 @@ export const CollectionItem = ({anim, index}) => {
                     >Close</Button>
                 </Modal.Footer>
             </Modal > 
-            {collectionItemState.previewFile 
+            {collectionItemState.previewFile || (collectionItemState.index <= index) 
                 ? <div></div>
                 :
                 <div hidden={true}>    
@@ -174,5 +176,7 @@ export const CollectionItem = ({anim, index}) => {
             } 
         </div>
     </LazyLoad>
+    : <div></div>}
+    </div>
     );
 }
