@@ -85,10 +85,6 @@ const Login = () => {
             case 'setIsFailed':{
                 return ({...state, isFailed: action.data, isSending: !action.data});
             }
-            case 'putLogin':{
-                putLogin(action.data);
-                return state;
-            }
             case 'setLogin':{
                 console.dir('setLogin: ', action.data);
                 window.localStorage.setItem('userid', action.data.userid);

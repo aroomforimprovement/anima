@@ -1,35 +1,38 @@
 import React, { useEffect, useReducer } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './partials/Loading';
 import { Problem } from './partials/Problem';
 import { Redirect } from 'react-router';
+import { useMainContext } from './Main';
 
 const apiUrl = process.env.REACT_APP_API_URL
 
 const Logout = () => {
-    //return(<Redirect to='/'/>);
-    const putLogout = (logout) => {
+
+    const {mainState} = useMainContext();
+
+    const putLogout = async (signal) => {
         console.log('putLogout');
-        return fetch(`${apiUrl}logout`, {
+        const userid = localStorage.getItem('userid');
+        const email = localStorage.getItem('email');
+        const username = localStorage.getItem('username');
+        const logout = {userid: userid, email: email, username: username};
+        return await fetch(`${apiUrl}logout`, {
             method: 'POST',
             mode: 'cors',
+            signal: signal,
             body: JSON.stringify(logout),
             headers: {
                 'Content-Type': 'application/json'
             },
         })
         .then(response => {
-            if(response.ok){ return response;
+            if(response.ok){ 
+                return response;
             }else{ console.error("response not ok") }
-        }, error => { console.error(error) }
-        )
-        .then(response => response.json())
-        .catch(error => { console.log(error) })
-        .finally(response =>{ 
-            dispatch({type: 'setLogout', data: response});
-            dispatch({type: 'setIsRegistered', data: true});
-            dispatch({type: 'setIsSending', data: false});
-        });
+        }, error => { 
+            console.error(error);
+        }
+        ).catch(error => { console.error(error) });
     }
 
     const logoutReducer = (state, action) => {
@@ -47,31 +50,17 @@ const Logout = () => {
             case 'setIsFailed':{
                 return ({...state, isFailed: action.data});
             }
-            case 'putLogout':{               
-                putLogout(action.data);
-                return state;
-            }
             case 'setLogout':{
                 localStorage.removeItem('userid');
                 localStorage.removeItem('username');
                 localStorage.removeItem('email');
-                localStorage.removeItem('isAuth');
-                return ({...state, user: {}, logout: action.data});
-            }
-            case 'setUser':{
-                const u = {
-                    userid: localStorage.getItem('userid'),
-                    username: localStorage.getItem('username'),
-                    email: localStorage.getItem('email')
-                };
-                return ({...state, user: u});
+                return ({...state, logout: action.data});
             }
             default:
                 return state;
         }
     }
 
-    const { isAuthenticated, isLoading } = useAuth0()
     const [state, dispatch] = useReducer(logoutReducer, {
         isLoaded: false,
         isSending: false,
@@ -81,54 +70,67 @@ const Logout = () => {
         logout: {},
     });
     
+ 
+    useEffect(() => {
+        console.log('mount');
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const putLogoutCall = async (signal) => {
+            await putLogout(signal).then((response) => {
+                console.log("then");
+                if(response){
+                    dispatch({type: 'setLogout', data: response});
+                    dispatch({type: 'setIsRegistered', data: true});
+                    dispatch({type: 'setIsSending', data: false});    
+                }else{
+                    dispatch({type: 'setIsSending', data: false});
+                }
+            }).catch((error) => {console.error(error);});
+        }
+        if(state.isLoaded && !state.isRegistered && !state.isFailed && !state.isSending){
+            dispatch({type: 'setIsSending', data: true});
+            putLogoutCall(signal)
+        }
+        return () => {
+            console.log("abort");
+            controller.abort();
+        }
+    },[state.isLoaded, state.isFailed, state.isSending, state.isRegistered]);
 
     useEffect(() => {
-        console.log("Logout: useEffect");
-        console.log('isSending: ' + state.isSending);
-        console.log('isRegistered: ' + state.isRegistered);
-        console.log('isFailed: ' + state.isFailed);
-        if(state.isRegistered){
-            return;
-        }
-        if(isLoading){
-            return;
-        }else if(!state.isLoaded){
+        if(!state.isLoaded && mainState.isSet){
             dispatch({type: 'setIsLoaded', data: true});
-            dispatch({type: 'setUser'})
-        }else if(state.isLoaded && isAuthenticated){
-            console.error("shouldn't get here! still authenticated after logout");
-        }else if(state.isLoaded && !isAuthenticated && !state.isSending 
-                    && !state.isFailed && state.user){
-            dispatch({type: 'setIsSending', data: true});
-            dispatch({type: 'putLogout', data: { 
-                userid: state.user.userid,
-                email: state.user.email,
-                username: state.user.username
-            }});
         }
-    }, [isLoading, state.user, isAuthenticated, state.isLoaded, 
-        state.isSending, state.isRegistered, state.isFailed]);
+    }, [state.isLoaded, mainState.isSet]);
 
-        if(isLoading){
-            return(
-                <Loading message={"Loading authentication..."} />
-            );
-        }else if(state.isSending && !state.isFailed && !state.isRegistered){
-            return(
-                <Loading message={"Registering logout..."} />
-            );
-        }else if(state.isFailed){
-            return(
-                <Problem message={"It looks like there was a problem logging you out"} />
-            );
-        }else if(state.isRegistered){
-            return(
-                <Redirect to='/'/>
-            );
+    useEffect(() => {
+        if(!state.isRegistered && state.isFailed && state.isSending){
+            dispatch({type: 'setIsRegistered', data: true});
+            dispatch({type: 'setIsSending', data: false});
         }
+    }, [state.isRegistered, state.isFailed, state.isSending]);
+
+    if(!mainState.isSet){
         return(
-            <Loading message={"Something something..."} />
-        )
+            <Loading message={"Loading..."} />
+        );
+    }else if(state.isSending && !state.isFailed && !state.isRegistered){
+        return(
+            <Loading message={"Registering logout..."} />
+        );
+    }else if(state.isFailed){
+        return(
+            <Problem message={"It looks like there was a problem logging you out"} />
+        );
+    }else if(state.isRegistered){
+        return(
+            //<Loading message={"Redirect blocked..."} />
+            <Redirect to='/'/>
+        );
+    }
+    return(
+        <Loading message={"Something something..."} />
+    );
 }
 
 export default Logout;
