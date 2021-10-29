@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { Loading } from './partials/Loading';
 import { Problem } from './partials/Problem';
 import { Redirect } from 'react-router';
-import { useMainContext } from '../App';
+import { useMainContext } from './Main';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

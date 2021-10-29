@@ -6,7 +6,7 @@ import { preview } from "../../animator/preview";
 import { Loading } from './Loading';
 import LazyLoad from "react-lazyload";
 import { saveAs } from 'file-saver';
-import { useMainContext } from "../../App";
+import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
 
 
@@ -164,7 +164,7 @@ export const CollectionItem = ({anim, index}) => {
                     >Close</Button>
                 </Modal.Footer>
             </Modal > 
-            {collectionItemState.previewFile || (collectionItemState.index === index) 
+            {collectionItemState.previewFile || (collectionItemState.index <= index) 
                 ? <div></div>
                 :
                 <div hidden={true}>    

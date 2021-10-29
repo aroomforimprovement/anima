@@ -6,7 +6,7 @@ import { animReducer, newAnimState } from '../../redux/Creation';
 import { sketch } from '../../animator/sketch';
 import { values } from '../../animator/values';
 import { Privacy } from './ControllerBtns';
-import { useMainContext } from '../../App';
+import { useMainContext } from '../Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {SITE} from '../../shared/site';
-import { useMainContext } from '../../App';
+import { useMainContext } from '../Main';
 import { useAccountContext } from '../Account';
 import { addContact, deleteNotice } from '../../redux/Account';
 

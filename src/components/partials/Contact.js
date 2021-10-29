@@ -1,7 +1,7 @@
 import React from 'react';
 import { SITE } from '../../shared/site';
 import { useAccountContext } from '../Account';
-import { useMainContext } from '../../App';
+import { useMainContext } from '../Main';
 import { deleteContact } from '../../redux/Account';
 
 

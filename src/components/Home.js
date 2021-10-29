@@ -4,7 +4,7 @@ import { SITE } from '../shared/site';
 import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
 import { NavLink } from 'react-router-dom';
 import { Loading } from './partials/Loading';
-import { useMainContext } from '../App';
+import { useMainContext } from './Main';
 
 const Home = () => {
     
