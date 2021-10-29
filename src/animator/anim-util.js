@@ -67,7 +67,7 @@ export const playPreview = async (blob, name, dispatch, index, setCollectionStat
         await dispatch({
             type: 'SET_PREVIEW_FILE', 
             data: {blob : blob, name: name}
-        });    
+        });  
     }
 }
 
@@ -99,10 +99,15 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
        if(type === 'PREVIEW'){
             playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState)
                 .then(() => {
-                    setCollectionState 
-                    ? setCollectionState({type: 'SET_INDEX', data: index+1}) 
-                    : console.log('no collection state');
-                });;
+                if(setCollectionState){
+                    if(document.getElementById(`previewCanvas_${index}`)){
+                        document.getElementById(`previewCanvas_${index}`).remove();
+                    } 
+                    setCollectionState({type: 'SET_INDEX', data: index+1}) 
+                }else{
+                    console.log('no collection state');
+                } 
+            });;
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);
         }

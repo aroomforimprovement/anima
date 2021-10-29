@@ -168,7 +168,7 @@ export const CollectionItem = ({anim, index}) => {
                 ? <div></div>
                 :
                 <div hidden={true}>    
-                    <ReactP5Wrapper sketch={preview} anim={anim} index={index} id='previewCanvas'
+                    <ReactP5Wrapper sketch={preview} anim={anim} index={index} id={`previewCanvas_${index}`}
                         collectionItemDispatch={collectionItemDispatch}
                         collectionState={collectionState}
                         setCollectionState={setCollectionState} />

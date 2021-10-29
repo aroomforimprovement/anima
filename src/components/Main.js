@@ -34,11 +34,7 @@ const Main = () => {
     const BrowsePage = () => { return <Collection browse={true} /> }
     const AccountPage = () => { return <Account />}
 
-    useEffect(() => {
-        const setAccessToken = async () => {
-            mainDispatch({type: 'SET_ACCESS', data: await getAccessTokenSilently()})
-        }
-
+    useEffect(() =>{
         if(!isLoading && !mainState.user){
             mainDispatch({
                 type: 'CHECK_AUTH',
@@ -47,9 +43,20 @@ const Main = () => {
                     user: user
                 }
             })
-        }else if(isAuthenticated && mainState.user && !mainState.user.access){
+        }
+    },[isLoading, mainState.user, isAuthenticated, user]);
+
+    useEffect(() => {
+        const setAccessToken = async () => {
+            mainDispatch({type: 'SET_ACCESS', data: await getAccessTokenSilently()})
+        }
+        if(isAuthenticated && mainState.user && !mainState.user.access){
             setAccessToken();
-        }else if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
+        }
+    },[getAccessTokenSilently, isAuthenticated, mainState.user])
+
+    useEffect(() => {
+        if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
             getAccountInfo(mainState.user.userid, mainState.user.access)
                 .then((result) => {
                     result.isSet = true;
@@ -61,9 +68,11 @@ const Main = () => {
         }else if(!isLoading && !isAuthenticated && !mainState.isSet){
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
         }
-    },[isLoading, isAuthenticated, user, getAccessTokenSilently, mainState.isAuth, mainState.user, mainState.notices, mainState.isSet]);
+    },[isLoading, isAuthenticated, getAccessTokenSilently, mainState.user, mainState.notices, mainState.isSet]);
         
     return (
+        <div>
+        {mainState && mainState.isSet ? 
         <div>
             <MainContext.Provider value={stateOfMain}>
                 <MainContext.Consumer>
@@ -88,6 +97,9 @@ const Main = () => {
                     )}
                 </MainContext.Consumer>
             </MainContext.Provider>
+        </div>
+        : <div></div>
+        }
         </div>
     );
 }

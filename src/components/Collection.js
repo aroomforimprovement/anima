@@ -109,7 +109,9 @@ const Collection = ({browse}) => {
             }
         </div>
     </div>
-    : <div></div>
+    : <div className='container collection-header mt-5 mb-5'>
+        <h5>Latest anims</h5>
+    </div>
         
     return(
         <div>
