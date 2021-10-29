@@ -163,7 +163,6 @@ const Login = () => {
             }).catch((error) => {console.error(error);});
         }
         if(state.anim && !state.isSaved && !state.isSaving){
-            //dispatch({type: 'setIsSaving', data: true});
             saveAnimToAccountCall(state.anim, mainState.user.access, signal);
         }
 

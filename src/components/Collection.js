@@ -57,7 +57,6 @@ const Collection = ({browse}) => {
     const stateOfCollection = { collectionState, setCollectionState };
 
     
-
     useEffect( () => {
         console.log("mounted");
         const controller = new AbortController();
