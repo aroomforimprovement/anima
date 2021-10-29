@@ -11,8 +11,8 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
     }
 }
 
-export const drawFrame = (f, p5) => {
-    setBgOverlay(p5);
+export const drawFrame = (f, p5, render) => {
+    setBgOverlay(p5, render);
     drawPoints(f.bg, p5);
     drawPoints(f.points, p5);
 }
@@ -92,8 +92,8 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     });
     capturer.start();
     const startTime = performance.now();
-    setBgOverlay(p5);
-    setBgOverlay(p5);
+    setBgOverlay(p5, true);
+    setBgOverlay(p5, true);
     let frames = [...a.frames];
     if(clip && frames.length > 4){
         frames = frames.splice(0, 4);
@@ -124,20 +124,24 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     });
 }
 
-export const setBgOverlay = (p5) => {
+export const setBgOverlay = (p5, render) => {
+        let c = values.bgc;
+        if(render){
+            c = p5.color(0);
+        }
         p5.background(values.bgc);
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
-    drawFrame(f, p5);
+    drawFrame(f, p5, true);
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);
     capturer.capture(p5canvas.elt)
 }
 
-export const drawBg = (bg, p5) => {
-    setBgOverlay(p5);
+export const drawBg = (bg, p5, render) => {
+    setBgOverlay(p5, render);
     if(bg && bg.length > 0){
         drawPoints(bg, p5);
     }
