@@ -78,7 +78,7 @@ export const animReducer = (state, action) => {
         return anim.id;
     }
 
-    const saveAnimToAccount = (anim, access) => {
+    const saveAnimToAccount = async (anim, access) => {
         console.log("saveAnimToAccount:");
         console.dir(anim);
         return fetch(`${apiUrl}anim`, {
