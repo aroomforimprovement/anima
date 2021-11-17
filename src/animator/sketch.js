@@ -328,7 +328,7 @@ export const sketch = (p5) => {
     }
 
     const setPenColour = (controlObj) => {
-		dispatch({type: 'PC', data: controlObj.arr});
+		dispatch({type: 'PC', data: values[controlObj.n.toLowerCase()]});
 	}
 }
 

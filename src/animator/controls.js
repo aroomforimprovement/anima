@@ -1,9 +1,10 @@
+
 export const CC = 
 {
     SINGLE: 101, MIRROR: 102, LAKE: 103, QUAD: 104,
     TYPE_MODE: 201, TYPE_TRIGGER: 202, TYPE_COLOUR: 203, TYPE_SIZE: 204,
     RED: 300, GREEN: 301, BLUE: 302, YELLOW: 303, ORANGE: 304, 
-	CYAN: 305, PURLPLE: 306, PINK: 307, 
+	CYAN: 305, PURPLE: 306, PINK: 307, 
 	BG_SOLID: 308, BG_SHADE: 309, FG_SOLID: 310, FG_SHADE: 311,
     PS_1: 2, PS_2: 6, PS_3: 12, PS_4: 24, PS_5: 36, PS_6: 48, PS_7: 60, 
 	NEXT: 320, BG: 321, CREATE_FRAMES: 322, SWITCH_PEN_BW: 323, 
@@ -22,7 +23,7 @@ export const CONTROLS =
 	{k : 'z', v : CC.FG_SHADE, arr: [220, 220, 220, 50], n : "FG_SHADE", t : CC.TYPE_COLOUR},
     {k : 'r', v : CC.RED, n : "RED", arr : [185, 70, 70, 200], t : CC.TYPE_COLOUR},
 	{k : 'g', v : CC.GREEN, n : "GREEN", arr : [70, 185, 70, 200], t : CC.TYPE_COLOUR},
-	{k : 'b', v : CC.BLUE, n : "BLUE", arr : [120, 210, 230, 200], t : CC.TYPE_COLOUR},
+	{k : 'b', v : CC.BLUE, n : "BLUE", arr : [110, 200, 220, 200], t : CC.TYPE_COLOUR},
 	{k : 'y', v : CC.YELLOW, n : "YELLOW", arr : [255, 255, 100, 200], t : CC.TYPE_COLOUR},
 	{k : 'o', v : CC.ORANGE, n : "ORANGE", arr : [242, 149, 0, 200], t : CC.TYPE_COLOUR},
 	{k : 'c', v : CC.CYAN, n : "CYAN", arr : [0, 238, 242, 200], t : CC.TYPE_COLOUR},

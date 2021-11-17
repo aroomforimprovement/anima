@@ -175,46 +175,51 @@ const PenColourDropdown = () => {
 export const PenColour = () => {
     const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
-    const [colour, setColour] = useState([200, 200, 200, 200])
+    const [colour, setColour] = useState(null)
 
     const toggle = () => setIsOpen(prevState => !prevState);
     
-    const handleColourChange = () => {
-        switch(controls.pc){
-            case values.red: setColour('red'); break;
-            case values.green: setColour('green'); break;
-            case values.blue: setColour('blue'); break;
-            case values.yellow: setColour('yellow'); break;
-            case values.orange: setColour('orange'); break;
-            case values.cyan: setColour('cyan'); break;
-            case values.purple: setColour('purple'); break;
-            case values.bg_solid:
-            case values.bg_shade: 
-                setColour('black');
-                    break;
-            case values.fg_solid: 
-            case values.fg_shade: 
-                setColour('white');
-                    break;
-            default:
-                break;
-        }
-    }
+    const classes = `btn-colour-caption ${colour}`;
+    //const classes = `btn-colour-caption`
+    console.log(classes);
 
     useEffect(() => {
+        const handleColourChange = () => {
+            console.log('handleColorChange');
+            switch(controls.pc){
+                case values.red: setColour('red'); break;
+                case values.green: setColour('green'); break;
+                case values.blue: setColour('blue'); break;
+                case values.yellow: setColour('yellow'); break;
+                case values.orange: setColour('orange'); break;
+                case values.cyan: setColour('cyan'); break;
+                case values.purple: setColour('purple'); break;
+                case values.pink: setColour('pink'); break;
+                case values.bg_solid:
+                case values.bg_shade: 
+                    setColour('black');
+                        break;
+                case values.fg_solid: 
+                case values.fg_shade: 
+                    setColour('white');
+                        break;
+                default:
+                    console.log('no match');
+                    break;
+            }
+        }
+        console.log("useEffect: handleColourChange " + controls.pc);
         handleColourChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[controls.pc]);
-    const classes = `btn-colour-caption ${colour}`;
-        
+    
+    
     return(
-        
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <div className='btn-colour-container'>
                 <DropdownToggle >
                     <img src={SITE.icons.penColour} alt='Pen size'/>
                 </DropdownToggle>
-                <div className={classes}></div>
+                <div className={classes} ></div>
             </div>
             <PenColourDropdown />
         </Dropdown>

@@ -13,7 +13,7 @@
  */
 
 export const controlReducer = (state, action) => {
-    console.log(action.type+':'+action.data);
+    //console.log(action.type+':'+action.data);
     switch(action.type){
         case 'DISABLE':{
             return ({...state, disable: action.data});
@@ -22,13 +22,13 @@ export const controlReducer = (state, action) => {
             return ({...state, enable: action.data});
         }
         case 'ENABLE_SHORTCUTS':{
-            return ({...state, shortcutsEnabled : action.data})
+            return ({...state, shortcutsEnabled : action.data});
         }
         case 'MODE':{
             return ({...state, mode: action.data});
         }
         case 'PC':{
-            return ({...state, pc: action.data})
+            return ({...state, pc: action.data});
         }
         case 'PS':{
             return ({...state, ps: action.data});
