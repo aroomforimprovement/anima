@@ -462,7 +462,6 @@ code {
 
 #defaultCanvas0{
   border-radius:10px;
-  padding:10px;
   background-color: rgb(42, 42, 42);
   cursor: crosshair;
 }
