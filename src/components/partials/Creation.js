@@ -105,6 +105,7 @@ export const Creation = ({edit, splat}) => {
 
     const handleNameChange = (e) => {
         console.log("handleNameChange: "+e.target.value);
+        
         updateAnim({type: 'NAME', data: e.target.value});
     }
 

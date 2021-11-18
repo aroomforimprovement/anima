@@ -273,7 +273,7 @@ export const sketch = (p5) => {
         if(anim.lastFrame && anim.lastFrame.length > 0){
             drawPoints(anim.bg, p5);
         }
-        drawBg(anim.bg);
+        drawBg(anim.bg, p5);
         if(anim.undos && anim.undos.length > 0){
             drawPoints(anim.undos, p5);
         }

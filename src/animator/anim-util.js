@@ -129,7 +129,7 @@ export const setBgOverlay = (p5, render) => {
         if(render){
             c = p5.color(0);
         }
-        p5.background(values.bgc);
+        p5.background(c);
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
