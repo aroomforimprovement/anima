@@ -46,13 +46,13 @@ export const newAnimState = (user) => {
             "size": 600,
             "privacy": 0,
             "frames": [],
+            "lastFrame":{},
         },
         undos:[],
         redos:[],
         undid:[],
         redid:[],
         bg:{},
-        lastFrame:{},
         fid: 0,
         isPreviewOpen: false,
     }
@@ -103,7 +103,7 @@ export const animReducer = (state, action) => {
         .catch(error => { console.error(error)})
     }
     console.log(action.type+':'+action.data);
-    
+    console.dir(action.data);
     switch(action.type){
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});
@@ -181,10 +181,9 @@ export const animReducer = (state, action) => {
             const frame = {fid: fid, animid: animid, points: points, bg: bg};
             const lastFrame = frame;
             return ({...state, 
-                anim:{...state["anim"],
+                anim:{...state["anim"], lastFrame: lastFrame,
                 frames: [...state["anim"]["frames"], frame]},
                 undos: [], redos: [], undid: [], redid: [], fid: newFid,
-                lastFrame: lastFrame
             });
         }
         case 'PREVIEW':{

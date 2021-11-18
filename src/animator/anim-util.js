@@ -13,7 +13,9 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
 
 export const drawFrame = (f, p5, render) => {
     setBgOverlay(p5, render);
-    drawPoints(f.bg, p5);
+    if(f.bg && f.bg.points){
+        drawPoints(f.bg.points, p5);   
+    }
     drawPoints(f.points, p5);
 }
 

@@ -12,6 +12,7 @@ export const sketch = (p5) => {
     let thisStroke = [];
     let isStroke = false;
     let isMounted = false;
+    let isSet = false;
 
     /**
      *  P5
@@ -32,7 +33,10 @@ export const sketch = (p5) => {
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
             anim = props.anim; 
-            
+            if(props.anim.isSet && !isSet){
+                isSet = true;
+                redrawLastFrame();
+            }
         }
         if(props.updateAnim && !updateAnim){ updateAnim = props.updateAnim; }
         if(props.controls.enable){
@@ -266,10 +270,14 @@ export const sketch = (p5) => {
 
     const wipeCurrentFrame = () => {
         p5.background(values.initialBgc);
-        if(anim.lastFrame && anim.lastFrame.length > 0){
+        if(anim.anim && anim.anim.lastFrame && anim.anim.lastFrame.points
+            && anim.anim.lastFrame.points.length > 0){
+            drawPoints(anim.anim.lastFrame.points, p5);
+        }
+        setBgOverlay(p5);
+        if(anim.bg && anim.bg > 0){
             drawPoints(anim.bg, p5);
         }
-        setBgOverlay();
     }
 
     const redrawLastFrame = () => {

@@ -55,7 +55,7 @@ export const Creation = ({edit, splat}) => {
                 })
                 .then(response => {
                     if(response.ok){
-                        return response;
+                        return response.json();
                     }else{
                         console.error("response not ok");
                         console.dir(response);
@@ -63,7 +63,6 @@ export const Creation = ({edit, splat}) => {
                 }, error => {
                     console.error("error fetching anim" + error);
                 })
-                .then(response => response.json())
                 .then(response => {
                     //assign response to anim here
                     console.log("got anim");
@@ -74,11 +73,7 @@ export const Creation = ({edit, splat}) => {
                         updateAnim({type: 'SET_ANIM', data: response});
                     }
                 })
-                .catch(err => console.log(err))
-                .finally(response => {
-                    console.log("finally");
-                    console.dir(response);
-                });
+                .catch(err => console.log(err));
         }
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setAccess(mainState.user.access);
