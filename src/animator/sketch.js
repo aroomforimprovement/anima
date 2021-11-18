@@ -282,26 +282,20 @@ export const sketch = (p5) => {
 
     const redrawLastFrame = () => {
         console.log("redrawLastFrame");
-        p5.background(values.bgc);
-        if(anim.bg && anim.bg.points && anim.bg.points.length > 0){
-            console.log('drawing background');
-            drawPoints(anim.bg, p5);
-        }
-        console.dir(anim.lastFrame);
-        if(anim.lastFrame && anim.lastFrame.points){
+        setBgOverlay(p5);
+        if(anim.anim.lastFrame && anim.anim.lastFrame.points){
             console.log('drawing last frame');
-            drawPoints(anim.lastFrame.points, p5);
+            drawPoints(anim.anim.lastFrame.points, p5);
         }
+        setBgOverlay(p5);
     }
 
     const redrawCurrentFrame = () => {
         console.log("redrawCurrentFrame");
-        p5.background(values.bgc);
         if(anim.bg && anim.bg.points && anim.bg.points.length > 0){
             console.log('drawing background');
             drawPoints(anim.bg, p5);
         }
-        //drawBg(anim.bg, p5);
         if(anim.undos && anim.undos.length > 0){
             console.log("drawing undos");
             drawPoints(anim.undos, p5);
