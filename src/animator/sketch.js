@@ -96,7 +96,8 @@ export const sketch = (p5) => {
             }else{
                 updateAnim({type: 'PREVIEW', data: anim.anim});
                 dispatch({type: 'DISABLE', data: true});
-                previewAnim(anim.anim, p5canvas, p5, updateAnim);
+                previewAnim(anim.anim, p5canvas, p5, updateAnim)
+                    .then(setBgOverlay(p5));
             }
         }
         if(props.controls.endPreview){
