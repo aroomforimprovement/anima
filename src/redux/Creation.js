@@ -128,7 +128,10 @@ export const animReducer = (state, action) => {
             let newRedos = [...state.redos];
             let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
             if(!isSameAsPrevious){
+                console.log("not same as previous");
                 newUndos.push(action.data);
+            }else{
+                console.log("same as previous");
             }
             if(state.undid.length > 0){
                 newRedos = [];

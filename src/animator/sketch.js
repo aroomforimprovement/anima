@@ -276,7 +276,7 @@ export const sketch = (p5) => {
             drawPoints(anim.anim.lastFrame.points, p5);
         }
         setBgOverlay(p5);
-        if(anim.bg && anim.bg > 0){
+        if(anim.bg && anim.bg.length > 0){
             drawPoints(anim.bg, p5);
         }
     }
