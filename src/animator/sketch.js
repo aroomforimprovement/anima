@@ -35,6 +35,7 @@ export const sketch = (p5) => {
             anim = props.anim; 
             if(props.anim.isSet && !isSet){
                 isSet = true;
+                setSavedBackground(props);
                 redrawLastFrame();
             }
         }
@@ -68,7 +69,7 @@ export const sketch = (p5) => {
         }
         if(props.controls.saveBg){
             dispatch({type: 'SAVE_BG', data: false});
-            updateAnim({type: 'SAVE_BG', data: true});
+            updateAnim({type: 'SAVE_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
         }
         if(props.controls.drawBg){
@@ -97,7 +98,9 @@ export const sketch = (p5) => {
                 updateAnim({type: 'PREVIEW', data: anim.anim});
                 dispatch({type: 'DISABLE', data: true});
                 previewAnim(anim.anim, p5canvas, p5, updateAnim)
-                    .then(setBgOverlay(p5));
+                    .then(() => {
+                        redrawLastFrame();
+                    });
             }
         }
         if(props.controls.endPreview){
@@ -247,7 +250,6 @@ export const sketch = (p5) => {
      * 
      * DRAWING ACTIONS 
      */
-
     const setPointDrawn = (x, y) => {
             let p = getPointObj(x, y);
             if(drawPoint(p, p5)){
@@ -274,10 +276,22 @@ export const sketch = (p5) => {
         if(anim.anim && anim.anim.lastFrame && anim.anim.lastFrame.points
             && anim.anim.lastFrame.points.length > 0){
             drawPoints(anim.anim.lastFrame.points, p5);
+
+            setBgOverlay(p5);
+            //if(anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0){
+            //    drawPoints(anim.anim.lastFrame.bg, p5);
+            //}
         }
-        setBgOverlay(p5);
-        if(anim.bg && anim.bg.length > 0){
-            drawPoints(anim.bg, p5);
+    }
+
+    const setSavedBackground = (props) => {
+        console.log("setSavedBackground");
+        if(props.anim.anim && props.anim.anim.frames
+            && props.anim.anim.frames.length > 0
+            && props.anim.anim.frames[props.anim.anim.frames.length-1].bg){
+                console.log("saving background");
+                updateAnim({type: 'SAVE_BG', data: props.anim.anim.frames[props.anim.anim.frames.length-1].bg});
+                updateAnim({type: 'DRAW_BG', data: true});
         }
     }
 
@@ -287,13 +301,22 @@ export const sketch = (p5) => {
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
             console.log('drawing last frame');
             drawPoints(anim.anim.lastFrame.points, p5);
+            setBgOverlay(p5);
+            
+            if((anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0)){
+                console.log('drawing lastframe background');
+                drawPoints(anim.anim.lastFrame.bg, p5);
+            }else if(anim.anim.bg && anim.anim.bg.length > 0){
+                console.log('drawing background');
+                drawPoints(anim.anim.bg, p5);
+            }
         }
-        setBgOverlay(p5);
+        
     }
 
     const redrawCurrentFrame = () => {
         console.log("redrawCurrentFrame");
-        if(anim.bg && anim.bg.points && anim.bg.points.length > 0){
+        if(anim.bg && anim.bg.length > 0){
             console.log('drawing background');
             drawPoints(anim.bg, p5);
         }
@@ -303,20 +326,11 @@ export const sketch = (p5) => {
         }
     }
 
-
-
-
-    /**
-     * 
-     *  DOWNLOAD / PREVIEW 
-     */
     
     /**
      * 
      *  DRAWING OBJ UTILS 
-     */
-    
-
+     */    
     const getPointObj = (x, y) => {
         return {
             x : x,
@@ -326,8 +340,6 @@ export const sketch = (p5) => {
             m: controls.mode
         }
     }
-
-
 
     /**
      *  LOGIC UTILS
@@ -342,7 +354,6 @@ export const sketch = (p5) => {
     /**
      *  CONTROL SWITCHES
      */
-
     const setMode = (controlObj) => {
         dispatch({type: 'MODE', data: controlObj.v});
     }

@@ -165,7 +165,12 @@ export const animReducer = (state, action) => {
             return ({...state, "anim": {...state["anim"], frate: action.data}});
         }
         case 'SAVE_BG':{
-            const bg = state.undos.length > 0 ? [...state.undos] : [];
+            let bg = []
+            if(action.data){
+                bg = action.data;
+            }else{
+                bg = state.undos.length > 0 ? [...state.undos] : [];
+            } 
             console.dir(bg)
             return ({...state, bg: bg});
         }
