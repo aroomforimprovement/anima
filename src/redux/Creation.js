@@ -179,12 +179,12 @@ export const animReducer = (state, action) => {
             const animid = state.animid ? state.animid : '1234567890';
             const bg = state.bg;
             const frame = {fid: fid, animid: animid, points: points, bg: bg};
-            const lastFrame = fid > 0 ? state.anim[fid-1] : null;
+            const lastFrame = fid > 0 ? {...state.anim.frames[fid-1]} : {};
             return ({...state, 
                 anim:{...state["anim"],
                 frames: [...state["anim"]["frames"], frame]},
                 undos: [], redos: [], undid: [], redid: [], fid: newFid,
-                lastFrame: lastFrame,
+                lastFrame: lastFrame
             });
         }
         case 'PREVIEW':{
