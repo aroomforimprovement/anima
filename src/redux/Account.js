@@ -2,7 +2,7 @@ import { arrayRemove } from "../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const addContact = (notice, i, access) => {
+export const addContact = async (notice, i, access) => {
     console.log("addContact:");
     console.dir(notice);
     let body = {
@@ -33,7 +33,7 @@ export const addContact = (notice, i, access) => {
     .catch((err) => console.log(err));
 }
 
-export const getAccountInfo = (id, access) => {
+export const getAccountInfo = async (id, access) => {
     return fetch(`${apiUrl}collection/${id}`, {
         headers: {
             Authorization: `Bearer ${access}`
@@ -41,13 +41,15 @@ export const getAccountInfo = (id, access) => {
     }).then(response => {
         if(response.ok){
             return response.json();
-        }
+        }else{
+            console.dir(response);
+        }   
     }, error => {
-        console.error("error fetching anim " + error);
+        console.error("error fetching account info " + error);
     }).catch(err => console.error(err))
 }
 
-export const deleteContact = (contact, userid, username, access) => {
+export const deleteContact = async (contact, userid, username, access) => {
     console.log("deleteContact");
     console.dir(contact);
     let body = {
@@ -79,7 +81,7 @@ export const deleteContact = (contact, userid, username, access) => {
     }).catch(err => console.error(err));
 }
 
-export const deleteNotice = (notice, i, access) => {
+export const deleteNotice = async (notice, i, access) => {
     notice.verb = 'delete';
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
@@ -98,7 +100,7 @@ export const deleteNotice = (notice, i, access) => {
     .catch((err) => console.error(err));
 }
 
-export const updateDisplayName = (id, name, access) => {
+export const updateDisplayName = async (id, name, access) => {
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
         mode: 'cors',

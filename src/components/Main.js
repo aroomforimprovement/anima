@@ -59,11 +59,19 @@ const Main = () => {
         if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
             getAccountInfo(mainState.user.userid, mainState.user.access)
                 .then((result) => {
-                    result.isSet = true;
-                    mainDispatch({
-                        type: 'SET_ACCOUNT_INFO',
-                        data: result
-                    });
+                    if(result){
+                        result.isSet = true;
+                        mainDispatch({
+                            type: 'SET_ACCOUNT_INFO',
+                            data: result
+                        });
+                    }else{
+                        mainDispatch({
+                            type: 'SET_ACCOUNT_INFO',
+                            data: {isSet: true}
+                        })
+                    }
+                    
                 });
         }else if(!isLoading && !isAuthenticated && !mainState.isSet){
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});

@@ -30,7 +30,10 @@ export const sketch = (p5) => {
         console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
-        if(props.anim){ anim = props.anim; }
+        if(props.anim){ 
+            anim = props.anim; 
+            
+        }
         if(props.updateAnim && !updateAnim){ updateAnim = props.updateAnim; }
         if(props.controls.enable){
             dispatch({type: 'ENABLE', data: false});
