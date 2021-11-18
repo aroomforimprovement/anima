@@ -48,6 +48,7 @@ export const sketch = (p5) => {
         }
         if((props.anim.redid && anim.redid.length > 0) ||
             (anim.undid && anim.undid.length > 0)){
+            redrawLastFrame();
             redrawCurrentFrame();
         }
         if(props.controls.frate && anim.anim.frate && props.controls.frate !== anim.anim.frate){
@@ -268,13 +269,30 @@ export const sketch = (p5) => {
         setBgOverlay();
     }
 
-    const redrawCurrentFrame = () => {
-        p5.background(values.initialBgc);
-        if(anim.lastFrame && anim.lastFrame.length > 0){
+    const redrawLastFrame = () => {
+        console.log("redrawLastFrame");
+        p5.background(values.bgc);
+        if(anim.bg && anim.bg.points && anim.bg.points.length > 0){
+            console.log('drawing background');
             drawPoints(anim.bg, p5);
         }
-        drawBg(anim.bg, p5);
+        console.dir(anim.lastFrame);
+        if(anim.lastFrame && anim.lastFrame.points){
+            console.log('drawing last frame');
+            drawPoints(anim.lastFrame.points, p5);
+        }
+    }
+
+    const redrawCurrentFrame = () => {
+        console.log("redrawCurrentFrame");
+        p5.background(values.bgc);
+        if(anim.bg && anim.bg.points && anim.bg.points.length > 0){
+            console.log('drawing background');
+            drawPoints(anim.bg, p5);
+        }
+        //drawBg(anim.bg, p5);
         if(anim.undos && anim.undos.length > 0){
+            console.log("drawing undos");
             drawPoints(anim.undos, p5);
         }
     }

@@ -51,8 +51,8 @@ export const newAnimState = (user) => {
         redos:[],
         undid:[],
         redid:[],
-        bg:[],
-        lastFrame:[],
+        bg:{},
+        lastFrame:{},
         fid: 0,
         isPreviewOpen: false,
     }
@@ -179,7 +179,7 @@ export const animReducer = (state, action) => {
             const animid = state.animid ? state.animid : '1234567890';
             const bg = state.bg;
             const frame = {fid: fid, animid: animid, points: points, bg: bg};
-            const lastFrame = fid > 0 ? {...state.anim.frames[fid-1]} : {};
+            const lastFrame = frame;
             return ({...state, 
                 anim:{...state["anim"],
                 frames: [...state["anim"]["frames"], frame]},
