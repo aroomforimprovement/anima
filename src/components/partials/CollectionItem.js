@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
 import toast from "react-hot-toast";
-import { ToastConfirm } from "./Toast";
+import { ToastConfirm, toastConfirmStyle } from "./Toast";
 
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
@@ -97,15 +97,15 @@ export const CollectionItem = ({anim, index}) => {
 
         toast((t) => (
             <ToastConfirm t={t} anim={anim} approve={approve} dismiss={dismiss}
-                message={`Are you sure you want to permanently delete anim ${anim.name}`}
+                message={`Are you sure you want to permanently delete anim \n"${anim.name}"`}
                 approveBtn={"Delete"} dismissBtn={"Cancel"} />
-        ), {duration: 60000, style: {padding: 40}});
+        ), toastConfirmStyle());
     }
 
     
     useEffect(() => {
         
-    },[collectionItemState.previewFile, collectionState.index, collectionItemState.viewFile, isPreviewOpen]);
+    },[collectionItemState.previewFile, collectionState.collection, collectionState.index, collectionItemState.viewFile, isPreviewOpen]);
 
 
     return(

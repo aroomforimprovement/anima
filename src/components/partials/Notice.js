@@ -3,6 +3,7 @@ import {SITE} from '../../shared/site';
 import { useMainContext } from '../Main';
 import { useAccountContext } from '../Account';
 import { addContact, deleteNotice } from '../../redux/Account';
+import toast from 'react-hot-toast';
 
 
 export const Notice = ({notice, i, link}) => {
@@ -24,6 +25,9 @@ export const Notice = ({notice, i, link}) => {
                 .then((response) => {
                     if(response && response.ok){
                         dispatch({type: 'DELETE_NOTICE', data: i})
+                        toast.success('Notification deleted');
+                    }else{
+                        toast.error('Error deleting notification');
                     }
                 });
         });

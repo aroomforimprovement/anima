@@ -7,7 +7,17 @@ export const Toast = () => {
     )
 }
 
-export const ToastConfirm = ({t, anim, approve, dismiss, message, approveBtn, dismissBtn}) => {
+export const toastConfirmStyle = () => {
+    return {duration: 60000, 
+        style: {
+            padding: 40, 
+            border: '2px solid #550000', 
+            backgroundColor: '#555',
+            color: '#eee'
+        }};
+}
+
+export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissBtn}) => {
 
     return (
         <div className='container'>
@@ -17,8 +27,16 @@ export const ToastConfirm = ({t, anim, approve, dismiss, message, approveBtn, di
                 </span>
             </div>
             <div className='row mt-4 mx-auto end-zone'>
-                <button className='btn-sm btn-outline-secondary col col-5 mx-2' onClick={() => dismiss(t.id)}>{dismissBtn}</button>
-                <button className='btn-sm btn-outline-danger col col-5 mx-2' onClick={() => approve(t.id)}>{approveBtn}</button>
+                <button className='btn btn-sm btn-outline-secondary col col-5 mx-2' 
+                    style={{backgroundColor: '#333', color: '#ddd'}} 
+                    onClick={() => dismiss(t.id)}>
+                        {dismissBtn}
+                </button>
+                <button className='btn btn-sm btn-outline-danger col col-5 mx-2'
+                    style={{backgroundColor: '#ddd', color: '#333'}} 
+                    onClick={() => approve(t.id)}>
+                        {approveBtn}
+                </button>
             </div>
         </div>
     );
