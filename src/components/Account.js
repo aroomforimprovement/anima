@@ -3,9 +3,10 @@ import { Notice } from './partials/Notice';
 import { Contact } from './partials/Contact';
 import { DisplayName } from './partials/DisplayName';
 import { useMainContext } from './Main';
-import { accountReducer, getAccountInfo } from '../redux/Account';
+import { accountReducer, getAccountInfo, deleteAccount } from '../redux/Account';
 import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle } from './partials/Toast';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const AccountContext = createContext({});
 
@@ -18,7 +19,7 @@ const Account = () => {
     const [hideContacts, setHideContacts] = useState(true);
     const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
     const { mainState } = useMainContext();
-
+    const { logout } = useAuth0();
 
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
@@ -67,7 +68,15 @@ const Account = () => {
 
     const handleDeleteAccount = () => {
         const approve = (id) => {
-            toast.error("Not implemented");
+            deleteAccount(mainState.user.userid, mainState.user.access)
+                .then((response) => {
+                    if(response && response.ok){
+                        toast.success("Account deleted");
+                        logout(`${process.env.REACT_APP_URL}/logout`);
+                    }else{
+                        toast.error("Error deleting account");
+                    }
+                })
             toast.dismiss(id);
         }
         const dismiss = (id) => {

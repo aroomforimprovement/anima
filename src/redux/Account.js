@@ -49,6 +49,21 @@ export const getAccountInfo = async (id, access) => {
     }).catch(err => console.error(err))
 }
 
+export const deleteAccount = async (userid, access) => {
+    console.log("deleteAccount");
+    return fetch(`${apiUrl}collection/${userid}`, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+            'Authorization': `Bearer ${access}`
+        }
+    }).then((response) => {
+        return response;
+    }).catch((error) => {
+        console.log(`Error deleting account: ${error}`);
+    })
+}
+
 export const deleteContact = async (contact, userid, username, access) => {
     console.log("deleteContact");
     console.dir(contact);
