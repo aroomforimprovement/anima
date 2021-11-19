@@ -11,11 +11,15 @@ import Account from './Account';
 import { mainReducer } from '../redux/Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../redux/Account';
+import { Toast } from './partials/Toast';
+
+
 const MainContext = createContext({});
 
 export const useMainContext = () => {
     return useContext(MainContext);
 }
+
 
 const Main = () => {
 
@@ -86,6 +90,7 @@ const Main = () => {
                 <MainContext.Consumer>
                     {() => (
                     <div>
+                        <Toast />
                         <Header />
                         <Switch>
                             <Route path='/account' history={history} component={AccountPage} />

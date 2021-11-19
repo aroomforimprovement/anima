@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -91,16 +92,20 @@ export const animReducer = (state, action) => {
             }
         })
         .then(response => {
-            if(response.ok){ console.log("anim saved ok " + response.json());
+            if(response.ok){ 
+                console.log("anim saved ok " + response.json());
+                toast.success("Anim saved to account");
             }else{ 
                 //dispatch({type: 'setSaveFailed', data: true});
                 console.error("response not ok") }
         }, error => { 
             //dispatch({type: 'setSaveFailed', data: true});
             console.error("error saving anim");
-         }
-        )
-        .catch(error => { console.error(error)})
+        })
+        .catch(error => { 
+            toast.error("Error saving Anim to account");
+            console.error(error)
+        });
     }
     console.log(action.type+':'+action.data);
     console.dir(action.data);
