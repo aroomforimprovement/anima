@@ -4,6 +4,7 @@ import { useMainContext } from '../Main';
 import { useAccountContext } from '../Account';
 import { addContact, deleteNotice } from '../../redux/Account';
 import toast from 'react-hot-toast';
+import { ToastConfirm, toastConfirmStyle } from './Toast';
 
 
 export const Notice = ({notice, i, link}) => {
@@ -16,21 +17,34 @@ export const Notice = ({notice, i, link}) => {
     },[state.notices]);
 
     const handleAcceptNotice = (i) => {
-        console.log("handleAcceptNotice");
-        console.dir(state.notices[i]);
         //only handling contact req for the moment
-        addContact(state.notices[i], i, mainState.user.access)
-        .then((response) => {
-            deleteNotice(state.notices[i], i, mainState.user.access)
-                .then((response) => {
-                    if(response && response.ok){
-                        dispatch({type: 'DELETE_NOTICE', data: i})
-                        toast.success('Notification deleted');
-                    }else{
-                        toast.error('Error deleting notification');
-                    }
-                });
-        });
+        const approve = (id) => {
+            addContact(state.notices[i], i, mainState.user.access)
+            .then((response) => {
+                deleteNotice(state.notices[i], i, mainState.user.access)
+                    .then((response) => {
+                        if(response && response.ok){
+                            toast.success('Contact request approved');
+                            dispatch({type: 'DELETE_NOTICE', data: i})
+                        }else{
+                            toast.error('Error approving contact request');
+                        }
+                    });
+            }); 
+            toast.dismiss(id);   
+        }
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+
+        toast((t) => (
+            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
+                message={`By approving this contact request, you are allowing 
+                    the user "${state.notices[i].reqUsername}" to view all of 
+                    your anims, including those marked Private`}
+                approveBtn={"Approve"} dismissBtn={"Maybe later"} />
+        ), toastConfirmStyle());
+        
     }
 
     const handleRejectNotice = (i) => {
@@ -40,6 +54,9 @@ export const Notice = ({notice, i, link}) => {
             .then((response) => {
                 if(response && response.ok){
                     dispatch({type: 'DELETE_NOTICE', data: i});
+                    toast.success('Notification deleted');
+                }else{
+                    toast.error('Error deleting notification');
                 }
             });
     }

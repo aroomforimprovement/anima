@@ -14,7 +14,8 @@ export const toastConfirmStyle = () => {
             border: '2px solid #550000', 
             backgroundColor: '#555',
             color: '#eee'
-        }};
+        }
+    };    
 }
 
 export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissBtn}) => {
