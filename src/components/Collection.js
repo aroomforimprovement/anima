@@ -4,6 +4,8 @@ import { Loading } from './partials/Loading';
 import { useMainContext } from './Main';
 import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
 import { useParams } from 'react-router';
+import toast from 'react-hot-toast';
+import { ToastConfirm, toastConfirmStyle } from './partials/Toast';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
@@ -44,12 +46,32 @@ const Collection = ({browse}) => {
     }
 
     const handleAddContact = (e) => {
-        addContactRequest(collectionState.userid, collectionState.username, 
-            mainState.user.username, mainState.user.userid, mainState.user.access)
-            .then((response) => {
-                //should check and set this on page load as well - would have to retrieve contacts and notices from target collection on fetch
-                setCollectionState({type: 'SET_CONTACT_REQ_ENABLED', data: false})
-            });
+        const approve = (id) => {
+            addContactRequest(collectionState.userid, collectionState.username, 
+                mainState.user.username, mainState.user.userid, mainState.user.access)
+                .then((response) => {
+                    //should check and set this on page load as well - would have to retrieve contacts and notices from target collection on fetch
+                    setCollectionState({type: 'SET_CONTACT_REQ_ENABLED', data: false});
+                    if(response){
+                        toast.success("Contact request sent");
+                    }else{
+                        toast.error("Error sending contact request");
+                    }
+                });
+            toast.dismiss(id);
+        }
+
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }     
+
+        toast((t) => (
+            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
+                message={`You are about to send a contact request to ${collectionState.username}. 
+                    After they approve the request, you will be able view all of eachother's anims,
+                     even the ones marked Private`}
+                approveBtn={"Send Contact Request"} dismissBtn={"Maybe later"} />
+        ), toastConfirmStyle());
     }
     
 

@@ -30,7 +30,7 @@ export const getCollection = async (id, isBrowse, access, signal) => {
     }).catch(err => console.error(err));
 }
 
-export const addContactRequest = (userid, username, requsername, requserid, access) => {
+export const addContactRequest = async (userid, username, requsername, requserid, access) => {
     console.log("addContactRequest: "+ userid + ":" + username);
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
@@ -62,6 +62,8 @@ export const addContactRequest = (userid, username, requsername, requserid, acce
     .then(response => {
         if(response.ok){
             return response.json();
+        }else{
+            return false;
         }
     }, error => {
         console.error(error);

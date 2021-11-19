@@ -4,6 +4,8 @@ import { Contact } from './partials/Contact';
 import { DisplayName } from './partials/DisplayName';
 import { useMainContext } from './Main';
 import { accountReducer, getAccountInfo } from '../redux/Account';
+import toast from 'react-hot-toast';
+import { ToastConfirm, toastConfirmStyle } from './partials/Toast';
 
 const AccountContext = createContext({});
 
@@ -14,6 +16,7 @@ export const useAccountContext = () => {
 const Account = () => {
     const [hideNotices, setHideNotices] = useState(true);
     const [hideContacts, setHideContacts] = useState(true);
+    const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
     const { mainState } = useMainContext();
 
 
@@ -57,6 +60,37 @@ const Account = () => {
         setHideNotices(!hideNotices);
     }
 
+    const handleShowDeleteAccount = () => {
+        console.log(!hideDeleteAccount);
+        setHideDeleteAccount(!hideDeleteAccount);
+    }
+
+    const handleDeleteAccount = () => {
+        const approve = (id) => {
+            toast.error("Not implemented");
+            toast.dismiss(id);
+        }
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+
+        toast((t) => (
+            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
+                message={
+                    <div>
+                        <p>
+                            You are about to delete your Anima account, all your anims and
+                            all your contacts. Are you sure you want to delete everything?
+                        </p> 
+                        <p>
+                            (If you log in with the same username and password again, Anima will
+                            create a new account)
+                        </p>
+                    </div>}
+                approveBtn={"Delete everything"} dismissBtn={"Maybe later"} />
+        ), toastConfirmStyle());
+    }
+
     const notices = state.notices && state.notices.length > 0 
         ? state.notices.map((notice, i) => {
             
@@ -94,6 +128,18 @@ const Account = () => {
                                     onClick={handleShowContacts}>Contacts:</div>
                                 <div className='container' hidden={hideContacts}>
                                     <div className='row'>{contacts}</div>
+                                </div>
+                            </div>
+                            <div className='row notices'>
+                                <div className='notices-header'
+                                    onClick={handleShowDeleteAccount}>Delete Account:</div>
+                                <div className='container' hidden={hideDeleteAccount}>
+                                    <div className='row col-10 col-lg-7 m-auto'>
+                                        <button className='btn btn-lg btn-danger shadow shadow-lg'
+                                            onClick={handleDeleteAccount}>
+                                                Delete my account and all of my anims forever.
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

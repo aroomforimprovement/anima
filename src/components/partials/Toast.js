@@ -23,6 +23,9 @@ export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissB
     return (
         <div className='container'>
             <div className='row'>
+                <h6>Confirm</h6>
+            </div>
+            <div className='row'>
                 <span>
                     {message}
                 </span>
