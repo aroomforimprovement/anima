@@ -96,7 +96,9 @@ export const CollectionItem = ({anim, index}) => {
         }
 
         toast((t) => (
-            <ToastConfirm t={t} anim={anim} approve={approve} dismiss={dismiss} />
+            <ToastConfirm t={t} anim={anim} approve={approve} dismiss={dismiss}
+                message={`Are you sure you want to permanently delete anim ${anim.name}`}
+                approveBtn={"Delete"} dismissBtn={"Cancel"} />
         ), {duration: 60000, style: {padding: 40}});
     }
 
