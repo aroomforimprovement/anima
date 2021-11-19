@@ -8,6 +8,8 @@ import LazyLoad from "react-lazyload";
 import { saveAs } from 'file-saver';
 import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
+import toast from "react-hot-toast";
+import { ToastConfirm } from "./Toast";
 
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
@@ -40,8 +42,10 @@ export const CollectionItem = ({anim, index}) => {
                 if(response.ok){
                     console.log("anim deleted ok ");
                     setCollectionState({type: 'DELETE_ANIM', data: animid});
+                    toast.success("Anim deleted as requested");
                 }else{
                     console.log("response not ok");
+                    toast.error("Error deleting the anim");
                 }
             }, error => {
                 console.error(error);
@@ -83,7 +87,17 @@ export const CollectionItem = ({anim, index}) => {
     }
 
     const handleDelete = (e) => {
-        collectionItemDispatch({type: 'DELETE_ANIM', data: true});
+        const approve = (id) => {
+            collectionItemDispatch({type: 'DELETE_ANIM', data: true});
+            toast.dismiss(id);
+        };
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+
+        toast((t) => (
+            <ToastConfirm t={t} anim={anim} approve={approve} dismiss={dismiss} />
+        ), {duration: 60000, style: {padding: 40}});
     }
 
     
