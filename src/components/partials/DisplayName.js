@@ -4,6 +4,7 @@ import { useAccountContext } from '../Account';
 import { updateDisplayName } from '../../redux/Account';
 import { Loading } from './Loading';
 import { Form, FormGroup, InputGroup, Input, Button } from 'reactstrap';
+import toast from 'react-hot-toast';
 
 export const DisplayName = () => {
 
@@ -26,6 +27,7 @@ export const DisplayName = () => {
             dispatch({type: 'SET_DISPLAY_NAME', data: name});
             mainDispatch({type: 'SET_USERNAME', data: name});
             setIsNameUpdating(false);
+            toast.success("Display Name updated");
         });
         
         setHideNameEdit(true);
