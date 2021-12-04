@@ -13,7 +13,7 @@ export const getCollection = async (id, isBrowse, access, signal) => {
     if(isBrowse){
         url = `${apiUrl}collection`;
     }else{
-        url = `${apiUrl}collection/${id}`;
+        url = `${apiUrl}collection/${id}`; 
     }
     if(access){
         req.headers = {
