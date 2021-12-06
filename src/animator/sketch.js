@@ -25,10 +25,10 @@ export const sketch = (p5) => {
 
     p5.updateWithProps = (props) => {
         isMounted = true;
-        //console.log("PROP CONTROLS:");
-        //console.dir(props.controls);
-        //console.log("PROP ANIM: ");
-        //console.dir(props.anim);
+        console.log("PROP CONTROLS:");
+        console.dir(props.controls);
+        console.log("PROP ANIM: ");
+        console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
@@ -126,39 +126,43 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        //console.debug("mouse pressed");
-        return handlePressed(p5.mouseX, p5.mouseY);
+        console.debug("mouse pressed");
+        handlePressed(p5.mouseX, p5.mouseY);
+        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    p5.touchStarted = () => {
-        //console.debug("touch started");
-        if(p5.touches.length === 1){
-            return handlePressed(p5.mouseX, p5.mouseY)
-        }
-        return false;
-    }
+    //p5.touchStarted = () => {
+    //    console.debug("touch started");
+    //    if(p5.touches.length === 1){
+    //        return handlePressed(p5.mouseX, p5.mouseY)
+    //    }
+    //    return false;
+    //}
     p5.mouseDragged = () => {
-        //console.debug("mouse dragged");
-        return handleDragged(p5.mouseX, p5.mouseY);
+        console.debug("mouse dragged");
+        handleDragged(p5.mouseX, p5.mouseY);
+        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
     p5.touchMoved = () => {
-        //console.debug("touch moved");
+        console.debug("touch moved");
         if(p5.touches.length === 1){
-            return handleDragged(p5.mouseX, p5.mouseY);
+            handleDragged(p5.mouseX, p5.mouseY);
+            //return isPointOnCanvas(p5.mouseX, p5.mouseY);
         }
-        return false;
+        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
     p5.mouseReleased = () => {
-        //console.debug("mouse released");
-        return handleReleased(p5.mouseX, p5.mouseY);
+        console.debug("mouse released");
+        handleReleased(p5.mouseX, p5.mouseY);
+        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    p5.touchEnded = () => {
-        //console.debug("touch ended");
-        //console.dir(p5.touches);
-        if(p5.touches.length <= 1){
-            return handleReleased(p5.mouseX, p5.mouseY);
-        }
-        return false;
-    }
+    //p5.touchEnded = () => {
+    //    console.debug("touch ended");
+    //    console.dir(p5.touches);
+    //    if(p5.touches.length <= 1){
+    //        return handleReleased(p5.mouseX, p5.mouseY);
+    //    }
+    //    return false;
+    //}
 
     const handlePressed = (x, y) => {
         if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
@@ -169,23 +173,23 @@ export const sketch = (p5) => {
 
     const startStroke = (x, y) => {
         isStroke = true;
-        //console.debug("start stroke");
+        console.debug("start stroke");
         return setPointDrawn(x, y);
     }
 
     const handleDragged = (x, y ) => {
-        //console.debug("handle dragged");
+        console.debug("handle dragged");
         if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
-            //console.debug("handle dragged -> set point drawn");
+            console.debug("handle dragged -> set point drawn");
             return setPointDrawn(x, y);
         }
         return false;
     }
 
     const handleReleased = (x, y) => {
-        //console.debug("handle released");
+        console.debug("handle released");
         if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
-            //console.debug("handle released -> end stroke");
+            console.debug("handle released -> end stroke");
             return endStroke(x, y);
         }
         return false;
@@ -217,7 +221,7 @@ export const sketch = (p5) => {
                 dispatch({type: 'WIPE', data: true});
                 break;
             default:
-                //console.log('no control found');
+                console.log('no control found');
 		}
     }
 
@@ -237,7 +241,7 @@ export const sketch = (p5) => {
         }
         
         if(!controlObj){
-            //console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
+            console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
             return;
         }
         switch(controlObj.t){
@@ -254,7 +258,7 @@ export const sketch = (p5) => {
                 setControlTriggered(controlObj);
                 break;
             default:
-                //console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
+                console.warn('key pressed but no shortcut exists for key ['+p5.key+']');
         }
     }
 
@@ -272,7 +276,7 @@ export const sketch = (p5) => {
                         updateAnim({type: 'DO_STROKE', data: thisStroke});
                         thisStroke = []; 
                     }else{
-                        //console.warn("unmounted while doing stroke");
+                        console.warn("unmounted while doing stroke");
                     }
                      
                 }
@@ -297,29 +301,29 @@ export const sketch = (p5) => {
     }
 
     const setSavedBackground = (props) => {
-        //console.log("setSavedBackground");
+        console.log("setSavedBackground");
         if(props.anim.anim && props.anim.anim.frames
             && props.anim.anim.frames.length > 0
             && props.anim.anim.frames[props.anim.anim.frames.length-1].bg){
-                //console.log("saving background");
+                console.log("saving background");
                 updateAnim({type: 'SAVE_BG', data: props.anim.anim.frames[props.anim.anim.frames.length-1].bg});
                 updateAnim({type: 'DRAW_BG', data: true});
         }
     }
 
     const redrawLastFrame = () => {
-        //console.log("redrawLastFrame");
+        console.log("redrawLastFrame");
         setBgOverlay(p5);
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
-            //console.log('drawing last frame');
+            console.log('drawing last frame');
             drawPoints(anim.anim.lastFrame.points, p5);
             setBgOverlay(p5);
             
             if((anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0)){
-                //console.log('drawing lastframe background');
+                console.log('drawing lastframe background');
                 drawPoints(anim.anim.lastFrame.bg, p5);
             }else if(anim.anim.bg && anim.anim.bg.length > 0){
-                //console.log('drawing background');
+                console.log('drawing background');
                 drawPoints(anim.anim.bg, p5);
             }
         }
@@ -327,13 +331,13 @@ export const sketch = (p5) => {
     }
 
     const redrawCurrentFrame = () => {
-        //console.log("redrawCurrentFrame");
+        console.log("redrawCurrentFrame");
         if(anim.bg && anim.bg.length > 0){
-            //console.log('drawing background');
+            console.log('drawing background');
             drawPoints(anim.bg, p5);
         }
         if(anim.undos && anim.undos.length > 0){
-            //console.log("drawing undos");
+            console.log("drawing undos");
             drawPoints(anim.undos, p5);
         }
     }
@@ -358,9 +362,15 @@ export const sketch = (p5) => {
      */
 
     const isPointOnCanvas = (x, y) => {
-        if(x < 0 || x > p5.width || y < 0 || y > p5.height)
+        //if(x < 0 || x > p5.width || y < 0 || y > p5.height)
+        if(x < 0 || x > p5.width || y < 0 || y > p5.height){
+            console.log("not on canvas")
             return false;
-        return true;
+        }else{
+            console.log("on canvas")
+            return true;
+        }
+        
     }
 
     /**
