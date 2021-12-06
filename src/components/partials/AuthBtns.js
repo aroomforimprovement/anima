@@ -8,7 +8,7 @@ export const LoginBtn = (props) => {
 
     const loginPop = async () => {
         loginWithPopup().then(() => {
-            console.log('loginWithPopup, then...');
+            //console.log('loginWithPopup, then...');
             window.location.href = '/login';
         });
     }

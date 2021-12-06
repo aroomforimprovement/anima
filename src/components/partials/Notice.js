@@ -48,8 +48,8 @@ export const Notice = ({notice, i, link}) => {
     }
 
     const handleRejectNotice = (i) => {
-        console.log("handleRejectNotice");
-        console.dir(state.notices[i]);
+        //console.log("handleRejectNotice");
+        //console.dir(state.notices[i]);
         deleteNotice(state.notices[i], i, mainState.user.access)
             .then((response) => {
                 if(response && response.ok){
@@ -62,7 +62,7 @@ export const Notice = ({notice, i, link}) => {
     }
 
     const handleVisitContactReq = (i) => {
-        console.log("handleVisitContact");
+        //console.log("handleVisitContact");
         let id;
         if(state.notices[i].targetUserid){
             id = state.notices[i].targetUserid;

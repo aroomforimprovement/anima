@@ -3,8 +3,8 @@ import { arrayRemove } from "../utils/utils";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const addContact = async (notice, i, access) => {
-    console.log("addContact:");
-    console.dir(notice);
+    //console.log("addContact:");
+    //console.dir(notice);
     let body = {
         userid: notice.userid,
         thisUsername: notice.username,
@@ -30,7 +30,7 @@ export const addContact = async (notice, i, access) => {
     }, error => {
         console.error(error);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
 }
 
 export const getAccountInfo = async (id, access) => {
@@ -42,7 +42,7 @@ export const getAccountInfo = async (id, access) => {
         if(response.ok){
             return response.json();
         }else{
-            console.dir(response);
+            //console.dir(response);
         }   
     }, error => {
         console.error("error fetching account info " + error);
@@ -50,7 +50,7 @@ export const getAccountInfo = async (id, access) => {
 }
 
 export const deleteAccount = async (userid, access) => {
-    console.log("deleteAccount");
+    //console.log("deleteAccount");
     return fetch(`${apiUrl}collection/${userid}`, {
         method: 'DELETE',
         mode: 'cors',
@@ -60,13 +60,13 @@ export const deleteAccount = async (userid, access) => {
     }).then((response) => {
         return response;
     }).catch((error) => {
-        console.log(`Error deleting account: ${error}`);
+        //console.log(`Error deleting account: ${error}`);
     })
 }
 
 export const deleteContact = async (contact, userid, username, access) => {
-    console.log("deleteContact");
-    console.dir(contact);
+    //console.log("deleteContact");
+    //console.dir(contact);
     let body = {
         userid: userid,
         username: username,
@@ -88,7 +88,7 @@ export const deleteContact = async (contact, userid, username, access) => {
         }
     }).then(response => {
         if(response.ok){
-            console.log("response ok, contact deleted");
+            //console.log("response ok, contact deleted");
             return response.json();
         }
     }, error => {
@@ -138,8 +138,8 @@ export const updateDisplayName = async (id, name, access) => {
 export const accountReducer = (state, action) => {
     switch(action.type){
         case 'SET_ACCOUNT_INFO':
-            console.log('SET_ACCOUNT_INFO: ');
-            console.dir(action.data);
+            //console.log('SET_ACCOUNT_INFO: ');
+            //console.dir(action.data);
             return({...state, 
                 userid: action.data.userid,
                 username: action.data.username,

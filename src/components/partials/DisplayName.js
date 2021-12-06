@@ -14,12 +14,12 @@ export const DisplayName = () => {
     const { mainState, mainDispatch } = useMainContext();
     const { state, dispatch } = useAccountContext();
     const handleEditUsername = (e) => {
-        console.log("handleEditUsername");
+        //console.log("handleEditUsername");
         setHideNameEdit(!hideNameEdit);
     }
 
     const handleUpdateName = async (e) => {
-        console.log("handleUpdateName");
+        //console.log("handleUpdateName");
         e.preventDefault();
         setIsNameUpdating(true);
         updateDisplayName(state.userid, e.target.displayName.value, mainState.user.access)

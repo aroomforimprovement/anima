@@ -5,7 +5,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const getNewAnimId = () => {
-    console.log("getNewAnimId");
+    //console.log("getNewAnimId");
     return uuidv4();
 }    
 const getTempUserId = (animid) => {
@@ -73,15 +73,15 @@ export const animReducer = (state, action) => {
     
     //save anim and send to auth
     const saveTempAnim = (anim) => {
-        console.log("saveTempAnim:");
-        console.dir(anim);
+        //console.log("saveTempAnim:");
+        //console.dir(anim);
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
         return anim.id;
     }
 
     const saveAnimToAccount = async (anim, access) => {
-        console.log("saveAnimToAccount:");
-        console.dir(anim);
+        //console.log("saveAnimToAccount:");
+        //console.dir(anim);
         return fetch(`${apiUrl}anim`, {
             method: 'POST',
             mode: 'cors',
@@ -93,7 +93,7 @@ export const animReducer = (state, action) => {
         })
         .then(response => {
             if(response.ok){ 
-                console.log("anim saved ok " + response.json());
+                //console.log("anim saved ok " + response.json());
                 toast.success("Anim saved to account");
             }else{ 
                 //dispatch({type: 'setSaveFailed', data: true});
@@ -107,8 +107,8 @@ export const animReducer = (state, action) => {
             console.error(error)
         });
     }
-    console.log(action.type+':'+action.data);
-    console.dir(action.data);
+    //console.log(action.type+':'+action.data);
+    //console.dir(action.data);
     switch(action.type){
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});
@@ -133,10 +133,10 @@ export const animReducer = (state, action) => {
             let newRedos = [...state.redos];
             let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
             if(!isSameAsPrevious){
-                console.log("not same as previous");
+                //console.log("not same as previous");
                 newUndos.push(action.data);
             }else{
-                console.log("same as previous");
+                //console.log("same as previous");
             }
             if(state.undid.length > 0){
                 newRedos = [];
@@ -176,7 +176,7 @@ export const animReducer = (state, action) => {
             }else{
                 bg = state.undos.length > 0 ? [...state.undos] : [];
             } 
-            console.dir(bg)
+            //console.dir(bg)
             return ({...state, bg: bg});
         }
         case 'DRAW_BG':{
@@ -249,7 +249,7 @@ export const animReducer = (state, action) => {
                 userid: state.anim.userid}})
         }
         default:
-            console.log("reached DEFAULT");
+            //console.log("reached DEFAULT");
             return state;
     }
 }

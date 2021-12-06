@@ -13,10 +13,10 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
 
 export const drawFrame = (f, p5, render) => {
     setBgOverlay(p5, render);
-    console.log("drawFrame:");
-    console.dir(f);
+    //console.log("drawFrame:");
+    //console.dir(f);
     if(f.bg && f.bg.length > 0){
-        console.log('drawing background');
+        //console.log('drawing background');
         drawPoints(f.bg, p5);   
     }
     drawPoints(f.points, p5);
@@ -102,14 +102,14 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
     let frames = [...a.frames];
     if(clip && frames.length > 4){
         frames = frames.splice(0, 4);
-        console.dir("frames:"+frames);
+        //console.dir("frames:"+frames);
     }
     frames.forEach((f) => {
        setFrameCaptured(f, capturer, p5canvas, p5);
     });
     capturer.stop();
     const duration = performance.now() - startTime;
-    console.log("Capture took "+duration);
+    //console.log("Capture took "+duration);
     capturer.save((blob) => {
        if(type === 'PREVIEW'){
             playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
@@ -120,7 +120,7 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
                     } 
                     setCollectionState({type: 'SET_INDEX', data: index+1}) 
                 }else{
-                    console.log('no collection state');
+                    //console.log('no collection state');
                 } 
             });;
         }else if(type === 'DOWNLOAD'){

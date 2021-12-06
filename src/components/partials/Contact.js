@@ -11,20 +11,20 @@ export const Contact = ({contact, i}) => {
     const { state, dispatch } = useAccountContext();
 
     const handleVisitContact = (i) => {
-        console.log("handleVisitContact");
+        //console.log("handleVisitContact");
         const id = state.contacts[i].userid;
         window.location.href = `/collection/${id}`;
     }
 
     const handleDeleteContact = (i) => {
-        console.log("handleDeleteContact");
+        //console.log("handleDeleteContact");
         deleteContact(state.contacts[i], mainState.user.userid, 
             mainState.user.username, mainState.user.access)
                 .then((response) => {
                     if(response && response.ok){
                         dispatch({type: 'DELETE_CONTACT', data: i});
                     }
-                    console.log("should toast to this");
+                    //console.log("should toast to this");
                 });
     }
 

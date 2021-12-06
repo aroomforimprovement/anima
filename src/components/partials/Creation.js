@@ -47,7 +47,7 @@ export const Creation = ({edit, splat}) => {
 
     useEffect(() => {
         const getSavedAnim = (id) => {
-            console.log("getSavedAnim");
+            //console.log("getSavedAnim");
             return fetch(`${apiUrl}anim/${id}`,{
                     headers: {
                         Authorization: `Bearer ${access}`,
@@ -58,29 +58,29 @@ export const Creation = ({edit, splat}) => {
                         return response.json();
                     }else{
                         console.error("response not ok");
-                        console.dir(response);
+                        //console.dir(response);
                     }
                 }, error => {
                     console.error("error fetching anim" + error);
                 })
                 .then(response => {
                     //assign response to anim here
-                    console.log("got anim");
-                    console.dir(response);
+                    //console.log("got anim");
+                    //console.dir(response);
                     if(anim.isSet){
-                        console.log("stop calling me!")
+                        //console.log("stop calling me!")
                     }else{
                         updateAnim({type: 'SET_ANIM', data: response});
                     }
                 })
-                .catch(err => console.log(err));
+                .catch(err => console.error(err));
         }
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
             setAccess(mainState.user.access);
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
         }
         if(!anim.isSet && splat && mainState.user && access){
-            console.log('!anim.isSet && id', access);
+            //console.log('!anim.isSet && id', access);
             
             getSavedAnim(splat);
         }
@@ -99,7 +99,7 @@ export const Creation = ({edit, splat}) => {
     }
 
     const handleNameChange = (e) => {
-        console.log("handleNameChange: "+e.target.value);
+        //console.log("handleNameChange: "+e.target.value);
         
         updateAnim({type: 'NAME', data: e.target.value});
     }

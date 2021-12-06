@@ -11,7 +11,7 @@ const Logout = () => {
     const {mainState} = useMainContext();
 
     const putLogout = async (signal) => {
-        console.log('putLogout');
+        //console.log('putLogout');
         const userid = localStorage.getItem('userid');
         const email = localStorage.getItem('email');
         const username = localStorage.getItem('username');
@@ -36,7 +36,7 @@ const Logout = () => {
     }
 
     const logoutReducer = (state, action) => {
-        console.log(action.type+':'+action.data);
+        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -72,12 +72,12 @@ const Logout = () => {
     
  
     useEffect(() => {
-        console.log('mount');
+        //console.log('mount');
         const controller = new AbortController();
         const signal = controller.signal;
         const putLogoutCall = async (signal) => {
             await putLogout(signal).then((response) => {
-                console.log("then");
+                //console.log("then");
                 if(response){
                     dispatch({type: 'setLogout', data: response});
                     dispatch({type: 'setIsRegistered', data: true});
@@ -91,7 +91,7 @@ const Logout = () => {
             putLogoutCall(signal)
         }
         return () => {
-            console.log("abort");
+            //console.log("abort");
             controller.abort();
         }
     },[state.isLoaded, state.isFailed, state.isSending, state.isRegistered]);

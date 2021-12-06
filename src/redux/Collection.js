@@ -31,7 +31,7 @@ export const getCollection = async (id, isBrowse, access, signal) => {
 }
 
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
-    console.log("addContactRequest: "+ userid + ":" + username);
+    //console.log("addContactRequest: "+ userid + ":" + username);
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
         mode: 'cors',
@@ -73,7 +73,7 @@ export const addContactRequest = async (userid, username, requsername, requserid
 }
 
 export const collectionReducer = (state, action) => {
-    console.log("collectionReducer: " + action.type + ":" + action.data);
+    //console.log("collectionReducer: " + action.type + ":" + action.data);
 
     switch(action.type){
         case 'SET':{

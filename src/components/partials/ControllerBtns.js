@@ -181,11 +181,11 @@ export const PenColour = () => {
     
     const classes = `btn-colour-caption ${colour}`;
     //const classes = `btn-colour-caption`
-    console.log(classes);
+    //console.log(classes);
 
     useEffect(() => {
         const handleColourChange = () => {
-            console.log('handleColorChange');
+            //console.log('handleColorChange');
             switch(controls.pc){
                 case values.red: setColour('red'); break;
                 case values.green: setColour('green'); break;
@@ -204,11 +204,11 @@ export const PenColour = () => {
                     setColour('white');
                         break;
                 default:
-                    console.log('no match');
+                    //console.log('no match');
                     break;
             }
         }
-        console.log("useEffect: handleColourChange " + controls.pc);
+        //console.log("useEffect: handleColourChange " + controls.pc);
         handleColourChange();
     },[controls.pc]);
     

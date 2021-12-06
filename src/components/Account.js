@@ -25,12 +25,12 @@ const Account = () => {
     const stateOfAccount = { state, dispatch };
     
     useEffect(() => {
-        console.log("mainState.user:");
-        console.dir(mainState.user);
-        console.log("state.notices:");
-        console.dir(state.notices);
-        console.log("state.contacts:");
-        console.dir(state.contacts);
+        //console.log("mainState.user:");
+        //console.dir(mainState.user);
+        //console.log("state.notices:");
+        //console.dir(state.notices);
+        //console.log("state.contacts:");
+        //console.dir(state.contacts);
     },[mainState.user, state.notices, state.contacts]);
 
     const getAccountId = () => {
@@ -62,7 +62,7 @@ const Account = () => {
     }
 
     const handleShowDeleteAccount = () => {
-        console.log(!hideDeleteAccount);
+        //console.log(!hideDeleteAccount);
         setHideDeleteAccount(!hideDeleteAccount);
     }
 

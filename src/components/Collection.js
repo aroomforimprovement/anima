@@ -23,11 +23,11 @@ const Collection = ({browse}) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
                     if(mainState.contacts[0].userid === id){
-                        console.log("isContact:TRUE");
+                        //console.log("isContact:TRUE");
                         return true;
                     }
                 }
-                console.log('isContact:FALSE');
+                //console.log('isContact:FALSE');
                 return false;
         }
         return false;
@@ -80,11 +80,11 @@ const Collection = ({browse}) => {
 
     
     useEffect( () => {
-        console.log("mounted");
+        //console.log("mounted");
         const controller = new AbortController();
         const signal = controller.signal;
         const setCollection = async (data) => {
-            console.log("setCollection");
+            //console.log("setCollection");
             setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
         if(!collectionState.isSet && mainState.isSet){
@@ -101,7 +101,7 @@ const Collection = ({browse}) => {
                 }).catch((error) => {console.error(error)});
         }
         return () => {
-            console.log("cleanup");
+            //console.log("cleanup");
             controller.abort();
         }
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat]);

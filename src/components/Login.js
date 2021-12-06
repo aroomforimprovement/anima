@@ -11,8 +11,8 @@ const Login = () => {
     const { mainState  } = useMainContext();
 
     const putLogin = async (login, signal) => {
-        console.log('putLogin');
-        console.log(login.access);
+        //console.log('putLogin');
+        //console.log(login.access);
         return await fetch(`${apiUrl}login`, {
             method: 'POST',
             mode: 'cors',
@@ -57,10 +57,10 @@ const Login = () => {
         })
         .then(response => {
             if(response.ok){
-                console.log("response ok");
+                //console.log("response ok");
                 return response;
             }else{
-                console.log('response not ok');
+                //console.log('response not ok');
             }
         }, error => {
             console.error('error saving anim');
@@ -70,7 +70,7 @@ const Login = () => {
     }
 
     const loginReducer = (state, action) => {
-        console.log(action.type+':'+action.data);
+        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -85,7 +85,7 @@ const Login = () => {
                 return ({...state, isFailed: action.data, isSending: !action.data});
             }
             case 'setLogin':{
-                console.dir('setLogin: ', action.data);
+                //console.dir('setLogin: ', action.data);
                 window.localStorage.setItem('userid', action.data.userid);
                 window.localStorage.setItem('username', action.data.username);
                 window.localStorage.setItem('email', action.data.email);
@@ -127,7 +127,7 @@ const Login = () => {
     });
 
     useEffect(() => {
-        console.log("useEffect: " + state.isFailed);
+        //console.log("useEffect: " + state.isFailed);
         const controller = new AbortController();
         const signal = controller.signal;
         const putLoginCall = async (login) => {
@@ -139,10 +139,10 @@ const Login = () => {
                 userid: mainState.user.userid,
                 email: mainState.user.email,
                 username: mainState.user.name, access: mainState.user.access,
-            }, signal).then(() => {console.log("then")}).catch((error) => {console.error(error)});
+            }, signal).catch((error) => {console.error(error)});
         }
         return () => {
-            console.log("abort login");
+            //console.log("abort login");
             controller.abort();
         }
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
@@ -168,7 +168,7 @@ const Login = () => {
         }
 
         return () => {
-            console.log("abort save");
+            //console.log("abort save");
             controller.abort();
         }
     }, [state.anim, state.isFailed, state.isSaving, state.isSaved, mainState.user]);

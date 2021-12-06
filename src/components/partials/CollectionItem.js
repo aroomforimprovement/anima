@@ -40,11 +40,11 @@ export const CollectionItem = ({anim, index}) => {
             }
             return fetch(url, req).then(response => {
                 if(response.ok){
-                    console.log("anim deleted ok ");
+                    //console.log("anim deleted ok ");
                     setCollectionState({type: 'DELETE_ANIM', data: animid});
                     toast.success("Anim deleted as requested");
                 }else{
-                    console.log("response not ok");
+                    //console.log("response not ok");
                     toast.error("Error deleting the anim");
                 }
             }, error => {
