@@ -27,7 +27,9 @@ const ModeDropdown = () => {
     }
     
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+        <DropdownMenu 
+            onMouseOver={() => dispatch({type: 'DISABLE', data: true})} 
+            onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
                 <ControllerDropdownItem 
                     title='SINGLE mode' func={() => handle(CC.SINGLE)}
                     iSrc={SITE.icons.single} text='Single'/>

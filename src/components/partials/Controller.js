@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
+import { MobileController } from '../mobile/MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
     Background, Next, Download, Save, Preview, EnableShortcuts } from './ControllerBtns';
 import { CreateInfo } from './CreateInfo';
@@ -7,17 +9,24 @@ import { CreateInfo } from './CreateInfo';
 export const Controller = () => {
 
     return(
-        <div className='container controller col-sm-12 col-md-6 col-lg-5 col-xl-4 my-1'>
-            <div className='row'>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Mode /></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenSize /></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenColour /></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Undo/></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Redo/></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><FrameRate/></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Background/></div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Next/></div>
+        <div>
+        <BrowserView>
+            <div className='container controller col-sm-12 col-md-6 col-lg-5 col-xl-4 my-1'>
+                <div className='row'>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Mode /></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenSize /></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenColour /></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Undo/></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Redo/></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><FrameRate/></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Background/></div>
+                    <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Next/></div>
+                </div>
             </div>
+        </BrowserView>
+        <MobileView>
+            <MobileController />
+        </MobileView>
         </div>
     );
 }
@@ -30,10 +39,10 @@ export const SaveController = () => {
                         <div className='col col-sm-3 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Save /></div>
                         <div className='col col-sm-3 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Download /></div>
                         <div className='col col-sm-3 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
-                </div>
+                    </div>
                 <div className='col col-6 col-md-5 col-lg-4 col-xl-3'>    
                     <div className='row'>
-                    <div ><EnableShortcuts id='enable-shortcuts'/></div>
+                        <div ><EnableShortcuts id='enable-shortcuts'/></div>
                     </div>
                     <div className='row'>
                         <CreateInfo />
