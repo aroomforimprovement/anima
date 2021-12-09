@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
+import { Button } from 'reactstrap';
 import { CC } from '../../animator/controls';
 import { SITE } from '../../shared/site';
 import { useControlContext } from '../Create';
 import { Next, Undo, Redo } from '../partials/ControllerBtns';
 
+
+const Expanse = () => {
+    return(<div></div>);
+}
+
 const ControllerExpandedItem = ({title, func, iSrc, text, c}) => {
-    const classes = `dropicon ${c}`;
+    const classes = `dropicon row ${c}`;
     return(
-        <button className={`btn btn-sm dropicon`} 
+        <Button className={`btn-ctl`} 
             title={title} onClick={func}>
             <img src={iSrc} alt={title} className={classes} />
             <span></span> {text}
-        </button>
+        </Button>
     );
 }
 
-const ModeExpandable = () => {
+const ModeExpandable = ({closeExpandable}) => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
+        closeExpandable();
         dispatch({type: 'MODE', data: val});
     }
 
@@ -39,62 +46,75 @@ const ModeExpandable = () => {
     );
 }
 
-const Mode = () => {
+const Mode = ({func}) => {
     return(
-        <button className={`btn btn-sm dropicon`}>
+        <Button type='button' className={`btn-ctl`} onClick={func}>
             <img src={SITE.icons.drawingMode} alt='Drawing Mode' />
-        </button>
+        </Button>
     );
 }
 
 const PenSize = () => {
     return(
-        <button className={`btn btn-sm dropicon`}>
+        <Button className={`btn-ctl`}>
             <img src={SITE.icons.penSize} alt='Pen Size' />
-        </button>
+        </Button>
     );
 }
 
 const PenColour = () => {
     return(
-        <button className={`btn btn-sm dropicon`}>
+        <Button className={`btn-ctl`}>
             <img src={SITE.icons.penColour} alt='Pen Colour' />
-        </button>
+        </Button>
     );
 }
 
 const FrameRate = () => {
     return(
-        <button className={`btn btn-sm dropicon`}>
+        <Button className={`btn-ctl`}>
             <img src={SITE.icons.frate} alt='Frame Rate' />
-        </button>
+        </Button>
     );
 }
 
 const Background = () => {
     return(
-        <button className={`btn btn-sm dropicon`}>
+        <Button className={`btn-ctl`}>
             <img src={SITE.icons.bg} alt='Save / Set Background' />
-        </button>
-    );
-}
-
-const ExpandableArea = ({btns, expanded}) => {
-    return(
-        <div hidden={!expanded}>
-            {btns}
-        </div>
+        </Button>
     );
 }
 
 export const MobileController = () => {
 
-    const [isExpanded, setIsExpanded] = useState(false);
+    const closeExpandable = () => {
+        dispatch({type: 'Close'});
+    }
+
+    const reducer = (state, action) => {
+        switch(action.type){
+            case 'Mode':{
+                console.log('reducer Mode');
+                return(<ModeExpandable closeExpandable={closeExpandable}/>);
+            }
+            case 'Close':{
+                return(<Expanse />)
+            }
+            default:
+            break;
+        }
+    }
+
+    const [state, dispatch] = useReducer(reducer, <Expanse />);
+
     
     return(
         <div className='container controller col-12'>
             <div className='row'>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Mode /></div>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <Mode func={() => {dispatch({type: 'Mode'})}}/>
+                </div>
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenSize /></div>
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenColour /></div>                
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Undo/></div>
@@ -103,7 +123,7 @@ export const MobileController = () => {
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Background/></div>
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Next/></div> 
             </div>
-            <ExpandableArea expanded={isExpanded} />
+            <div className='m-1'>{state}</div>
         </div>
     )
 }
