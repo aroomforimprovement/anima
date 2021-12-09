@@ -99,21 +99,20 @@ export const PenSize = () => {
     const toggle = () => setIsOpen(prevState => !prevState);
     const [size, setSize] = useState(1);
 
-    //pretty hacky - would need to reorganise the CONTROLS object
-    const handleSizeChange = () => {
-        CONTROLS.forEach((controlObj) => {
-            if(controlObj.t === CC.TYPE_SIZE){
-                if(controlObj.v === controls.ps){
-                    setSize(parseInt(controlObj.n.substring(3,4)));
-                    return;
-                }
-            }
-        });
-    }
 
     useEffect(() => {
+        //pretty hacky - would need to reorganise the CONTROLS object
+        const handleSizeChange = () => {
+            CONTROLS.forEach((controlObj) => {
+                if(controlObj.t === CC.TYPE_SIZE){
+                    if(controlObj.v === controls.ps){
+                        setSize(parseInt(controlObj.n.substring(3,4)));
+                        return;
+                    }
+                }
+            });
+        }
         handleSizeChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[controls.ps]);
 
     return(
