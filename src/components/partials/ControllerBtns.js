@@ -128,16 +128,16 @@ const PenColourDropdown = () => {
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='BG Solid' func={() => handle(values.bg_solid)}
-                iSrc={SITE.icons.penColour} c='black' text='BG Solid'/>
+                iSrc={SITE.icons.penColour} c='bg_solid' text='BG Solid'/>
             <ControllerDropdownItem 
                 title='BG Shade' func={() => handle(values.bg_shade)}
-                iSrc={SITE.icons.penColour} c='black' text='BG Shade'/>
+                iSrc={SITE.icons.penColour} c='bg_shade' text='BG Shade'/>
             <ControllerDropdownItem 
                 title='FG Solid' func={() => handle(values.fg_solid)}
-                iSrc={SITE.icons.penColour} c='white' text='FG Solid'/>
+                iSrc={SITE.icons.penColour} c='fg_solid' text='FG Solid'/>
             <ControllerDropdownItem 
                 title='FG Shade' func={() => handle(values.fg_shade)}
-                iSrc={SITE.icons.penColour} c='white' text='FG Shade'/>
+                iSrc={SITE.icons.penColour} c='fg_shade' text='FG Shade'/>
             <ControllerDropdownItem 
                 title='Red' func={() => handle(values.red)}
                 iSrc={SITE.icons.penColour} c='red' text='Red'/>

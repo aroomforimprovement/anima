@@ -15,6 +15,9 @@ export const preview = (p5) => {
         if(props.anim && p5 && props.anim.name !== 'nothing' 
             && props.collectionState && (props.collectionState.index === props.index || props.index === 'temp')){
                 //console.log(props.clip);
+            p5.resizeCanvas(
+                props.anim.size ? props.anim.size : values.defaultSize, 
+                props.anim.size ? props.anim.size : values.defaultSize);
             previewAnim(props.anim, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
         }
     }

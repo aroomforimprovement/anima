@@ -224,7 +224,9 @@ export const animReducer = (state, action) => {
                 anim: {...state["anim"], name: action.data}})
         }
         case 'SAVE':{
-            return ({...state, enabled: false, isSaveOpen: true});
+            let anim = {...state.anim};
+            anim.size = action.data.size; 
+            return ({...state, enabled: false, isSaveOpen: true, anim: anim});
         }
         case 'SAVE_TO_ACCOUNT':{
             console.debug('SAVE_TO_ACCOUNT');
@@ -233,6 +235,8 @@ export const animReducer = (state, action) => {
                 saveTempAnim(state.anim);
                 temp = state.anim.animid;
             }else if(action.data){
+                let anim = {...state.anim};
+                anim.size = action.data;
                 saveAnimToAccount(state.anim, action.data);
             }
             return ({...state, enabled: true, isSaveOpen: false, temp: temp});

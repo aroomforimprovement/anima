@@ -108,7 +108,7 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
        setFrameCaptured(f, capturer, p5canvas, p5);
     });
     capturer.stop();
-    const duration = performance.now() - startTime;
+    //const duration = performance.now() - startTime;
     //console.log("Capture took "+duration);
     capturer.save((blob) => {
        if(type === 'PREVIEW'){

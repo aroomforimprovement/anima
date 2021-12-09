@@ -1,5 +1,6 @@
 import { values } from './values';
 import { CC, CONTROLS }  from './controls';
+import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 
 
@@ -18,7 +19,9 @@ export const sketch = (p5) => {
      *  P5
      */
     p5.setup = () => {
-        p5canvas = p5.createCanvas(600, 600);
+        p5canvas = p5.createCanvas(
+            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize, 
+            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
     }
@@ -32,7 +35,8 @@ export const sketch = (p5) => {
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
-            anim = props.anim; 
+            anim = props.anim;
+            p5.resizeCanvas(props.anim.anim.size, props.anim.anim.size);
             if(props.anim.isSet && !isSet){
                 isSet = true;
                 setSavedBackground(props);
@@ -109,7 +113,7 @@ export const sketch = (p5) => {
         }
         if(props.controls.save){
             dispatch({type: 'SAVE', data: false});
-            updateAnim({type: 'SAVE', data: true});
+            updateAnim({type: 'SAVE', data: {size: p5.width}});
         }
         if(props.controls.privacy !== null){
             const p = props.controls.privacy;

@@ -503,9 +503,12 @@ code {
 .bg_solid{
   background-color: rgb(20, 20, 20, 200);
 }
-.bg_solid{
-  background-color: rgb(20, 20, 20, 200);
+.bg_shade{
+  background-color: rgb(70, 70, 70, 100);
 }
-.bg_solid{
-  background-color: rgb(20, 20, 20, 200);
+.fg_solid{
+  background-color: rgb(220, 220, 220, 200);
+}
+.fg_shade{
+  background-color: rgb(200, 200, 200, 100);
 }

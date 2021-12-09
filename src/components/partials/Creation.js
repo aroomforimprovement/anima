@@ -130,7 +130,7 @@ export const Creation = ({edit, splat}) => {
         <div>
             <ControlContext.Consumer> 
                 {() => (
-                <AnimContext.Provider value={animState}>
+                <AnimContext.Provider value={animState} >
                     <ReactP5Wrapper sketch={sketch} 
                         controls={controls} dispatch={dispatch}
                         anim={anim} updateAnim={updateAnim} index={'temp'}
@@ -138,7 +138,7 @@ export const Creation = ({edit, splat}) => {
                     <Modal show={anim.isPreviewOpen} 
                         onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}
                         onHide={() => updateAnim({type: 'setIsPreviewOpen', data: false})}>
-                            <video controls loop autoPlay> 
+                            <video controls loop autoPlay className='col col-12'> 
                                 <source src={anim.viewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
                             </video>
                        <Modal.Footer>

@@ -1,6 +1,7 @@
 import { CC }  from './controls';
 
 export const values = {
+    defaultSize: 600,
     initialBgc: [20, 20, 20, 255],
     bgc: [20, 20, 20, 240],
     penWhite: [200, 200, 200, 200],
@@ -36,7 +37,7 @@ export const values = {
             "created": null,
             "modified": null,
             "frate": 8,
-            "size": 0,
+            "size": 600,
             "privacy": 0,
             "frames": [],
             "lastFrame":{},
