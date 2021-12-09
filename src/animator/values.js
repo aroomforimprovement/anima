@@ -61,4 +61,6 @@ export const values = {
     bg_shade: [20, 20, 20, 50],
     fg_solid: [220, 220, 220, 200],
     fg_shade: [220, 220, 220, 50],
+    frameRates: [4, 8, 16, 20, 24, 28],
+    penSizes: [1, 2, 3, 4, 5, 6, 7]
 }

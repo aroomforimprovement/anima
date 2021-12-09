@@ -52,7 +52,8 @@ export const Mode = () => {
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
             <DropdownToggle >
-                <img src={SITE.icons.drawingMode} alt='Drawing Mode'/>
+                <img src={SITE.icons.drawingMode} 
+                    title='Drawing Mode' alt='Drawing Mode'/>
             </DropdownToggle>
             <ModeDropdown />
         </Dropdown>
@@ -65,29 +66,17 @@ const PenSizeDropdown = () => {
         dispatch({ type: 'PS', data: val});
         dispatch({ type: 'ENABLE', data: true });
     }
+
+    const sizes = values.penSizes.map((size) => {
+        return(
+            <ControllerDropdownItem key={size}
+                title={`Pen size ${size}`} func={() => handle(CC[`PS_${size}`])}
+                iSrc={SITE.icons.penSize} text={size}/>
+        );
+    });
     return(
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
-                <ControllerDropdownItem 
-                    title='Pen size 1' func={() => handle(CC.PS_1)}
-                    iSrc={SITE.icons.penSize} text='1'/>
-                <ControllerDropdownItem 
-                    title='Pen size 2' func={() => handle(CC.PS_2)}
-                    iSrc={SITE.icons.penSize} text='2'/>
-                <ControllerDropdownItem 
-                    title='Pen size 3' func={() => handle(CC.PS_3)}
-                    iSrc={SITE.icons.penSize} text='3'/>
-                <ControllerDropdownItem 
-                    title='Pen size 4' func={() => handle(CC.PS_4)}
-                    iSrc={SITE.icons.penSize} text='4'/>
-                <ControllerDropdownItem 
-                    title='Pen size 5' func={() => handle(CC.PS_5)}
-                    iSrc={SITE.icons.penSize} text='5'/>
-                <ControllerDropdownItem 
-                    title='Pen size 6' func={() => handle(CC.PS_6)}
-                    iSrc={SITE.icons.penSize} text='6'/>
-                <ControllerDropdownItem 
-                    title='Pen size 7' func={() => handle(CC.PS_7)}
-                    iSrc={SITE.icons.penSize} text='7'/>
+                {sizes}
         </DropdownMenu>  
     );
 
@@ -119,7 +108,8 @@ export const PenSize = () => {
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <div className='btn-container'>
                 <DropdownToggle >
-                    <img src={SITE.icons.penSize} alt='Pen size'/>              
+                    <img src={SITE.icons.penSize} 
+                    title='Pen size' alt='Pen size'/>              
                 </DropdownToggle>
             </div>
             <div className='btn-caption'>{size}</div>
@@ -218,7 +208,8 @@ export const PenColour = () => {
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <div className='btn-colour-container'>
                 <DropdownToggle >
-                    <img src={SITE.icons.penColour} alt='Pen size'/>
+                    <img src={SITE.icons.penColour} 
+                        title='Pen colour' alt='Pen colour'/>
                 </DropdownToggle>
                 <div className={classes} ></div>
             </div>
@@ -233,29 +224,18 @@ const FrameRateDropdown = () => {
         dispatch({ type: 'FRAME_RATE', data: val});
         dispatch({ type: 'ENABLE', data: true });
     }
+
+    const rates = values.frameRates.map((rate) => {
+        return(
+            <ControllerDropdownItem key={rate}
+                title={`Frame rate ${rate}`} func={() => handle(rate)}
+                iSrc={SITE.icons.penSize} text={rate}/>
+        );
+    })
+
     return(
         <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
-                <ControllerDropdownItem 
-                    title='Frame rate 4' func={() => handle(4)}
-                    iSrc={SITE.icons.penSize} text='4'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 8' func={() => handle(8)}
-                    iSrc={SITE.icons.penSize} text='8'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 12' func={() => handle(12)}
-                    iSrc={SITE.icons.penSize} text='12'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 16' func={() => handle(16)}
-                    iSrc={SITE.icons.penSize} text='16'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 20' func={() => handle(20)}
-                    iSrc={SITE.icons.penSize} text='20'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 24' func={() => handle(24)}
-                    iSrc={SITE.icons.penSize} text='24'/>
-                <ControllerDropdownItem 
-                    title='Frame rate 28' func={() => handle(28)}
-                    iSrc={SITE.icons.penSize} text='28'/>
+                {rates}
         </DropdownMenu>  
     );
 
@@ -267,7 +247,7 @@ export const FrameRate = () => {
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
-                <img src={SITE.icons.frate} alt='Frame rate'/>
+                <img src={SITE.icons.frate} title='Frame rate' alt='Frame rate'/>
             </DropdownToggle>
             <FrameRateDropdown />
         </Dropdown>
@@ -301,7 +281,8 @@ export const Background = () => {
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
             <DropdownToggle >
-                <img src={SITE.icons.bg} alt='Background'/>
+                <img src={SITE.icons.bg}
+                    title='Background' alt='Background'/>
             </DropdownToggle>
             <BackgroundDropdown />
         </Dropdown>

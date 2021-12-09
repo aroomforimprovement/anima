@@ -62,29 +62,17 @@ const PenSizeExpandable = ({closeExpandable}) => {
         dispatch({type: 'PS', data: val});
     }
 
+    const sizes = values.penSizes.map((size) => {
+        return(
+            <ControllerExpandedItem key={size}
+                title={`Pen size ${size}`} func={() => handle(CC[`PS_${size}`])}
+                iSrc={SITE.icons.penSize} text={size}/>
+        );
+    });
+
     return(
         <div>
-            <ControllerExpandedItem 
-                title='Pen size 1' func={() => handle(CC.PS_1)}
-                iSrc={SITE.icons.penSize} text='1'/>
-            <ControllerExpandedItem 
-                title='Pen size 2' func={() => handle(CC.PS_2)}
-                iSrc={SITE.icons.penSize} text='2'/>
-            <ControllerExpandedItem 
-                title='Pen size 3' func={() => handle(CC.PS_3)}
-                iSrc={SITE.icons.penSize} text='3'/>
-            <ControllerExpandedItem 
-                title='Pen size 4' func={() => handle(CC.PS_4)}
-                iSrc={SITE.icons.penSize} text='4'/>
-            <ControllerExpandedItem 
-                title='Pen size 5' func={() => handle(CC.PS_5)}
-                iSrc={SITE.icons.penSize} text='5'/>
-            <ControllerExpandedItem 
-                title='Pen size 6' func={() => handle(CC.PS_6)}
-                iSrc={SITE.icons.penSize} text='6'/>
-            <ControllerExpandedItem 
-                title='Pen size 7' func={() => handle(CC.PS_7)}
-                iSrc={SITE.icons.penSize} text='7'/>
+            {sizes}
         </div>
     );
 }
@@ -115,9 +103,10 @@ const PenSize = ({func}) => {
     );
 }
 
-const PenColourExpandable = () => {
+const PenColourExpandable = ({closeExpandable}) => {
     const { dispatch } = useControlContext();
     const handle = (val) => {
+        closeExpandable();
         dispatch({type: 'PC', data: val});
     }
     return(
@@ -163,23 +152,65 @@ const PenColour = ({func}) => {
     return(
         <Button className={`btn-ctl`} onClick={func}> 
             <img src={SITE.icons.penColour} alt='Pen Colour' />
-            
         </Button>
     );
 }
 
-const FrameRate = () => {
+const FrameRateExpandable = ({closeExpandable}) => {
+    const { dispatch } = useControlContext();
+    const handle = (val) => {
+        closeExpandable();
+        dispatch({type: 'FRAME_RATE', data: val});
+    }
+
+    const rates = values.frameRates.map((rate) => {
+        return (
+            <ControllerExpandedItem key={rate}
+                title={`Frame rate ${rate}`} func={() => handle(rate)}
+                iSrc={SITE.icons.penSize} text={rate}/>
+        );
+    });
+
     return(
-        <Button className={`btn-ctl`}>
+        <div>
+            {rates}
+        </div>
+    );
+}
+
+const FrameRate = ({func}) => {
+    return(
+        <Button className={`btn-ctl`} onClick={func}>
             <img src={SITE.icons.frate} alt='Frame Rate' />
         </Button>
     );
 }
 
-const Background = () => {
+const BackgroundExpandable = ({closeExpandable}) => {
+    const { dispatch } = useControlContext();
+    const handle = (val) => {
+        closeExpandable();
+        dispatch({type: val, data: true});
+    }
     return(
-        <Button className={`btn-ctl`}>
-            <img src={SITE.icons.bg} alt='Save / Set Background' />
+        <div>
+            <ControllerExpandedItem 
+                title='Save background' func={() => handle('SAVE_BG')}
+                iSrc={SITE.icons.saveBg} text="Save this frame as background"/>
+            <ControllerExpandedItem 
+                title='Draw background' func={() => handle('DRAW_BG')}
+                iSrc={SITE.icons.drawBg} text="Clear frame and draw saved background"/>
+            <ControllerExpandedItem 
+                title='Wipe frame' func={() => handle('WIPE')}
+                iSrc={SITE.icons.wipe} text="Wipe frame (can't be undone!)"/>
+        </div>
+    );
+}
+
+const Background = ({func}) => {
+    return(
+        <Button className={`btn-ctl`} onClick={func}>
+            <img src={SITE.icons.bg} title='Background' alt='Save / Set Background' />
         </Button>
     );
 }
@@ -193,16 +224,22 @@ export const MobileController = () => {
     const reducer = (state, action) => {
         switch(action.type){
             case 'Mode':{
-                return(<ModeExpandable closeExpandable={closeExpandable}/>);
+                return(state ? null : <ModeExpandable closeExpandable={closeExpandable}/>);
             }
             case 'PenSize':{
-                return(<PenSizeExpandable closeExpandable={closeExpandable}/>);
+                return(state ? null : <PenSizeExpandable closeExpandable={closeExpandable}/>);
             }
             case 'PenColour':{
-                return(<PenColourExpandable closeExpandable={closeExpandable}/>);
+                return(state ? null : <PenColourExpandable closeExpandable={closeExpandable}/>);
+            }
+            case 'FrameRate':{
+                return(state ? null : <FrameRateExpandable closeExpandable={closeExpandable} />)
+            }
+            case 'Background':{
+                return(state ? null : <BackgroundExpandable closeExpandable={closeExpandable} />)
             }
             case 'Close':{
-                return(<Expanse />)
+                return(null)
             }
             default:
             break;
