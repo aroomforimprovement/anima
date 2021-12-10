@@ -144,11 +144,11 @@ export const animReducer = (state, action) => {
         case 'DO_STROKE':{
             let newUndos = [...state.undos];
             let newRedos = [...state.redos];
-            let isSameAsPrevious = newUndos[newUndos.length-1] === action.data.points;
+            let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
             if(!isSameAsPrevious){
                 //console.log("not same as previous");
-                const points = getPointsScaledToDefault(action.data);
-                newUndos.push(points);
+                //const points = getPointsScaledToDefault(action.data);
+                newUndos.push(action.data);
             }else{
                 //console.log("same as previous");
             }

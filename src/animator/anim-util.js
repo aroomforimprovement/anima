@@ -28,14 +28,12 @@ export const drawPoints = (points, p5, render) => {
         });
 }
 
-export const drawPoint = (p, p5, render) => {
+export const drawPoint = (point, p5, render) => {
+    let p = {...point};
     p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
-    console.dir(p);
-    if(render){
-        console.log(p.x + ' BEFORE ' + p.y);
-        p.x = p5.map(p.x, 0, 1000, 0, p5.width);
-        p.y = p5.map(p.y, 0, 1000, 0, p5.width);
-        console.log(p.x + ' AFTER ' + p.y);
+    if(p.size !== p5.width){
+        p.x = p5.map(p.x, 0, p.size ? p.size : values.defaultSize, 0, p5.width);
+        p.y = p5.map(p.y, 0, p.size ? p.size : values.defaultSize, 0, p5.height);
     }
     switch(p.m)
     {

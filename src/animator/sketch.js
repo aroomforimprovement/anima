@@ -31,7 +31,7 @@ export const sketch = (p5) => {
         //console.log("PROP CONTROLS:");
         //console.dir(props.controls);
         //console.log("PROP ANIM: ");
-        console.dir(props.anim);
+        //console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
@@ -130,7 +130,6 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        //console.debug("mouse pressed");
         handlePressed(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
@@ -147,15 +146,12 @@ export const sketch = (p5) => {
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
     p5.touchMoved = () => {
-        //console.debug("touch moved");
         if(p5.touches.length === 1){
             handleDragged(p5.mouseX, p5.mouseY);
-            //return isPointOnCanvas(p5.mouseX, p5.mouseY);
         }
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
     p5.mouseReleased = () => {
-        //console.debug("mouse released");
         handleReleased(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
@@ -177,23 +173,18 @@ export const sketch = (p5) => {
 
     const startStroke = (x, y) => {
         isStroke = true;
-        //console.debug("start stroke");
         return setPointDrawn(x, y);
     }
 
     const handleDragged = (x, y ) => {
-        //console.debug("handle dragged");
         if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
-            //console.debug("handle dragged -> set point drawn");
             return setPointDrawn(x, y);
         }
         return false;
     }
 
     const handleReleased = (x, y) => {
-        //console.debug("handle released");
         if(anim.enabled && isStroke && isPointOnCanvas(x,y)){
-            //console.debug("handle released -> end stroke");
             return endStroke(x, y);
         }
         return false;
@@ -271,18 +262,13 @@ export const sketch = (p5) => {
      * DRAWING ACTIONS 
      */
     const setPointDrawn = (x, y) => {
-            console.log("x: " + x);
             const p = getPointObj(x, y);
-            console.log("pointObj");
-            console.log(p.x);
             if(drawPoint(p, p5)){
                 thisStroke.push(p);
                 if(!isStroke){
                     //save and clear stroke
                     if(isMounted){
-                        console.log("DO_STROKE:");
-                        console.dir(thisStroke[0].x);
-                        updateAnim({type: 'DO_STROKE', data: {points: [...thisStroke], map : (x) => {return p5.map(x, 0, p5.width, 0, 1000)}}});
+                        updateAnim({type: 'DO_STROKE', data: thisStroke});
                         thisStroke = []; 
                     }else{
                         //console.warn("unmounted while doing stroke");
@@ -360,6 +346,7 @@ export const sketch = (p5) => {
         return {
             x : x,
             y : y,
+            size: p5.width,
             pc: controls.pc,
             ps: controls.ps,
             m: controls.mode
