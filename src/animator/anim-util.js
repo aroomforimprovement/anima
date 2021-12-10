@@ -17,19 +17,26 @@ export const drawFrame = (f, p5, render) => {
     //console.dir(f);
     if(f.bg && f.bg.length > 0){
         //console.log('drawing background');
-        drawPoints(f.bg, p5);   
+        drawPoints(f.bg, p5, render);   
     }
-    drawPoints(f.points, p5);
+    drawPoints(f.points, p5, render);
 }
 
-export const drawPoints = (points, p5) => {
+export const drawPoints = (points, p5, render) => {
         points.forEach((element) => {
-            drawStroke(element, p5);
+            drawStroke(element, p5, render);
         });
 }
 
-export const drawPoint = (p, p5) => {
+export const drawPoint = (p, p5, render) => {
     p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
+    console.dir(p);
+    if(render){
+        console.log(p.x + ' BEFORE ' + p.y);
+        p.x = p5.map(p.x, 0, 1000, 0, p5.width);
+        p.y = p5.map(p.y, 0, 1000, 0, p5.width);
+        console.log(p.x + ' AFTER ' + p.y);
+    }
     switch(p.m)
     {
         case CC.SINGLE:
@@ -56,10 +63,12 @@ export const drawPoint = (p, p5) => {
     return true;
 }
 
-export const drawStroke = (stroke, p5) => {
-    stroke.forEach((element) => {
-        drawPoint(element, p5);
-    });
+export const drawStroke = (stroke, p5, render) => {
+    if(stroke){
+        stroke.forEach((element) => {
+            drawPoint(element, p5, render);
+        });
+    }
 }
 /**
  * 
@@ -92,11 +101,11 @@ export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch, index
 export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip) =>{
     const CCapture = window.CCapture; 
     let capturer = new CCapture({format: 'webm',
-//        workersPath: process.env.PUBLIC_URL + '/ccapture/',
+//      workersPath: process.env.PUBLIC_URL + '/ccapture/',
         framerate: a.frate
     });
     capturer.start();
-    const startTime = performance.now();
+    //const startTime = performance.now();
     setBgOverlay(p5, true);
     setBgOverlay(p5, true);
     let frames = [...a.frames];
@@ -138,7 +147,8 @@ export const setBgOverlay = (p5, render) => {
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
-    drawFrame(f, p5, true);
+    const render = true;
+    drawFrame(f, p5, render);
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);

@@ -71,6 +71,19 @@ export const newAnimState = (user) => {
  */
 export const animReducer = (state, action) => {
     
+    const getPointsScaledToDefault = (data) => {
+        let newPoints = [];
+        for(let i = 0; i < data.points.length; i++) {
+            let point = {...data.points[i]};
+            console.log("point.x: " + point.x);
+            point.x = data.map(point.x);
+            console.log("point.x: " + point.x);
+            point.y = data.map(point.y);
+            newPoints.push(point);
+        };
+        return newPoints;
+    }
+
     //save anim and send to auth
     const saveTempAnim = (anim) => {
         //console.log("saveTempAnim:");
@@ -131,10 +144,11 @@ export const animReducer = (state, action) => {
         case 'DO_STROKE':{
             let newUndos = [...state.undos];
             let newRedos = [...state.redos];
-            let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
+            let isSameAsPrevious = newUndos[newUndos.length-1] === action.data.points;
             if(!isSameAsPrevious){
                 //console.log("not same as previous");
-                newUndos.push(action.data);
+                const points = getPointsScaledToDefault(action.data);
+                newUndos.push(points);
             }else{
                 //console.log("same as previous");
             }

@@ -31,12 +31,12 @@ export const sketch = (p5) => {
         //console.log("PROP CONTROLS:");
         //console.dir(props.controls);
         //console.log("PROP ANIM: ");
-        //console.dir(props.anim);
+        console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
             anim = props.anim;
-            p5.resizeCanvas(props.anim.anim.size, props.anim.anim.size);
+            //p5.resizeCanvas(props.anim.anim.size, props.anim.anim.size);
             if(props.anim.isSet && !isSet){
                 isSet = true;
                 setSavedBackground(props);
@@ -271,13 +271,18 @@ export const sketch = (p5) => {
      * DRAWING ACTIONS 
      */
     const setPointDrawn = (x, y) => {
-            let p = getPointObj(x, y);
+            console.log("x: " + x);
+            const p = getPointObj(x, y);
+            console.log("pointObj");
+            console.log(p.x);
             if(drawPoint(p, p5)){
                 thisStroke.push(p);
                 if(!isStroke){
                     //save and clear stroke
                     if(isMounted){
-                        updateAnim({type: 'DO_STROKE', data: thisStroke});
+                        console.log("DO_STROKE:");
+                        console.dir(thisStroke[0].x);
+                        updateAnim({type: 'DO_STROKE', data: {points: [...thisStroke], map : (x) => {return p5.map(x, 0, p5.width, 0, 1000)}}});
                         thisStroke = []; 
                     }else{
                         //console.warn("unmounted while doing stroke");
