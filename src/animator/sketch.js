@@ -103,17 +103,27 @@ export const sketch = (p5) => {
                 dispatch({type: 'DISABLE', data: true});
                 previewAnim(anim.anim, p5canvas, p5, updateAnim)
                     .then(() => {
-                        redrawLastFrame();
+                        p5.resizeCanvas(10, 10);
                     });
             }
         }
         if(props.controls.endPreview){
             dispatch({type: 'END_PREVIEW', data: false});
             updateAnim({type: 'END_PREVIEW', data: false});
+            p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
+                isMobile ? p5.displayWidth : values.defaultSize);
+            redrawLastFrame();
         }
         if(props.controls.save){
             dispatch({type: 'SAVE', data: false});
             updateAnim({type: 'SAVE', data: {size: p5.width}});
+            p5.resizeCanvas(20, 20);
+        }
+        if(props.anim.saveClose){
+            console.log('resizing');
+            p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
+                isMobile ? p5.displayWidth : values.defaultSize);
+            updateAnim({type: 'SAVE_CLOSE', data: false});
         }
         if(props.controls.privacy !== null){
             const p = props.controls.privacy;
@@ -122,6 +132,7 @@ export const sketch = (p5) => {
             dispatch({type: 'SET_PRIVACY', data: p});
             
         }
+        
         return () => { isMounted = false};
     }
 
@@ -130,9 +141,23 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
+        console.log("mousePressed");
+        if(anim.isSaveOpen){
+            console.log("isSaveOpen");
+            return true;
+        }
         handlePressed(p5.mouseX, p5.mouseY);
-        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
+        //if(isPointOnCanvas(p5.mouseX, p5.mouseY) && anim.enabled){
+        //    return true;
+        //}
+        //return false;
+        return (!isPointOnCanvas(p5.mouseX, p5.mouseY));// || (isPointOnCanvas(p5.mouseX, p5.mouseY) && !anim.enabled));
+        //return true;
     }
+    //p5.touchStarted = () => {
+    //    console.log("touchStarted");
+    //    return isPointOnCanvas(p5.mouseX, p5.mouseY);
+    //}
     //p5.touchStarted = () => {
     //    //console.debug("touch started");
     //    if(p5.touches.length === 1){
@@ -145,12 +170,13 @@ export const sketch = (p5) => {
         handleDragged(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    p5.touchMoved = () => {
-        if(p5.touches.length === 1){
-            handleDragged(p5.mouseX, p5.mouseY);
-        }
-        return !isPointOnCanvas(p5.mouseX, p5.mouseY);
-    }
+    //p5.touchMoved = () => {
+    //    if(p5.touches.length === 1){
+    //        handleDragged(p5.mouseX, p5.mouseY);
+    //    }
+    //    return !isPointOnCanvas(p5.mouseX, p5.mouseY);
+    //}
+
     p5.mouseReleased = () => {
         handleReleased(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
@@ -165,8 +191,10 @@ export const sketch = (p5) => {
     //}
 
     const handlePressed = (x, y) => {
+        console.log("handlePressed");
         if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
-            return startStroke(x, y);
+            startStroke(x, y);
+            return true;
         }
         return false;
     }
@@ -262,24 +290,22 @@ export const sketch = (p5) => {
      * DRAWING ACTIONS 
      */
     const setPointDrawn = (x, y) => {
-            const p = getPointObj(x, y);
-            if(drawPoint(p, p5)){
-                thisStroke.push(p);
-                if(!isStroke){
-                    //save and clear stroke
-                    if(isMounted){
-                        updateAnim({type: 'DO_STROKE', data: thisStroke});
-                        thisStroke = []; 
-                    }else{
-                        //console.warn("unmounted while doing stroke");
-                    }
-                     
+        const p = getPointObj(x, y);
+        if(drawPoint(p, p5)){
+            thisStroke.push(p);
+            if(!isStroke){
+                //save and clear stroke
+                if(isMounted){
+                    updateAnim({type: 'DO_STROKE', data: thisStroke});
+                    thisStroke = []; 
+                }else{
+                    //console.warn("unmounted while doing stroke");
                 }
-            }else{
-                return false;
+                return true;
             }
-            
-            return isPointOnCanvas(x, y);
+        }else{
+            return false;
+        }
     }
 
     const wipeCurrentFrame = () => {

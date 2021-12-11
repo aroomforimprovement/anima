@@ -88,7 +88,7 @@ export const Creation = ({edit, splat}) => {
     
 
     const handleSaveSubmission = (e) => {
-        
+        console.debug(`handleSaveSubmission`)
         updateAnim({type: 'USERID', data: true});
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
@@ -144,13 +144,13 @@ export const Creation = ({edit, splat}) => {
                        <Modal.Footer>
                             <p>{anim.viewName}</p>
                             <Button size='sm' 
-                                onClick={() => dispatch({type: 'END_PREVIEW', data: true})}
+                                onClick={() => {dispatch({type: 'END_PREVIEW', data: true})}}
                             >Close</Button>
                         </Modal.Footer>
                     </Modal >
                     <Modal show={anim.isSaveOpen} 
-                        onShow={() => updateAnim({type: 'setIsOpen', data: true})}
-                        onHide={() => updateAnim({type: 'setIsOpen', data: false})}>
+                        onShow={() => updateAnim({type: 'SET_SAVE_OPEN', data: true})}
+                        onHide={() => updateAnim({type: 'SET_SAVE_OPEN', data: false})}>
                         <Modal.Header>Save your creation to your account</Modal.Header>
                         <Form onSubmit={handleSaveSubmission}>
                             <Modal.Body>

@@ -71,7 +71,7 @@ export const newAnimState = (user) => {
  */
 export const animReducer = (state, action) => {
     
-    const getPointsScaledToDefault = (data) => {
+    /*const getPointsScaledToDefault = (data) => {
         let newPoints = [];
         for(let i = 0; i < data.points.length; i++) {
             let point = {...data.points[i]};
@@ -82,7 +82,7 @@ export const animReducer = (state, action) => {
             newPoints.push(point);
         };
         return newPoints;
-    }
+    }*/
 
     //save anim and send to auth
     const saveTempAnim = (anim) => {
@@ -253,10 +253,16 @@ export const animReducer = (state, action) => {
                 anim.size = action.data;
                 saveAnimToAccount(state.anim, action.data);
             }
-            return ({...state, enabled: true, isSaveOpen: false, temp: temp});
+            return ({...state, enabled: true, isSaveOpen: false, temp: temp, saveClose: true});
         }
         case 'CANCEL_SAVE':{
-            return({...state, enabled: true, isSaveOpen: false});
+            return({...state, enabled: true, isSaveOpen: false, saveClose: true});
+        }
+        case 'SET_SAVE_OPEN':{
+            return({...state, enabled: !action.data, isSaveOpen: action.data})
+        }
+        case 'SAVE_CLOSE':{
+            return({...state, saveClose: action.data});
         }
         case 'PRIVACY':{
             return({...state, anim:{...state["anim"],
