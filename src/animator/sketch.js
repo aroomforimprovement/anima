@@ -141,9 +141,9 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        console.log("mousePressed");
+        //console.log("mousePressed");
         if(anim.isSaveOpen){
-            console.log("isSaveOpen");
+            //console.log("isSaveOpen");
             return true;
         }
         handlePressed(p5.mouseX, p5.mouseY);
@@ -191,7 +191,7 @@ export const sketch = (p5) => {
     //}
 
     const handlePressed = (x, y) => {
-        console.log("handlePressed");
+        //console.log("handlePressed");
         if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
             startStroke(x, y);
             return true;

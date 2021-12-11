@@ -10,6 +10,7 @@ import { useMainContext } from "../Main";
 import { useCollectionContext } from "../Collection";
 import toast from "react-hot-toast";
 import { ToastConfirm, toastConfirmStyle } from "./Toast";
+import { isMobile } from "react-device-detect";
 
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
@@ -170,7 +171,7 @@ export const CollectionItem = ({anim, index}) => {
                     </div>
                 </div>
             </div>
-            <Modal size='lg' show={isPreviewOpen} 
+            <Modal  show={isPreviewOpen} fullscreen={isMobile}
                 onShow={() => {setIsPreviewOpen(true)}}
                 onHide={() => {setIsPreviewOpen(false)}}>
                 {isPreviewOpen && !collectionItemState.viewFile 
@@ -182,7 +183,7 @@ export const CollectionItem = ({anim, index}) => {
                 : <div></div>}
                 {
                     collectionItemState.viewFile ?
-                    <video controls loop autoPlay muted className='p-2'> 
+                    <video controls loop autoPlay muted className='coll-modal-video p-2'> 
                         <source src={collectionItemState.viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
                     </video> 
                 :
