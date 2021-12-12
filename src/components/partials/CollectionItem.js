@@ -150,7 +150,7 @@ export const CollectionItem = ({anim, index}) => {
                             <div className='col col-3'>
                                 <button className='btn btn-outline-secondary'
                                     onClick={handlePreview}>
-                                        <img src={SITE.icons.preview} alt='preview'></img>
+                                        {isPreviewOpen ? <Loading /> : <img src={SITE.icons.preview} alt='preview'></img>}
                                 </button>
                             </div>
                             <div className='col col-3'>

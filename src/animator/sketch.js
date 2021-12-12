@@ -94,17 +94,19 @@ export const sketch = (p5) => {
                 downloadAnimAsWebm(anim.anim, p5canvas, p5);
             }            
         }
-        if(props.controls.preview){
-            dispatch({type: 'PREVIEW', data: false});
-            if(anim.anim.frames.length < 1){
-                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
-            }else{
-                updateAnim({type: 'PREVIEW', data: anim.anim});
-                dispatch({type: 'DISABLE', data: true});
+        if(props.controls.preview && props.anim.isPreviewOpen){
+                dispatch({type: 'PREVIEW', data: false});        
+                console.log(props.anim.isPreviewOpen);
                 previewAnim(anim.anim, p5canvas, p5, updateAnim)
                     .then(() => {
                         p5.resizeCanvas(10, 10);
-                    });
+                });
+        }else if(props.controls.preview){
+            if(anim.anim.frames.length < 1){
+                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
+            }else{
+                dispatch({type: 'DISABLE', data: true});
+                updateAnim({type: 'PREVIEW', data: anim.anim});
             }
         }
         if(props.controls.endPreview){

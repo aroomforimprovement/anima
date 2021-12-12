@@ -214,6 +214,7 @@ export const animReducer = (state, action) => {
             });
         }
         case 'PREVIEW':{
+            console.log("Creation: PREVIEW");
             return({...state,
                 isPreviewOpen: true});
         }
