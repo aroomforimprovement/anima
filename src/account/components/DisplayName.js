@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useMainContext } from '../Main';
+import { useMainContext } from '../../main/Main';
 import { useAccountContext } from '../Account';
-import { updateDisplayName } from '../../redux/Account';
-import { Loading } from './Loading';
+import { updateDisplayName } from '../accountReducer';
+import { Loading } from '../../common/Loading';
 import { Form, FormGroup, InputGroup, Input, Button } from 'reactstrap';
 import toast from 'react-hot-toast';
 

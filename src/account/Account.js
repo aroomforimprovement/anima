@@ -1,11 +1,11 @@
 import React, { useEffect, useReducer, createContext, useContext, useState } from 'react';
-import { Notice } from './partials/Notice';
-import { Contact } from './partials/Contact';
-import { DisplayName } from './partials/DisplayName';
-import { useMainContext } from './Main';
-import { accountReducer, getAccountInfo, deleteAccount } from '../redux/Account';
+import { Notice } from './components/Notice';
+import { Contact } from './components/Contact';
+import { DisplayName } from './components/DisplayName';
+import { useMainContext } from '../main/Main';
+import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from './partials/Toast';
+import { ToastConfirm, toastConfirmStyle } from '../common/Toast';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const AccountContext = createContext({});

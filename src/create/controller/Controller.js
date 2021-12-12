@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { MobileController } from '../mobile/MobileController';
+import { MobileController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
     Background, Next, Download, Save, Preview, EnableShortcuts } from './ControllerBtns';
-import { CreateInfo } from './CreateInfo';
+import { ControllerInfo } from './ControllerInfo';
 
 
 export const Controller = () => {
@@ -45,7 +45,7 @@ export const SaveController = () => {
                         <div ><EnableShortcuts id='enable-shortcuts'/></div>
                     </div>
                     <div className='row'>
-                        <CreateInfo />
+                        <ControllerInfo />
                     </div>
                 </div>
             </div>

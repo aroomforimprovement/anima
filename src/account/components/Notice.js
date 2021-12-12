@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import {SITE} from '../../shared/site';
-import { useMainContext } from '../Main';
+import { useMainContext } from '../../main/Main';
 import { useAccountContext } from '../Account';
-import { addContact, deleteNotice } from '../../redux/Account';
+import { addContact, deleteNotice } from '../accountReducer';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from './Toast';
+import { ToastConfirm, toastConfirmStyle } from '../../common/Toast';
 
 
 export const Notice = ({notice, i, link}) => {

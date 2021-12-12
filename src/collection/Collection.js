@@ -1,11 +1,11 @@
 import React, { useReducer, useContext, createContext, useEffect } from 'react';
-import { CollectionItem } from './partials/CollectionItem';
-import { Loading } from './partials/Loading';
-import { useMainContext } from './Main';
-import { collectionReducer, addContactRequest, getCollection } from '../redux/Collection';
+import { CollectionItem } from './CollectionItem';
+import { Loading } from '../common/Loading';
+import { useMainContext } from '../main/Main';
+import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from './partials/Toast';
+import { ToastConfirm, toastConfirmStyle } from '../common/Toast';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 

@@ -1,9 +1,10 @@
 import React from 'react';
+import { SITE } from '../shared/site';
 
 const Footer = () => {
     return(
         <footer hidden={true} className='site-footer'>
-            <p><a href='/'>Animator</a></p>
+            <p><a href='/'>{SITE.name}</a></p>
         </footer>
     );
 }

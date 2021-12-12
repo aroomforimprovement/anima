@@ -5,7 +5,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const getNewAnimId = () => {
-    //console.log("getNewAnimId");
     return uuidv4();
 }    
 const getTempUserId = (animid) => {

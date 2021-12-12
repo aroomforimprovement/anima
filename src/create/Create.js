@@ -1,9 +1,9 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { Controller, SaveController } from './partials/Controller';
+import { Controller, SaveController } from './controller/Controller';
 import { Jumbotron } from 'reactstrap';
-import { Creation } from './partials/Creation';
-import { values } from '../animator/values';
-import { controlReducer } from '../redux/Create';
+import { Animation } from './animation/Animation';
+import { values } from './values';
+import { controlReducer } from './controller/controlReducer';
 import { useParams } from 'react-router';
 
 export const ControlContext = createContext(values.initialControlState);
@@ -22,7 +22,7 @@ const Create = ({edit}) => {
             <ControlContext.Provider value={controlState}>
                 <Controller />
                 <Jumbotron >
-                    <Creation edit={edit} splat={splat}/>
+                    <Animation edit={edit} splat={splat}/>
                 </Jumbotron>
                 <SaveController />
             </ControlContext.Provider>        

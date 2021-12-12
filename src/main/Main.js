@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { Switch, Route, Redirect, withRouter, useHistory } from 'react-router-dom';
-import Header from './partials/Header';
-import Footer from './partials/Footer';
+import Header from '../common/Header';
+import Footer from '../common/Footer';
 import Home from './Home';
-import Login from './Login';
-import Logout from './Logout';
-import Create from './Create';
-import Collection from './Collection';
-import Account from './Account';
-import { mainReducer } from '../redux/Main';
+import Login from '../common/Login';
+import Logout from '../common/Logout';
+import Create from '../create/Create';
+import Collection from '../collection/Collection';
+import Account from '../account/Account';
+import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getAccountInfo } from '../redux/Account';
-import { Toast } from './partials/Toast';
+import { getAccountInfo } from '../account/accountReducer';
+import { Toast } from '../common/Toast';
 
 
 const MainContext = createContext({});

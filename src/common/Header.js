@@ -3,8 +3,8 @@ import { Navbar, NavItem, NavbarToggler, NavbarBrand, Nav, Collapse } from 'reac
 import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
-import { SITE } from '../../shared/site';
-import { useMainContext } from '../Main';
+import { SITE } from '../shared/site';
+import { useMainContext } from '../main/Main';
 
 const Header = () => {
     

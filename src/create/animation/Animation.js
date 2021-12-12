@@ -2,11 +2,11 @@ import React, { createContext, useContext, useEffect, useRef, useReducer, useSta
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { ControlContext, useControlContext } from '../Create';
-import { animReducer, newAnimState } from '../../redux/Creation';
-import { sketch } from '../../animator/sketch';
-import { values } from '../../animator/values';
-import { Privacy } from './ControllerBtns';
-import { useMainContext } from '../Main';
+import { animReducer, newAnimState } from './animationReducer';
+import { sketch } from './sketch';
+import { values } from '../values';
+import { Privacy } from '../controller/ControllerBtns';
+import { useMainContext } from '../../main/Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 
@@ -19,7 +19,7 @@ export const useAnimContext = () => {
 }
 
 
-export const Creation = ({edit, splat}) => {
+export const Animation = ({edit, splat}) => {
 
     const { mainState } = useMainContext();
     

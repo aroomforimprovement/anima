@@ -11,6 +11,74 @@ export const CC =
 	UNDO_STROKE: 324, REDO_STROKE: 325, WIPE: 326,
 };
 
+export const values = {
+    defaultSize: 600,
+    initialBgc: [20, 20, 20, 255],
+    bgc: [20, 20, 20, 240],
+    penWhite: [200, 200, 200, 200],
+    initialControlState: {
+        mode: CC.SINGLE,
+        pc: [200, 200, 200, 200],
+        ps: CC.PS_2,
+        enable: false,
+        disable: false,
+        shortcutsEnabled: false,
+        undo: false,
+        redo: false,
+        frate: 8,
+        wipe: false,
+        saveBg: false,
+        drawBg: false,
+        download: false,
+        preview: false,
+        endPreview: false,
+        isPreviewOpen: false,
+        isSaveOpen: false,
+        privacy: 0,
+        currentPrivacy: 0
+    },
+    initialAnimState: {
+        enabled: true,
+        anim:{
+            "animid": null,
+            "userid": null,
+            "username": null,
+            "name": null,
+            "type": "animation",
+            "created": null,
+            "modified": null,
+            "frate": 8,
+            "size": 600,
+            "privacy": 0,
+            "frames": [],
+            "lastFrame":{},
+        },
+        undos:[],
+        redos:[],
+        undid:[],
+        redid:[],
+        bg:[],
+        fid: 0,
+        isPreviewOpen: false,
+        isSaveOpen: false
+    },
+    red: [185, 70, 70, 200],
+    green: [70, 185, 70, 200],
+    blue: [110, 200, 220, 200],
+    yellow: [255, 255, 100, 200],
+    orange: [242, 149, 0, 200],
+    cyan: [0, 238, 242, 200],
+    purple: [127, 0, 181, 200],
+    pink: [242, 92, 162, 200],
+    bg_solid:  [20, 20, 20, 200],
+    bg_shade: [20, 20, 20, 50],
+    fg_solid: [220, 220, 220, 200],
+    fg_shade: [220, 220, 220, 50],
+    frameRates: [4, 8, 16, 20, 24, 28],
+    penSizes: [1, 2, 3, 4, 5, 6, 7],
+    
+}
+
 export const CONTROLS = 
 [
     {k: 's', v: CC.SINGLE, n: "SINGLE", t: CC.TYPE_MODE},
@@ -45,5 +113,4 @@ export const CONTROLS =
 	{k : ']', v : CC.REDO_STROKE, n : "REDO_STROKE", t : CC.TYPE_TRIGGER},
 	{k : 'x', v : CC.WIPE, n : "WIPE", t: CC.TYPE_TRIGGER},
 ];
-
 

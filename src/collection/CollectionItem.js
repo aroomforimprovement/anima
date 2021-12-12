@@ -1,15 +1,15 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { SITE } from "../../shared/site";
+import { SITE } from "../shared/site";
 import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
-import { preview } from "../../animator/preview";
-import { Loading } from './Loading';
+import { preview } from "../create/animation/preview";
+import { Loading } from '../common/Loading';
 import LazyLoad from "react-lazyload";
 import { saveAs } from 'file-saver';
-import { useMainContext } from "../Main";
-import { useCollectionContext } from "../Collection";
+import { useMainContext } from "../main/Main";
+import { useCollectionContext } from "./Collection";
 import toast from "react-hot-toast";
-import { ToastConfirm, toastConfirmStyle } from "./Toast";
+import { ToastConfirm, toastConfirmStyle } from "../common/Toast";
 import { isMobile } from "react-device-detect";
 
 

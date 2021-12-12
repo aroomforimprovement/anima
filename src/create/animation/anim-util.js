@@ -1,5 +1,4 @@
-import { values } from './values';
-import { CC } from './controls';
+import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 
 

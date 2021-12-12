@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Problem } from '../components/partials/Problem';
+import { Problem } from '../common/Problem';
 
 export const getApiError = (res, err, dispatch) => {
     dispatch({type: 'setIsFailed', data: true});

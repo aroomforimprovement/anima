@@ -1,10 +1,10 @@
 import React from 'react';
 import { Jumbotron } from 'reactstrap';
 import { SITE } from '../shared/site';
-import { LoginBtn, LogoutBtn, SignupBtn } from './partials/AuthBtns';
+import { LoginBtn, LogoutBtn, SignupBtn } from '../common/AuthBtns';
 import { NavLink } from 'react-router-dom';
-import { Loading } from './partials/Loading';
-import { useMainContext } from './Main';
+import { Loading } from '../common/Loading';
+import { useMainContext } from '../main/Main';
 
 const Home = () => {
     

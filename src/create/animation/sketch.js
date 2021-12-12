@@ -1,5 +1,4 @@
-import { values } from './values';
-import { CC, CONTROLS }  from './controls';
+import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 

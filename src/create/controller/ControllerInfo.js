@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useControlContext } from '../Create'; 
-import { CC } from '../../animator/controls';
+import { CC } from '../values';
 import { SITE } from '../../shared/site';
 
-export const CreateInfo = () => {
+export const ControllerInfo = () => {
     
     const { controls } = useControlContext();
     const [mode, setMode] = useState(101);

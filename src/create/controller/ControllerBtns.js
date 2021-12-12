@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
     FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { SITE } from '../../shared/site';
-import { values } from '../../animator/values';
+import { CC, CONTROLS, values } from '../values';
 import { useControlContext } from '../Create';
-import { CC, CONTROLS } from '../../animator/controls';
-import { ShortcutInfo } from './CreateInfo';
+import { ShortcutInfo } from './ControllerInfo';
 
 
 const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {

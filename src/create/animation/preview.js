@@ -1,5 +1,5 @@
 import { previewAnim } from './anim-util';
-import { values } from './values';
+import { values } from '../values';
 import { isMobile } from 'react-device-detect';
 
 export const preview = (p5) => {

@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Button } from 'reactstrap';
-import { CC, CONTROLS } from '../../animator/controls';
 import { SITE } from '../../shared/site';
-import { values } from '../../animator/values';
+import { values, CC, CONTROLS } from '../values';
 import { useControlContext } from '../Create';
-import { Next, Undo, Redo } from '../partials/ControllerBtns';
+import { Next, Undo, Redo } from './ControllerBtns';
 
 
 const Expanse = () => {
