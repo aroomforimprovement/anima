@@ -1,0 +1,169 @@
+
+.btn-ctl {
+    border-radius: 5px;
+    border-color:rgb(42, 42, 42);
+    display:inline-block;
+  }
+
+@media only screen and (max-width: 410px){
+    .save-controller .btn-ctl{
+      margin:0px;
+    }
+  }
+  
+  .controller {
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  
+  .controller img{
+    width:30px;
+    height:30px;
+  }
+  
+  @media only screen and (max-width: 576px) {
+    .controller img{
+      width:30px;
+      height:30px;
+      padding:0px;
+      display:inline-block;
+    }
+    .controller button{
+      width:45px;
+      height:45px;
+      padding:0px;
+      display:inline-block;
+    }
+  }
+  
+  @media only screen and (max-width: 390px){
+    .controller img{
+      width:25px;
+      height:25px;
+      display:inline-block;
+    }
+    .controller button{
+      width:30px;
+      height:30px;
+      padding:0px;
+      margin:0px;
+      display:inline-block;
+    }
+    .save-controller img{
+      width:25px;
+      height:25px;
+      display:inline-block;
+    }
+    .save-controller button{
+      width:35px;
+      height:35px;
+      padding:0px;
+      display:inline-block;
+    }
+    
+  }
+
+  .btn-container{
+    position: relative;
+    text-align: center;
+  }
+  
+  .btn-caption{
+    position: absolute;
+    font-size:x-small;
+    color:black;
+    bottom: 2px;
+    left: 10px;
+  }
+  
+  .btn-colour-container{
+    position:relative;
+    text-align: center;
+  }
+  
+  .btn-colour-caption{
+    position: absolute;
+    font-size:x-small;
+    color:black;
+    background-color:white;
+    border-radius: 2.5px;
+    width: 100%;
+    height: 5px;
+    bottom: 7px;
+    left: 7px;
+  }
+  
+  .privacy-group{
+    float:left;
+  }
+  
+  .privacy-heading{
+    color: rgb(179, 179, 179);
+    text-align: left;
+    display:inline-block;
+    font-size: smaller;
+  }
+  
+  .privacy-label{
+    font-size:small;
+    text-align:start;
+    display:block;
+  }
+  
+  .shortcuts-group{
+    margin-top:0.5em;
+    border-color:rgb(0, 0, 0);
+    border-width: 10px;
+    text-align:end;
+  }
+  
+  .shortcuts-label {
+    text-align:start;
+    font-size:small;
+    color:silver;
+  }
+  
+  .create-options{
+    overflow: auto;
+  }
+  
+  .cont-left{
+    margin-left:auto;
+    margin-right:0px;
+  }
+  
+  .cont-right{
+    margin-left:0px;
+    margin-right:auto;
+  }
+  
+  .btn-shortcuts-info{
+    text-align:justify;
+  }
+  
+  .create-info{
+    text-align: end;
+  }
+  .create-info p{
+    font-size: small;
+    text-align:start;
+    display:inline-block;
+    color:rgb(172, 172, 172);
+  }
+  
+  .create-info span{
+    font-size: small;
+    color:rgb(172, 172, 172);
+  }
+  
+  .shortcut-info{
+    background-color: rgb(161, 161, 161) !important;
+  }
+  .shortcut-info p{
+    font-size: small;
+  }
+  
+  .shortcut-info-item li p {
+    font-size: smaller;
+  }

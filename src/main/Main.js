@@ -12,7 +12,7 @@ import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
 import { Toast } from '../common/Toast';
-
+import './main.css';
 
 const MainContext = createContext({});
 

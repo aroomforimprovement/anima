@@ -1,6 +1,7 @@
 html{
   background-color: rgb(103, 103, 103);
 }
+
 body {
   margin: 0px;
   background-color: rgb(103, 103, 103);
@@ -15,7 +16,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
 
 .site-header {
   position: absolute;
@@ -84,241 +84,8 @@ code {
   }
 }
 
-
 .loading {
   display:inline-block;
-}
-
-.home-page-heading {
-  padding-top: 1.5em;
-  padding-bottom: 1em;
-  color:rgb(199, 199, 199);
-}
-
-.sample-anim {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.home-page-btn-rack {
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 1.5em;
-  padding-bottom: 1em;
-  display: block;
-}
-
-.controller {
-  display:block;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-.controller img{
-  width:30px;
-  height:30px;
-}
-
-@media only screen and (max-width: 576px) {
-  .controller img{
-    width:30px;
-    height:30px;
-    padding:0px;
-    display:inline-block;
-  }
-  .controller button{
-    width:45px;
-    height:45px;
-    padding:0px;
-    display:inline-block;
-  }
-}
-
-@media only screen and (max-width: 410px){
-  .save-controller .btn-ctl{
-    margin:0px;
-  }
-}
-
-
-@media only screen and (max-width: 390px){
-  .controller img{
-    width:25px;
-    height:25px;
-    display:inline-block;
-  }
-  .controller button{
-    width:30px;
-    height:30px;
-    padding:0px;
-    margin:0px;
-    display:inline-block;
-  }
-  .save-controller img{
-    width:25px;
-    height:25px;
-    display:inline-block;
-  }
-  .save-controller button{
-    width:35px;
-    height:35px;
-    padding:0px;
-    display:inline-block;
-  }
-  
-}
-
-.btn-ctl {
-  border-radius: 5px;
-  border-color:rgb(42, 42, 42);
-  display:inline-block;
-}
-
-.btn-container{
-  position: relative;
-  text-align: center;
-}
-
-.btn-caption{
-  position: absolute;
-  font-size:x-small;
-  color:black;
-  bottom: 2px;
-  left: 10px;
-}
-
-.btn-colour-container{
-  position:relative;
-  text-align: center;
-}
-
-.btn-colour-caption{
-  position: absolute;
-  font-size:x-small;
-  color:black;
-  background-color:white;
-  border-radius: 2.5px;
-  width: 100%;
-  height: 5px;
-  bottom: 7px;
-  left: 7px;
-}
-
-.privacy-group{
-  float:left;
-}
-
-.privacy-heading{
-  color: rgb(179, 179, 179);
-  text-align: left;
-  display:inline-block;
-  font-size: smaller;
-}
-
-.privacy-label{
-  font-size:small;
-  text-align:start;
-  display:block;
-}
-
-.shortcuts-group{
-  margin-top:0.5em;
-  border-color:rgb(0, 0, 0);
-  border-width: 10px;
-  text-align:end;
-}
-
-.shortcuts-label {
-  text-align:start;
-  font-size:small;
-  color:silver;
-}
-
-.create-options{
-  overflow: auto;
-}
-
-.cont-left{
-  margin-left:auto;
-  margin-right:0px;
-}
-
-.cont-right{
-  margin-left:0px;
-  margin-right:auto;
-}
-
-.btn-shortcuts-info{
-  text-align:justify;
-}
-
-.create-info{
-  text-align: end;
-}
-.create-info p{
-  font-size: small;
-  text-align:start;
-  display:inline-block;
-  color:rgb(172, 172, 172);
-}
-
-.create-info span{
-  font-size: small;
-  color:rgb(172, 172, 172);
-}
-
-.shortcut-info{
-  background-color: rgb(161, 161, 161) !important;
-}
-.shortcut-info p{
-  font-size: small;
-}
-
-.shortcut-info-item li p {
-  font-size: smaller;
-}
-
-.collection-header h5{
-  text-align: start;
-  font-size: xx-large;
-}
-
-.coll-item {
-  display:inline-block;
-  color:rgb(80, 80, 80);
-  margin-top: 5px;
-  text-align: start;
-  font-size:smaller;
-  background: rgb(223, 223, 223);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .6), 0 4px 8px rgba(200, 200, 200, .02);
-
-}
-
-.coll-item:hover{
-  transform: scale(1.02);
-  box-shadow: 0 10px 20px rgba(200, 200, 200, .6), 0 4px 8px rgba(200, 200, 200, .06);
-}
-
-.coll-item a{
-  color:black;
-}
-
-.coll-item-name{
-  font-size:large;
-  font-weight: bolder;
-}
-
-.coll-item-detail{
-  text-align: start;
-}
-
-.coll-item-username{
-  text-align:start;
-}
-
-.coll-item-date{
-  text-align:end;
 }
 
 .coll-item-btns{
@@ -358,74 +125,6 @@ code {
   background: linear-gradient(45deg, rgb(220, 220, 220), rgb(200, 200, 200));
 }
 
-.coll-modal-video{
-  max-height:50%;
-}
-
-.preview-name, span{
-  text-align:start;
-}
-
-
-
-.account-page{
-  text-align: start;
-  display:inline-block;
-}
-
-.display-name-area, .notices, .contacts{
-  background-color: rgb(94, 94, 94);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .2);
-  padding: 5%;
-  margin-bottom:3%;
-}
-
-.display-name{
-  font-size:xx-large;
-}
-
-.edit-name:hover{
-  transform: scale(1.2);
-  color:rgba(255, 255, 255, 0.7);
-  cursor:pointer;
-}
-
-.notices-header, .contacts-header{
-  cursor:pointer;
-  font-size:larger;
-  margin-top:3%;
-  margin-bottom:3%;
-}
-
-.notices-header:hover, .contacts-header:hover{
-  transform: scale(1.02);
-}
-
-.notice{
-  position:relative;
-  background: rgb(83,83,83);
-  box-shadow: 0 10px 20px rgba(200, 200, 200, .06), 0 4px 8px rgba(200, 200, 200, .02);
-}
-
-.notice:hover{
-  transform: scale(1.02);
-  box-shadow: 0 10px 20px rgba(200, 200, 200, .12), 0 4px 8px rgba(200, 200, 200, .06);
-}
-
-.contact{
-  background: rgb(83,83,83);
-  box-shadow: 0 10px 20px rgba(200, 200, 200, .06), 0 4px 8px rgba(200, 200, 200, .02);
-}
-
-.contact:hover{
-  transform: scale(1.02);
-  box-shadow: 0 10px 20px rgba(200, 200, 200, .12), 0 4px 8px rgba(200, 200, 200, .06);
-}
-
-.contact-name{
-  font-size:larger;
-}
-
 .end-zone{
   text-align: end;
 }
@@ -457,8 +156,6 @@ code {
     right:0%;
   }
 }
-
-
 
 .warn{
   color:rgb(173, 2, 2);

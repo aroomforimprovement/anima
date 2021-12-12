@@ -7,6 +7,7 @@ import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer'
 import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle } from '../common/Toast';
 import { useAuth0 } from '@auth0/auth0-react';
+import './account.css';
 
 const AccountContext = createContext({});
 
@@ -25,12 +26,7 @@ const Account = () => {
     const stateOfAccount = { state, dispatch };
     
     useEffect(() => {
-        //console.log("mainState.user:");
-        //console.dir(mainState.user);
-        //console.log("state.notices:");
-        //console.dir(state.notices);
-        //console.log("state.contacts:");
-        //console.dir(state.contacts);
+        
     },[mainState.user, state.notices, state.contacts]);
 
     const getAccountId = () => {
