@@ -1,6 +1,6 @@
 
 export const mainReducer = (state, action) => {
-    //console.debug(`mainReducer: ${action.type}:${action.data}`);
+    console.debug(`mainReducer: ${action.type}:${action.data}`);
     switch (action.type) {
         case 'CHECK_AUTH':{
             //should get really get display name from db (or update on auth0)
@@ -20,8 +20,6 @@ export const mainReducer = (state, action) => {
                 user = {...state.user};
             }
             user.access = action.data
-            //console.log("User in SET_ACCESS");
-            //console.dir(user);
             return({...state, user: user});
         }
         case 'SET_USERNAME':{
@@ -30,8 +28,6 @@ export const mainReducer = (state, action) => {
             return({...state, user: user});
         }
         case 'SET_ACCOUNT_INFO':{
-            //console.log('SET_ACCOUNT_INFO');
-            //console.dir(action.data);
             return({...state, contacts: action.data.contacts, notices: action.data.notices, 
                 user: {...state.user, username: action.data.username}, isSet: action.data.isSet});
         }

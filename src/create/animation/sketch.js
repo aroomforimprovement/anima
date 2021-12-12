@@ -27,15 +27,10 @@ export const sketch = (p5) => {
 
     p5.updateWithProps = (props) => {
         isMounted = true;
-        //console.log("PROP CONTROLS:");
-        //console.dir(props.controls);
-        //console.log("PROP ANIM: ");
-        //console.dir(props.anim);
         if(props.controls){ controls = props.controls; }
         if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
         if(props.anim){ 
             anim = props.anim;
-            //p5.resizeCanvas(props.anim.anim.size, props.anim.anim.size);
             if(props.anim.isSet && !isSet){
                 isSet = true;
                 setSavedBackground(props);
@@ -126,7 +121,8 @@ export const sketch = (p5) => {
                 isMobile ? p5.displayWidth : values.defaultSize);
             updateAnim({type: 'SAVE_CLOSE', data: false});
         }
-        if(props.controls.privacy !== null){
+        if(props.controls.privacy !== null 
+            && (anim && anim.anim && anim.anim.privacy !== props.controls.privacy)){
             const p = props.controls.privacy;
             updateAnim({type: 'PRIVACY', data: p});
             dispatch({type: 'PRIVACY', data: null});

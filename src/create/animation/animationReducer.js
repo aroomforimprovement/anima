@@ -69,20 +69,6 @@ export const newAnimState = (user) => {
  * @returns 
  */
 export const animReducer = (state, action) => {
-    
-    /*const getPointsScaledToDefault = (data) => {
-        let newPoints = [];
-        for(let i = 0; i < data.points.length; i++) {
-            let point = {...data.points[i]};
-            console.log("point.x: " + point.x);
-            point.x = data.map(point.x);
-            console.log("point.x: " + point.x);
-            point.y = data.map(point.y);
-            newPoints.push(point);
-        };
-        return newPoints;
-    }*/
-
     //save anim and send to auth
     const saveTempAnim = (anim) => {
         //console.log("saveTempAnim:");
@@ -119,8 +105,8 @@ export const animReducer = (state, action) => {
             console.error(error)
         });
     }
-    //console.log(action.type+':'+action.data);
-    //console.dir(action.data);
+    
+    console.debug(`animReducer:${action.type}:${action.data}`);
     switch(action.type){
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});

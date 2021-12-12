@@ -13,7 +13,7 @@
  */
 
 export const controlReducer = (state, action) => {
-    ////console.log(action.type+':'+action.data);
+    console.debug(`controlReducer:${action.type}:${action.data}`);
     switch(action.type){
         case 'DISABLE':{
             return ({...state, disable: action.data});
