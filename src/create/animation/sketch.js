@@ -91,7 +91,7 @@ export const sketch = (p5) => {
         if(props.controls.preview && props.anim.isPreviewOpen){
                 dispatch({type: 'PREVIEW', data: false});        
                 console.log(props.anim.isPreviewOpen);
-                previewAnim(anim.anim, p5canvas, p5, updateAnim)
+                previewAnim(anim.anim, 'DRAWING', p5canvas, p5, updateAnim, undefined, undefined, false, true)
                     .then(() => {
                         p5.resizeCanvas(10, 10);
                 });
@@ -106,9 +106,9 @@ export const sketch = (p5) => {
         if(props.controls.endPreview){
             dispatch({type: 'END_PREVIEW', data: false});
             updateAnim({type: 'END_PREVIEW', data: false});
-            p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
-                isMobile ? p5.displayWidth : values.defaultSize);
-            redrawLastFrame();
+            isMounted ? p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
+                isMobile ? p5.displayWidth : values.defaultSize) : console.debug("unmounted before canvas resize");
+            isMounted ? redrawLastFrame() : console.log("unmounted before redrawLastFrame");
         }
         if(props.controls.save){
             dispatch({type: 'SAVE', data: false});

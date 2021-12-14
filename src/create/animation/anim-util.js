@@ -87,15 +87,15 @@ export const playPreview = async (blob, name, dispatch, index, setCollectionStat
     }
 }
 
-export const previewAnim = async (a, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip) => {
+export const previewAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing) => {
     try{
-        renderAnim(a, 'PREVIEW', p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip);
+        renderAnim(a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing);
     }catch(err){
         console.error(err);
     }
 }
 
-export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip) =>{
+export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing) =>{
     const CCapture = window.CCapture; 
     let capturer = new CCapture({format: 'webm',
 //      workersPath: process.env.PUBLIC_URL + '/ccapture/',
@@ -121,18 +121,18 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
             playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
                 .then(() => {
                 if(setCollectionState){
-                    if(document.getElementById(`previewCanvas_${index}`)){
-                        document.getElementById(`previewCanvas_${index}`).remove();
-                    } 
                     setCollectionState({type: 'SET_INDEX', data: index+1}) 
                 }else{
-                    //console.log('no collection state');
+                    console.debug('no collection state');
                 } 
             });;
         }else if(type === 'DOWNLOAD'){
             saveAs(blob, a.name);
         }
     });
+    if(!drawing){
+        p5.remove();
+    }
 }
 
 export const setBgOverlay = (p5, render) => {

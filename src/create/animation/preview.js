@@ -21,7 +21,7 @@ export const preview = (p5) => {
 //            p5.resizeCanvas(
 //                props.anim.size ? props.anim.size : values.defaultSize, 
 //                props.anim.size ? props.anim.size : values.defaultSize);
-            previewAnim(props.anim, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
+            previewAnim(props.anim, 'PREVIEW', p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
         }
     }
     
