@@ -88,7 +88,7 @@ export const Animation = ({edit, splat}) => {
     
 
     const handleSaveSubmission = (e) => {
-        console.debug(`handleSaveSubmission`)
+        //console.debug(`handleSaveSubmission`)
         updateAnim({type: 'USERID', data: true});
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});

@@ -106,7 +106,7 @@ export const animReducer = (state, action) => {
         });
     }
     
-    console.debug(`animReducer:${action.type}:${action.data}`);
+    //console.debug(`animReducer:${action.type}:${action.data}`);
     switch(action.type){
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});
@@ -199,7 +199,7 @@ export const animReducer = (state, action) => {
             });
         }
         case 'PREVIEW':{
-            console.log("Creation: PREVIEW");
+            //console.log("Creation: PREVIEW");
             return({...state,
                 isPreviewOpen: true});
         }
@@ -229,7 +229,7 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true, anim: anim});
         }
         case 'SAVE_TO_ACCOUNT':{
-            console.debug('SAVE_TO_ACCOUNT');
+            //console.debug('SAVE_TO_ACCOUNT');
             let temp = false;
             if(!action.data && !window.localStorage.getItem('tempAnim')){
                 saveTempAnim(state.anim);
