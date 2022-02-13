@@ -29,7 +29,9 @@ export const preview = (p5) => {
 
     }
 
-
+    p5.touchMoved = () => {
+        console.log("touchMoved");
+    }
 
 
 }

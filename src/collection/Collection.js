@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, createContext, useEffect } from 'react';
+import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './CollectionItem';
 import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
@@ -15,11 +15,10 @@ export const useCollectionContext = () => {
 }
 
 const Collection = ({browse}) => {
-   
+
     const { mainState } = useMainContext();
     const splat = useParams()[0];
-    
-    
+      
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){

@@ -102,7 +102,7 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
         framerate: a.frate
     });
     capturer.start();
-    //const startTime = performance.now();
+    const startTime = performance.now();
     setBgOverlay(p5, true);
     setBgOverlay(p5, true);
     let frames = [...a.frames];
@@ -114,10 +114,10 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
        setFrameCaptured(f, capturer, p5canvas, p5);
     });
     capturer.stop();
-    //const duration = performance.now() - startTime;
-    //console.log("Capture took "+duration);
+    const duration = performance.now() - startTime;
+    console.log("Capture took "+duration);
     capturer.save((blob) => {
-       if(type === 'PREVIEW'){
+       if(type === 'PREVIEW'){ 
             playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
                 .then(() => {
                 if(setCollectionState){

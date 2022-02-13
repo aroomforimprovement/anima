@@ -111,7 +111,8 @@ export const CollectionItem = ({anim, index}) => {
 
     return(
         <div className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
-            {mainState.isSet ? <LazyLoad height={300} offset={10} once>
+            {mainState.isSet && collectionState.index >= index
+            ? <LazyLoad height={300} offset={10} once>
                 <div>    
                     <div >
                     {collectionItemState.previewFile 
