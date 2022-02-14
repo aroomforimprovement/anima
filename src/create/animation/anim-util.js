@@ -121,7 +121,7 @@ export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, 
             playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
                 .then(() => {
                 if(setCollectionState){
-                    setCollectionState({type: 'SET_INDEX', data: index+1}) 
+                    setCollectionState({type: 'SET_INDEX', data: index+1});
                 }else{
                     console.debug('no collection state');
                 } 

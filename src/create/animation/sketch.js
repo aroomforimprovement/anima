@@ -1,6 +1,8 @@
 import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
+import toast from 'react-hot-toast';
+import { ToastConfirm, toastConfirmStyle } from '../../common/Toast';
 
 
 export const sketch = (p5) => {
@@ -14,6 +16,17 @@ export const sketch = (p5) => {
     let isMounted = false;
     let isSet = false;
 
+    const handleNoFramesAlert = () => {
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+        toast((t) => (
+            <ToastConfirm t={t} appprove={dismiss} dismiss={dismiss}
+                message={`Looks like you tried to render an animation with no frames. 
+                    Save a frame and try again`}
+                approveBtn={"Cool"} dismissBtn={"OK"} />
+        ), toastConfirmStyle());
+    }
     /**
      *  P5
      */
@@ -83,7 +96,7 @@ export const sketch = (p5) => {
         if(props.controls.download){
             dispatch({type: 'DOWNLOAD', data: false});
             if(anim.anim.frames.length < 1){
-                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
+                handleNoFramesAlert();
             }else{
                 downloadAnimAsWebm(anim.anim, p5canvas, p5);
             }            
@@ -97,7 +110,7 @@ export const sketch = (p5) => {
                 });
         }else if(props.controls.preview){
             if(anim.anim.frames.length < 1){
-                alert("Looks like you tried to render an animation with no frames. Save a frame and try again");
+                handleNoFramesAlert()
             }else{
                 dispatch({type: 'DISABLE', data: true});
                 updateAnim({type: 'PREVIEW', data: anim.anim});
