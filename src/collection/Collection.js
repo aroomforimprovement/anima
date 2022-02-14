@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
+import React, { useReducer, useContext, createContext, useEffect } from 'react';
 import { CollectionItem } from './CollectionItem';
 import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
@@ -87,16 +87,32 @@ const Collection = ({browse}) => {
             //console.log("setCollection");
             setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
+        const handleFailedConnection = () => {
+            const dismiss = (id) => {
+                toast.dismiss(id);
+                window.location.href = '/';
+            }
+            toast((t) => (
+                <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
+                    message={`It looks like there has been an issue contacting the server.
+                        Try again in a few minutes, or contact support if this is a persistent problem.`}
+                    approveBtn={"Cool"} dismissBtn={"OK"}/>
+            ), toastConfirmStyle());
+        }
         if(!collectionState.isSet && mainState.isSet){
             const access = mainState.user ? mainState.user.access : undefined
             getCollection(splat, browse, access, signal)
                 .then((response) => {
-                    if(browse){
-                        setCollection({anims: response, isSet: true});
+                    if(response){
+                        if(browse){
+                            setCollection({anims: response, isSet: true});
+                        }else{
+                            setCollection({anims: response.anims, isSet: true,
+                                username: response.username, userid: response.userid,
+                                isOwn: response.userid === mainState.user.userid});
+                        }
                     }else{
-                        setCollection({anims: response.anims, isSet: true,
-                            username: response.username, userid: response.userid,
-                            isOwn: response.userid === mainState.user.userid});
+                        handleFailedConnection();
                     }
                 }).catch((error) => {console.error(error)});
         }

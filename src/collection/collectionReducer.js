@@ -27,7 +27,11 @@ export const getCollection = async (id, isBrowse, access, signal) => {
         }
     }, error => {
         console.error("error fetching collection: " + error);
-    }).catch(err => console.error(err));
+        return false;
+    }).catch(err => {
+        console.error(err);
+        return false;
+    });
 }
 
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
