@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
 import { Loading } from './Loading';
-import { Problem } from './Problem';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
 import { handleFailedConnection } from './Toast';
@@ -12,8 +11,6 @@ const Login = () => {
     const { mainState  } = useMainContext();
 
     const putLogin = async (login, signal) => {
-        //console.log('putLogin');
-        //console.log(login.access);
         return await fetch(`${apiUrl}login`, {
             method: 'POST',
             mode: 'cors',
