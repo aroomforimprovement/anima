@@ -11,7 +11,7 @@ import Account from '../account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
-import { Toast } from '../common/Toast';
+import { handleFailedConnection, Toast } from '../common/Toast';
 import './main.css';
 
 const MainContext = createContext({});
@@ -60,7 +60,7 @@ const Main = () => {
     },[getAccessTokenSilently, isAuthenticated, mainState.user])
 
     useEffect(() => {
-        if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices){
+        if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices && !mainState.isSet){
             getAccountInfo(mainState.user.userid, mainState.user.access)
                 .then((result) => {
                     if(result){
@@ -73,7 +73,8 @@ const Main = () => {
                         mainDispatch({
                             type: 'SET_ACCOUNT_INFO',
                             data: {isSet: true}
-                        })
+                        });
+                        handleFailedConnection();
                     }
                     
                 });

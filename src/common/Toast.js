@@ -1,5 +1,5 @@
 import React from "react";
-import { Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 
 export const Toast = () => {
     return (
@@ -44,4 +44,17 @@ export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissB
             </div>
         </div>
     );
+}
+
+export const handleFailedConnection = () => {
+    const dismiss = (id) => {
+        toast.dismiss(id);
+        window.location.href = '/';
+    }
+    toast((t) => (
+        <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
+            message={`It looks like there has been an issue contacting the server.
+                Try again in a few minutes, or contact support if this is a persistent problem.`}
+            approveBtn={"Cool"} dismissBtn={"OK"}/>
+    ), toastConfirmStyle());
 }

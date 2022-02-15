@@ -3,6 +3,7 @@ import { Loading } from './Loading';
 import { Problem } from './Problem';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
+import { handleFailedConnection } from './Toast';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -40,6 +41,7 @@ const Login = () => {
         )
         .catch(error => { 
             dispatch({type: 'setIsFailed', data: true});
+            handleFailedConnection();
             console.error(error)
         });
     }
@@ -130,8 +132,12 @@ const Login = () => {
         //console.log("useEffect: " + state.isFailed);
         const controller = new AbortController();
         const signal = controller.signal;
+        
         const putLoginCall = async (login) => {
             await putLogin(login);
+        }
+        if(state.isFailed){
+            handleFailedConnection();
         }
         if(!state.isRegistered && state.isLoaded && (mainState && mainState.user && mainState.user.access) && !state.isSending && !state.isFailed){
             dispatch({type: 'setIsSending', data: true});
@@ -172,18 +178,14 @@ const Login = () => {
             controller.abort();
         }
     }, [state.anim, state.isFailed, state.isSaving, state.isSaved, mainState.user]);
-    
+    if(state.isFailed){
+        return(
+            <Loading message={"Loading..."} />
+        )
+    }
     if(!mainState){
         return(
             <Loading message={"Loading authentication..."} />
-        );
-    }else if(state.isSending && !state.isFailed && !state.isRegistered){
-        return(
-            <Loading message={"Registering login..."} />
-        );
-    }else if(state.isFailed){
-        return(
-            <Problem message={"It looks like there was a problem with your login"} />
         );
     }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
         dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
@@ -205,11 +207,11 @@ const Login = () => {
            //<Loading message="redirect blocked" />
            <Redirect to='/create'/>
         );
+    }else{
+        return(
+            <Redirect to='/create'/>
+        );
     }
-
-    return(
-        <Loading message={"Getting you all set up..."} />
-    )
 }
 
 export default Login;

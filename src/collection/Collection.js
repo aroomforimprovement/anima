@@ -1,11 +1,11 @@
-import React, { useReducer, useContext, createContext, useEffect } from 'react';
+import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './CollectionItem';
 import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from '../common/Toast';
+import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
 import './collection.css';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
@@ -77,7 +77,7 @@ const Collection = ({browse}) => {
 
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
-
+    const [isFailed, setIsFailed] = useState(false);
     
     useEffect( () => {
         //console.log("mounted");
@@ -87,40 +87,30 @@ const Collection = ({browse}) => {
             //console.log("setCollection");
             setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
-        const handleFailedConnection = () => {
-            const dismiss = (id) => {
-                toast.dismiss(id);
-                window.location.href = '/';
-            }
-            toast((t) => (
-                <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
-                    message={`It looks like there has been an issue contacting the server.
-                        Try again in a few minutes, or contact support if this is a persistent problem.`}
-                    approveBtn={"Cool"} dismissBtn={"OK"}/>
-            ), toastConfirmStyle());
-        }
-        if(!collectionState.isSet && mainState.isSet){
+        
+        if(!isFailed && !collectionState.isSet && mainState.isSet){
             const access = mainState.user ? mainState.user.access : undefined
             getCollection(splat, browse, access, signal)
                 .then((response) => {
-                    if(response){
-                        if(browse){
-                            setCollection({anims: response, isSet: true});
-                        }else{
-                            setCollection({anims: response.anims, isSet: true,
-                                username: response.username, userid: response.userid,
-                                isOwn: response.userid === mainState.user.userid});
-                        }
+                    if(browse){
+                        setCollection({anims: response, isSet: true});
                     }else{
-                        handleFailedConnection();
+                        setCollection({anims: response.anims, isSet: true,
+                            username: response.username, userid: response.userid,
+                            isOwn: response.userid === mainState.user.userid});
                     }
-                }).catch((error) => {console.error(error)});
+                })
+                .catch((error) => {
+                    console.error(error);
+                    handleFailedConnection();
+                    setIsFailed(true);
+                });
         }
         return () => {
             //console.log("cleanup");
             controller.abort();
         }
-    },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat]);
+    },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
 
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {

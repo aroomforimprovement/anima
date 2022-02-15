@@ -1,3 +1,4 @@
+import { handleFailedConnection } from "../common/Toast";
 import { arrayRemove } from "../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -46,6 +47,7 @@ export const getAccountInfo = async (id, access) => {
         }   
     }, error => {
         console.error("error fetching account info " + error);
+        handleFailedConnection();
     }).catch(err => console.error(err))
 }
 
@@ -132,6 +134,7 @@ export const updateDisplayName = async (id, name, access) => {
         console.error(error);
     }).catch((error) => {
         console.error(error);
+        handleFailedConnection();
     })
 }
 
