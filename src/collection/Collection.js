@@ -112,6 +112,9 @@ const Collection = ({browse}) => {
         }
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
 
+    useEffect(() => {
+        console.log("collectionState.anims");
+    }, [collectionState.anims]);
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
         return(

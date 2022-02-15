@@ -1,4 +1,5 @@
 import React, { useState, useReducer, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { SITE } from "../shared/site";
 import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
@@ -20,10 +21,10 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 export const CollectionItem = ({anim, index}) => {
-    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
     const { mainState } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
-
+    let history = useHistory();
 
     const collectionItemReducer = (state, action) => {
         
@@ -41,9 +42,10 @@ export const CollectionItem = ({anim, index}) => {
             }
             return fetch(url, req).then(response => {
                 if(response.ok){
-                    //console.log("anim deleted ok ");
                     setCollectionState({type: 'DELETE_ANIM', data: animid});
                     toast.success("Anim deleted as requested");
+                    //temporary solution for rendering issue (ANIM-201)
+                    window.location.href = window.location.href;
                 }else{
                     //console.log("response not ok");
                     toast.error("Error deleting the anim");
@@ -79,11 +81,12 @@ export const CollectionItem = ({anim, index}) => {
 
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
-    const handlePreview = (e) => {
-        setIsPreviewOpen(true);
+    const handleView = (e) => {
+        setIsViewerOpen(true);
     }
 
     const handleDownload = (e) => {
+        //TODO should generated and download the viewFile instead 
        saveAs(collectionItemState.previewFile, anim.name);
     }
 
@@ -105,7 +108,8 @@ export const CollectionItem = ({anim, index}) => {
 
     useEffect(() => {
         
-    },[collectionItemState.previewFile, collectionState.collection, collectionState.index, collectionItemState.viewFile, isPreviewOpen]);
+    },[collectionItemState.previewFile, collectionState.anims, collectionState.index, collectionItemState.viewFile, isViewerOpen]);
+
 
 
     return(
@@ -149,8 +153,8 @@ export const CollectionItem = ({anim, index}) => {
                             <div></div>}
                             <div className='col col-3'>
                                 <button className='btn btn-outline-secondary'
-                                    onClick={handlePreview}>
-                                        {isPreviewOpen ? <Loading /> : <img src={SITE.icons.preview} alt='preview'></img>}
+                                    onClick={handleView}>
+                                        {isViewerOpen ? <Loading /> : <img src={SITE.icons.preview} alt='preview'></img>}
                                 </button>
                             </div>
                             <div className='col col-3'>
@@ -171,10 +175,10 @@ export const CollectionItem = ({anim, index}) => {
                     </div>
                 </div>
             </div>
-            <Modal  show={isPreviewOpen} fullscreen={isMobile}
-                onShow={() => {setIsPreviewOpen(true)}}
-                onHide={() => {setIsPreviewOpen(false)}}>
-                {isPreviewOpen && !collectionItemState.viewFile
+            <Modal  show={isViewerOpen} fullscreen={isMobile}
+                onShow={() => {setIsViewerOpen(true)}}
+                onHide={() => {setIsViewerOpen(false)}}>
+                {isViewerOpen && !collectionItemState.viewFile
                 ?  
                 <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
                     collectionItemDispatch={collectionItemDispatch}
@@ -194,7 +198,7 @@ export const CollectionItem = ({anim, index}) => {
                         <span >{anim.name}</span>
                     </div>
                     <Button size='sm' 
-                        onClick={() => setIsPreviewOpen(false)}
+                        onClick={() => setIsViewerOpen(false)}
                     >Close</Button>
                 </Modal.Footer>
             </Modal > 
