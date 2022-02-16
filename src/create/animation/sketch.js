@@ -96,7 +96,7 @@ export const sketch = (p5) => {
         if(props.controls.download){
             dispatch({type: 'DOWNLOAD', data: false});
             if(anim.anim.frames.length < 1){
-                handleNoFramesAlert();
+                //handleNoFramesAlert();
             }else{
                 downloadAnimAsWebm(anim.anim, p5canvas, p5);
             }            
@@ -110,7 +110,7 @@ export const sketch = (p5) => {
                 });
         }else if(props.controls.preview){
             if(anim.anim.frames.length < 1){
-                handleNoFramesAlert()
+                //handleNoFramesAlert();
             }else{
                 dispatch({type: 'DISABLE', data: true});
                 updateAnim({type: 'PREVIEW', data: anim.anim});

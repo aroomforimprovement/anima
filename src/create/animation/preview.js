@@ -1,4 +1,4 @@
-import { previewAnim } from './anim-util';
+import { previewAnim, previewAnimMobile } from './anim-util';
 import { values } from '../values';
 import { isMobile } from 'react-device-detect';
 
@@ -21,7 +21,14 @@ export const preview = (p5) => {
 //            p5.resizeCanvas(
 //                props.anim.size ? props.anim.size : values.defaultSize, 
 //                props.anim.size ? props.anim.size : values.defaultSize);
-            previewAnim(props.anim, 'PREVIEW', p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
+            if(isMobile && props.clip){
+                console.debug("isMobile + clip");
+                previewAnimMobile(props.anim, 'PREVIEW', p5canvas, p5, 
+                    props.collectionItemDispatch, props.index, props.setCollectionState);
+            }else{
+                previewAnim(props.anim, 'PREVIEW', p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
+            }
+            
         }
     }
     

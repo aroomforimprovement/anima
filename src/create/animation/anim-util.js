@@ -87,51 +87,111 @@ export const playPreview = async (blob, name, dispatch, index, setCollectionStat
     }
 }
 
-export const previewAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing) => {
+export const previewAnim = async (a, type, p5canvas, p5, 
+    collectionItemDispatch, index, setCollectionState, 
+    clip, drawing) => {
+    
+        try{
+            renderAnim(a, type, p5canvas, p5, 
+                collectionItemDispatch, index, setCollectionState, clip, drawing);
+        }catch(err){
+            console.error(err);
+        }
+}
+export const previewAnimMobile = async (a, type, p5canvas, p5, 
+    dispatch, index, setCollectionState) => {
+    console.debug("previewAnimMobile");
     try{
-        renderAnim(a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing);
+        renderThumb(a, p5canvas, p5, 
+            dispatch, index, setCollectionState);
     }catch(err){
-        console.error(err);
+        console.err(err);
     }
 }
 
-export const renderAnim = async (a, type, p5canvas, p5, collectionItemDispatch, index, setCollectionState, clip, drawing) =>{
-    const CCapture = window.CCapture; 
-    let capturer = new CCapture({format: 'webm',
-//      workersPath: process.env.PUBLIC_URL + '/ccapture/',
-        framerate: a.frate
-    });
-    capturer.start();
-    const startTime = performance.now();
-    setBgOverlay(p5, true);
-    setBgOverlay(p5, true);
-    let frames = [...a.frames];
-    if(clip && frames.length > 4){
-        frames = frames.splice(0, 4);
-        //console.dir("frames:"+frames);
-    }
-    frames.forEach((f) => {
-       setFrameCaptured(f, capturer, p5canvas, p5);
-    });
-    capturer.stop();
-    const duration = performance.now() - startTime;
-    console.log("Capture took "+duration);
-    capturer.save((blob) => {
-       if(type === 'PREVIEW'){ 
-            playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
-                .then(() => {
-                if(setCollectionState){
-                    setCollectionState({type: 'SET_INDEX', data: index+1});
-                }else{
-                    console.debug('no collection state');
-                } 
-            });;
-        }else if(type === 'DOWNLOAD'){
-            saveAs(blob, a.name);
+export const renderAnim = async (a, type, p5canvas, p5, 
+    collectionItemDispatch, index, setCollectionState, 
+    clip, drawing) =>{
+    
+        const CCapture = window.CCapture; 
+        let capturer = new CCapture({format: 'webm',
+    //      workersPath: process.env.PUBLIC_URL + '/ccapture/',
+            framerate: a.frate
+        });
+        capturer.start();
+        const startTime = performance.now();
+        setBgOverlay(p5, true);
+        setBgOverlay(p5, true);
+        let frames = [...a.frames];
+        if(clip && frames.length > 4){
+            frames = frames.splice(0, 4);
+            //console.dir("frames:"+frames);
         }
+        frames.forEach((f) => {
+        setFrameCaptured(f, capturer, p5canvas, p5);
+        });
+        capturer.stop();
+        const duration = performance.now() - startTime;
+        console.log("Capture took "+duration);
+        capturer.save((blob) => {
+        if(type === 'PREVIEW'){ 
+                playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
+                    .then(() => {
+                    if(setCollectionState){
+                        setCollectionState({type: 'SET_INDEX', data: index+1});
+                    }else{
+                        console.debug('no collection state');
+                    } 
+                });;
+            }else if(type === 'DOWNLOAD'){
+                saveAs(blob, a.name);
+            }
+        });
+        if(!drawing){
+            p5.remove();
+        }
+}
+
+export const renderThumb = async (a, p5canvas, p5, 
+    dispatch, index, setCollectionState, clip, drawing) => {
+        console.debug("renderAnimMobile");
+        setBgOverlay(p5, true);
+        setBgOverlay(p5, true);
+        let frames = [...a.frames];
+        const thumb = frames[0];
+        setThumbCaptured(thumb, a.name, index, p5, p5canvas,
+            dispatch, setCollectionState);
+}
+
+export const setThumbCaptured = async (f, name, index, p5, p5canvas,
+    dispatch, setCollectionState) => {
+    console.debug("setThumbCaptured");
+    const render = true;
+    drawFrame(f, p5, render);
+    let img = p5.get(0, 0, 600, 600);
+    img.loadPixels();
+    p5.image(img, 0, 0);
+    
+    p5canvas.canvas.toBlob((blob) => {
+        setThumb(blob, name, index, dispatch, setCollectionState);
+        //saveAs(blob, name);
     });
-    if(!drawing){
-        p5.remove();
+
+}
+
+export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
+    if(dispatch){
+        dispatch({
+            type: 'SET_PREVIEW_FILE',
+            data: {blob: blob, name: name}
+        });
+    }else{
+        console.debug('no collection item dispatch');
+    }
+    if(setCollectionState){
+        setCollectionState({type: 'SET_INDEX', data: index+1});
+    }else{
+        console.debug('no collection state');
     }
 }
 

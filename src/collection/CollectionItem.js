@@ -118,13 +118,30 @@ export const CollectionItem = ({anim, index}) => {
             ? <LazyLoad height={300} offset={10} once>
                 <div>    
                     <div >
-                    {collectionItemState.previewFile 
-                    ? <div className='row'>
-                        <video autoPlay loop className='rounded p-0'> 
-                            <source src={collectionItemState.previewFile} type='video/webm' alt={`Previewing ${anim.name}`} />
-                        </video> 
+                        {
+                        collectionItemState.previewFile 
+                        ? 
+                        <div>
+                            {
+                            isMobile 
+                            ? 
+                            <div className='row'>
+                                <img src={collectionItemState.previewFile}
+                                    alt={anim.name}
+                                />
+                            </div>
+                            : 
+                            <div className='row'>
+                                <video autoPlay loop className='rounded p-0'> 
+                                    <source src={collectionItemState.previewFile} 
+                                    type='video/webm' alt={`Previewing ${anim.name}`} />
+                                </video> 
+                            </div>
+                        }
                     </div>
-                    : <Loading /> }
+                    : 
+                    <Loading /> 
+                    }
                     <div className='row'>
                         <div className='col col-12 mt-2 ms-2'>
                             <div className='coll-item-name'>{anim.name}</div>

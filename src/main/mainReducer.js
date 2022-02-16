@@ -1,6 +1,7 @@
 
 export const mainReducer = (state, action) => {
-    //console.debug(`mainReducer: ${action.type}:${action.data}`);
+    console.debug(`mainReducer: ${action.type}:${action.data}`);
+    console.dir(action.data);
     switch (action.type) {
         case 'CHECK_AUTH':{
             //should get really get display name from db (or update on auth0)
