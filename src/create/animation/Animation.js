@@ -120,12 +120,14 @@ export const Animation = ({edit, splat}) => {
         );
     }
 
+
     if(window.localStorage.getItem('tempAnim')){
         return(
             <Redirect to='/login'/>
         );
     }
-    
+    console.log("anim.viewFile");
+    console.dir(anim.viewFile);
     return(
         <div>
             <ControlContext.Consumer> 

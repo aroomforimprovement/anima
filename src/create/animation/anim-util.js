@@ -104,7 +104,7 @@ export const previewAnimMobile = async (a, p5canvas, p5,
 }
 
 export const renderAnim = async (a, type, p5canvas, p5, 
-    collectionItemDispatch, index, setCollectionState, 
+    dispatch, index, setCollectionState, 
     clip, drawing) =>{
     
         const CCapture = window.CCapture; 
@@ -127,8 +127,8 @@ export const renderAnim = async (a, type, p5canvas, p5,
         const duration = performance.now() - startTime;
         console.log("Capture took "+duration);
         capturer.save((blob) => {
-        if(type === 'PREVIEW'){ 
-                playPreview(blob, a.name, collectionItemDispatch, index, setCollectionState, clip)
+            if(type === 'PREVIEW'){ 
+                playPreview(blob, a.name, dispatch, index, setCollectionState, clip)
                     .then(() => {
                     if(setCollectionState){
                         setCollectionState({type: 'SET_INDEX', data: index+1});
@@ -138,6 +138,8 @@ export const renderAnim = async (a, type, p5canvas, p5,
                 });;
             }else if(type === 'DOWNLOAD'){
                 saveAs(blob, a.name);
+            }else if(type === 'DRAWING'){
+                playPreview(blob, a.name, dispatch);
             }
         });
         if(!drawing){
