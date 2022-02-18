@@ -16,18 +16,18 @@ export const drawFrame = (f, p5, render) => {
     //console.dir(f);
     if(f.bg && f.bg.length > 0){
         //console.log('drawing background');
-        drawPoints(f.bg, p5, render);   
+        drawPoints(f.bg, p5);   
     }
-    drawPoints(f.points, p5, render);
+    drawPoints(f.points, p5);
 }
 
-export const drawPoints = (points, p5, render) => {
+export const drawPoints = (points, p5) => {
         points.forEach((element) => {
-            drawStroke(element, p5, render);
+            drawStroke(element, p5);
         });
 }
 
-export const drawPoint = (point, p5, render) => {
+export const drawPoint = (point, p5) => {
     let p = {...point};
     p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
     if(p.size !== p5.width){
@@ -60,10 +60,10 @@ export const drawPoint = (point, p5, render) => {
     return true;
 }
 
-export const drawStroke = (stroke, p5, render) => {
+export const drawStroke = (stroke, p5) => {
     if(stroke){
         stroke.forEach((element) => {
-            drawPoint(element, p5, render);
+            drawPoint(element, p5);
         });
     }
 }
