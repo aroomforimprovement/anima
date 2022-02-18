@@ -23,7 +23,7 @@ export const preview = (p5) => {
 //                props.anim.size ? props.anim.size : values.defaultSize);
             if(isMobile && props.clip){
                 console.debug("isMobile + clip");
-                previewAnimMobile(props.anim, 'PREVIEW', p5canvas, p5, 
+                previewAnimMobile(props.anim, p5canvas, p5, 
                     props.collectionItemDispatch, props.index, props.setCollectionState);
             }else{
                 previewAnim(props.anim, 'PREVIEW', p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);

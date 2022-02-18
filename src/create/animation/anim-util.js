@@ -1,21 +1,30 @@
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
+import toast from 'react-hot-toast';
 
 
-export const downloadAnimAsWebm = (a, p5canvas, p5) => {
-    try{
-        renderAnim(a, 'DOWNLOAD', p5canvas, p5);
-    }catch(err){
-        console.error(err);
+/***
+ * DRAWING
+ */
+
+export const setBgOverlay = (p5, render) => {
+    let c = values.bgc;
+    if(render){
+        c = p5.color(0);
+    }
+    p5.background(c);
+}
+
+export const drawBg = (bg, p5, render) => {
+    setBgOverlay(p5, render);
+    if(bg && bg.length > 0){
+        drawPoints(bg, p5);
     }
 }
 
 export const drawFrame = (f, p5, render) => {
     setBgOverlay(p5, render);
-    //console.log("drawFrame:");
-    //console.dir(f);
     if(f.bg && f.bg.length > 0){
-        //console.log('drawing background');
         drawPoints(f.bg, p5);   
     }
     drawPoints(f.points, p5);
@@ -67,25 +76,10 @@ export const drawStroke = (stroke, p5) => {
         });
     }
 }
-/**
- * 
- * @param {*} blob 
- * @param {*} name 
- * @param {f} dispatch will be either updateAnim or collectionItemDispatch
+
+/***
+ * RENDERING
  */
-export const playPreview = async (blob, name, dispatch, index, setCollectionState, clip) => {
-    if(dispatch && clip){
-        await dispatch({
-            type: 'SET_PREVIEW_FILE', 
-            data: {blob : blob, name: name}
-        });  
-    }else if(dispatch){
-        await dispatch({
-            type: 'SET_VIEW_FILE',
-            data: {blob: blob, name: name}
-        })
-    }
-}
 
 export const previewAnim = async (a, type, p5canvas, p5, 
     collectionItemDispatch, index, setCollectionState, 
@@ -98,9 +92,9 @@ export const previewAnim = async (a, type, p5canvas, p5,
             console.error(err);
         }
 }
-export const previewAnimMobile = async (a, type, p5canvas, p5, 
+
+export const previewAnimMobile = async (a, p5canvas, p5, 
     dispatch, index, setCollectionState) => {
-    console.debug("previewAnimMobile");
     try{
         renderThumb(a, p5canvas, p5, 
             dispatch, index, setCollectionState);
@@ -115,7 +109,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
     
         const CCapture = window.CCapture; 
         let capturer = new CCapture({format: 'webm',
-    //      workersPath: process.env.PUBLIC_URL + '/ccapture/',
+        //workersPath: process.env.PUBLIC_URL + '/ccapture/',
             framerate: a.frate
         });
         capturer.start();
@@ -125,7 +119,6 @@ export const renderAnim = async (a, type, p5canvas, p5,
         let frames = [...a.frames];
         if(clip && frames.length > 4){
             frames = frames.splice(0, 4);
-            //console.dir("frames:"+frames);
         }
         frames.forEach((f) => {
         setFrameCaptured(f, capturer, p5canvas, p5);
@@ -152,8 +145,17 @@ export const renderAnim = async (a, type, p5canvas, p5,
         }
 }
 
+export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
+    const render = true;
+    drawFrame(f, p5, render);
+    let img = p5.get(0, 0, 600, 600);
+    img.loadPixels();
+    p5.image(img, 0, 0);
+    capturer.capture(p5canvas.elt);
+}
+
 export const renderThumb = async (a, p5canvas, p5, 
-    dispatch, index, setCollectionState, clip, drawing) => {
+    dispatch, index, setCollectionState) => {
         console.debug("renderAnimMobile");
         setBgOverlay(p5, true);
         setBgOverlay(p5, true);
@@ -174,9 +176,38 @@ export const setThumbCaptured = async (f, name, index, p5, p5canvas,
     
     p5canvas.canvas.toBlob((blob) => {
         setThumb(blob, name, index, dispatch, setCollectionState);
-        //saveAs(blob, name);
+        p5.remove();
     });
 
+}
+
+export const downloadAnimAsWebm = (a, p5canvas, p5) => {
+    try{
+        renderAnim(a, 'DOWNLOAD', p5canvas, p5);
+    }catch(err){
+        console.error(err);
+        toast.error("Error downloading file");
+    }
+}
+
+/**
+ * 
+ * @param {*} blob 
+ * @param {*} name 
+ * @param {f} dispatch will be either updateAnim or collectionItemDispatch
+ */
+ export const playPreview = async (blob, name, dispatch, clip) => {
+    if(dispatch && clip){
+        await dispatch({
+            type: 'SET_PREVIEW_FILE', 
+            data: {blob : blob, name: name}
+        });  
+    }else if(dispatch){
+        await dispatch({
+            type: 'SET_VIEW_FILE',
+            data: {blob: blob, name: name}
+        })
+    }
 }
 
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
@@ -195,26 +226,3 @@ export const setThumb = async (blob, name, index, dispatch, setCollectionState) 
     }
 }
 
-export const setBgOverlay = (p5, render) => {
-        let c = values.bgc;
-        if(render){
-            c = p5.color(0);
-        }
-        p5.background(c);
-}
-
-export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
-    const render = true;
-    drawFrame(f, p5, render);
-    let img = p5.get(0, 0, 600, 600);
-    img.loadPixels();
-    p5.image(img, 0, 0);
-    capturer.capture(p5canvas.elt)
-}
-
-export const drawBg = (bg, p5, render) => {
-    setBgOverlay(p5, render);
-    if(bg && bg.length > 0){
-        drawPoints(bg, p5);
-    }
-}
