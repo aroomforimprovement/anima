@@ -151,9 +151,9 @@ const Login = () => {
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
 
     useEffect(() => {
-         if(!state.isLoaded && mainState.isSet){
+        if(!state.isLoaded && mainState.isSet){
             dispatch({type: 'setIsLoaded', data: true});
-         }       
+        }       
     },[state.isLoaded, mainState.isSet]);
 
     useEffect(() => {
