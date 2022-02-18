@@ -126,8 +126,6 @@ const Login = () => {
     });
 
     useEffect(() => {
-        console.log("useEffect: ");
-        console.dir(mainState);
         const controller = new AbortController();
         const signal = controller.signal;
 
@@ -148,7 +146,7 @@ const Login = () => {
         }
         return () => {
             //console.log("abort login");
-            //controller.abort();
+            controller.abort();
         }
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
 
@@ -159,11 +157,6 @@ const Login = () => {
     },[state.isLoaded, mainState.isSet]);
 
     useEffect(() => {
-        console.log("useEffect state.anim:" + state.anim);
-        console.log("useEffect state.isFailed:" + state.isFailed);
-        console.log("useEffect state.isSaving:" + state.isSaving);
-        console.log("useEffect state.isSaved:" + state.isSaved);
-        console.log("useEffect mainState.user:" + mainState.user);
         const controller = new AbortController();
         const signal = controller.signal;
 
@@ -179,7 +172,7 @@ const Login = () => {
 
         return () => {
             //console.log("abort save");
-            //controller.abort();
+            controller.abort();
         }
     }, [mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
 
