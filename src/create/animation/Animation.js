@@ -35,7 +35,7 @@ export const Animation = ({edit, splat}) => {
     const tempSave = () => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
     }
-    const redirectAfterTempSave = (temp) => {
+    const redirectAfterTempSave = async (temp) => {
         //updateAnim({type: 'SET_TEMP', data: false});
         tempSave();
         loginWithPopup(

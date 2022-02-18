@@ -126,9 +126,11 @@ const Login = () => {
     });
 
     useEffect(() => {
-        //console.log("useEffect: " + state.isFailed);
+        console.log("useEffect: ");
+        console.dir(mainState);
         const controller = new AbortController();
         const signal = controller.signal;
+
         
         const putLoginCall = async (login) => {
             await putLogin(login);
@@ -146,7 +148,7 @@ const Login = () => {
         }
         return () => {
             //console.log("abort login");
-            controller.abort();
+            //controller.abort();
         }
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
 
@@ -157,6 +159,11 @@ const Login = () => {
     },[state.isLoaded, mainState.isSet]);
 
     useEffect(() => {
+        console.log("useEffect state.anim:" + state.anim);
+        console.log("useEffect state.isFailed:" + state.isFailed);
+        console.log("useEffect state.isSaving:" + state.isSaving);
+        console.log("useEffect state.isSaved:" + state.isSaved);
+        console.log("useEffect mainState.user:" + mainState.user);
         const controller = new AbortController();
         const signal = controller.signal;
 
@@ -172,42 +179,54 @@ const Login = () => {
 
         return () => {
             //console.log("abort save");
-            controller.abort();
+            //controller.abort();
         }
-    }, [state.anim, state.isFailed, state.isSaving, state.isSaved, mainState.user]);
+    }, [mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
+
     if(state.isFailed){
         return(
             <Loading message={"Loading..."} />
         )
     }
+    
     if(!mainState){
         return(
             <Loading message={"Loading authentication..."} />
         );
     }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
-        dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
-        window.localStorage.removeItem('tempAnim');
-        return <Loading message={"Saving your animation...1"} />
+            
+            dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
+            window.localStorage.removeItem('tempAnim');
+            return <Loading message={"Saving your animation...1"} />
     }else if(state.anim && !state.isSaving && !state.isSaved){
+        
         //dispatch({type: 'setTempAnimSaving', data: state.anim});
         return <Loading message={"Saving your animation...2"} />
+    
     }else if(state.anim && !state.isSaved){
+    
         return <Loading message={"Saving your animation...3"} />
+    
     }else if(state.isSaved && !state.isSaving){
+    
         const animid = state.anim.animid;
         return(
             //<Loading message="redirect blocked" />
             <Redirect to={`/create/${animid}`} />
         );
+    
     }else if(state.isRegistered && mainState.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
+    
         return(
            //<Loading message="redirect blocked" />
            <Redirect to='/create'/>
         );
     }else{
+    
         return(
-            <Redirect to='/create'/>
+           <Loading/>
         );
+    
     }
 }
 
