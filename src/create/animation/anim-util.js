@@ -134,9 +134,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
                     .then(() => {
                         if(setCollectionState && type === 'PREVIEW'){
                             setCollectionState({type: 'SET_INDEX', data: index+1});
-                        }else{
-                            console.debug('no collection state');
-                        } 
+                        }
                 });;
             }else if(type === 'DOWNLOAD'){
                 saveAs(blob, a.name);

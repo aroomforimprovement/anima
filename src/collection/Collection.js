@@ -1,5 +1,5 @@
 import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
-import { CollectionItem } from './CollectionItem';
+import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';

@@ -1,19 +1,17 @@
 import React, { useState, useReducer, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { SITE } from "../shared/site";
+import { SITE } from "../../shared/site";
 import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
-import { preview } from "../create/animation/preview";
-import { Loading } from '../common/Loading';
+import { preview } from "../../create/animation/preview";
+import { Loading } from '../../common/Loading';
 import LazyLoad from "react-lazyload";
-import { saveAs } from 'file-saver';
-import { useMainContext } from "../main/Main";
-import { useCollectionContext } from "./Collection";
+import { useMainContext } from "../../main/Main";
+import { useCollectionContext } from "../Collection";
 import toast from "react-hot-toast";
-import { ToastConfirm, toastConfirmStyle } from "../common/Toast";
+import { ToastConfirm, toastConfirmStyle } from "../../common/Toast";
 import { isMobile } from "react-device-detect";
-import { downloadAnimAsWebm, previewAnim } from "../create/animation/anim-util";
-
+import { collectionItemReducer } from './collectionItemReducer';
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false}
@@ -28,58 +26,7 @@ export const CollectionItem = ({anim, index}) => {
     const { collectionState, setCollectionState } = useCollectionContext();
     let history = useHistory();
 
-    const collectionItemReducer = (state, action) => {
-        
-        const deleteAnim = async (animid) => {
-            const url = `${apiUrl}anim/${animid}`;
-            const req = {
-                method: 'DELETE',
-                mode: 'cors'
-            }
-            if(mainState.user.access){
-                req.headers = {
-                    Authorization: `Bearer ${mainState.user.access}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-            return fetch(url, req).then(response => {
-                if(response.ok){
-                    setCollectionState({type: 'DELETE_ANIM', data: animid});
-                    toast.success("Anim deleted as requested");
-                    //temporary solution for rendering issue (ANIM-201)
-                    window.location.href = window.location.href;
-                }else{
-                    //console.log("response not ok");
-                    toast.error("Error deleting the anim");
-                }
-            }, error => {
-                console.error(error);
-            }).catch(error => { console.error(error);})
-        }
-
-        switch(action.type){
-            case 'SET_PREVIEW_FILE':{
-                const previewFile = URL.createObjectURL(action.data.blob);
-                return ({...state, 
-                    previewFile: previewFile, 
-                    previewName: action.data.name,
-                });
-            }
-            case 'SET_VIEW_FILE':{
-                const viewFile = URL.createObjectURL(action.data.blob);
-                return({...state,
-                    viewFile: viewFile,
-                    viewName: action.data.name
-                });
-            }
-            case 'DELETE_ANIM':{
-                deleteAnim(anim.animid);
-                return({...state, deleted: true});
-            }
-            default:
-                break;
-        }
-    }
+    
 
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
@@ -96,7 +43,16 @@ export const CollectionItem = ({anim, index}) => {
 
     const handleDelete = (e) => {
         const approve = (id) => {
-            collectionItemDispatch({type: 'DELETE_ANIM', data: true});
+            collectionItemDispatch(
+                {
+                    type: 'DELETE_ANIM', 
+                    data: {
+                        animid: anim.animid,
+                        user: mainState.user
+                    }
+                }
+            );
+            setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
             toast.dismiss(id);
         };
         const dismiss = (id) => {
