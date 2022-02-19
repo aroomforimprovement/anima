@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { ToastConfirm, toastConfirmStyle } from "../../common/Toast";
 import { isMobile } from "react-device-detect";
 import { collectionItemReducer } from './collectionItemReducer';
+import { Thumb } from "./Thumb";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false}
@@ -24,9 +25,7 @@ export const CollectionItem = ({anim, index}) => {
     const [isDownloading, setIsDownloading] = useState(false);
     const { mainState } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
-    let history = useHistory();
 
-    
 
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
@@ -68,7 +67,7 @@ export const CollectionItem = ({anim, index}) => {
 
     useEffect(() => {
         
-    },[collectionItemState.previewFile, collectionState.anims, collectionState.index, collectionItemState.viewFile, isViewerOpen]);
+    },[collectionState.anims]);
 
 
 
@@ -78,45 +77,23 @@ export const CollectionItem = ({anim, index}) => {
             ? <LazyLoad height={300} offset={10} once>
                 <div>    
                     <div >
-                        {
-                        collectionItemState.previewFile 
-                        ? 
-                        <div>
-                            {
-                            isMobile 
-                            ? 
-                            <div className='row'>
-                                <img src={collectionItemState.previewFile}
-                                    alt={anim.name}
-                                />
-                            </div>
-                            : 
-                            <div className='row'>
-                                <video autoPlay loop className='rounded p-0'> 
-                                    <source src={collectionItemState.previewFile} 
-                                    type='video/webm' alt={`Previewing ${anim.name}`} />
-                                </video> 
-                            </div>
-                            }
-                        </div>
-                        : 
-                        <Loading /> 
-                        }
-                    <div className='row'>
-                        <div className='col col-12 mt-2 ms-2'>
-                            <div className='coll-item-name'>{anim.name}</div>
-                            <div className='coll-item-username' >
-                                <small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small>
-                            </div>
-                        </div>
+                        <Thumb previewFile={collectionItemState.previewFile}
+                            name={anim.name}/>
                         <div className='row'>
-                        <div className='col col-2 ms-2'>
-                            <small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small>
-                        </div>
-                        <div className='col col-8 ms-2 coll-item-date'>
-                            <small>{new Date(anim.created).toDateString()}</small>
-                        </div>
-                    </div>
+                            <div className='col col-12 mt-2 ms-2'>
+                                <div className='coll-item-name'>{anim.name}</div>
+                                <div className='coll-item-username' >
+                                    <small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small>
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className='col col-2 ms-2'>
+                                    <small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small>
+                                </div>
+                                <div className='col col-8 ms-2 coll-item-date'>
+                                    <small>{new Date(anim.created).toDateString()}</small>
+                                </div>
+                            </div>
                     <div className='col col-12'>
                         <div className='row coll-item-btns mt-1 mb-1'>
                             { mainState.user && anim.userid === mainState.user.userid
