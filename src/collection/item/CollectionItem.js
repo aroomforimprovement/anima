@@ -13,6 +13,7 @@ import { collectionItemReducer } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
 import { Info } from "./Info";
+import { Div } from "../../common/Div";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false}
@@ -64,50 +65,54 @@ export const CollectionItem = ({anim, index}) => {
         
     },[collectionState.anims]);
 
-
+    
 
     return(
-        <div className='col col-12 col-sm-5 col-md-3 col-lg-3 py-1 px-3 m-1 coll-item'>
-            {mainState.isSet 
-            ? <LazyLoad height={300} offset={10} once>
-                <div>    
-                    <div >
-                        <Thumb previewFile={collectionItemState.previewFile}
-                            name={anim.name}/>
-                        <Info anim={anim} />
-                        <Buttons anim={anim} user={mainState.user}
-                            handleDelete={handleDelete} handleView={handleView}
-                            handleDownload={handleDownload} isViewerOpen={isViewerOpen}/>
-                    </div>
-            <Modal  show={isViewerOpen} fullscreen={isMobile}
-                onShow={() => {setIsViewerOpen(true)}}
-                onHide={() => {setIsViewerOpen(false)}}>
-                {isViewerOpen && !collectionItemState.viewFile
-                ?  
-                <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
-                    collectionItemDispatch={collectionItemDispatch}
-                    collectionState={collectionState} type='VIEW'
-                    setCollectionState={setCollectionState} clip={false}/>
-                : <div></div>}
+        <div className={`col col-12 col-sm-5 col-md-3 col-lg-3 
+            py-1 px-3 m-1 coll-item`}>
+            {
+            mainState.isSet 
+            ? 
+            <LazyLoad height={300} offset={10} once>
+                <Thumb previewFile={collectionItemState.previewFile}
+                    name={anim.name}/>
+                <Info anim={anim} />
+                <Buttons anim={anim} user={mainState.user}
+                    handleDelete={handleDelete} handleView={handleView}
+                    handleDownload={handleDownload} isViewerOpen={isViewerOpen}/>
+                <Modal show={isViewerOpen} fullscreen={isMobile}
+                    onShow={() => {setIsViewerOpen(true)}}
+                    onHide={() => {setIsViewerOpen(false)}}>
+                    {
+                    isViewerOpen && !collectionItemState.viewFile
+                    ?  
+                    <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
+                        collectionItemDispatch={collectionItemDispatch}
+                        collectionState={collectionState} type='VIEW'
+                        setCollectionState={setCollectionState} clip={false}/>
+                    : 
+                    <Div/>
+                    }
+                    {
+                        collectionItemState.viewFile ?
+                        <video controls loop autoPlay muted className='coll-modal-video p-2'> 
+                            <source src={collectionItemState.viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
+                        </video> 
+                    :
+                    <Loading />
+                    }
+                    <Modal.Footer>
+                        <div className='preview-name'>
+                            <span >{anim.name}</span>
+                        </div>
+                        <Button size='sm' 
+                            onClick={() => setIsViewerOpen(false)}
+                        >Close</Button>
+                    </Modal.Footer>
+                </Modal > 
                 {
-                    collectionItemState.viewFile ?
-                    <video controls loop autoPlay muted className='coll-modal-video p-2'> 
-                        <source src={collectionItemState.viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
-                    </video> 
-                :
-                <Loading />
-                }
-                <Modal.Footer>
-                    <div className='preview-name'>
-                        <span >{anim.name}</span>
-                    </div>
-                    <Button size='sm' 
-                        onClick={() => setIsViewerOpen(false)}
-                    >Close</Button>
-                </Modal.Footer>
-            </Modal > 
-            {collectionItemState.previewFile || (collectionItemState.index <= index) 
-                ? <div hidden={true}></div>
+                collectionItemState.previewFile || (collectionItemState.index <= index) 
+                ? <Div hidden={true} />
                 :
                 <div hidden={true}>    
                     <ReactP5Wrapper sketch={preview} anim={anim} index={index} id={`previewCanvas_${index}`}
@@ -115,19 +120,21 @@ export const CollectionItem = ({anim, index}) => {
                         collectionState={collectionState} type='PREVIEW'
                         setCollectionState={setCollectionState} clip={true}/>
                 </div>
-            } 
-            {collectionItemState.viewFile || !isDownloading
-                ? <div hidden={true}></div>
+                } 
+                {
+                collectionItemState.viewFile || !isDownloading
+                ? <Div hidden={true}/>
                 : <div hidden={true}>
                     <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
                     collectionItemDispatch={collectionItemDispatch}
                     collectionState={collectionState} type='DOWNLOAD'
                     setCollectionState={setCollectionState} clip={false}/>
                 </div>                
+                }
+            </LazyLoad>
+            : 
+            <Div/>
             }
-        </div>
-    </LazyLoad>
-    : <div></div>}
     </div>
     );
 }
