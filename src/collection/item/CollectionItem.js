@@ -14,6 +14,7 @@ import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
 import { Info } from "./Info";
 import { Div } from "../../common/Div";
+import { saveAs } from "file-saver";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false}
@@ -25,17 +26,27 @@ export const CollectionItem = ({anim, index}) => {
     const { mainState } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
 
-
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
     const handleView = (e) => {
         setIsViewerOpen(true);
     }
 
-    const handleDownload = (e) => {
-        setIsDownloading(true);
+    const handleDownload = async (e) => {
+        if(collectionItemState.viewFile){
+            fetch(collectionItemState.viewFile)
+                .then((r) => {
+                    r.blob().then((b) => saveAs(b, anim.name));
+                    
+                });
+            setIsDownloading(false);
+        }else{
+            setIsDownloading(true);
+        }
+        
+        
     }
-
+    
     const handleDelete = (e) => {
         const approve = (id) => {
             collectionItemDispatch(
@@ -52,7 +63,7 @@ export const CollectionItem = ({anim, index}) => {
         };
         const dismiss = (id) => {
             toast.dismiss(id);
-        }
+        } 
 
         toast((t) => (
             <ToastConfirm t={t} approve={approve} dismiss={dismiss}
@@ -109,6 +120,24 @@ export const CollectionItem = ({anim, index}) => {
         );
     }
 
+    const PreviewGen = () => {
+        return(
+            <div hidden={true}>
+                <PreviewWrapper anim={anim} index={index} id={`previewCanvas_${index}`}
+                    type={'PREVIEW'} clip={true} />
+            </div>
+        );
+    }
+
+    const DownloadGen = () => {
+        return(
+            <div hidden={true}>
+                <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
+                    type='DOWNLOAD' clip={false} />
+            </div> 
+        );
+    }
+
     return(
         <div className={`col col-12 col-sm-5 col-md-3 col-lg-3 
             py-1 px-3 m-1 coll-item`}>
@@ -127,19 +156,13 @@ export const CollectionItem = ({anim, index}) => {
                 {
                 collectionItemState.previewFile || (collectionItemState.index <= index) 
                 ? <Div hidden={true} />
-                :
-                <div hidden={true}>
-                    <PreviewWrapper anim={anim} index={index} id={`previewCanvas_${index}`}
-                        type={'PREVIEW'} clip={true} />
-                </div>
+                : <PreviewGen />
                 } 
                 {
-                collectionItemState.viewFile || !isDownloading
+                collectionItemState.viewFile  
+                || !isDownloading 
                 ? <Div hidden={true}/>
-                : <div hidden={true}>
-                    <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
-                        type='DOWNLOAD' clip={false} />
-                </div>                
+                : <DownloadGen />             
                 }
             </LazyLoad>
             : 

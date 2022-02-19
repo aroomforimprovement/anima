@@ -78,7 +78,6 @@ export const addContactRequest = async (userid, username, requsername, requserid
 
 export const collectionReducer = (state, action) => {
     //console.log("collectionReducer: " + action.type + ":" + action.data);
-
     switch(action.type){
         case 'SET':{
             return({...state, isSet: action.data})
@@ -102,6 +101,12 @@ export const collectionReducer = (state, action) => {
         }
         case 'SET_INDEX':{
             return({...state, index: action.data})
+        }
+        case 'DOWNLOADED':{
+            return({...state, downloaded: action.data});
+        }
+        case 'RESET_DOWNLOADED':{
+            return({...state, downloaded: 100000});
         }
         default:
             break;

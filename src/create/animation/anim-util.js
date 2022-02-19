@@ -138,6 +138,8 @@ export const renderAnim = async (a, type, p5canvas, p5,
                 });;
             }else if(type === 'DOWNLOAD'){
                 saveAs(blob, a.name);
+                playPreview(blob, a.name, dispatch);
+                //setCollectionState({type:'DOWNLOADED', data: index});
             }else if(type === 'DRAWING'){
                 playPreview(blob, a.name, dispatch);
             }

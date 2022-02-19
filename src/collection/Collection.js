@@ -7,7 +7,7 @@ import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
 import './collection.css';
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0, downloaded: 100000};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
