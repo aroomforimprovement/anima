@@ -1,6 +1,4 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { SITE } from "../../shared/site";
 import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
@@ -13,11 +11,11 @@ import { ToastConfirm, toastConfirmStyle } from "../../common/Toast";
 import { isMobile } from "react-device-detect";
 import { collectionItemReducer } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
+import { Buttons } from "./Buttons";
+import { Info } from "./Info";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false}
-
-const apiUrl = process.env.REACT_APP_API_URL;
 
 
 export const CollectionItem = ({anim, index}) => {
@@ -34,10 +32,7 @@ export const CollectionItem = ({anim, index}) => {
     }
 
     const handleDownload = (e) => {
-        //TODO should generated and download the viewFile instead 
         setIsDownloading(true);
-        //downloadAnimAsWebm(anim, ?, ?);
-       //saveAs(collectionItemState.previewFile, anim.name);
     }
 
     const handleDelete = (e) => {
@@ -79,56 +74,11 @@ export const CollectionItem = ({anim, index}) => {
                     <div >
                         <Thumb previewFile={collectionItemState.previewFile}
                             name={anim.name}/>
-                        <div className='row'>
-                            <div className='col col-12 mt-2 ms-2'>
-                                <div className='coll-item-name'>{anim.name}</div>
-                                <div className='coll-item-username' >
-                                    <small>by <a href={`/collection/${anim.userid}`} alt='Visit profile'>{anim.username}</a></small>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col col-2 ms-2'>
-                                    <small>{parseFloat(anim.frames ? anim.frames.length / anim.frate : 1 / anim.frate).toFixed(2)}</small>
-                                </div>
-                                <div className='col col-8 ms-2 coll-item-date'>
-                                    <small>{new Date(anim.created).toDateString()}</small>
-                                </div>
-                            </div>
-                    <div className='col col-12'>
-                        <div className='row coll-item-btns mt-1 mb-1'>
-                            { mainState.user && anim.userid === mainState.user.userid
-                            ? <div className='col col-3'>
-                                <button className='btn btn-outline-secondary'>
-                                    <a href={`/create/${anim.animid}`} alt='edit'>
-                                        <img src={SITE.icons.penColour} alt='edit' />
-                                    </a>   
-                                </button>
-                            </div> :
-                            <div></div>}
-                            <div className='col col-3'>
-                                <button className='btn btn-outline-secondary'
-                                    onClick={handleView}>
-                                        {isViewerOpen ? <Loading /> : <img src={SITE.icons.preview} alt='preview'></img>}
-                                </button>
-                            </div>
-                            <div className='col col-3'>
-                                <button className='btn btn-outline-secondary'
-                                    onClick={handleDownload}>
-                                    <img src={SITE.icons.download} alt='download'></img>
-                                </button>
-                            </div>
-                            { mainState.user && anim.userid === mainState.user.userid
-                            ? <div className='col col-3'>
-                                <button className='btn btn-outline-secondary'
-                                    onClick={handleDelete}>
-                                    <img src={SITE.icons.wipe} alt='delete'></img>
-                                </button>
-                            </div>
-                            : <div></div>}
-                        </div>
+                        <Info anim={anim} />
+                        <Buttons anim={anim} user={mainState.user}
+                            handleDelete={handleDelete} handleView={handleView}
+                            handleDownload={handleDownload} isViewerOpen={isViewerOpen}/>
                     </div>
-                </div>
-            </div>
             <Modal  show={isViewerOpen} fullscreen={isMobile}
                 onShow={() => {setIsViewerOpen(true)}}
                 onHide={() => {setIsViewerOpen(false)}}>
