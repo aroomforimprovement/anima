@@ -12,6 +12,7 @@ import { useCollectionContext } from "./Collection";
 import toast from "react-hot-toast";
 import { ToastConfirm, toastConfirmStyle } from "../common/Toast";
 import { isMobile } from "react-device-detect";
+import { downloadAnimAsWebm, previewAnim } from "../create/animation/anim-util";
 
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
@@ -22,6 +23,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const CollectionItem = ({anim, index}) => {
     const [isViewerOpen, setIsViewerOpen] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
     const { mainState } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
     let history = useHistory();
@@ -87,7 +89,9 @@ export const CollectionItem = ({anim, index}) => {
 
     const handleDownload = (e) => {
         //TODO should generated and download the viewFile instead 
-       saveAs(collectionItemState.previewFile, anim.name);
+        setIsDownloading(true);
+        //downloadAnimAsWebm(anim, ?, ?);
+       //saveAs(collectionItemState.previewFile, anim.name);
     }
 
     const handleDelete = (e) => {
@@ -137,11 +141,11 @@ export const CollectionItem = ({anim, index}) => {
                                     type='video/webm' alt={`Previewing ${anim.name}`} />
                                 </video> 
                             </div>
+                            }
+                        </div>
+                        : 
+                        <Loading /> 
                         }
-                    </div>
-                    : 
-                    <Loading /> 
-                    }
                     <div className='row'>
                         <div className='col col-12 mt-2 ms-2'>
                             <div className='coll-item-name'>{anim.name}</div>
@@ -199,7 +203,7 @@ export const CollectionItem = ({anim, index}) => {
                 ?  
                 <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
                     collectionItemDispatch={collectionItemDispatch}
-                    collectionState={collectionState}
+                    collectionState={collectionState} type='VIEW'
                     setCollectionState={setCollectionState} clip={false}/>
                 : <div></div>}
                 {
@@ -220,15 +224,24 @@ export const CollectionItem = ({anim, index}) => {
                 </Modal.Footer>
             </Modal > 
             {collectionItemState.previewFile || (collectionItemState.index <= index) 
-                ? <div></div>
+                ? <div hidden={true}></div>
                 :
                 <div hidden={true}>    
                     <ReactP5Wrapper sketch={preview} anim={anim} index={index} id={`previewCanvas_${index}`}
                         collectionItemDispatch={collectionItemDispatch}
-                        collectionState={collectionState}
+                        collectionState={collectionState} type='PREVIEW'
                         setCollectionState={setCollectionState} clip={true}/>
                 </div>
             } 
+            {collectionItemState.viewFile || !isDownloading
+                ? <div hidden={true}></div>
+                : <div hidden={true}>
+                    <ReactP5Wrapper sketch={preview} anim={anim} index={'temp'} id={`temp`}
+                    collectionItemDispatch={collectionItemDispatch}
+                    collectionState={collectionState} type='DOWNLOAD'
+                    setCollectionState={setCollectionState} clip={false}/>
+                </div>                
+            }
         </div>
     </LazyLoad>
     : <div></div>}

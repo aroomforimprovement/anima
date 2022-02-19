@@ -1,6 +1,7 @@
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+import { animReducer } from './animationReducer';
 
 
 /***
@@ -84,7 +85,7 @@ export const drawStroke = (stroke, p5) => {
 export const previewAnim = async (a, type, p5canvas, p5, 
     collectionItemDispatch, index, setCollectionState, 
     clip, drawing) => {
-    
+    console.log("previewAnim");
         try{
             renderAnim(a, type, p5canvas, p5, 
                 collectionItemDispatch, index, setCollectionState, clip, drawing);
@@ -118,6 +119,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
         setBgOverlay(p5, true);
         let frames = [...a.frames];
         if(clip && frames.length > 4){
+            console.log("clipping");
             frames = frames.splice(0, 4);
         }
         frames.forEach((f) => {
@@ -127,14 +129,14 @@ export const renderAnim = async (a, type, p5canvas, p5,
         const duration = performance.now() - startTime;
         console.log("Capture took "+duration);
         capturer.save((blob) => {
-            if(type === 'PREVIEW'){ 
-                playPreview(blob, a.name, dispatch, index, setCollectionState, clip)
+            if(type.indexOf('VIEW') > -1){ 
+                playPreview(blob, a.name, dispatch, clip)
                     .then(() => {
-                    if(setCollectionState){
-                        setCollectionState({type: 'SET_INDEX', data: index+1});
-                    }else{
-                        console.debug('no collection state');
-                    } 
+                        if(setCollectionState && type === 'PREVIEW'){
+                            setCollectionState({type: 'SET_INDEX', data: index+1});
+                        }else{
+                            console.debug('no collection state');
+                        } 
                 });;
             }else if(type === 'DOWNLOAD'){
                 saveAs(blob, a.name);

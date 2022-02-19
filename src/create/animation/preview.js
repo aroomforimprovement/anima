@@ -16,7 +16,9 @@ export const preview = (p5) => {
 
     p5.updateWithProps = (props) => {
         if(props.anim && p5 && props.anim.name !== 'nothing' 
-            && props.collectionState && (props.collectionState.index === props.index || props.index === 'temp')){
+            && props.collectionState 
+            && (props.collectionState.index === props.index 
+                || props.index === 'temp')){
                 //console.log(props.clip);
 //            p5.resizeCanvas(
 //                props.anim.size ? props.anim.size : values.defaultSize, 
@@ -26,7 +28,7 @@ export const preview = (p5) => {
                 previewAnimMobile(props.anim, p5canvas, p5, 
                     props.collectionItemDispatch, props.index, props.setCollectionState);
             }else{
-                previewAnim(props.anim, 'PREVIEW', p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
+                previewAnim(props.anim, props.type, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
             }
             
         }

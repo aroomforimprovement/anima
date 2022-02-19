@@ -96,6 +96,10 @@ export const collectionReducer = (state, action) => {
             const newAnims = arrayRemove(anims, anim[0]);
             return({...state, anims: newAnims});
         }
+        case 'SET_VIEW_FILE':{
+            const url = URL.createObjectURL(action.data.blob);
+            return({...state, viewFile: url, viewFileName: action.data.name});
+        }
         case 'SET_INDEX':{
             return({...state, index: action.data})
         }
