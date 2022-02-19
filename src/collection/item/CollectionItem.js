@@ -43,8 +43,6 @@ export const CollectionItem = ({anim, index}) => {
         }else{
             setIsDownloading(true);
         }
-        
-        
     }
     
     const handleDelete = (e) => {
@@ -59,6 +57,7 @@ export const CollectionItem = ({anim, index}) => {
                 }
             );
             setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
+            window.location.href = window.location.href;
             toast.dismiss(id);
         };
         const dismiss = (id) => {
@@ -90,33 +89,33 @@ export const CollectionItem = ({anim, index}) => {
     const Viewer = ({isViewerOpen, setIsViewerOpen, viewFile, anim}) => {
         return(
             <Modal show={isViewerOpen} fullscreen={isMobile}
-                    onShow={() => {setIsViewerOpen(true)}}
-                    onHide={() => {setIsViewerOpen(false)}}>
-                    {
-                    isViewerOpen && !viewFile
-                    ?  
-                    <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
-                    type={'VIEW'} clip={false}/>
-                    : 
-                    <Div/>
-                    }
-                    {
-                        viewFile ?
-                        <video controls loop autoPlay muted className='coll-modal-video p-2'> 
-                            <source src={viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
-                        </video> 
-                    :
-                    <Loading />
-                    }
-                    <Modal.Footer>
-                        <div className='preview-name'>
-                            <span >{anim.name}</span>
-                        </div>
-                        <Button size='sm' 
-                            onClick={() => setIsViewerOpen(false)}
-                        >Close</Button>
-                    </Modal.Footer>
-                </Modal >
+                onShow={() => {setIsViewerOpen(true)}}
+                onHide={() => {setIsViewerOpen(false)}}>
+                {
+                isViewerOpen && !viewFile
+                ?  
+                <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
+                type={'VIEW'} clip={false}/>
+                : 
+                <Div/>
+                }
+                {
+                viewFile ?
+                <video controls loop autoPlay muted className='coll-modal-video p-2'> 
+                    <source src={viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
+                </video> 
+                :
+                <Loading />
+                }
+                <Modal.Footer>
+                    <div className='preview-name'>
+                        <span >{anim.name}</span>
+                    </div>
+                    <Button size='sm' 
+                        onClick={() => setIsViewerOpen(false)}
+                    >Close</Button>
+                </Modal.Footer>
+            </Modal >
         );
     }
 

@@ -47,7 +47,7 @@ export const collectionItemReducer = (state, action) => {
         }
         case 'DELETE_ANIM':{
             deleteAnim(action.data.animid, action.data.user);
-            return({...state, deleted: true});
+            return({...state, deleted: true, previewFile: undefined});
         }
         default:
             break;

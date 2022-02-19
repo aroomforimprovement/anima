@@ -126,8 +126,7 @@ export const Animation = ({edit, splat}) => {
             <Redirect to='/login'/>
         );
     }
-    console.log("anim.viewFile");
-    console.dir(anim.viewFile);
+    
     return(
         <div>
             <ControlContext.Consumer> 

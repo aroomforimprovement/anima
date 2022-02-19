@@ -85,7 +85,6 @@ export const drawStroke = (stroke, p5) => {
 export const previewAnim = async (a, type, p5canvas, p5, 
     collectionItemDispatch, index, setCollectionState, 
     clip, drawing) => {
-    console.log("previewAnim");
         try{
             renderAnim(a, type, p5canvas, p5, 
                 collectionItemDispatch, index, setCollectionState, clip, drawing);
@@ -114,20 +113,19 @@ export const renderAnim = async (a, type, p5canvas, p5,
             framerate: a.frate
         });
         capturer.start();
-        const startTime = performance.now();
+        //const startTime = performance.now();
         setBgOverlay(p5, true);
         setBgOverlay(p5, true);
         let frames = [...a.frames];
         if(clip && frames.length > 4){
-            console.log("clipping");
             frames = frames.splice(0, 4);
         }
         frames.forEach((f) => {
         setFrameCaptured(f, capturer, p5canvas, p5);
         });
         capturer.stop();
-        const duration = performance.now() - startTime;
-        console.log("Capture took "+duration);
+        //const duration = performance.now() - startTime;
+        //console.log("Capture took "+duration);
         capturer.save((blob) => {
             if(type.indexOf('VIEW') > -1){ 
                 playPreview(blob, a.name, dispatch, clip)
