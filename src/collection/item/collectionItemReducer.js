@@ -16,17 +16,14 @@ export const deleteAnim = async (animid, user) => {
     }
     return fetch(url, req).then(response => {
         if(response.ok){
-            
-            toast.success("Anim deleted as requested");
-            //temporary solution for rendering issue (ANIM-201)
-            //window.location.href = window.location.href;
+            toast.success("Anim deleted");
         }else{
             //console.log("response not ok");
             toast.error("Error deleting the anim");
         }
     }, error => {
-        console.error(error);
-    }).catch(error => { console.error(error);})
+        console.error("Error fetching data: deleteAnim");
+    }).catch(error => { console.error("Error fetching data: deleteAnim"); })
 }
 
 export const collectionItemReducer = (state, action) => {

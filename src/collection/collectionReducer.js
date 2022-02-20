@@ -26,10 +26,10 @@ export const getCollection = async (id, isBrowse, access, signal) => {
             return response.json();
         }
     }, error => {
-        console.error("error fetching collection: " + error);
+        console.error("Error fetching data: getCollection");
         return false;
     }).catch(err => {
-        console.error(err);
+        console.error("Error fetching data: getCollection");
         return false;
     });
 }
@@ -70,14 +70,13 @@ export const addContactRequest = async (userid, username, requsername, requserid
             return false;
         }
     }, error => {
-        console.error(error);
+        console.error("Error fetching data: addContactRequest");
     }).catch((error) => {
-        console.error(error);
+        console.error("Error fetching data: addContactRequest");
     })
 }
 
 export const collectionReducer = (state, action) => {
-    //console.log("collectionReducer: " + action.type + ":" + action.data);
     switch(action.type){
         case 'SET':{
             return({...state, isSet: action.data})

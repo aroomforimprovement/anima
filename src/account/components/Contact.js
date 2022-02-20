@@ -3,6 +3,7 @@ import { SITE } from '../../shared/site';
 import { useAccountContext } from '../Account';
 import { useMainContext } from '../../main/Main';
 import { deleteContact } from '../accountReducer';
+import toast from 'react-hot-toast';
 
 
 export const Contact = ({contact, i}) => {
@@ -23,6 +24,9 @@ export const Contact = ({contact, i}) => {
                 .then((response) => {
                     if(response && response.ok){
                         dispatch({type: 'DELETE_CONTACT', data: i});
+                        toast.success("Contact deleted");
+                    }else{
+                        toast.error(SITE.failed_delete_message);
                     }
                     //console.log("should toast to this");
                 });

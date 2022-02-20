@@ -25,12 +25,13 @@ export class ErrorBoudary extends Component {
         return { hasError: true };
     }
     componentDidCatch(error, errorInfo) {
-        console.error(error, errorInfo);
+        console.debug(error, errorInfo);
+        console.error("Unexpected Error");
     }
 
     render() {
         if(this.state.hasError){
-            return <Problem message={"Error boundary..."} />
+            return <Problem message={"Unexpected Error..."} />
         }
         return this.props.children;
     }

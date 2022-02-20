@@ -7,6 +7,7 @@ import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
 import './collection.css';
+import { SITE } from '../shared/site';
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0, downloaded: 100000};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
@@ -23,11 +24,9 @@ const Collection = ({browse}) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
                     if(mainState.contacts[0].userid === id){
-                        //console.log("isContact:TRUE");
                         return true;
                     }
                 }
-                //console.log('isContact:FALSE');
                 return false;
         }
         return false;
@@ -80,11 +79,9 @@ const Collection = ({browse}) => {
     const [isFailed, setIsFailed] = useState(false);
     
     useEffect( () => {
-        //console.log("mounted");
         const controller = new AbortController();
         const signal = controller.signal;
         const setCollection = async (data) => {
-            //console.log("setCollection");
             setCollectionState({type: 'SET_COLLECTION', data: data}); 
         }
         
@@ -101,26 +98,23 @@ const Collection = ({browse}) => {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
-                    handleFailedConnection();
+                    console.error("Error fetching data: getCollection, then()");
+                    handleFailedConnection(SITE.failed_retrieval_message, true);
                     setIsFailed(true);
                 });
         }
         return () => {
-            //console.log("cleanup");
             controller.abort();
         }
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
 
-    useEffect(() => {
-        console.log("collectionState.anims");
-    }, [collectionState.anims]);
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
         return(
             <CollectionItem key={index} index={index} anim={anim}/>
             );
     }) : <Loading />
+    
     
     const collectionHeading = collectionState.username
     ? <div className='container collection-header mt-4 mb-4'>

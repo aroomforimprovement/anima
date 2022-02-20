@@ -103,7 +103,6 @@ export const sketch = (p5) => {
         }
         if(props.controls.preview && props.anim.isPreviewOpen){
                 dispatch({type: 'PREVIEW', data: false});        
-                console.log(props.anim.isPreviewOpen);
                 previewAnim(anim.anim, 'DRAWING', p5canvas, p5, updateAnim, undefined, undefined, false, true)
                     .then(() => {
                         p5.resizeCanvas(10, 10);

@@ -46,15 +46,15 @@ export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissB
     );
 }
 
-export const handleFailedConnection = () => {
+export const handleFailedConnection = (message, takeHome) => {
     const dismiss = (id) => {
         toast.dismiss(id);
-        window.location.href = '/';
+        takeHome ? window.location.href = '/' : console.error(message);
+        
     }
     toast((t) => (
         <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
-            message={`It looks like there has been an issue contacting the server.
-                Try again in a few minutes, or contact support if this is a persistent problem.`}
+            message={message}
             approveBtn={"Cool"} dismissBtn={"OK"}/>
     ), toastConfirmStyle());
 }

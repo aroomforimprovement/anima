@@ -13,6 +13,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
 import { handleFailedConnection, Toast } from '../common/Toast';
 import './main.css';
+import { SITE } from '../shared/site';
 
 const MainContext = createContext({});
 
@@ -74,7 +75,7 @@ const Main = () => {
                             type: 'SET_ACCOUNT_INFO',
                             data: {isSet: true}
                         });
-                        handleFailedConnection();
+                        handleFailedConnection(SITE.failed_retrieval_message, false);
                     }
                     
                 });

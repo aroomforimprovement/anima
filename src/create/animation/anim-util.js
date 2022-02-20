@@ -89,7 +89,7 @@ export const previewAnim = async (a, type, p5canvas, p5,
             renderAnim(a, type, p5canvas, p5, 
                 collectionItemDispatch, index, setCollectionState, clip, drawing);
         }catch(err){
-            console.error(err);
+            console.error("Error trying renderAnim: previewAnim");
         }
 }
 
@@ -187,7 +187,7 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
     try{
         renderAnim(a, 'DOWNLOAD', p5canvas, p5);
     }catch(err){
-        console.error(err);
+        console.error("Error trying renderAnim: downloadAnimAsWebm");
         toast.error("Error downloading file");
     }
 }
