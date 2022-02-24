@@ -290,7 +290,7 @@ export const Background = () => {
 
 const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { dispatch } = useControlContext();
-    const handle = () => {
+    const handle = async () => {
         dispatch({type: dispatchType, data: true});
     }
     return(

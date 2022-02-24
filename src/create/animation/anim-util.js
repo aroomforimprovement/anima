@@ -30,13 +30,13 @@ export const drawFrame = (f, p5, render) => {
     drawPoints(f.points, p5);
 }
 
-export const drawPoints = (points, p5) => {
+export const drawPoints = async (points, p5) => {
         points.forEach((element) => {
             drawStroke(element, p5);
         });
 }
 
-export const drawPoint = (point, p5) => {
+export const drawPoint = async (point, p5) => {
     let p = {...point};
     p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
     if(p.size !== p5.width){
@@ -69,7 +69,7 @@ export const drawPoint = (point, p5) => {
     return true;
 }
 
-export const drawStroke = (stroke, p5) => {
+export const drawStroke = async (stroke, p5) => {
     if(stroke){
         stroke.forEach((element) => {
             drawPoint(element, p5);
@@ -207,7 +207,7 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
         await dispatch({
             type: 'SET_VIEW_FILE',
             data: {blob: blob, name: name}
-        })
+        });
     }
 }
 

@@ -38,8 +38,10 @@ export const preview = (p5) => {
 
     }
 
-    p5.touchMoved = () => {
-    }
+    
+    p5.touchStarted = () => {return true;}
+    p5.touchMoved = () => {return true;}
+    p5.touchEnded = () => {return true;}
 
 
 }

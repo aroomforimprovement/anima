@@ -151,57 +151,30 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        //console.log("mousePressed");
         if(anim.isSaveOpen){
-            //console.log("isSaveOpen");
             return true;
         }
         handlePressed(p5.mouseX, p5.mouseY);
-        //if(isPointOnCanvas(p5.mouseX, p5.mouseY) && anim.enabled){
-        //    return true;
-        //}
-        //return false;
-        return (!isPointOnCanvas(p5.mouseX, p5.mouseY));// || (isPointOnCanvas(p5.mouseX, p5.mouseY) && !anim.enabled));
-        //return true;
+        return (!isPointOnCanvas(p5.mouseX, p5.mouseY));
     }
-    //p5.touchStarted = () => {
-    //    console.log("touchStarted");
-    //    return isPointOnCanvas(p5.mouseX, p5.mouseY);
-    //}
-    //p5.touchStarted = () => {
-    //    //console.debug("touch started");
-    //    if(p5.touches.length === 1){
-    //        return handlePressed(p5.mouseX, p5.mouseY)
-    //    }
-    //    return false;
-    //}
+
+    //p5.touchStarted = () => {return true;}
+
     p5.mouseDragged = () => {
-        //console.debug("mouse dragged");
         handleDragged(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    //p5.touchMoved = () => {
-    //    if(p5.touches.length === 1){
-    //        handleDragged(p5.mouseX, p5.mouseY);
-    //    }
-    //    return !isPointOnCanvas(p5.mouseX, p5.mouseY);
-    //}
+
+    //p5.touchMoved = () => {return true;}
 
     p5.mouseReleased = () => {
         handleReleased(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    //p5.touchEnded = () => {
-    //    //console.debug("touch ended");
-    //    //console.dir(p5.touches);
-    //    if(p5.touches.length <= 1){
-    //        return handleReleased(p5.mouseX, p5.mouseY);
-    //    }
-    //    return false;
-    //}
+
+    //p5.touchEnded = () => {return true;}
 
     const handlePressed = (x, y) => {
-        //console.log("handlePressed");
         if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
             startStroke(x, y);
             return true;

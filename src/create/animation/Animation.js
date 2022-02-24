@@ -46,9 +46,12 @@ export const Animation = ({edit, splat}) => {
     }
 
     useEffect(() => {
-        const getSavedAnim = (id) => {
-            //console.log("getSavedAnim");
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const getSavedAnim = (id, signal) => {
             return fetch(`${apiUrl}anim/${id}`,{
+                    signal: signal,
                     headers: {
                         Authorization: `Bearer ${access}`,
                     }
@@ -58,31 +61,30 @@ export const Animation = ({edit, splat}) => {
                         return response.json();
                     }else{
                         console.error("response not ok");
-                        //console.dir(response);
                     }
                 }, error => {
                     console.error("error fetching anim" + error);
                 })
                 .then(response => {
-                    //assign response to anim here
-                    //console.log("got anim");
-                    //console.dir(response);
                     if(anim.isSet){
                         //console.log("stop calling me!")
                     }else{
-                        updateAnim({type: 'SET_ANIM', data: response});
+                        updateAnim({type: 'SET_ANIM', data: response, signal: signal});
                     }
                 })
                 .catch(err => console.error(err));
         }
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            setAccess(mainState.user.access);
-            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
+            setAccess(mainState.user.access, signal);
+            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
         }
         if(!anim.isSet && splat && mainState.user && access){
             //console.log('!anim.isSet && id', access);
             
-            getSavedAnim(splat);
+            getSavedAnim(splat, signal);
+        }
+        return () => {
+            controller.abort();
         }
     },[anim.isSet, splat, mainState.user, access]);
     
