@@ -1,7 +1,6 @@
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
-import { animReducer } from './animationReducer';
 
 
 /***

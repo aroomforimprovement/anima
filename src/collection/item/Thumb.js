@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { Loading } from '../../common/Loading';
 
