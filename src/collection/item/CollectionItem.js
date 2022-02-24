@@ -57,6 +57,7 @@ export const CollectionItem = ({anim, index}) => {
                 }
             );
             setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
+            // eslint-disable-next-line no-self-assign
             window.location.href = window.location.href;
             toast.dismiss(id);
         };
