@@ -82,7 +82,7 @@ const Collection = ({browse}) => {
         const controller = new AbortController();
         const signal = controller.signal;
         const setCollection = async (data) => {
-            setCollectionState({type: 'SET_COLLECTION', data: data}); 
+            setCollectionState({type: 'SET_COLLECTION', data: data, signal}); 
         }
         
         if(!isFailed && !collectionState.isSet && mainState.isSet){
@@ -90,17 +90,17 @@ const Collection = ({browse}) => {
             getCollection(splat, browse, access, signal)
                 .then((response) => {
                     if(browse){
-                        setCollection({anims: response, isSet: true});
+                        setCollection({anims: response, isSet: true, signal});
                     }else{
                         setCollection({anims: response.anims, isSet: true,
                             username: response.username, userid: response.userid,
-                            isOwn: response.userid === mainState.user.userid});
+                            isOwn: response.userid === mainState.user.userid, signal});
                     }
                 })
                 .catch((error) => {
                     console.error("Error fetching data: getCollection, then()");
-                    handleFailedConnection(SITE.failed_retrieval_message, true);
-                    setIsFailed(true);
+                    handleFailedConnection(SITE.failed_retrieval_message, true, signal);
+                    setIsFailed(true, signal);
                 });
         }
         return () => {

@@ -28,7 +28,7 @@ export const CollectionItem = ({anim, index}) => {
 
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
-    const handleView = (e) => {
+    const handleView = async (e) => {
         setIsViewerOpen(true);
     }
 
@@ -72,9 +72,9 @@ export const CollectionItem = ({anim, index}) => {
         ), toastConfirmStyle());
     }
 
-    useEffect(() => {
-        
-    },[collectionState.anims]);
+//    useEffect(() => {
+//        
+//    },[collectionState.anims]);
 
     const PreviewWrapper = ({anim, index, id, type, clip}) => {
         return(
