@@ -11785,6 +11785,11 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+smoothscroll-for-websites@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/smoothscroll-for-websites/-/smoothscroll-for-websites-1.4.10.tgz#f5070f574dad552d194f8ed1e71792c3d443d8aa"
+  integrity sha512-4/4RdF+wbXD2RqylKpzaU2CO+cngt/rCE81FP5Hc0jFbTma0mouCwMBvfMDHXQXFJsVS0FOMSNfPQdlAu8HkcQ==
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"

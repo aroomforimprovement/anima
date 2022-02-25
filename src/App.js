@@ -5,7 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import Auth0ProviderWithHistory from './auth/Auth0ProviderWithHistory';
 import { ErrorBoudary } from './utils/errorUtils';
 
-class App extends Component {
+class App extends Component {  
+  
   render(){
     return (
       <ErrorBoudary>

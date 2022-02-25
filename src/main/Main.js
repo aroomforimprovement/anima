@@ -14,6 +14,8 @@ import { getAccountInfo } from '../account/accountReducer';
 import { handleFailedConnection, Toast } from '../common/Toast';
 import './main.css';
 import { SITE } from '../shared/site';
+import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
+
 
 const MainContext = createContext({});
 
@@ -23,7 +25,7 @@ export const useMainContext = () => {
 
 
 const Main = () => {
-
+    SmoothScroll({animationTime: 400, stepSize: 10});
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {});
     const stateOfMain = { mainState, mainDispatch };
