@@ -1,6 +1,8 @@
+import React from 'react';
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+
 
 
 /***
@@ -25,15 +27,29 @@ export const drawBg = async (bg, p5, render) => {
 export const drawFrame = async (f, p5, render) => {
     setBgOverlay(p5, render);
     if(f.bg && f.bg.length > 0){
+        
         drawPoints(f.bg, p5);   
     }
     drawPoints(f.points, p5);
 }
 
 export const drawPoints = async (points, p5) => {
-        points.forEach((element) => {
-            drawStroke(element, p5);
-        });
+    //let time = performance.now();
+    //const wait = 1000;
+    points.forEach((element) => {
+    //    let now = performance.now();
+    //    while(now - time < wait){
+    //        //wait;
+    //        now = performance.now() + 1;
+    //        console.log(`waiting ${now}`);
+    //        console.log(`${time}:${wait}`);
+    //    }
+    //    console.log(`NOT waiting ${now}`);
+    //    console.log(`${time}:${wait}`);
+    //    time = performance.now();
+        
+        drawStroke(element, p5);
+    });
 }
 
 export const drawPoint = async (point, p5) => {
@@ -71,8 +87,8 @@ export const drawPoint = async (point, p5) => {
 
 export const drawStroke = async (stroke, p5) => {
     if(stroke){
-        stroke.forEach((element) => {
-            drawPoint(element, p5);
+        stroke.forEach((point) => {
+            drawPoint(point, p5);
         });
     }
 }
@@ -87,7 +103,8 @@ export const previewAnim = async (a, type, p5canvas, p5,
         console.debug("previewAnim");
         try{
             renderAnim(a, type, p5canvas, p5, 
-                collectionItemDispatch, index, setCollectionState, clip, drawing);
+                collectionItemDispatch, index, 
+                setCollectionState, clip, drawing);
         }catch(err){
             console.error("Error trying renderAnim: previewAnim");
         }

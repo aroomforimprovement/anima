@@ -3,9 +3,9 @@ import { values } from '../values';
 //import { isMobile } from 'react-device-detect';
 
 export const preview = (p5) => {
+    //temp switch to turn off thumbs on mobile, using video
     const isMobile = false;
     let p5canvas = undefined;
-    
 
     p5.setup = () => {
         p5canvas = p5.createCanvas(
@@ -30,7 +30,9 @@ export const preview = (p5) => {
                 previewAnimMobile(props.anim, p5canvas, p5, 
                     props.collectionItemDispatch, props.index, props.setCollectionState);
             }else{
-                previewAnim(props.anim, props.type, p5canvas, p5, props.collectionItemDispatch, props.index, props.setCollectionState, props.clip);
+                previewAnim(props.anim, props.type, p5canvas, p5, 
+                    props.collectionItemDispatch, props.index, props.setCollectionState, 
+                    props.clip, false);
             }
             
         }
