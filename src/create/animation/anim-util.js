@@ -100,7 +100,7 @@ export const drawStroke = async (stroke, p5) => {
 export const previewAnim = async (a, type, p5canvas, p5, 
     collectionItemDispatch, index, setCollectionState, 
     clip, drawing) => {
-        console.debug("previewAnim");
+        //console.debug("previewAnim");
         try{
             renderAnim(a, type, p5canvas, p5, 
                 collectionItemDispatch, index, 
@@ -112,7 +112,7 @@ export const previewAnim = async (a, type, p5canvas, p5,
 
 export const previewAnimMobile = async (a, p5canvas, p5, 
     dispatch, index, setCollectionState) => {
-        console.debug("previewAnimMobile");
+        //console.debug("previewAnimMobile");
     try{
         renderThumb(a, p5canvas, p5, 
             dispatch, index, setCollectionState);
@@ -124,7 +124,7 @@ export const previewAnimMobile = async (a, p5canvas, p5,
 export const renderAnim = async (a, type, p5canvas, p5, 
     dispatch, index, setCollectionState, 
     clip, drawing) => {
-        console.debug("renderAnim");
+        //console.debug("renderAnim");
         const CCapture = window.CCapture; 
         let capturer = new CCapture({format: 'webm',
         //workersPath: process.env.PUBLIC_URL + '/ccapture/',
@@ -166,7 +166,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
-    console.debug("setFrameCaptured");
+    //console.debug("setFrameCaptured");
     const render = true;
     drawFrame(f, p5, render);
     let img = p5.get(0, 0, 600, 600);
@@ -177,7 +177,7 @@ export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
 
 export const renderThumb = async (a, p5canvas, p5, 
     dispatch, index, setCollectionState) => {
-        console.debug("renderThumb");
+        //console.debug("renderThumb");
         setBgOverlay(p5, true);
         setBgOverlay(p5, true);
         let frames = [...a.frames];
@@ -188,7 +188,7 @@ export const renderThumb = async (a, p5canvas, p5,
 
 export const setThumbCaptured = async (f, name, index, p5, p5canvas,
     dispatch, setCollectionState) => {
-    console.debug("setThumbCaptured");
+    //console.debug("setThumbCaptured");
     const render = true;
     drawFrame(f, p5, render);
     let img = p5.get(0, 0, 600, 600);
@@ -218,7 +218,7 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
  export const playPreview = async (blob, name, dispatch, clip) => {
-     console.debug("playPreview");
+     //console.debug("playPreview");
     if(dispatch && clip){
         await dispatch({
             type: 'SET_PREVIEW_FILE', 
@@ -233,19 +233,19 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
 }
 
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
-    console.debug("setThumb");
+    //console.debug("setThumb");
     if(dispatch){
         dispatch({
             type: 'SET_PREVIEW_FILE',
             data: {blob: blob, name: name}
         });
     }else{
-        console.debug('no collection item dispatch');
+        //console.debug('no collection item dispatch');
     }
     if(setCollectionState){
         setCollectionState({type: 'SET_INDEX', data: index+1});
     }else{
-        console.debug('no collection state');
+        //console.debug('no collection state');
     }
 }
 
