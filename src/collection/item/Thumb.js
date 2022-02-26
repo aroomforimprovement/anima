@@ -1,9 +1,9 @@
 import React from 'react';
-import { isMobile } from 'react-device-detect';
+//import { isMobile } from 'react-device-detect';
 import { Loading } from '../../common/Loading';
 
 export const Thumb = ({previewFile, name}) => {
-    
+    const isMobile = false;  
 
     /***ANIM-229 - useRef didn't work to fix preview image
      * not updating after anim delete

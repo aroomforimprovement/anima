@@ -25,7 +25,7 @@ export const useMainContext = () => {
 
 
 const Main = () => {
-    SmoothScroll({animationTime: 400, stepSize: 10});
+    SmoothScroll({animationTime: 1000, stepSize: 10, accelerationDelta: 5});
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {});
     const stateOfMain = { mainState, mainDispatch };

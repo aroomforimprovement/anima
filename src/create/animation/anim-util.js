@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
  * DRAWING
  */
 
-export const setBgOverlay = (p5, render) => {
+export const setBgOverlay = async (p5, render) => {
     let c = values.bgc;
     if(render){
         c = p5.color(0);
@@ -15,14 +15,14 @@ export const setBgOverlay = (p5, render) => {
     p5.background(c);
 }
 
-export const drawBg = (bg, p5, render) => {
+export const drawBg = async (bg, p5, render) => {
     setBgOverlay(p5, render);
     if(bg && bg.length > 0){
         drawPoints(bg, p5);
     }
 }
 
-export const drawFrame = (f, p5, render) => {
+export const drawFrame = async (f, p5, render) => {
     setBgOverlay(p5, render);
     if(f.bg && f.bg.length > 0){
         drawPoints(f.bg, p5);   
@@ -84,6 +84,7 @@ export const drawStroke = async (stroke, p5) => {
 export const previewAnim = async (a, type, p5canvas, p5, 
     collectionItemDispatch, index, setCollectionState, 
     clip, drawing) => {
+        console.debug("previewAnim");
         try{
             renderAnim(a, type, p5canvas, p5, 
                 collectionItemDispatch, index, setCollectionState, clip, drawing);
@@ -94,6 +95,7 @@ export const previewAnim = async (a, type, p5canvas, p5,
 
 export const previewAnimMobile = async (a, p5canvas, p5, 
     dispatch, index, setCollectionState) => {
+        console.debug("previewAnimMobile");
     try{
         renderThumb(a, p5canvas, p5, 
             dispatch, index, setCollectionState);
@@ -104,8 +106,8 @@ export const previewAnimMobile = async (a, p5canvas, p5,
 
 export const renderAnim = async (a, type, p5canvas, p5, 
     dispatch, index, setCollectionState, 
-    clip, drawing) =>{
-    
+    clip, drawing) => {
+        console.debug("renderAnim");
         const CCapture = window.CCapture; 
         let capturer = new CCapture({format: 'webm',
         //workersPath: process.env.PUBLIC_URL + '/ccapture/',
@@ -147,6 +149,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
+    console.debug("setFrameCaptured");
     const render = true;
     drawFrame(f, p5, render);
     let img = p5.get(0, 0, 600, 600);
@@ -157,7 +160,7 @@ export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
 
 export const renderThumb = async (a, p5canvas, p5, 
     dispatch, index, setCollectionState) => {
-        console.debug("renderAnimMobile");
+        console.debug("renderThumb");
         setBgOverlay(p5, true);
         setBgOverlay(p5, true);
         let frames = [...a.frames];
@@ -198,6 +201,7 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
  export const playPreview = async (blob, name, dispatch, clip) => {
+     console.debug("playPreview");
     if(dispatch && clip){
         await dispatch({
             type: 'SET_PREVIEW_FILE', 
@@ -212,6 +216,7 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
 }
 
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
+    console.debug("setThumb");
     if(dispatch){
         dispatch({
             type: 'SET_PREVIEW_FILE',

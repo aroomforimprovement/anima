@@ -36,6 +36,7 @@ export const sketch = (p5) => {
             isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
+        p5.noLoop();
     }
 
     p5.updateWithProps = (props) => {
@@ -279,8 +280,9 @@ export const sketch = (p5) => {
             if(!isStroke){
                 //save and clear stroke
                 if(isMounted){
-                    updateAnim({type: 'DO_STROKE', data: thisStroke});
+                    const stk = [...thisStroke];
                     thisStroke = []; 
+                    updateAnim({type: 'DO_STROKE', data: stk});
                 }else{
                     //console.warn("unmounted while doing stroke");
                 }

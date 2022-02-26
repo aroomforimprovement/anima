@@ -63,7 +63,7 @@ export const Animation = ({edit, splat}) => {
                         console.error("response not ok");
                     }
                 }, error => {
-                    console.error("error fetching anim" + error);
+                    console.error(`error fetching anim ${error}`);
                 })
                 .then(response => {
                     if(anim.isSet){

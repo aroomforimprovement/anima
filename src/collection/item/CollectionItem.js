@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
@@ -72,9 +72,6 @@ export const CollectionItem = ({anim, index}) => {
         ), toastConfirmStyle());
     }
 
-//    useEffect(() => {
-//        
-//    },[collectionState.anims]);
 
     const PreviewWrapper = ({anim, index, id, type, clip}) => {
         return(
@@ -86,6 +83,7 @@ export const CollectionItem = ({anim, index}) => {
             </div>
         );
     }
+
 
     const Viewer = ({isViewerOpen, setIsViewerOpen, viewFile, anim}) => {
         return(
@@ -120,6 +118,7 @@ export const CollectionItem = ({anim, index}) => {
         );
     }
 
+
     const PreviewGen = () => {
         return(
             <div hidden={true}>
@@ -128,6 +127,7 @@ export const CollectionItem = ({anim, index}) => {
             </div>
         );
     }
+    
 
     const DownloadGen = () => {
         return(
