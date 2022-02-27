@@ -24,16 +24,16 @@ export const drawBg = async (bg, p5, render) => {
     }
 }
 
-export const drawFrame = async (f, p5, render) => {
+export const drawFrame = async (f, p5, render, clip) => {
     setBgOverlay(p5, render);
     if(f.bg && f.bg.length > 0){
         
-        drawPoints(f.bg, p5);   
+        drawPoints(f.bg, p5, clip);   
     }
-    drawPoints(f.points, p5);
+    drawPoints(f.points, p5, clip);
 }
 
-export const drawPoints = async (points, p5) => {
+export const drawPoints = async (points, p5, clip) => {
     //let time = performance.now();
     //const wait = 1000;
     points.forEach((element) => {
@@ -47,8 +47,8 @@ export const drawPoints = async (points, p5) => {
     //    console.log(`NOT waiting ${now}`);
     //    console.log(`${time}:${wait}`);
     //    time = performance.now();
+        drawStroke(element, p5, clip);            
         
-        drawStroke(element, p5);
     });
 }
 
@@ -85,10 +85,17 @@ export const drawPoint = async (point, p5) => {
     return true;
 }
 
-export const drawStroke = async (stroke, p5) => {
+export const drawStroke = async (stroke, p5, clip) => {
     if(stroke){
-        stroke.forEach((point) => {
-            drawPoint(point, p5);
+        stroke.forEach((point, i) => {
+            if(clip){
+                if(i%2 === 0){
+                    drawPoint(point, p5);
+                }
+            }else{
+                drawPoint(point, p5);
+            }
+            
         });
     }
 }
@@ -139,7 +146,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
             frames = frames.splice(0, 4);
         }
         frames.forEach((f) => {
-        setFrameCaptured(f, capturer, p5canvas, p5);
+        setFrameCaptured(f, capturer, p5canvas, p5, clip);
         });
         capturer.stop();
         //const duration = performance.now() - startTime;
@@ -165,10 +172,10 @@ export const renderAnim = async (a, type, p5canvas, p5,
         }
 }
 
-export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
+export const setFrameCaptured = async (f, capturer, p5canvas, p5, clip) => {
     //console.debug("setFrameCaptured");
     const render = true;
-    drawFrame(f, p5, render);
+    drawFrame(f, p5, render, clip);
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);
