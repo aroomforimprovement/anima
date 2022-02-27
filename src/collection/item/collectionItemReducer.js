@@ -30,10 +30,14 @@ export const collectionItemReducer = (state, action) => {
     switch(action.type){
         case 'SET_PREVIEW_FILE':{
             const previewFile = URL.createObjectURL(action.data.blob);
-            return ({...state, 
-                previewFile: previewFile, 
-                previewName: action.data.name,
-            });
+            if(previewFile){
+                return ({...state, 
+                    previewFile: previewFile, 
+                    previewName: action.data.name,
+                });
+            }
+            return(state);
+            
         }
         case 'SET_VIEW_FILE':{
             const viewFile = URL.createObjectURL(action.data.blob);

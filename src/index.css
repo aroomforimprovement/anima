@@ -88,6 +88,16 @@ code {
   display:inline-block;
 }
 
+.loading-float{
+  position:absolute;
+  min-width: 100vw;
+  min-height: 30vh;
+  background-color: white;
+  text-align: center;
+  font-size:large;
+  font-weight:bold;
+}
+
 .coll-item-btns{
   text-align: center;
 }

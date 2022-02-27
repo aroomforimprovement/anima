@@ -138,7 +138,7 @@ export const renderAnim = async (a, type, p5canvas, p5,
             framerate: a.frate
         });
         capturer.start();
-        //const startTime = performance.now();
+        const startTime = performance.now();
         setBgOverlay(p5, true);
         setBgOverlay(p5, true);
         let frames = [...a.frames];
@@ -149,14 +149,18 @@ export const renderAnim = async (a, type, p5canvas, p5,
         setFrameCaptured(f, capturer, p5canvas, p5, clip);
         });
         capturer.stop();
-        //const duration = performance.now() - startTime;
-        //console.log("Capture took "+duration);
+        const duration = performance.now() - startTime;
+        console.log("Capture took "+duration);
         capturer.save((blob) => {
             if(type.indexOf('VIEW') > -1){ 
                 playPreview(blob, a.name, dispatch, clip)
                     .then(() => {
                         if(setCollectionState && type === 'PREVIEW'){
+                            //console.log("playPreview, then");
+                            
                             setCollectionState({type: 'SET_INDEX', data: index+1});
+                        }else{
+                            setCollectionState({type: 'SET_VIEW_FILE', data: {blob: blob, name: a.name}});
                         }
                 });;
             }else if(type === 'DOWNLOAD'){
@@ -225,13 +229,15 @@ export const downloadAnimAsWebm = (a, p5canvas, p5) => {
  * @param {f} dispatch will be either updateAnim or collectionItemDispatch
  */
  export const playPreview = async (blob, name, dispatch, clip) => {
-     //console.debug("playPreview");
+    //console.debug("playPreview");
     if(dispatch && clip){
+        //console.log("dispatch & clip");
         await dispatch({
             type: 'SET_PREVIEW_FILE', 
             data: {blob : blob, name: name}
         });  
     }else if(dispatch){
+        //console.log("dispatch");
         await dispatch({
             type: 'SET_VIEW_FILE',
             data: {blob: blob, name: name}

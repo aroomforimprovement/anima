@@ -17,6 +17,8 @@ export const preview = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
+        //console.log("udpateWithProps");
+        //console.dir(props);
         if(props.anim && p5 && props.anim.name !== 'nothing' 
             && props.collectionState 
             && (props.collectionState.index === props.index 
@@ -26,10 +28,11 @@ export const preview = (p5) => {
                 //props.anim.size ? props.anim.size : values.defaultSize, 
                 //props.anim.size ? props.anim.size : values.defaultSize);
             if(isMobile && props.clip){
-                console.debug("isMobile + clip");
+                //console.debug("isMobile + clip");
                 previewAnimMobile(props.anim, p5canvas, p5, 
                     props.collectionItemDispatch, props.index, props.setCollectionState);
             }else{
+                //console.log("previewAnim")
                 previewAnim(props.anim, props.type, p5canvas, p5, 
                     props.collectionItemDispatch, props.index, props.setCollectionState, 
                     props.clip, false);

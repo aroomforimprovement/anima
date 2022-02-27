@@ -1,14 +1,11 @@
 import React, { useState, useReducer } from "react";
-import { Modal, Button } from "react-bootstrap";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
-import { Loading } from '../../common/Loading';
 import LazyLoad from "react-lazyload";
 import { useMainContext } from "../../main/Main";
 import { useCollectionContext } from "../Collection";
 import toast from "react-hot-toast";
 import { ToastConfirm, toastConfirmStyle } from "../../common/Toast";
-import { isMobile } from "react-device-detect";
 import { collectionItemReducer } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
@@ -21,15 +18,15 @@ const collectionItemInitialState = {viewFile: null, viewName: null,
 
 
 export const CollectionItem = ({anim, index}) => {
-    const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
     const { mainState } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
-
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
 
     const handleView = async (e) => {
-        setIsViewerOpen(true);
+        console.log("handleView");
+        setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
+        setCollectionState({type: 'SET_VIEWER_OPEN', data: true})
     }
 
     const handleDownload = async (e) => {
@@ -73,7 +70,7 @@ export const CollectionItem = ({anim, index}) => {
     }
 
 
-    const PreviewWrapper = ({anim, index, id, type, clip}) => {
+    const RenderWrapper = ({anim, index, id, type, clip}) => {
         return(
             <div>
                 <ReactP5Wrapper sketch={preview} anim={anim} index={index} id={id}
@@ -84,7 +81,7 @@ export const CollectionItem = ({anim, index}) => {
         );
     }
 
-
+/***
     const Viewer = ({isViewerOpen, setIsViewerOpen, viewFile, anim}) => {
         return(
             <Modal show={isViewerOpen} fullscreen={isMobile}
@@ -117,22 +114,21 @@ export const CollectionItem = ({anim, index}) => {
             </Modal >
         );
     }
-
+*/
 
     const PreviewGen = () => {
         return(
             <div hidden={true}>
-                <PreviewWrapper anim={anim} index={index} id={`previewCanvas_${index}`}
+                <RenderWrapper anim={anim} index={index} id={`previewCanvas_${index}`}
                     type={'PREVIEW'} clip={true} />
             </div>
         );
     }
     
-
     const DownloadGen = () => {
         return(
             <div hidden={true}>
-                <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
+                <RenderWrapper anim={anim} index={'temp'} id={`temp`}
                     type='DOWNLOAD' clip={false} />
             </div> 
         );
@@ -150,11 +146,9 @@ export const CollectionItem = ({anim, index}) => {
                 <Info anim={anim} />
                 <Buttons anim={anim} user={mainState.user}
                     handleDelete={handleDelete} handleView={handleView}
-                    handleDownload={handleDownload} isViewerOpen={isViewerOpen}/>
-                <Viewer viewFile={collectionItemState.viewFile} anim={anim} 
-                    isViewerOpen={isViewerOpen} setIsViewerOpen={setIsViewerOpen}/> 
+                    handleDownload={handleDownload} isViewerOpen={collectionState.isViewerOpen}/> 
                 {
-                collectionItemState.previewFile || (collectionItemState.index <= index) 
+                collectionItemState.viewFile || (collectionItemState.index <= index) 
                 ? <Div hidden={true} />
                 : <PreviewGen />
                 } 

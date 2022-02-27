@@ -1,6 +1,34 @@
 /* ! coll-item-btns coll-item-btn is used in CollectionItem.js
 but is not in this css file (check index.css) */
 
+.fullscreen{
+  position:fixed;
+  top:0;
+  left:0;
+  padding-top:2vh;
+  min-height:100vh;
+  min-width:98vw;
+  margin:auto;
+  background-color: white;
+  color: black;
+}
+
+.fullscreen-header {
+  text-align:right;
+  color:black;
+}
+.fullscreen-header button{
+  color:white;
+  background-color:grey;
+  margin-right:5em;
+}
+
+.fullscreen-footer{
+  text-align:left;
+  padding-left:5em;
+  font-weight: bold;
+}
+
 .collection-header h5{
     text-align: start;
     font-size: xx-large;

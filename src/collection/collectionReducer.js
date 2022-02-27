@@ -95,8 +95,19 @@ export const collectionReducer = (state, action) => {
             return({...state, anims: newAnims});
         }
         case 'SET_VIEW_FILE':{
-            const url = URL.createObjectURL(action.data.blob);
-            return({...state, viewFile: url, viewFileName: action.data.name});
+            if(action.data){
+                const url = URL.createObjectURL(action.data.blob);
+                console.log("SET_VIEW_FILE");
+                return({...state, viewFile: url, viewFileName: action.data.name});
+            }
+            return({...state, viewFile: null, viewFileName: null, selectedAnim: null});
+            
+        }
+        case 'SET_SELECTED_ANIM':{
+            return({...state, selectedAnim: action.data});
+        }
+        case 'SET_VIEWER_OPEN':{
+            return({...state, isViewerOpen: action.data});
         }
         case 'SET_INDEX':{
             return({...state, index: action.data})

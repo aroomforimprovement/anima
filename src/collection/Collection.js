@@ -8,7 +8,13 @@ import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
 import './collection.css';
 import { SITE } from '../shared/site';
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0, downloaded: 100000};
+import { Viewer } from './Viewer';
+import { Div } from '../common/Div';
+import { ReactP5Wrapper } from 'react-p5-wrapper';
+import { preview } from '../create/animation/preview';
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
+    contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
+    selectedAnim: null};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
@@ -73,7 +79,6 @@ const Collection = ({browse}) => {
         ), toastConfirmStyle());
     }
     
-
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
     const [isFailed, setIsFailed] = useState(false);
@@ -136,26 +141,47 @@ const Collection = ({browse}) => {
     : <div className='container collection-header mt-5 mb-5'>
         <h5>Latest anims</h5>
     </div>
-        
+   
+
     return(
         <div>
-            {mainState.isSet && collectionState.anims ?
-            <CollectionContext.Provider value={stateOfCollection}>
-                <CollectionContext.Consumer>
-                    {() => (
-                    <div className='container'>
-                        {collectionHeading}
-                        <div className='col col-12'>
-                            {collectionItems}
-                        </div>
-                    </div>  
-                    )}
-                </CollectionContext.Consumer>
-            </CollectionContext.Provider>
+            {mainState.isSet && collectionState.anims 
+            ?
+            <div>
+                <CollectionContext.Provider value={stateOfCollection}>
+                    {/*<CollectionContext.Consumer>*/}
+                        {/*{() => {*/}
+                            <div className='container'>
+                                {collectionHeading}
+                                <div className='col col-12'>
+                                    {collectionItems}
+                                </div>
+                                {collectionState.isViewerOpen && collectionState.viewFile 
+                                ?
+                                <Viewer viewFile={collectionState.viewFile} 
+                                anim={collectionState.selectedAnim}
+                                name={collectionState.viewFileName}/> 
+                                : 
+                                <Div/>
+                                }
+                                {
+                                collectionState.isViewerOpen && !collectionState.viewFile 
+                                ?
+                                <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
+                                    collectionState={collectionState} type={'VIEW'}
+                                    setCollectionState={setCollectionState} clip={false}/> 
+                                : <Div/>
+                                }
+                            </div>
+                        {/*}}*/}
+                    {/*</CollectionContext.Consumer>*/}
+                </CollectionContext.Provider>
+            </div>
             :
             <Loading />}
         </div> 
     );
+ 
 }
 
 export default Collection;
