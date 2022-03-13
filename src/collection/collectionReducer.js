@@ -97,7 +97,6 @@ export const collectionReducer = (state, action) => {
         case 'SET_VIEW_FILE':{
             if(action.data){
                 const url = URL.createObjectURL(action.data.blob);
-                console.log("SET_VIEW_FILE");
                 return({...state, viewFile: url, viewFileName: action.data.name});
             }
             return({...state, viewFile: null, viewFileName: null, selectedAnim: null});
