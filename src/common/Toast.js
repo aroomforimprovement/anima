@@ -10,7 +10,7 @@ export const Toast = () => {
 export const toastConfirmStyle = () => {
     return {duration: 60000, 
         style: {
-            padding: 40, 
+            padding: 10, 
             border: '2px solid #550000', 
             backgroundColor: '#555',
             color: '#eee'
@@ -21,8 +21,9 @@ export const toastConfirmStyle = () => {
 export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissBtn}) => {
 
     return (
-        <div className='container'>
-            <div className='row'>
+        <div className='container end-zone'>
+            <button className='btn btn-sm btn-close ' onClick={() => toast.dismiss(t.id)}></button>
+            <div className='row float-center'>
                 <h6>Confirm</h6>
             </div>
             <div className='row'>

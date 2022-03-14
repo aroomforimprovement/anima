@@ -138,7 +138,9 @@ code {
 .end-zone{
   text-align: end;
 }
-
+.float-center{
+  text-align:center;
+}
 .float-middle{
   position:absolute;
   top:30%;
