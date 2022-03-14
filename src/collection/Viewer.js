@@ -4,14 +4,11 @@ import { useCollectionContext } from './Collection';
 import { useResizeDetector } from 'react-resize-detector';
 
 export const Viewer = ({viewFile, name}) => {
-    const {collectionState, setCollectionState} = useCollectionContext();
-    const { width, height } = useResizeDetector();
-    const [dim, setDim] = useState(width > height ? height : width)
+    const { setCollectionState } = useCollectionContext();
     const handleClose = () => {
         setCollectionState({type: 'SET_VIEWER_OPEN', date: false});
         setCollectionState({type: 'SET_VIEW_FILE', data: null})
     }
-    console.log(dim);
     return(
        <div className='fullscreen'>
            <div className='fullscreen-header mb-3'>

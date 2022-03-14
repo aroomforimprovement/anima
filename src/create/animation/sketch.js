@@ -21,10 +21,10 @@ export const sketch = (p5) => {
             toast.dismiss(id);
         }
         toast((t) => (
-            <ToastConfirm t={t} appprove={dismiss} dismiss={dismiss}
+            <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
                 message={`Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`}
-                approveBtn={"Cool"} dismissBtn={"OK"} />
+                approveBtn={"OK"} dismissBtn={"Cool"} />
         ), toastConfirmStyle());
     }
     /**
@@ -32,8 +32,12 @@ export const sketch = (p5) => {
      */
     p5.setup = () => {
         p5canvas = p5.createCanvas(
-            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize, 
-            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize);
+            isMobile && p5.displayWidth < values.defaultSize 
+            ? p5.displayWidth 
+            : values.defaultSize, 
+            isMobile && p5.displayWidth < values.defaultSize 
+            ? p5.displayWidth 
+            : values.defaultSize);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
         p5.noLoop();
