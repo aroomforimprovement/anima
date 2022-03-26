@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Problem } from '../common/Problem';
 import { useCollectionContext } from './Collection';
-import { useResizeDetector } from 'react-resize-detector';
 
 export const Viewer = ({viewFile, name}) => {
     const { setCollectionState } = useCollectionContext();
