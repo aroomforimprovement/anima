@@ -109,10 +109,9 @@ export const Animation = ({edit, splat}) => {
         e.preventDefault();
     }
 
+    const inputRef = useRef();
+    useEffect(() => {inputRef.current && inputRef.current.focus()});
     const NameInput = () => {
-        //name component holds focus now, not ideal
-        const inputRef = useRef();
-        useEffect(() => {inputRef.current && inputRef.current.focus()});
         return(
             <Form.Control type='text' id='name' name='name' autoFocus={true}
                 onChange={handleNameChange} ref={inputRef} 
