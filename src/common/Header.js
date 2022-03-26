@@ -34,14 +34,14 @@ const Header = () => {
                                 </NavLink>
                             </NavItem>
                             {!mainState ? <Loading /> : mainState.user && mainState.user.isAuth ? <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link' to={`/collection/${mainState.user.userid}`}>
+                                <a className='nav-link' href={`/collection/${mainState.user.userid}`}>
                                     <span className='fa fa-film fa-md m-1'></span> Collection
-                                </NavLink>
+                                </a>
                             </NavItem> : null}
                             <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link' to='/browse'>
+                                <a className='nav-link' href='/browse'>
                                     <span className='fa fa-eye fa-md m-1'></span> Browse
-                                </NavLink>
+                                </a>
                             </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>

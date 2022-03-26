@@ -1,7 +1,7 @@
 
 export const mainReducer = (state, action) => {
-    console.debug(`mainReducer: ${action.type}:${action.data}`);
-    console.dir(action.data);
+    //console.debug(`mainReducer: ${action.type}:${action.data}`);
+    //console.dir(action.data);
     switch (action.type) {
         case 'CHECK_AUTH':{
             //should get really get display name from db (or update on auth0)
@@ -31,6 +31,9 @@ export const mainReducer = (state, action) => {
         case 'SET_ACCOUNT_INFO':{
             return({...state, contacts: action.data.contacts, notices: action.data.notices, 
                 user: {...state.user, username: action.data.username}, isSet: action.data.isSet});
+        }
+        case 'PROGRESS_FRAME':{
+            return({...state, progressFrame: {max: 0, now: 0}})
         }
         default:
             break;

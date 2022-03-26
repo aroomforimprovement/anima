@@ -1,11 +1,10 @@
 import { handleFailedConnection } from "../common/Toast";
+import { SITE } from "../shared/site";
 import { arrayRemove } from "../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const addContact = async (notice, i, access) => {
-    //console.log("addContact:");
-    //console.dir(notice);
     let body = {
         userid: notice.userid,
         thisUsername: notice.username,
@@ -29,9 +28,9 @@ export const addContact = async (notice, i, access) => {
     .then(response => {
         return response;
     }, error => {
-        console.error(error);
+        console.warn("Problem fetching data: addContact");
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.error("Error fetching data: addContact"));
 }
 
 export const getAccountInfo = async (id, access) => {
@@ -43,16 +42,15 @@ export const getAccountInfo = async (id, access) => {
         if(response.ok){
             return response.json();
         }else{
-            //console.dir(response);
+            console.warn("Problem fetching data: getAccountInfo")
         }   
     }, error => {
-        console.error("error fetching account info " + error);
-        handleFailedConnection();
-    }).catch(err => console.error(err))
+        console.error("Error fetching data: getAccountInfo");
+        handleFailedConnection(SITE.failed_retrieval_message, false);
+    }).catch(err => console.error("Error fetching data: getAccountInfo"));
 }
 
 export const deleteAccount = async (userid, access) => {
-    //console.log("deleteAccount");
     return fetch(`${apiUrl}collection/${userid}`, {
         method: 'DELETE',
         mode: 'cors',
@@ -62,13 +60,11 @@ export const deleteAccount = async (userid, access) => {
     }).then((response) => {
         return response;
     }).catch((error) => {
-        //console.log(`Error deleting account: ${error}`);
+        handleFailedConnection(SITE.failed_delete_message);
     })
 }
 
 export const deleteContact = async (contact, userid, username, access) => {
-    //console.log("deleteContact");
-    //console.dir(contact);
     let body = {
         userid: userid,
         username: username,
@@ -89,13 +85,15 @@ export const deleteContact = async (contact, userid, username, access) => {
             'Authorization': `Bearer ${access}`
         }
     }).then(response => {
+        //response handled in calling function
         if(response.ok){
-            //console.log("response ok, contact deleted");
             return response.json();
+        }else{
+            console.warn("Problem fetching data: deleteContact")
         }
     }, error => {
-        console.error(error);
-    }).catch(err => console.error(err));
+        console.error(console.error("Error fetching data: deleteContact"));
+    }).catch(err => console.error("Error fetching data: deleteContact"));
 }
 
 export const deleteNotice = async (notice, i, access) => {
@@ -110,11 +108,12 @@ export const deleteNotice = async (notice, i, access) => {
         }
     })
     .then(response => {
+        //response handled in calling function
         return response;
     }, error => {
-        console.error(error);
+        console.error("Error fetching data: deleteNotice");
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.error("Error fetching data: deleteNotice"));
 }
 
 export const updateDisplayName = async (id, name, access) => {
@@ -129,11 +128,13 @@ export const updateDisplayName = async (id, name, access) => {
     }).then(response => {
         if(response.ok){
             return response.json();
+        }else{
+            console.warn("Problem fetching data: updateDisplayName");
         }
     }, error => {
-        console.error(error);
+        console.error("Error fetching data: updateDisplayName");
     }).catch((error) => {
-        console.error(error);
+        console.error("Error fetching data: updateDisplayName");
         handleFailedConnection();
     })
 }
@@ -141,8 +142,6 @@ export const updateDisplayName = async (id, name, access) => {
 export const accountReducer = (state, action) => {
     switch(action.type){
         case 'SET_ACCOUNT_INFO':
-            //console.log('SET_ACCOUNT_INFO: ');
-            //console.dir(action.data);
             return({...state, 
                 userid: action.data.userid,
                 username: action.data.username,

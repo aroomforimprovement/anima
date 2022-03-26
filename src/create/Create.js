@@ -14,8 +14,8 @@ export const useControlContext = () => {
 
 const Create = ({edit}) => {
 
-    const [ controls, dispatch ] = useReducer(controlReducer, values.initialControlState);
-    const controlState = { controls, dispatch };
+    const [ controls, updateControls ] = useReducer(controlReducer, values.initialControlState);
+    const controlState = { controls, updateControls };
     const splat = useParams()[0];
     return(
         <div>

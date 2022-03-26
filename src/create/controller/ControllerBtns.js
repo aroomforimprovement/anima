@@ -19,16 +19,16 @@ const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
 }
 
 const ModeDropdown = () => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
-        dispatch({ type: 'MODE', data: val });
-        dispatch({ type: 'ENABLE', data: true });
+        updateControls({ type: 'MODE', data: val });
+        updateControls({ type: 'ENABLE', data: true });
     }
     
     return(
         <DropdownMenu 
-            onMouseOver={() => dispatch({type: 'DISABLE', data: true})} 
-            onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+            onMouseOver={() => updateControls({type: 'DISABLE', data: true})} 
+            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
                 <ControllerDropdownItem 
                     title='SINGLE mode' func={() => handle(CC.SINGLE)}
                     iSrc={SITE.icons.single} text='Single'/>
@@ -60,10 +60,10 @@ export const Mode = () => {
 }
 
 const PenSizeDropdown = () => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
-        dispatch({ type: 'PS', data: val});
-        dispatch({ type: 'ENABLE', data: true });
+        updateControls({ type: 'PS', data: val});
+        updateControls({ type: 'ENABLE', data: true });
     }
 
     const sizes = values.penSizes.map((size) => {
@@ -74,7 +74,7 @@ const PenSizeDropdown = () => {
         );
     });
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
                 {sizes}
         </DropdownMenu>  
     );
@@ -118,13 +118,13 @@ export const PenSize = () => {
 }
 
 const PenColourDropdown = () => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
-        dispatch({ type: 'PC', data: val});
-        dispatch({ type: 'ENABLE', data: true });
+        updateControls({ type: 'PC', data: val});
+        updateControls({ type: 'ENABLE', data: true });
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='BG Solid' func={() => handle(values.bg_solid)}
                 iSrc={SITE.icons.penColour} c='bg_solid' text='BG Solid'/>
@@ -218,10 +218,10 @@ export const PenColour = () => {
 }
 
 const FrameRateDropdown = () => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
-        dispatch({ type: 'FRAME_RATE', data: val});
-        dispatch({ type: 'ENABLE', data: true });
+        updateControls({ type: 'FRAME_RATE', data: val});
+        updateControls({ type: 'ENABLE', data: true });
     }
 
     const rates = values.frameRates.map((rate) => {
@@ -233,7 +233,7 @@ const FrameRateDropdown = () => {
     })
 
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
                 {rates}
         </DropdownMenu>  
     );
@@ -254,13 +254,13 @@ export const FrameRate = () => {
 }
 
 export const BackgroundDropdown = () => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
-        dispatch({type: val, data: true});
-        dispatch({type: 'ENABLE', data: true});
+        updateControls({type: val, data: true});
+        updateControls({type: 'ENABLE', data: true});
     }
     return(
-        <DropdownMenu onMouseOver={() => dispatch({type: 'DISABLE', data: true})} onMouseOut={() => dispatch({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
             <ControllerDropdownItem 
                 title='Save background' func={() => handle('SAVE_BG')}
                 iSrc={SITE.icons.saveBg} text="Save this frame as background"/>
@@ -289,9 +289,9 @@ export const Background = () => {
 }
 
 const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
-    const { dispatch } = useControlContext();
-    const handle = () => {
-        dispatch({type: dispatchType, data: true});
+    const { updateControls } = useControlContext();
+    const handle = async () => {
+        updateControls({type: dispatchType, data: true});
     }
     return(
         <div>
@@ -347,11 +347,11 @@ export const Preview = () => {
 
 export const EnableShortcuts = () => {
 
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
 
     const handleCheck = (e) => {
-        dispatch({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
+        updateControls({type: 'ENABLE_SHORTCUTS', data: e.target.checked});
     }
     return(
         <div className='shortcuts-group'>
@@ -382,11 +382,11 @@ export const EnableShortcuts = () => {
 }
 
 export const Privacy = () => {
-    const { controls, dispatch } = useControlContext();
+    const { controls, updateControls } = useControlContext();
     const [ checked, setChecked ] = useState(controls.currentPrivacy);
     const handleChange = (e) => {
         setChecked(e.target.value);
-        dispatch({type: 'PRIVACY', data: parseInt(e.target.value)});
+        updateControls({type: 'PRIVACY', data: parseInt(e.target.value)});
     }
     return(
         <div className='col col-xs-4 col-sm-7 ms-xs-1 ms-sm-2'>

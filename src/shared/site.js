@@ -2,6 +2,16 @@ export const SITE = {
     "name": "Anima",
     "home_heading": "ANIMA",
     "home_sub_heading" : "Old-timey Animation Online",
+    "failed_connection_message": `It looks like there has been an issue contacting the server.
+        Try again in a few minutes, or contact support if this is a persistent problem.`,
+    "failed_delete_message": `It looks like there has been an issue deleting the resource.
+        Try again in a few minutes, or contact support if this is a persistent problem.`,
+    "failed_update_message": `It looks like there has been an issue updating the resource.
+        Try again in a few minutes, or contact support if this is a persistent problem.`,
+    "failed_create_message": `It looks like there has been an issue creating the resource.
+        Try again in a few minutes, or contact support if this is a persistent problem.`,
+    "failed_retrieval_message": `It looks like there has been an issue retrieving the resource.
+        Try again in a few minutes, or contact support if this is a persistent problem.`,
     "icons": {
         "drawingMode": process.env.REACT_APP_URL + '/assets/drawing-mode.svg',
         "single": process.env.REACT_APP_URL + '/assets/mode-single.svg',

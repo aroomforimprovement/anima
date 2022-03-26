@@ -1,11 +1,11 @@
 /**
- * This reducer takes calls from the Create Controller.
+ * This reducer takes calls from the Animation Controller.
  * The returned state is checked by the updateWithProps function
  * in the P5 sketch. 
  * For CHANGE controls, like penSize, penColor, the sketch updates
  * the anim reducer with the appropriate value.
  * For TRIGGER controls, like like enable, disable, the sketch takes
- * a TRUE values, sends back a FALSE to this reducer (to turn off the switch)
+ * a TRUE value, sends back a FALSE to this reducer (to turn off the switch)
  * and then does an update to the anim reducer. 
  * @param {*} state 
  * @param {*} action 
@@ -13,7 +13,7 @@
  */
 
 export const controlReducer = (state, action) => {
-    console.debug(`controlReducer:${action.type}:${action.data}`);
+    //console.debug(`controlReducer:${action.type}:${action.data}`);
     switch(action.type){
         case 'DISABLE':{
             return ({...state, disable: action.data});

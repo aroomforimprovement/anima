@@ -26,10 +26,10 @@ export const getCollection = async (id, isBrowse, access, signal) => {
             return response.json();
         }
     }, error => {
-        console.error("error fetching collection: " + error);
+        console.error("Error fetching data: getCollection");
         return false;
     }).catch(err => {
-        console.error(err);
+        console.error("Error fetching data: getCollection");
         return false;
     });
 }
@@ -70,15 +70,13 @@ export const addContactRequest = async (userid, username, requsername, requserid
             return false;
         }
     }, error => {
-        console.error(error);
+        console.error("Error fetching data: addContactRequest");
     }).catch((error) => {
-        console.error(error);
+        console.error("Error fetching data: addContactRequest");
     })
 }
 
 export const collectionReducer = (state, action) => {
-    //console.log("collectionReducer: " + action.type + ":" + action.data);
-
     switch(action.type){
         case 'SET':{
             return({...state, isSet: action.data})
@@ -97,11 +95,27 @@ export const collectionReducer = (state, action) => {
             return({...state, anims: newAnims});
         }
         case 'SET_VIEW_FILE':{
-            const url = URL.createObjectURL(action.data.blob);
-            return({...state, viewFile: url, viewFileName: action.data.name});
+            if(action.data){
+                const url = URL.createObjectURL(action.data.blob);
+                return({...state, viewFile: url, viewFileName: action.data.name});
+            }
+            return({...state, viewFile: null, viewFileName: null, selectedAnim: null});
+            
+        }
+        case 'SET_SELECTED_ANIM':{
+            return({...state, selectedAnim: action.data});
+        }
+        case 'SET_VIEWER_OPEN':{
+            return({...state, isViewerOpen: action.data});
         }
         case 'SET_INDEX':{
             return({...state, index: action.data})
+        }
+        case 'DOWNLOADED':{
+            return({...state, downloaded: action.data});
+        }
+        case 'RESET_DOWNLOADED':{
+            return({...state, downloaded: 100000});
         }
         default:
             break;

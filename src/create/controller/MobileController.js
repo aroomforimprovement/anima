@@ -16,7 +16,7 @@ const ControllerExpandedItem = ({title, func, iSrc, text, c}) => {
         <Button className={`btn-ctl m-1`} 
             title={title} onClick={func}>
             <img src={iSrc} alt={title} className={classes} />
-            <small>{text}</small>
+            <small>{isNaN(parseInt(text)) ? '' : text}</small>
         </Button>
     );
 }

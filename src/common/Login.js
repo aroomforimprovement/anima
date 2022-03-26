@@ -3,6 +3,7 @@ import { Loading } from './Loading';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
 import { handleFailedConnection } from './Toast';
+import { SITE } from '../shared/site';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -38,8 +39,8 @@ const Login = () => {
         )
         .catch(error => { 
             dispatch({type: 'setIsFailed', data: true});
-            handleFailedConnection();
-            console.error(error)
+            handleFailedConnection(SITE.failed_connection_message, true);
+            console.error("Error fetching data: putLogin")
         });
     }
 
@@ -65,7 +66,7 @@ const Login = () => {
             console.error('error saving anim');
             dispatch({type: 'setSaveFailed'});
         })
-        .catch(error => {console.error(error)});
+        .catch(error => {console.error("Error fetching data: saveAnimToAccount")});
     }
 
     const loginReducer = (state, action) => {
@@ -134,7 +135,7 @@ const Login = () => {
             await putLogin(login);
         }
         if(state.isFailed){
-            handleFailedConnection();
+            handleFailedConnection(SITE.failed_connection_message, true);
         }
         if(!state.isRegistered && state.isLoaded && (mainState && mainState.user && mainState.user.access) && !state.isSending && !state.isFailed){
             dispatch({type: 'setIsSending', data: true});
@@ -142,7 +143,7 @@ const Login = () => {
                 userid: mainState.user.userid,
                 email: mainState.user.email,
                 username: mainState.user.name, access: mainState.user.access,
-            }, signal).catch((error) => {console.error(error)});
+            }, signal).catch((error) => {console.error("Error registering login")});
         }
         return () => {
             //console.log("abort login");
@@ -164,7 +165,7 @@ const Login = () => {
             await saveAnimToAccount(anim, access, signal).then(() => {
                 dispatch({type: 'setIsSaved', data: true});
                 dispatch({type: 'setIsSaving', data: false});
-            }).catch((error) => {console.error(error);});
+            }).catch((error) => {console.error("Error saving Anim to account");});
         }
         if(state.anim && !state.isSaved && !state.isSaving){
             saveAnimToAccountCall(state.anim, mainState.user.access, signal);

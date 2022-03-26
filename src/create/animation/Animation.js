@@ -21,11 +21,11 @@ export const useAnimContext = () => {
 
 export const Animation = ({edit, splat}) => {
 
-    const { mainState } = useMainContext();
+    const { mainState, mainDispatch } = useMainContext();
     
     const [ access, setAccess ] = useState(null);
 
-    const { controls, dispatch } = useControlContext();
+    const { controls, updateControls } = useControlContext();
     const initAnimState = newAnimState(mainState.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
@@ -46,9 +46,12 @@ export const Animation = ({edit, splat}) => {
     }
 
     useEffect(() => {
-        const getSavedAnim = (id) => {
-            //console.log("getSavedAnim");
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const getSavedAnim = (id, signal) => {
             return fetch(`${apiUrl}anim/${id}`,{
+                    signal: signal,
                     headers: {
                         Authorization: `Bearer ${access}`,
                     }
@@ -58,31 +61,30 @@ export const Animation = ({edit, splat}) => {
                         return response.json();
                     }else{
                         console.error("response not ok");
-                        //console.dir(response);
                     }
                 }, error => {
-                    console.error("error fetching anim" + error);
+                    console.error(`error fetching anim ${error}`);
                 })
                 .then(response => {
-                    //assign response to anim here
-                    //console.log("got anim");
-                    //console.dir(response);
                     if(anim.isSet){
                         //console.log("stop calling me!")
                     }else{
-                        updateAnim({type: 'SET_ANIM', data: response});
+                        updateAnim({type: 'SET_ANIM', data: response, signal: signal});
                     }
                 })
                 .catch(err => console.error(err));
         }
         if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            setAccess(mainState.user.access);
-            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user});
+            setAccess(mainState.user.access, signal);
+            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
         }
         if(!anim.isSet && splat && mainState.user && access){
             //console.log('!anim.isSet && id', access);
             
-            getSavedAnim(splat);
+            getSavedAnim(splat, signal);
+        }
+        return () => {
+            controller.abort();
         }
     },[anim.isSet, splat, mainState.user, access]);
     
@@ -99,8 +101,6 @@ export const Animation = ({edit, splat}) => {
     }
 
     const handleNameChange = (e) => {
-        //console.log("handleNameChange: "+e.target.value);
-        
         updateAnim({type: 'NAME', data: e.target.value});
     }
 
@@ -109,10 +109,9 @@ export const Animation = ({edit, splat}) => {
         e.preventDefault();
     }
 
+    const inputRef = useRef();
+    useEffect(() => {inputRef.current && inputRef.current.focus()});
     const NameInput = () => {
-        //name component holds focus now, not ideal
-        const inputRef = useRef();
-        useEffect(() => {inputRef.current && inputRef.current.focus()});
         return(
             <Form.Control type='text' id='name' name='name' autoFocus={true}
                 onChange={handleNameChange} ref={inputRef} 
@@ -120,22 +119,27 @@ export const Animation = ({edit, splat}) => {
         );
     }
 
+    useEffect(() => {
+        console.dir(anim);
+    }, [anim]);
 
     if(window.localStorage.getItem('tempAnim')){
         return(
             <Redirect to='/login'/>
         );
     }
-    console.log("anim.viewFile");
-    console.dir(anim.viewFile);
+
+    
+    
     return(
         <div>
             <ControlContext.Consumer> 
                 {() => (
                 <AnimContext.Provider value={animState} >
                     <ReactP5Wrapper sketch={sketch} 
-                        controls={controls} dispatch={dispatch}
+                        controls={controls} updateControls={updateControls}
                         anim={anim} updateAnim={updateAnim} index={'temp'}
+                        mainDispatch={mainDispatch}
                         id='animCanvas' clip={false}/>
                     <Modal show={anim.isPreviewOpen} 
                         onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}
@@ -146,7 +150,7 @@ export const Animation = ({edit, splat}) => {
                        <Modal.Footer>
                             <p>{anim.viewName}</p>
                             <Button size='sm' 
-                                onClick={() => {dispatch({type: 'END_PREVIEW', data: true})}}
+                                onClick={() => {updateControls({type: 'END_PREVIEW', data: true})}}
                             >Close</Button>
                         </Modal.Footer>
                     </Modal >

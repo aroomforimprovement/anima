@@ -8,7 +8,8 @@ import { ToastConfirm, toastConfirmStyle } from '../../common/Toast';
 export const sketch = (p5) => {
     let p5canvas = undefined;
     let controls = values.initialControlState; 
-    let dispatch;
+    let updateControls;
+    let mainDispatch;
     let anim = values.initialAnimState;
     let updateAnim;
     let thisStroke = [];
@@ -21,10 +22,10 @@ export const sketch = (p5) => {
             toast.dismiss(id);
         }
         toast((t) => (
-            <ToastConfirm t={t} appprove={dismiss} dismiss={dismiss}
+            <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
                 message={`Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`}
-                approveBtn={"Cool"} dismissBtn={"OK"} />
+                dismissBtn={"Cool"} approveBtn={"OK"} />
         ), toastConfirmStyle());
     }
     /**
@@ -32,16 +33,22 @@ export const sketch = (p5) => {
      */
     p5.setup = () => {
         p5canvas = p5.createCanvas(
-            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize, 
-            isMobile && p5.displayWidth < values.defaultSize ? p5.displayWidth : values.defaultSize);
+            isMobile && p5.displayWidth < values.defaultSize 
+            ? p5.displayWidth 
+            : values.defaultSize, 
+            isMobile && p5.displayWidth < values.defaultSize 
+            ? p5.displayWidth 
+            : values.defaultSize);
         p5.background(values.initialBgc[0], values.initialBgc[3]);
         p5.noStroke();
+        p5.noLoop();
     }
 
     p5.updateWithProps = (props) => {
         isMounted = true;
         if(props.controls){ controls = props.controls; }
-        if(props.dispatch && !dispatch){ dispatch = props.dispatch; }
+        if(props.updateControls && !updateControls){ updateControls = props.updateControls; }
+        if(props.mainDispatch && !mainDispatch){mainDispatch = props.mainDispatch}
         if(props.anim){ 
             anim = props.anim;
             if(props.anim.isSet && !isSet){
@@ -52,17 +59,17 @@ export const sketch = (p5) => {
         }
         if(props.updateAnim && !updateAnim){ updateAnim = props.updateAnim; }
         if(props.controls.enable){
-            dispatch({type: 'ENABLE', data: false});
+            updateControls({type: 'ENABLE', data: false});
             updateAnim({type: 'ENABLED', data: true});
         }else if(props.controls.disable){
-            dispatch({type: 'DISABLE', data: false});
+            updateControls({type: 'DISABLE', data: false});
             updateAnim({type: 'ENABLED', data: false});
         }
         if(controls.undo){
-            dispatch({type: 'UNDO', data: false});
+            updateControls({type: 'UNDO', data: false});
             updateAnim({type: 'UNDO_STROKE', data: true});
         }else if(controls.redo){
-            dispatch({type: 'REDO', data: false});
+            updateControls({type: 'REDO', data: false});
             updateAnim({type: 'REDO_STROKE'});
         }
         if((props.anim.redid && anim.redid.length > 0) ||
@@ -74,58 +81,73 @@ export const sketch = (p5) => {
             updateAnim({type: 'FRATE', data: props.controls.frate});
         }
         if(props.controls.wipe){
-            dispatch({type: 'WIPE', data: false});
+            updateControls({type: 'WIPE', data: false});
             updateAnim({type: 'WIPE'});
             wipeCurrentFrame();
         }
         if(props.controls.saveBg){
-            dispatch({type: 'SAVE_BG', data: false});
+            updateControls({type: 'SAVE_BG', data: false});
             updateAnim({type: 'SAVE_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
         }
         if(props.controls.drawBg){
-            dispatch({type: 'DRAW_BG', data: false});
+            updateControls({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
             drawBg(anim.bg, p5);
         }
         if(props.controls.next){
-            dispatch({type: 'NEXT', data: false});
+            updateControls({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
             drawBg(anim.bg, p5);
         }
         if(props.controls.download){
-            dispatch({type: 'DOWNLOAD', data: false});
+            updateControls({type: 'DOWNLOAD', data: false});
             if(anim.anim.frames.length < 1){
                 handleNoFramesAlert();
             }else{
-                downloadAnimAsWebm(anim.anim, p5canvas, p5);
+                downloadAnimAsWebm(
+                    {
+                        a: anim.anim, 
+                        p5canvas: p5canvas, 
+                        p5: p5,
+                        drawing: true
+                    });
             }            
         }
         if(props.controls.preview && props.anim.isPreviewOpen){
-                dispatch({type: 'PREVIEW', data: false});        
-                console.log(props.anim.isPreviewOpen);
-                previewAnim(anim.anim, 'DRAWING', p5canvas, p5, updateAnim, undefined, undefined, false, true)
-                    .then(() => {
+                updateControls({type: 'PREVIEW', data: false});        
+                previewAnim(
+                    {
+                        a: anim.anim, 
+                        type: 'DRAWING',
+                        p5canvas: p5canvas,
+                        p5: p5,
+                        updateAnim: updateAnim,
+                        clip: false,
+                        drawing: true,
+                        mainDispatch: mainDispatch
+                    }
+                ).then(() => {
                         p5.resizeCanvas(10, 10);
                 });
         }else if(props.controls.preview){
             if(anim.anim.frames.length < 1){
-                dispatch({type: 'PREVIEW', data: false});
+                updateControls({type: 'PREVIEW', data: false});
                 handleNoFramesAlert();
             }else{
-                dispatch({type: 'DISABLE', data: true});
+                updateControls({type: 'DISABLE', data: true});
                 updateAnim({type: 'PREVIEW', data: anim.anim});
             }
         }
         if(props.controls.endPreview){
-            dispatch({type: 'END_PREVIEW', data: false});
+            updateControls({type: 'END_PREVIEW', data: false});
             updateAnim({type: 'END_PREVIEW', data: false});
             isMounted ? p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
                 isMobile ? p5.displayWidth : values.defaultSize) : console.debug("unmounted before canvas resize");
             isMounted ? redrawLastFrame() : console.log("unmounted before redrawLastFrame");
         }
         if(props.controls.save){
-            dispatch({type: 'SAVE', data: false});
+            updateControls({type: 'SAVE', data: false});
             updateAnim({type: 'SAVE', data: {size: p5.width}});
             p5.resizeCanvas(20, 20);
         }
@@ -139,8 +161,8 @@ export const sketch = (p5) => {
             && (anim && anim.anim && anim.anim.privacy !== props.controls.privacy)){
             const p = props.controls.privacy;
             updateAnim({type: 'PRIVACY', data: p});
-            dispatch({type: 'PRIVACY', data: null});
-            dispatch({type: 'SET_PRIVACY', data: p});
+            updateControls({type: 'PRIVACY', data: null});
+            updateControls({type: 'SET_PRIVACY', data: p});
             
         }
         
@@ -152,57 +174,30 @@ export const sketch = (p5) => {
     }
 
     p5.mousePressed = () => {
-        //console.log("mousePressed");
         if(anim.isSaveOpen){
-            //console.log("isSaveOpen");
             return true;
         }
         handlePressed(p5.mouseX, p5.mouseY);
-        //if(isPointOnCanvas(p5.mouseX, p5.mouseY) && anim.enabled){
-        //    return true;
-        //}
-        //return false;
-        return (!isPointOnCanvas(p5.mouseX, p5.mouseY));// || (isPointOnCanvas(p5.mouseX, p5.mouseY) && !anim.enabled));
-        //return true;
+        return (!isPointOnCanvas(p5.mouseX, p5.mouseY));
     }
-    //p5.touchStarted = () => {
-    //    console.log("touchStarted");
-    //    return isPointOnCanvas(p5.mouseX, p5.mouseY);
-    //}
-    //p5.touchStarted = () => {
-    //    //console.debug("touch started");
-    //    if(p5.touches.length === 1){
-    //        return handlePressed(p5.mouseX, p5.mouseY)
-    //    }
-    //    return false;
-    //}
+
+    //p5.touchStarted = () => {return true;}
+
     p5.mouseDragged = () => {
-        //console.debug("mouse dragged");
         handleDragged(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    //p5.touchMoved = () => {
-    //    if(p5.touches.length === 1){
-    //        handleDragged(p5.mouseX, p5.mouseY);
-    //    }
-    //    return !isPointOnCanvas(p5.mouseX, p5.mouseY);
-    //}
+
+    //p5.touchMoved = () => {return true;}
 
     p5.mouseReleased = () => {
         handleReleased(p5.mouseX, p5.mouseY);
         return !isPointOnCanvas(p5.mouseX, p5.mouseY);
     }
-    //p5.touchEnded = () => {
-    //    //console.debug("touch ended");
-    //    //console.dir(p5.touches);
-    //    if(p5.touches.length <= 1){
-    //        return handleReleased(p5.mouseX, p5.mouseY);
-    //    }
-    //    return false;
-    //}
+
+    //p5.touchEnded = () => {return true;}
 
     const handlePressed = (x, y) => {
-        //console.log("handlePressed");
         if(anim.enabled && !isStroke && isPointOnCanvas(x,y)){
             startStroke(x, y);
             return true;
@@ -237,22 +232,22 @@ export const sketch = (p5) => {
     const setControlTriggered = (controlObj) => {
         switch(controlObj.v){
 			case CC.NEXT:
-                isMounted ? dispatch({type: 'NEXT', data: true}) : console.log("unmounted");
+                isMounted ? updateControls({type: 'NEXT', data: true}) : console.log("unmounted");
     			break;
 			case CC.BG:
-                dispatch({type: 'DRAW_BG', data: true})
+                updateControls({type: 'DRAW_BG', data: true})
 		    	break;
 			case CC.SWITCH_PEN_BW:
-			    dispatch({type: 'SWITCH_PEN_BW', data: true});
+			    updateControls({type: 'SWITCH_PEN_BW', data: true});
 			break;
 			case CC.UNDO_STROKE:
-                dispatch({type: 'UNDO', data: true});
+                updateControls({type: 'UNDO', data: true});
                 break;
 			case CC.REDO_STROKE:
-                dispatch({type: 'REDO', data: true});
+                updateControls({type: 'REDO', data: true});
 	    		break;
             case CC.WIPE:
-                dispatch({type: 'WIPE', data: true});
+                updateControls({type: 'WIPE', data: true});
                 break;
             default:
                 //console.log('no control found');
@@ -307,8 +302,9 @@ export const sketch = (p5) => {
             if(!isStroke){
                 //save and clear stroke
                 if(isMounted){
-                    updateAnim({type: 'DO_STROKE', data: thisStroke});
+                    const stk = [...thisStroke];
                     thisStroke = []; 
+                    updateAnim({type: 'DO_STROKE', data: stk});
                 }else{
                     //console.warn("unmounted while doing stroke");
                 }
@@ -410,15 +406,15 @@ export const sketch = (p5) => {
      *  CONTROL SWITCHES
      */
     const setMode = (controlObj) => {
-        dispatch({type: 'MODE', data: controlObj.v});
+        updateControls({type: 'MODE', data: controlObj.v});
     }
 
     const setPenSize = (controlObj) => {
-        dispatch({type: 'PS', data: controlObj.size});
+        updateControls({type: 'PS', data: controlObj.size});
     }
 
     const setPenColour = (controlObj) => {
-		dispatch({type: 'PC', data: values[controlObj.n.toLowerCase()]});
+		updateControls({type: 'PC', data: values[controlObj.n.toLowerCase()]});
 	}
 }
 

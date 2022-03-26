@@ -58,7 +58,6 @@ const Account = () => {
     }
 
     const handleShowDeleteAccount = () => {
-        //console.log(!hideDeleteAccount);
         setHideDeleteAccount(!hideDeleteAccount);
     }
 

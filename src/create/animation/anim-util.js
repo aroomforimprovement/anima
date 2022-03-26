@@ -1,14 +1,15 @@
+import React from 'react';
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
-import { animReducer } from './animationReducer';
+
 
 
 /***
  * DRAWING
  */
 
-export const setBgOverlay = (p5, render) => {
+export const setBgOverlay = async (p5, render) => {
     let c = values.bgc;
     if(render){
         c = p5.color(0);
@@ -16,28 +17,42 @@ export const setBgOverlay = (p5, render) => {
     p5.background(c);
 }
 
-export const drawBg = (bg, p5, render) => {
+export const drawBg = async (bg, p5, render) => {
     setBgOverlay(p5, render);
     if(bg && bg.length > 0){
         drawPoints(bg, p5);
     }
 }
 
-export const drawFrame = (f, p5, render) => {
+export const drawFrame = async (f, p5, render, clip) => {
     setBgOverlay(p5, render);
     if(f.bg && f.bg.length > 0){
-        drawPoints(f.bg, p5);   
+        
+        drawPoints(f.bg, p5, clip);   
     }
-    drawPoints(f.points, p5);
+    drawPoints(f.points, p5, clip);
 }
 
-export const drawPoints = (points, p5) => {
-        points.forEach((element) => {
-            drawStroke(element, p5);
-        });
+export const drawPoints = async (points, p5, clip) => {
+    //let time = performance.now();
+    //const wait = 1000;
+    points.forEach((element) => {
+    //    let now = performance.now();
+    //    while(now - time < wait){
+    //        //wait;
+    //        now = performance.now() + 1;
+    //        console.log(`waiting ${now}`);
+    //        console.log(`${time}:${wait}`);
+    //    }
+    //    console.log(`NOT waiting ${now}`);
+    //    console.log(`${time}:${wait}`);
+    //    time = performance.now();
+        drawStroke(element, p5, clip);            
+        
+    });
 }
 
-export const drawPoint = (point, p5) => {
+export const drawPoint = async (point, p5) => {
     let p = {...point};
     p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
     if(p.size !== p5.width){
@@ -70,10 +85,17 @@ export const drawPoint = (point, p5) => {
     return true;
 }
 
-export const drawStroke = (stroke, p5) => {
+export const drawStroke = async (stroke, p5, clip) => {
     if(stroke){
-        stroke.forEach((element) => {
-            drawPoint(element, p5);
+        stroke.forEach((point, i) => {
+            if(clip){
+                if(i%2 === 0){
+                    drawPoint(point, p5);
+                }
+            }else{
+                drawPoint(point, p5);
+            }
+            
         });
     }
 }
@@ -82,94 +104,114 @@ export const drawStroke = (stroke, p5) => {
  * RENDERING
  */
 
-export const previewAnim = async (a, type, p5canvas, p5, 
-    collectionItemDispatch, index, setCollectionState, 
-    clip, drawing) => {
-    console.log("previewAnim");
+export const previewAnim = async (params) => {
+        
         try{
-            renderAnim(a, type, p5canvas, p5, 
-                collectionItemDispatch, index, setCollectionState, clip, drawing);
+            renderAnim(params);
         }catch(err){
-            console.error(err);
+            console.error("Error trying renderAnim: previewAnim");
         }
 }
 
-export const previewAnimMobile = async (a, p5canvas, p5, 
-    dispatch, index, setCollectionState) => {
+export const previewAnimMobile = async (params) => {
     try{
-        renderThumb(a, p5canvas, p5, 
-            dispatch, index, setCollectionState);
+        renderThumb(params);
     }catch(err){
         console.err(err);
     }
 }
 
-export const renderAnim = async (a, type, p5canvas, p5, 
-    dispatch, index, setCollectionState, 
-    clip, drawing) =>{
-    
-        const CCapture = window.CCapture; 
-        let capturer = new CCapture({format: 'webm',
+export const renderAnim = async (params) => {
+    const CCapture = window.CCapture; 
+    let capturer = new CCapture({format: 'webm',
         //workersPath: process.env.PUBLIC_URL + '/ccapture/',
-            framerate: a.frate
-        });
-        capturer.start();
-        const startTime = performance.now();
-        setBgOverlay(p5, true);
-        setBgOverlay(p5, true);
-        let frames = [...a.frames];
-        if(clip && frames.length > 4){
-            console.log("clipping");
-            frames = frames.splice(0, 4);
+        framerate: params.a.frate
+    });
+    capturer.start();
+    const startTime = performance.now();
+    setBgOverlay(params.p5, true);
+    setBgOverlay(params.p5, true);
+    let frames = [...params.a.frames];
+    if(params.clip && frames.length > 4){
+        frames = frames.splice(0, 4);
+    }
+    frames.forEach((f, i) => {
+        setFrameCaptured(f, capturer, params.p5canvas, params.p5, params.clip);
+    });
+    capturer.stop();
+    const duration = performance.now() - startTime;
+    console.log("Capture took "+duration);
+    capturer.save((blob) => {
+        if(params.type.indexOf('VIEW') > -1){ 
+            playPreview(
+                {
+                    blob: blob, 
+                    name: params.a.name, 
+                    updateAnim: params.updateAnim, 
+                    collectionItemDispatch: params.collectionItemDispatch,  
+                    setCollectionState: params.setCollectionState,
+                    clip: params.clip
+                }
+            ).then(() => {
+                params.mainDispatch ? params.mainDispatch({type: 'PROGRESS_FRAME', data: {max: 0, now: 0}}) : console.log('no main dispatch');
+                if(params.setCollectionState && params.type === 'PREVIEW'){
+                    params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
+                }else if(params.setCollectionState){
+                    params.setCollectionState({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
+                }else if(params.updateAnim){
+                    console.log('here')
+                    params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
+                }
+            });
+        }else if(params.type === 'DOWNLOAD'){
+            saveAs(blob, params.a.name);
+            playPreview(
+                {
+                    blob: blob, 
+                    name: params.a.name, 
+                    updateAnim: params.updateAnim, 
+                    collectionItemDispatch: params.collectionItemDispatch}
+
+            );
+                //setCollectionState({type:'DOWNLOADED', data: index});
+        }else if(params.type === 'DRAWING'){
+            playPreview(
+                {
+                    blob: blob, 
+                    name: params.a.name, 
+                    updateAnim: params.updateAnim
+                } 
+            );
         }
-        frames.forEach((f) => {
-        setFrameCaptured(f, capturer, p5canvas, p5);
-        });
-        capturer.stop();
-        const duration = performance.now() - startTime;
-        console.log("Capture took "+duration);
-        capturer.save((blob) => {
-            if(type.indexOf('VIEW') > -1){ 
-                playPreview(blob, a.name, dispatch, clip)
-                    .then(() => {
-                        if(setCollectionState && type === 'PREVIEW'){
-                            setCollectionState({type: 'SET_INDEX', data: index+1});
-                        }
-                });;
-            }else if(type === 'DOWNLOAD'){
-                saveAs(blob, a.name);
-            }else if(type === 'DRAWING'){
-                playPreview(blob, a.name, dispatch);
-            }
-        });
-        if(!drawing){
-            p5.remove();
-        }
+    });
+    if(!params.drawing){
+        params.p5.remove();
+    }
 }
 
-export const setFrameCaptured = async (f, capturer, p5canvas, p5) => {
+export const setFrameCaptured = async (f, capturer, p5canvas, p5, clip) => {
+    //console.debug("setFrameCaptured");
     const render = true;
-    drawFrame(f, p5, render);
+    drawFrame(f, p5, render, clip);
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);
     capturer.capture(p5canvas.elt);
 }
 
-export const renderThumb = async (a, p5canvas, p5, 
-    dispatch, index, setCollectionState) => {
-        console.debug("renderAnimMobile");
-        setBgOverlay(p5, true);
-        setBgOverlay(p5, true);
-        let frames = [...a.frames];
+export const renderThumb = async (params) => {
+        //console.debug("renderThumb");
+        setBgOverlay(params.p5, true);
+        setBgOverlay(params.p5, true);
+        let frames = [...params.a.frames];
         const thumb = frames[0];
-        setThumbCaptured(thumb, a.name, index, p5, p5canvas,
-            dispatch, setCollectionState);
+        setThumbCaptured(thumb, params.a.name, params.index, params.p5, params.p5canvas,
+            params.dispatch, params.setCollectionState);
 }
 
 export const setThumbCaptured = async (f, name, index, p5, p5canvas,
     dispatch, setCollectionState) => {
-    console.debug("setThumbCaptured");
+    //console.debug("setThumbCaptured");
     const render = true;
     drawFrame(f, p5, render);
     let img = p5.get(0, 0, 600, 600);
@@ -183,48 +225,54 @@ export const setThumbCaptured = async (f, name, index, p5, p5canvas,
 
 }
 
-export const downloadAnimAsWebm = (a, p5canvas, p5) => {
+export const downloadAnimAsWebm = (params) => {
+    params.type = 'DOWNLOAD';
     try{
-        renderAnim(a, 'DOWNLOAD', p5canvas, p5);
+        renderAnim(params);
     }catch(err){
-        console.error(err);
+        console.error("Error trying renderAnim: downloadAnimAsWebm");
         toast.error("Error downloading file");
     }
 }
 
-/**
- * 
- * @param {*} blob 
- * @param {*} name 
- * @param {f} dispatch will be either updateAnim or collectionItemDispatch
- */
- export const playPreview = async (blob, name, dispatch, clip) => {
-    if(dispatch && clip){
-        await dispatch({
+
+ export const playPreview = async (params) => {
+    //console.debug("playPreview");
+    if(params.collectionItemDispatch && params.clip){
+        //console.log("dispatch & clip");
+        await params.collectionItemDispatch({
             type: 'SET_PREVIEW_FILE', 
-            data: {blob : blob, name: name}
+            data: {blob : params.blob, name: params.name}
         });  
-    }else if(dispatch){
-        await dispatch({
+    }else if(params.setCollectionState){
+        //console.log("dispatch");
+        await params.setCollectionState({
             type: 'SET_VIEW_FILE',
-            data: {blob: blob, name: name}
-        })
+            data: {blob: params.blob, name: params.name}
+        });
+    }else if(params.updateAnim){
+        //console.log("dispatch");
+        await params.updateAnim({
+            type: 'SET_VIEW_FILE',
+            data: {blob: params.blob, name: params.name}
+        });
     }
 }
 
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
+    //console.debug("setThumb");
     if(dispatch){
         dispatch({
             type: 'SET_PREVIEW_FILE',
             data: {blob: blob, name: name}
         });
     }else{
-        console.debug('no collection item dispatch');
+        //console.debug('no collection item dispatch');
     }
     if(setCollectionState){
         setCollectionState({type: 'SET_INDEX', data: index+1});
     }else{
-        console.debug('no collection state');
+        //console.debug('no collection state');
     }
 }
 

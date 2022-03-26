@@ -8,3 +8,11 @@ export const Loading = ({message}) => {
         </div>
     );
 }
+
+export const LoadingFloat = ({message}) => {
+    return(
+        <div className='loading-float'>
+            <Loading message={message}/>
+        </div>
+    );
+}

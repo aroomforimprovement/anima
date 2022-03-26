@@ -7,7 +7,14 @@ import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
 import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
 import './collection.css';
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, contactReqEnabled: true, index: 0};
+import { SITE } from '../shared/site';
+import { Viewer } from './Viewer';
+import { Div } from '../common/Div';
+import { ReactP5Wrapper } from 'react-p5-wrapper';
+import { preview } from '../create/animation/preview';
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
+    contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
+    selectedAnim: null, progressFrame: {max: 0, now: 0}};
 const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
@@ -16,18 +23,16 @@ export const useCollectionContext = () => {
 
 const Collection = ({browse}) => {
 
-    const { mainState } = useMainContext();
+    const { mainState, mainDispatch } = useMainContext();
     const splat = useParams()[0];
       
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
                     if(mainState.contacts[0].userid === id){
-                        //console.log("isContact:TRUE");
                         return true;
                     }
                 }
-                //console.log('isContact:FALSE');
                 return false;
         }
         return false;
@@ -74,18 +79,15 @@ const Collection = ({browse}) => {
         ), toastConfirmStyle());
     }
     
-
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
     const [isFailed, setIsFailed] = useState(false);
     
     useEffect( () => {
-        //console.log("mounted");
         const controller = new AbortController();
         const signal = controller.signal;
         const setCollection = async (data) => {
-            //console.log("setCollection");
-            setCollectionState({type: 'SET_COLLECTION', data: data}); 
+            setCollectionState({type: 'SET_COLLECTION', data: data, signal}); 
         }
         
         if(!isFailed && !collectionState.isSet && mainState.isSet){
@@ -93,34 +95,31 @@ const Collection = ({browse}) => {
             getCollection(splat, browse, access, signal)
                 .then((response) => {
                     if(browse){
-                        setCollection({anims: response, isSet: true});
+                        setCollection({anims: response, isSet: true, signal});
                     }else{
                         setCollection({anims: response.anims, isSet: true,
                             username: response.username, userid: response.userid,
-                            isOwn: response.userid === mainState.user.userid});
+                            isOwn: response.userid === mainState.user.userid, signal});
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
-                    handleFailedConnection();
-                    setIsFailed(true);
+                    console.error("Error fetching data: getCollection, then()");
+                    handleFailedConnection(SITE.failed_retrieval_message, true, signal);
+                    setIsFailed(true, signal);
                 });
         }
         return () => {
-            //console.log("cleanup");
             controller.abort();
         }
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
 
-    useEffect(() => {
-        console.log("collectionState.anims");
-    }, [collectionState.anims]);
 
     const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
         return(
             <CollectionItem key={index} index={index} anim={anim}/>
-            );
+        );
     }) : <Loading />
+    
     
     const collectionHeading = collectionState.username
     ? <div className='container collection-header mt-4 mb-4'>
@@ -142,26 +141,48 @@ const Collection = ({browse}) => {
     : <div className='container collection-header mt-5 mb-5'>
         <h5>Latest anims</h5>
     </div>
-        
+   
+
     return(
         <div>
-            {mainState.isSet && collectionState.anims ?
-            <CollectionContext.Provider value={stateOfCollection}>
-                <CollectionContext.Consumer>
-                    {() => (
-                    <div className='container'>
-                        {collectionHeading}
-                        <div className='col col-12'>
-                            {collectionItems}
-                        </div>
-                    </div>  
-                    )}
-                </CollectionContext.Consumer>
-            </CollectionContext.Provider>
+            {mainState.isSet && collectionState.anims 
+            ?
+            <div>
+                <CollectionContext.Provider value={stateOfCollection}>
+                    {/*<CollectionContext.Consumer>*/}
+                        {/*{() => {*/}
+                            <div className='container'>
+                                {collectionHeading}
+                                <div className='col col-12'>
+                                    {collectionItems}
+                                </div>
+                                {collectionState.isViewerOpen && collectionState.viewFile 
+                                ?
+                                <Viewer viewFile={collectionState.viewFile} 
+                                anim={collectionState.selectedAnim}
+                                name={collectionState.viewFileName}/> 
+                                : 
+                                <Div/>
+                                }
+                                {
+                                collectionState.isViewerOpen && !collectionState.viewFile 
+                                ?
+                                <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
+                                    collectionState={collectionState} type={'VIEW'}
+                                    setCollectionState={setCollectionState} clip={false}
+                                    mainDispatch={mainDispatch}/> 
+                                : <Div/>
+                                }
+                            </div>
+                        {/*}}*/}
+                    {/*</CollectionContext.Consumer>*/}
+                </CollectionContext.Provider>
+            </div>
             :
             <Loading />}
         </div> 
     );
+ 
 }
 
 export default Collection;

@@ -88,6 +88,16 @@ code {
   display:inline-block;
 }
 
+.loading-float{
+  position:absolute;
+  min-width: 100vw;
+  min-height: 30vh;
+  background-color: white;
+  text-align: center;
+  font-size:large;
+  font-weight:bold;
+}
+
 .coll-item-btns{
   text-align: center;
 }
@@ -125,10 +135,15 @@ code {
   background: linear-gradient(45deg, rgb(220, 220, 220), rgb(200, 200, 200));
 }
 
-.end-zone{
+.end-zone, .float-end{
   text-align: end;
 }
-
+.float-start{
+  text-align:start;
+}
+.float-center{
+  text-align:center;
+}
 .float-middle{
   position:absolute;
   top:30%;
@@ -157,6 +172,15 @@ code {
   }
 }
 
+.clickable{
+  cursor:pointer;
+}
+.clickable:hover{
+  transform: scale(1.1);
+}
+.clickable:active{
+  transform: scale(0.9);
+}
 .warn{
   color:rgb(173, 2, 2);
 }

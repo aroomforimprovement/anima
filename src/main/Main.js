@@ -13,6 +13,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
 import { handleFailedConnection, Toast } from '../common/Toast';
 import './main.css';
+import { SITE } from '../shared/site';
+import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
+import { TopProgressBar } from '../common/ProgressBar';
+
 
 const MainContext = createContext({});
 
@@ -22,9 +26,9 @@ export const useMainContext = () => {
 
 
 const Main = () => {
-
+    SmoothScroll({animationTime: 1000, stepSize: 10, accelerationDelta: 5});
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-    const [mainState, mainDispatch] = useReducer(mainReducer, {});
+    const [mainState, mainDispatch] = useReducer(mainReducer, {progressFrame: {max: 0, now: 0}});
     const stateOfMain = { mainState, mainDispatch };
 
     const {history} = useHistory();
@@ -74,7 +78,7 @@ const Main = () => {
                             type: 'SET_ACCOUNT_INFO',
                             data: {isSet: true}
                         });
-                        handleFailedConnection();
+                        handleFailedConnection(SITE.failed_retrieval_message, false);
                     }
                     
                 });
@@ -106,6 +110,10 @@ const Main = () => {
                             <Route path='/' history={history} component={HomePage} />
                             <Redirect to='/home' history={history}/>
                         </Switch>
+                        <div>{(isLoading || mainState.progressFrame.max > 0)
+                             && <TopProgressBar />}
+                             {/**this is pointless with out a show prop */}
+                        </div>
                         <Footer />
                     </div>
                     )}
