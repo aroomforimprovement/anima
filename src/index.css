@@ -135,8 +135,11 @@ code {
   background: linear-gradient(45deg, rgb(220, 220, 220), rgb(200, 200, 200));
 }
 
-.end-zone{
+.end-zone, .float-end{
   text-align: end;
+}
+.float-start{
+  text-align:start;
 }
 .float-center{
   text-align:center;
@@ -169,6 +172,15 @@ code {
   }
 }
 
+.clickable{
+  cursor:pointer;
+}
+.clickable:hover{
+  transform: scale(1.1);
+}
+.clickable:active{
+  transform: scale(0.9);
+}
 .warn{
   color:rgb(173, 2, 2);
 }
