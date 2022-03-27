@@ -8,14 +8,12 @@ export const LoginBtn = (props) => {
 
     useEffect(() => {
         if(user){
-            //window.location.href = '/login';
+            window.location.href = '/login';
         }
     }, [user]);
 
     const loginPop = async () => {
         loginWithPopup().then(() => {
-            //console.log('loginWithPopup, then...');
-            console.log(user)
         });
     }
     return <button 
@@ -30,8 +28,14 @@ export const LogoutBtn = (props) => {
     const classes = `btn btn-secondary ${props.size} m-1`;
     const url = `${process.env.REACT_APP_URL}/logout`;
     const { logout } = useAuth0();
+    const handleLogout = () => {
+        logout({url});
+        localStorage.removeItem('userid');
+        localStorage.removeItem('username');
+            localStorage.removeItem('email');
+    }
     return <button 
-            onClick={() => logout({url})}
+            onClick={() => handleLogout()}
             type='button' 
             className={classes}>
                 Log out
@@ -43,11 +47,6 @@ export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
     const { loginWithPopup, user } = useAuth0();
     
-    useEffect(() => {
-        if(user){
-            //window.location.href = '/login'
-        }
-    }, [user])
     return <button
             onClick={() => loginWithPopup(
                 {
