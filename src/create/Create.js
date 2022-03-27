@@ -12,7 +12,7 @@ export const useControlContext = () => {
     return useContext(ControlContext);
 }
 
-const Create = ({edit}) => {
+const Create = ({edit, loggingIn}) => {
 
     const [ controls, updateControls ] = useReducer(controlReducer, values.initialControlState);
     const controlState = { controls, updateControls };
@@ -22,7 +22,11 @@ const Create = ({edit}) => {
             <ControlContext.Provider value={controlState}>
                 <Controller />
                 <Jumbotron >
-                    <Animation edit={edit} splat={splat}/>
+                    <Animation 
+                        edit={edit} 
+                        splat={splat} 
+                        loggingIn={loggingIn}
+                    />
                 </Jumbotron>
                 <SaveController />
             </ControlContext.Provider>        

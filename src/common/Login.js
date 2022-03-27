@@ -146,7 +146,6 @@ const Login = () => {
             }, signal).catch((error) => {console.error("Error registering login")});
         }
         return () => {
-            //console.log("abort login");
             controller.abort();
         }
     },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
@@ -163,8 +162,8 @@ const Login = () => {
 
         const saveAnimToAccountCall = async (anim, access) => {
             await saveAnimToAccount(anim, access, signal).then(() => {
-                dispatch({type: 'setIsSaved', data: true});
-                dispatch({type: 'setIsSaving', data: false});
+                dispatch({type: 'setIsSaved', data: true, signal});
+                dispatch({type: 'setIsSaving', data: false, signal});
             }).catch((error) => {console.error("Error saving Anim to account");});
         }
         if(state.anim && !state.isSaved && !state.isSaving){

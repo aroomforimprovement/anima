@@ -33,10 +33,16 @@ export const mainReducer = (state, action) => {
                 user: {...state.user, username: action.data.username}, isSet: action.data.isSet});
         }
         case 'PROGRESS_FRAME':{
-            return({...state, progressFrame: {max: 0, now: 0}})
+            return({...state, progressFrame: {max: 0, now: 0}});
+        }
+        case 'LOGGING_IN':{
+            return({...state, loggingIn: action.data});
+        }
+        case 'ANIM':{
+            return({...state, anim: action.data})
         }
         default:
-            break;
+            return(state);
     }
 }
   

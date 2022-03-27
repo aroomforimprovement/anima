@@ -19,7 +19,7 @@ export const useAnimContext = () => {
 }
 
 
-export const Animation = ({edit, splat}) => {
+export const Animation = ({edit, splat, loggingIn}) => {
 
     const { mainState, mainDispatch } = useMainContext();
     
@@ -36,13 +36,12 @@ export const Animation = ({edit, splat}) => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
     }
     const redirectAfterTempSave = async (temp) => {
-        //updateAnim({type: 'SET_TEMP', data: false});
         tempSave();
         loginWithPopup(
             {
                 screen_hint: 'signup'
             }
-        ).then(() => {window.location.href = '/login'});
+        ).then(() => {{/*window.location.href = '/login'*/}});
     }
 
     useEffect(() => {
@@ -79,8 +78,6 @@ export const Animation = ({edit, splat}) => {
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
         }
         if(!anim.isSet && splat && mainState.user && access){
-            //console.log('!anim.isSet && id', access);
-            
             getSavedAnim(splat, signal);
         }
         return () => {
@@ -119,7 +116,28 @@ export const Animation = ({edit, splat}) => {
         );
     }
 
-    if(window.localStorage.getItem('tempAnim')){
+    //useEffect(() => {
+    //    const update = async () => {
+    //        mainDispatch({type: 'ANIM', data: anim});
+    //    }
+    //    update();
+    //}, [anim, mainDispatch])
+
+    //useEffect(() => {
+    //    console.dir(anim);
+    //    console.log(loggingIn);
+    //    const saveTemp = () => {
+    //        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
+    //    }
+    //    const handleLoggingIn = async () => {
+    //        saveTemp();
+    //    }
+    //    if(loggingIn){
+    //        handleLoggingIn();
+    //    }
+    //}, [loggingIn, anim])
+
+    if(window.localStorage.getItem('tempAnim') && !loggingIn){
         return(
             <Redirect to='/login'/>
         );

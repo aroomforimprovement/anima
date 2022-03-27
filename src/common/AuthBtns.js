@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useMainContext } from '../main/Main';
 
-export const LoginBtn = (props) => {
-    const classes = `btn btn-secondary ${props.size} m-1`;
-    
+export const LoginBtn = ({size}) => {
+    //const {mainDispatch} = useMainContext();
+    const classes = `btn btn-secondary ${size} m-1`;
     const { loginWithPopup, user } = useAuth0();
 
     useEffect(() => {
@@ -13,7 +14,9 @@ export const LoginBtn = (props) => {
     }, [user]);
 
     const loginPop = async () => {
+        //mainDispatch({type: 'LOGGING_IN', data: true});
         loginWithPopup().then(() => {
+            //mainDispatch({type: 'LOGGING_IN', data: false});
         });
     }
     return <button 
@@ -32,7 +35,7 @@ export const LogoutBtn = (props) => {
         logout({url});
         localStorage.removeItem('userid');
         localStorage.removeItem('username');
-            localStorage.removeItem('email');
+        localStorage.removeItem('email');
     }
     return <button 
             onClick={() => handleLogout()}
@@ -45,7 +48,7 @@ export const LogoutBtn = (props) => {
 
 export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
-    const { loginWithPopup, user } = useAuth0();
+    const { loginWithPopup } = useAuth0();
     
     return <button
             onClick={() => loginWithPopup(
@@ -58,6 +61,5 @@ export const SignupBtn = (props) => {
             type='button'
             className={classes}
             >Sign up</button>
-
 }
 

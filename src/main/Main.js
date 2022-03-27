@@ -36,9 +36,9 @@ const Main = () => {
     const HomePage = () => { return <Home /> }
     const LoginPage = () => { return <Login /> }
     const LogoutPage = () => { return <Logout /> }
-    const CreatePage = () => { return <Create edit={false} /> }
-    const EditPage = () => { return <Create edit={true} />}
-    const CollectionPage = () => { return <Collection browse={false}/> }
+    const CreatePage = () => { return <Create edit={false} loggingIn={mainState.loggingIn}/> }
+    const EditPage = () => { return <Create edit={true} loggingIn={mainState.loggingIn}/>}
+    const CollectionPage = () => { return <Collection browse={false} /> }
     const BrowsePage = () => { return <Collection browse={true} /> }
     const AccountPage = () => { return <Account />}
 

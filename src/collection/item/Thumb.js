@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loading } from '../../common/Loading';
 //import { isMobile } from 'react-device-detect';
-import { ViewerProgressBar } from '../../common/ProgressBar';
+//import { ViewerProgressBar } from '../../common/ProgressBar';
 
 export const Thumb = ({previewFile, name, max, now}) => {
     const isMobile = false;  
