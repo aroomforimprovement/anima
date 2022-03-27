@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export const LoginBtn = (props) => {
     const classes = `btn btn-secondary ${props.size} m-1`;
     
-    const { loginWithPopup } = useAuth0();
+    const { loginWithPopup, user } = useAuth0();
+
+    useEffect(() => {
+        if(user){
+            //window.location.href = '/login';
+        }
+    }, [user]);
 
     const loginPop = async () => {
         loginWithPopup().then(() => {
             //console.log('loginWithPopup, then...');
-            window.location.href = '/login';
+            console.log(user)
         });
     }
     return <button 
@@ -35,13 +41,21 @@ export const LogoutBtn = (props) => {
 
 export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
-    const { loginWithPopup } = useAuth0();
+    const { loginWithPopup, user } = useAuth0();
+    
+    useEffect(() => {
+        if(user){
+            //window.location.href = '/login'
+        }
+    }, [user])
     return <button
             onClick={() => loginWithPopup(
                 {
                     screen_hint: 'signup'
                 }
-            ).then(() => {window.location.href = '/login'})}
+            ).then(() => {
+                
+            })}
             type='button'
             className={classes}
             >Sign up</button>

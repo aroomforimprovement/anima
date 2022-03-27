@@ -119,10 +119,6 @@ export const Animation = ({edit, splat}) => {
         );
     }
 
-    useEffect(() => {
-        console.dir(anim);
-    }, [anim]);
-
     if(window.localStorage.getItem('tempAnim')){
         return(
             <Redirect to='/login'/>
