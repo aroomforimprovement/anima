@@ -25,7 +25,7 @@ export const sketch = (p5) => {
             <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
                 message={`Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`}
-                dismissBtn={"Cool"} approveBtn={"OK"} />
+                dismissBtn={"OK"} approveBtn={"Cool"} />
         ), toastConfirmStyle());
     }
     /**

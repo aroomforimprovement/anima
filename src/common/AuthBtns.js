@@ -1,9 +1,31 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useMainContext } from '../main/Main';
+import toast from 'react-hot-toast';
+import { ToastConfirm, toastConfirmStyle } from './Toast';
+
+const loginPop = async (loginWithPopup, screenHint) => {
+        
+    const doLogin = (t) => {
+        t ? toast.dismiss(t) : console.debug();
+        loginWithPopup({screen_hint: screenHint});
+    }
+    const dismiss = (t) => {
+        toast.dismiss(t);
+    }
+    window.location.href.indexOf('/create') > -1
+    ?
+    toast((t) => (
+        <ToastConfirm t={t} approve={doLogin} dismiss={dismiss}
+            message={`If you log in now, you will lose any unsaved changes in your animation.
+             Click cancel to go back and save your work. Click OK to proceed without saving`}
+             dismissBtn={"Cancel"} approveBtn={"OK"}/>
+
+    ), toastConfirmStyle())
+    :
+    doLogin();
+}
 
 export const LoginBtn = ({size}) => {
-    //const {mainDispatch} = useMainContext();
     const classes = `btn btn-secondary ${size} m-1`;
     const { loginWithPopup, user } = useAuth0();
 
@@ -13,14 +35,8 @@ export const LoginBtn = ({size}) => {
         }
     }, [user]);
 
-    const loginPop = async () => {
-        //mainDispatch({type: 'LOGGING_IN', data: true});
-        loginWithPopup().then(() => {
-            //mainDispatch({type: 'LOGGING_IN', data: false});
-        });
-    }
     return <button 
-            onClick={() => loginPop()}
+            onClick={() => loginPop(loginWithPopup, 'login')}
             type='button' 
             className={classes}
             >Login</button>
@@ -51,13 +67,7 @@ export const SignupBtn = (props) => {
     const { loginWithPopup } = useAuth0();
     
     return <button
-            onClick={() => loginWithPopup(
-                {
-                    screen_hint: 'signup'
-                }
-            ).then(() => {
-                
-            })}
+            onClick={() => loginPop(loginWithPopup, 'signup')}
             type='button'
             className={classes}
             >Sign up</button>

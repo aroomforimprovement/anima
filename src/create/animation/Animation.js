@@ -117,13 +117,6 @@ export const Animation = ({edit, splat, loggingIn}) => {
     }
 
     //useEffect(() => {
-    //    const update = async () => {
-    //        mainDispatch({type: 'ANIM', data: anim});
-    //    }
-    //    update();
-    //}, [anim, mainDispatch])
-
-    //useEffect(() => {
     //    console.dir(anim);
     //    console.log(loggingIn);
     //    const saveTemp = () => {
