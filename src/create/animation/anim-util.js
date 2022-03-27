@@ -153,7 +153,7 @@ export const renderAnim = async (params) => {
                     clip: params.clip
                 }
             ).then(() => {
-                params.mainDispatch ? params.mainDispatch({type: 'PROGRESS_FRAME', data: {max: 0, now: 0}}) : console.log('no main dispatch');
+                //params.mainDispatch ? params.mainDispatch({type: 'PROGRESS_FRAME', data: {max: 0, now: 0}}) : console.log('no main dispatch');
                 if(params.setCollectionState && params.type === 'PREVIEW'){
                     params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
                 }else if(params.setCollectionState){
