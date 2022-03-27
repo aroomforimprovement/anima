@@ -1,4 +1,3 @@
-import React from 'react';
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
@@ -158,9 +157,7 @@ export const renderAnim = async (params) => {
                     params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
                 }else if(params.setCollectionState){
                     params.setCollectionState({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
-                }else if(params.updateAnim){
-                    console.log('here')
-                    params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
+                }else if(params.updateAnim){params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
                 }
             });
         }else if(params.type === 'DOWNLOAD'){
