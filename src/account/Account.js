@@ -41,7 +41,9 @@ const Account = () => {
         const id = getAccountId();
         getAccountInfo(id, mainState.user.access)
             .then((response) => {
-                dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+                if(response){
+                    dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+                }
             });
         
     }

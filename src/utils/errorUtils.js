@@ -22,6 +22,7 @@ export class ErrorBoudary extends Component {
         this.state = { hasError: false };
     }
     static getDerivedStateFromError(error){
+        console.dir("HERE", error);
         return { hasError: true };
     }
     componentDidCatch(error, errorInfo) {

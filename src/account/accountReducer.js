@@ -42,11 +42,12 @@ export const getAccountInfo = async (id, access) => {
         if(response.ok){
             return response.json();
         }else{
+            handleFailedConnection(SITE.failed_retrieval_message, false);
             console.warn("Problem fetching data: getAccountInfo")
         }   
     }, error => {
         console.error("Error fetching data: getAccountInfo");
-        handleFailedConnection(SITE.failed_retrieval_message, false);
+        
     }).catch(err => console.error("Error fetching data: getAccountInfo"));
 }
 
@@ -142,6 +143,7 @@ export const updateDisplayName = async (id, name, access) => {
 export const accountReducer = (state, action) => {
     switch(action.type){
         case 'SET_ACCOUNT_INFO':
+            
             return({...state, 
                 userid: action.data.userid,
                 username: action.data.username,
