@@ -5,7 +5,7 @@ import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle, handleFailedConnection } from '../common/Toast';
+import { ToastConfirm, toastConfirmStyle, handleFailedConnection, handleProgress } from '../common/Toast';
 import './collection.css';
 import { SITE } from '../shared/site';
 import { Viewer } from './Viewer';
@@ -99,7 +99,7 @@ const Collection = ({browse}) => {
         
         if(!isFailed && !collectionState.isSet && mainState.isSet){
             const access = mainState.user ? mainState.user.access : undefined
-            getCollection(splat, browse, access, signal)
+            const collPromise = getCollection(splat, browse, access, signal)
                 .then((response) => {
                     if(browse){
                         setCollection({anims: response, isSet: true, signal});
@@ -110,9 +110,10 @@ const Collection = ({browse}) => {
                     }
                 })
                 .catch((error) => {
-                    console.error("Error fetching data: getCollection, then()");
                     setIsFailed(true, signal);
                 });
+            handleProgress(collPromise, 
+                "Loading animations...", "Animations ahoy!", "Failed to load animations")
         }
         return () => {
             controller.abort();

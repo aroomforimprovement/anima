@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from 'react-hot-toast';
+import { ViewerProgressBar } from "./ProgressBar";
 
 export const toastConfirmStyle = (id) => {
     return {duration: 60000, id: id,
@@ -53,4 +54,13 @@ export const handleFailedConnection = (message, takeHome) => {
             message={message}
             approveBtn={"Cool"} dismissBtn={"OK"} /> 
     ), toastConfirmStyle('connection'));
+}
+
+
+export const handleProgress = (promise, loading, success, error) => {
+    toast.promise(promise, {
+        loading: loading,
+        success: success,
+        error: error
+    });
 }
