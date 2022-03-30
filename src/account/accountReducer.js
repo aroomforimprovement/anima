@@ -42,8 +42,8 @@ export const getAccountInfo = async (id, access) => {
         if(response.ok){
             return response.json();
         }else{
-            handleFailedConnection(SITE.failed_retrieval_message, false);
-            console.warn("Problem fetching data: getAccountInfo")
+            console.warn("Problem fetching data: getAccountInfo");
+            return false;
         }   
     }, error => {
         console.error("Error fetching data: getAccountInfo");

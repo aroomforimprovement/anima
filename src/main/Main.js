@@ -11,11 +11,12 @@ import Account from '../account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
-import { handleFailedConnection, Toast } from '../common/Toast';
+import { handleFailedConnection } from '../common/Toast';
 import './main.css';
 import { SITE } from '../shared/site';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { TopProgressBar } from '../common/ProgressBar';
+import { Toaster } from 'react-hot-toast';
 
 
 const MainContext = createContext({});
@@ -30,7 +31,7 @@ const Main = () => {
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {progressFrame: {max: 0, now: 0}});
     const stateOfMain = { mainState, mainDispatch };
-
+    
     const {history} = useHistory();
     
     const HomePage = () => { return <Home /> }
@@ -41,6 +42,8 @@ const Main = () => {
     const CollectionPage = () => { return <Collection browse={false} /> }
     const BrowsePage = () => { return <Collection browse={true} /> }
     const AccountPage = () => { return <Account />}
+
+    
 
     useEffect(() =>{
         if(!isLoading && !mainState.user){
@@ -86,6 +89,8 @@ const Main = () => {
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
         }
     },[isLoading, isAuthenticated, getAccessTokenSilently, mainState.user, mainState.notices, mainState.isSet]);
+
+
         
     return (
         <div>
@@ -95,7 +100,7 @@ const Main = () => {
                 <MainContext.Consumer>
                     {() => (
                     <div>
-                        <Toast />
+                        <Toaster />
                         <Header />
                         <Switch>
                             <Route path='/account' history={history} component={AccountPage} />

@@ -5,9 +5,10 @@ import { DisplayName } from './components/DisplayName';
 import { useMainContext } from '../main/Main';
 import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from '../common/Toast';
+import { handleFailedConnection, ToastConfirm, toastConfirmStyle } from '../common/Toast';
 import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
+import { SITE } from '../shared/site';
 
 const AccountContext = createContext({});
 
@@ -24,32 +25,39 @@ const Account = () => {
 
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
-    
-    useEffect(() => {
-        
-    },[mainState.user, state.notices, state.contacts]);
+    const [isFailed, setIsFailed] = useState(false);
 
-    const getAccountId = () => {
-        if(mainState.user){
-            return mainState.user.userid;
-        }else{
-            console.error("no user");
+    useEffect(() => {
+        if(isFailed){
+            handleFailedConnection(SITE.failed_retrieval_message, false);
         }
-    }
-    
-    const setAccountInfo = async () => {
-        const id = getAccountId();
-        getAccountInfo(id, mainState.user.access)
-            .then((response) => {
-                if(response){
-                    dispatch({type: 'SET_ACCOUNT_INFO', data: response});
-                }
-            });
-        
-    }
-    if(!state.isSet && mainState.user && mainState.user.access){
-        setAccountInfo();
-    }
+    }, [isFailed])
+
+    useEffect(() => {
+        const getAccountId = () => {
+            if(mainState.user){
+                return mainState.user.userid;
+            }else{
+                console.error("no user");
+            }
+        }
+        const setAccountInfo = async () => {
+            const id = getAccountId();
+            getAccountInfo(id, mainState.user.access)
+                .then((response) => {
+                    if(response){
+                        dispatch({type: 'SET_ACCOUNT_INFO', data: response});
+                    }else{
+                        //dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
+                        setIsFailed(true);
+                    }
+                });
+            
+        }
+        if(!state.isSet && !isFailed){// && mainState.user && mainState.user.access){
+            setAccountInfo();
+        }
+    },[mainState.user, state.notices, state.contacts, state.isSet, isFailed]);
 
     const handleShowContacts = () => {
         setHideContacts(!hideContacts);

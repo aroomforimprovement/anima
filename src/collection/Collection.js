@@ -12,6 +12,7 @@ import { Viewer } from './Viewer';
 import { Div } from '../common/Div';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
+
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
     selectedAnim: null, progressFrame: {max: 0, now: 0}};
@@ -83,6 +84,12 @@ const Collection = ({browse}) => {
     const stateOfCollection = { collectionState, setCollectionState };
     const [isFailed, setIsFailed] = useState(false);
     
+    useEffect(() => {
+        if(isFailed){
+            handleFailedConnection(SITE.failed_retrieval_message, true);        
+        }
+    }, [isFailed])
+
     useEffect( () => {
         const controller = new AbortController();
         const signal = controller.signal;
@@ -104,7 +111,6 @@ const Collection = ({browse}) => {
                 })
                 .catch((error) => {
                     console.error("Error fetching data: getCollection, then()");
-                    handleFailedConnection(SITE.failed_retrieval_message, true, signal);
                     setIsFailed(true, signal);
                 });
         }

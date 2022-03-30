@@ -1,14 +1,8 @@
 import React from "react";
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
-export const Toast = () => {
-    return (
-        <Toaster />
-    )
-}
-
-export const toastConfirmStyle = () => {
-    return {duration: 60000, 
+export const toastConfirmStyle = (id) => {
+    return {duration: 60000, id: id,
         style: {
             padding: 10, 
             border: '2px solid #550000', 
@@ -47,6 +41,7 @@ export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissB
     );
 }
 
+
 export const handleFailedConnection = (message, takeHome) => {
     const dismiss = (id) => {
         toast.dismiss(id);
@@ -56,6 +51,6 @@ export const handleFailedConnection = (message, takeHome) => {
     toast((t) => (
         <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
             message={message}
-            approveBtn={"Cool"} dismissBtn={"OK"}/>
-    ), toastConfirmStyle());
+            approveBtn={"Cool"} dismissBtn={"OK"} /> 
+    ), toastConfirmStyle('connection'));
 }
