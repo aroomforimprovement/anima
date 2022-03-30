@@ -1,6 +1,5 @@
 import React from "react";
 import { toast } from 'react-hot-toast';
-import { ViewerProgressBar } from "./ProgressBar";
 
 export const toastConfirmStyle = (id) => {
     return {duration: 60000, id: id,

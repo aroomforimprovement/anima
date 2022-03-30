@@ -2,7 +2,7 @@ import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from '../../common/Toast';
+import { handleProgress, ToastConfirm, toastConfirmStyle } from '../../common/Toast';
 
 
 export const sketch = (p5) => {
@@ -116,7 +116,7 @@ export const sketch = (p5) => {
         }
         if(props.controls.preview && props.anim.isPreviewOpen){
                 updateControls({type: 'PREVIEW', data: false});        
-                previewAnim(
+                const previewPromise = previewAnim(
                     {
                         a: anim.anim, 
                         type: 'DRAWING',
@@ -130,6 +130,8 @@ export const sketch = (p5) => {
                 ).then(() => {
                         p5.resizeCanvas(10, 10);
                 });
+                handleProgress(previewPromise,
+                    `Rendering your anim`, `Anim rendered ok`, `Something went wrong :(`)
         }else if(props.controls.preview){
             if(anim.anim.frames.length < 1){
                 updateControls({type: 'PREVIEW', data: false});
@@ -152,7 +154,6 @@ export const sketch = (p5) => {
             p5.resizeCanvas(20, 20);
         }
         if(props.anim.saveClose){
-            console.log('resizing');
             p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
                 isMobile ? p5.displayWidth : values.defaultSize);
             updateAnim({type: 'SAVE_CLOSE', data: false});

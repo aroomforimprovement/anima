@@ -9,6 +9,7 @@ import { Privacy } from '../controller/ControllerBtns';
 import { useMainContext } from '../../main/Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
+import { handleProgress } from '../../common/Toast';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -41,14 +42,14 @@ export const Animation = ({edit, splat, loggingIn}) => {
             {
                 screen_hint: 'signup'
             }
-        ).then(() => {{/*window.location.href = '/login'*/}});
+        ).then(() => {});
     }
 
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
 
-        const getSavedAnim = (id, signal) => {
+        const getSavedAnim = async (id, signal) => {
             return fetch(`${apiUrl}anim/${id}`,{
                     signal: signal,
                     headers: {
@@ -78,7 +79,8 @@ export const Animation = ({edit, splat, loggingIn}) => {
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
         }
         if(!anim.isSet && splat && mainState.user && access){
-            getSavedAnim(splat, signal);
+            const animPromise = getSavedAnim(splat, signal);
+            handleProgress(animPromise, "Loading animation", "Animation ready to edit!", "Something went wrong :(");
         }
         return () => {
             controller.abort();
