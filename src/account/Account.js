@@ -123,6 +123,12 @@ const Account = () => {
         }) 
         : <div>Nobody here</div>
 
+    const Unverfied = () => {
+        return(
+            <div>Verify your account to use this feature</div>
+        )
+    }
+    
     return(
         <div className='container account-page'>
             <AccountContext.Provider value={stateOfAccount} >
@@ -134,14 +140,18 @@ const Account = () => {
                                 <div className='notices-header' 
                                     onClick={handleShowNotices}>Notifications:</div>
                                 <div className='container' hidden={hideNotices}>
-                                    <div className='row mb-4'>{notices}</div>
+                                    {mainState.user && mainState.user.isVerified
+                                    ? <div className='row mb-4'>{notices}</div>
+                                    : <Unverfied className='row mb-4'/>}
                                 </div>
                             </div>
                             <div className='row notices'>
                                 <div className='contacts-header' 
                                     onClick={handleShowContacts}>Contacts:</div>
                                 <div className='container' hidden={hideContacts}>
-                                    <div className='row'>{contacts}</div>
+                                    {mainState.user && mainState.user.isVerified
+                                    ? <div className='row'>{contacts}</div>
+                                    : <Unverfied className='row mb-4' />}
                                 </div>
                             </div>
                             <div className='row notices'>

@@ -55,10 +55,11 @@ export const DisplayName = () => {
                     </div>
                 }
             </div>
-            <div className='col fa fa-edit mt-1 edit-name'
-                onClick={handleEditUsername}>
-                    {''}
-                </div>
+                {mainState.user && mainState.user.isVerified
+                ? <div className='col fa fa-edit mt-1 edit-name'
+                    onClick={handleEditUsername}>{''}</div>
+                : <div className='col fa fa-edit mt-1 edit-name'
+                    onClick={() => {toast.error('Verify your account to use this feature')}}>{''}</div>}
             </div>
     );
 }

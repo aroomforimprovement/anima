@@ -34,6 +34,7 @@ const Login = () => {
                 console.error("response not ok") }
         }, error => { 
             dispatch({type: 'setIsFailed', data: true});
+            console.error(error);
             console.error("error fetching login");
          }
         )
@@ -137,13 +138,16 @@ const Login = () => {
         if(state.isFailed){
             handleFailedConnection(SITE.failed_connection_message, true);
         }
-        if(!state.isRegistered && state.isLoaded && (mainState && mainState.user && mainState.user.access) && !state.isSending && !state.isFailed){
-            dispatch({type: 'setIsSending', data: true});
-            putLoginCall({ 
-                userid: mainState.user.userid,
-                email: mainState.user.email,
-                username: mainState.user.name, access: mainState.user.access,
-            }, signal).catch((error) => {console.error("Error registering login")});
+        if(!state.isRegistered && state.isLoaded 
+            && (mainState && mainState.user && mainState.user.access) 
+            && !state.isSending && !state.isFailed){
+                dispatch({type: 'setIsSending', data: true});
+                putLoginCall({ 
+                    userid: mainState.user.userid,
+                    email: mainState.user.email,
+                    username: mainState.user.name, 
+                    access: mainState.user.access,
+                }, signal).catch((error) => {console.error("Error registering login")});
         }
         return () => {
             controller.abort();

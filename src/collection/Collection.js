@@ -135,6 +135,7 @@ const Collection = ({browse}) => {
                 {collectionState.username}
             </h5>
             {
+            !mainState.user || !mainState.user.isAuth || !mainState.user.isVerified ||
             collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
             ? 
             <div></div> 

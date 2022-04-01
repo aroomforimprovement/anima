@@ -5,6 +5,7 @@ import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../shared/site';
 import { useMainContext } from '../main/Main';
+import { toast } from 'react-hot-toast';
 
 const Header = () => {
     
@@ -33,9 +34,19 @@ const Header = () => {
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
                                 </NavLink>
                             </NavItem>
-                            {!mainState ? <Loading /> : mainState.user && mainState.user.isAuth ? <NavItem className='nav-item nav-i'>
-                                <a className='nav-link' href={`/collection/${mainState.user.userid}`}>
-                                    <span className='fa fa-film fa-md m-1'></span> Collection
+                            {!mainState 
+                                ? <Loading /> 
+                                : mainState.user && mainState.user.isAuth 
+                                ? mainState.user.verified
+                                ? <NavItem className='nav-item nav-i'>
+                                    <a className='nav-link' href={`/collection/${mainState.user.userid}`}>
+                                        <span className='fa fa-film fa-md m-1'></span> Collection
+                                    </a>
+                            </NavItem>
+                            : <NavItem className='nav-item nav-i'>
+                                <a className='nav-link' href='#_Verify_your_account_to_access_Collection_page_' >
+                                    <span className='fa fa-film fa-md m-1'
+                                        onClick={() => {toast.error("Verify your account to access Collection page")}}>Collection *</span>
                                 </a>
                             </NavItem> : null}
                             <NavItem className='nav-item nav-i'>

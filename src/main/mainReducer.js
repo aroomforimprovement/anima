@@ -9,8 +9,9 @@ export const mainReducer = (state, action) => {
             if(action.data.isAuthenticated){
                 const user = action.data.user;
                 const userid = user.sub.replace('auth0|', '');
+                const verified = user.email_verified;
                 storedUser = {userid: userid, email: user.email,
-                    username: user.nickname, isAuth: true, 
+                    username: user.nickname, isAuth: true, isVerified: verified, 
                     access: (state.user && state.user.access) ? state.user.access : null}
             }
             return({...state, user: storedUser});

@@ -12,6 +12,27 @@ export const toastConfirmStyle = (id) => {
     };    
 }
 
+export const toastForeverStyle = (id) => {
+    return {
+        duration: 3000, 
+        id: id,
+        position: 'bottom-center',
+        style: {
+            color: '#fff',
+            backgroundColor: '#aaa',
+            textAlign: 'start',
+            minWidth: '100vw',
+            padding: '5px'
+        }
+    }
+}
+
+export const ToastForever = ({t, message}) => {
+    return(
+        <div>{message}</div>
+    );
+}
+
 export const ToastConfirm = ({t, approve, dismiss, message, approveBtn, dismissBtn}) => {
 
     return (
@@ -63,3 +84,4 @@ export const handleProgress = (promise, loading, success, error) => {
         error: error
     });
 }
+

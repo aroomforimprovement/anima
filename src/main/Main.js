@@ -11,12 +11,12 @@ import Account from '../account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
-import { handleFailedConnection, handleProgress } from '../common/Toast';
+import { handleFailedConnection, handleProgress, ToastConfirm, toastConfirmStyle, ToastForever, toastForeverStyle } from '../common/Toast';
 import './main.css';
 import { SITE } from '../shared/site';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { TopProgressBar } from '../common/ProgressBar';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const MainContext = createContext({});
@@ -46,6 +46,19 @@ const Main = () => {
     
 
     useEffect(() =>{
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+        const setUnverifiedWarning = () => {
+            toast((t) => (
+                <ToastForever t={t} approve={dismiss} dismiss={dismiss}
+                    message={"Thanks for signing up to use Animator. "+
+                        "You'll need to verify your account to access some features. "+ 
+                        "Check your email and follow the link to verify."}
+                    dismissBtn={"OK"} approveBtn={"Cool"} />
+            ), toastForeverStyle('unverified'));
+        }
+
         if(!isLoading && !mainState.user){
             mainDispatch({
                 type: 'CHECK_AUTH',
@@ -53,8 +66,13 @@ const Main = () => {
                     isAuthenticated: isAuthenticated,
                     user: user
                 }
-            })
+            });
         }
+        if(mainState.user && mainState.user.isAuth && !mainState.user.isVerified){
+            setUnverifiedWarning();
+            //console.log("unverified")
+        }
+        
     },[isLoading, mainState.user, isAuthenticated, user]);
 
     useEffect(() => {
