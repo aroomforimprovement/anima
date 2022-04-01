@@ -37,12 +37,12 @@ const Header = () => {
                             {!mainState 
                                 ? <Loading /> 
                                 : mainState.user && mainState.user.isAuth 
-                                ? mainState.user.verified
+                                ? mainState.user.isVerified
                                 ? <NavItem className='nav-item nav-i'>
                                     <a className='nav-link' href={`/collection/${mainState.user.userid}`}>
                                         <span className='fa fa-film fa-md m-1'></span> Collection
                                     </a>
-                            </NavItem>
+                                </NavItem>
                             : <NavItem className='nav-item nav-i'>
                                 <a className='nav-link' href='#_Verify_your_account_to_access_Collection_page_' >
                                     <span className='fa fa-film fa-md m-1'
