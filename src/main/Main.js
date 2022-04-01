@@ -11,7 +11,7 @@ import Account from '../account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
-import { handleFailedConnection, handleProgress, ToastConfirm, toastConfirmStyle, ToastForever, toastForeverStyle } from '../common/Toast';
+import { handleFailedConnection, handleProgress, ToastForever, toastForeverStyle } from '../common/Toast';
 import './main.css';
 import { SITE } from '../shared/site';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
