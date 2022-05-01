@@ -11,12 +11,10 @@ import Account from '../account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from '../account/accountReducer';
-import { handleFailedConnection, handleProgress, ToastForever, toastForeverStyle } from '../common/Toast';
 import './main.css';
-import { SITE } from '../shared/site';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { TopProgressBar } from '../common/ProgressBar';
-import { ToastRack, useToastRack} from 'buttoned-toaster';
+import { ToastRack } from 'buttoned-toaster';
 
 const MainContext = createContext({});
 
@@ -30,7 +28,6 @@ const Main = () => {
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {progressFrame: {max: 0, now: 0}});
     const stateOfMain = { mainState, mainDispatch };
-    const toast = useToastRack();
     const {history} = useHistory();
     
     const HomePage = () => { return <Home /> }
@@ -46,18 +43,24 @@ const Main = () => {
 
     useEffect(() =>{
         const dismiss = (id) => {
-            toast.dismiss(id);
+            //toast.dismiss(id);
         }
         const setUnverifiedWarning = () => {
-            toast((t) => (
-                <ToastForever t={t} approve={dismiss} dismiss={dismiss}
-                    message={"Thanks for signing up to use Animator. "+
+            /*toast.warn(
+                { 
+                    duration: 1661,
+                    approveFunc: dismiss, 
+                    dismissFunc: dismiss,
+                    message: "Thanks for signing up to use Animator. "+
                         "You'll need to verify your account to access some features. "+ 
-                        "Check your email and follow the link to verify."}
-                    dismissBtn={"OK"} approveBtn={"Cool"} />
-            ), toastForeverStyle('unverified'));
+                        "Check your email and follow the link to verify.",
+                    dismissTxt: "OK", 
+                    approveTxt: "Cool",
+                    toastId: "unverified"
+                }
+            );*/
         }
-
+        
         if(!isLoading && !mainState.user){
             mainDispatch({
                 type: 'CHECK_AUTH',
@@ -69,10 +72,8 @@ const Main = () => {
         }
         if(mainState.user && mainState.user.isAuth && !mainState.user.isVerified){
             setUnverifiedWarning();
-            //console.log("unverified")
         }
-        
-    },[isLoading, mainState.user, isAuthenticated, user, toast]);
+    },[isLoading, mainState.user, isAuthenticated, user]);
 
     useEffect(() => {
         const setAccessToken = async () => {
@@ -85,7 +86,7 @@ const Main = () => {
 
     useEffect(() => {
         if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices && !mainState.isSet){
-            const accPromise = getAccountInfo(mainState.user.userid, mainState.user.access)
+            getAccountInfo(mainState.user.userid, mainState.user.access)
                 .then((result) => {
                     if(result){
                         result.isSet = true;
@@ -93,20 +94,16 @@ const Main = () => {
                             type: 'SET_ACCOUNT_INFO',
                             data: result
                         });
+                        //toast.success("Account info ready");
                     }else{
                         mainDispatch({
                             type: 'SET_ACCOUNT_INFO',
                             data: {isSet: true}
                         });
-                        handleFailedConnection(SITE.failed_retrieval_message, false);
+                        //handleFailedConnection(SITE.failed_retrieval_message, false, toast);
                     }
                     
                 });
-            handleProgress(
-                accPromise, 
-                "Retrieving account info...",
-                "Account info retrieved ok",
-                "Failed to retrieve account info");
 
         }else if(!isLoading && !isAuthenticated && !mainState.isSet){
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});

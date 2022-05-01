@@ -5,6 +5,8 @@ import { updateDisplayName } from '../accountReducer';
 import { Loading } from '../../common/Loading';
 import { Form, FormGroup, InputGroup, Input, Button } from 'reactstrap';
 import { useToastRack } from 'buttoned-toaster';
+import { handleFailedConnection } from '../../common/Toast';
+import { SITE } from '../../shared/site';
 
 export const DisplayName = () => {
 
@@ -26,6 +28,8 @@ export const DisplayName = () => {
             mainDispatch({type: 'SET_USERNAME', data: name});
             setIsNameUpdating(false);
             toast.success("Display Name updated");
+        }).catch((error) => {
+            handleFailedConnection(SITE.failed_connection_message, false, toast);
         });
         
         setHideNameEdit(true);

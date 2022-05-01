@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {SITE} from '../../shared/site';
 import { useMainContext } from '../../main/Main';
 import { useAccountContext } from '../Account';
@@ -11,10 +11,6 @@ export const Notice = ({notice, i, link}) => {
     const { mainState } = useMainContext();    
     const { state, dispatch } = useAccountContext();
     const toast = useToastRack();
-
-    useEffect(() => {
-        
-    },[state.notices]);
 
     const handleAcceptNotice = (i) => {
         //only handling contact req for the moment

@@ -1,8 +1,5 @@
 import { values, CC } from '../values';
 import { saveAs } from 'file-saver';
-import toast from 'react-hot-toast';
-
-
 
 /***
  * DRAWING
@@ -139,7 +136,7 @@ export const renderAnim = async (params) => {
     });
     capturer.stop();
     const duration = performance.now() - startTime;
-    console.log("Capture took "+duration);
+    //console.log("Capture took "+duration);
     capturer.save((blob) => {
         if(params.type.indexOf('VIEW') > -1){ 
             playPreview(
@@ -222,13 +219,14 @@ export const setThumbCaptured = async (f, name, index, p5, p5canvas,
 
 }
 
-export const downloadAnimAsWebm = (params) => {
+export const downloadAnimAsWebm = async (params) => {
     params.type = 'DOWNLOAD';
     try{
         renderAnim(params);
+        return true;
     }catch(err){
         console.error("Error trying renderAnim: downloadAnimAsWebm");
-        toast.error("Error downloading file");
+        return false;
     }
 }
 

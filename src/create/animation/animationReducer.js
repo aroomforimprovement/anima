@@ -1,6 +1,4 @@
-import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
-import { handleProgress } from '../../common/Toast';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -71,16 +69,12 @@ export const newAnimState = (user) => {
  */
 export const animReducer = (state, action) => {
     //save anim and send to auth
-    const saveTempAnim = (anim) => {
-        //console.log("saveTempAnim:");
-        //console.dir(anim);
+    const saveTempAnim = async (anim) => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
         return anim.id;
     }
 
     const saveAnimToAccount = async (anim, access) => {
-        //console.log("saveAnimToAccount:");
-        //console.dir(anim);
         return fetch(`${apiUrl}anim`, {
             method: 'POST',
             mode: 'cors',
@@ -92,18 +86,17 @@ export const animReducer = (state, action) => {
         })
         .then(response => {
             if(response.ok){ 
-                //console.log("anim saved ok " + response.json());
-                toast.success("Anim saved to account");
+                return true;
             }else{ 
-                //dispatch({type: 'setSaveFailed', data: true});
                 console.error("response not ok") }
+                return false;
         }, error => { 
-            //dispatch({type: 'setSaveFailed', data: true});
             console.error("error saving anim");
+            return false;
         })
         .catch(error => { 
-            toast.error("Error saving Anim to account");
             console.error(error)
+            return false;
         });
     }
     
@@ -132,11 +125,7 @@ export const animReducer = (state, action) => {
             let newRedos = [...state.redos];
             let isSameAsPrevious = newUndos[newUndos.length-1] === action.data;
             if(!isSameAsPrevious){
-                //console.log("not same as previous");
-                //const points = getPointsScaledToDefault(action.data);
                 newUndos.push(action.data);
-            }else{
-                //console.log("same as previous");
             }
             if(state.undid.length > 0){
                 newRedos = [];
@@ -240,7 +229,7 @@ export const animReducer = (state, action) => {
                 anim.size = action.data;
                 saveAnimToAccount(state.anim, action.data);
             }
-            return ({...state, enabled: true, isSaveOpen: false, temp: temp, saveClose: true});
+            return ({...state, enabled: true, isSaveOpen: false, temp: temp, saveClose: true});    
         }
         case 'CANCEL_SAVE':{
             return({...state, enabled: true, isSaveOpen: false, saveClose: true});

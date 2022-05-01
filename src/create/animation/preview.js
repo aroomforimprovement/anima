@@ -1,8 +1,5 @@
 import { previewAnim, previewAnimMobile } from './anim-util';
 import { values } from '../values';
-import toast from 'react-hot-toast';
-import { handleProgress } from '../../common/Toast';
-//import { isMobile } from 'react-device-detect';
 
 export const preview = (p5) => {
     //temp switch to turn off thumbs on mobile, using video
@@ -43,7 +40,7 @@ export const preview = (p5) => {
                 );
             }else{
                 //console.log("previewAnim")
-                const previewPromise = previewAnim(
+                previewAnim(
                     {
                         a: props.anim, 
                         type: props.type, 
@@ -57,11 +54,6 @@ export const preview = (p5) => {
                         mainDispatch: props.mainDispatch
                     }
                 );
-                if(!props.clip){
-                    handleProgress(previewPromise,
-                    `Rendering ${props.anim.name}`,
-                    `${props.anim.name} ready!`, "Oh no, something went wrong :(");
-                }
             }
             
         }

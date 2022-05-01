@@ -1,9 +1,6 @@
 import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
-import toast from 'react-hot-toast';
-import { handleProgress, ToastConfirm, toastConfirmStyle } from '../../common/Toast';
-
 
 export const sketch = (p5) => {
     let p5canvas = undefined;
@@ -16,17 +13,22 @@ export const sketch = (p5) => {
     let isStroke = false;
     let isMounted = false;
     let isSet = false;
+    let toast;
 
     const handleNoFramesAlert = () => {
         const dismiss = (id) => {
             toast.dismiss(id);
         }
-        toast((t) => (
-            <ToastConfirm t={t} approve={dismiss} dismiss={dismiss}
-                message={`Looks like you tried to render an animation with no frames. 
-                    Save a frame and try again`}
-                dismissBtn={"OK"} approveBtn={"Cool"} />
-        ), toastConfirmStyle());
+        toast.info(
+            {
+                approveFunc: dismiss,
+                dismissFunc: dismiss,
+                message: `Looks like you tried to render an animation with no frames. 
+                    Save a frame and try again`,
+                dismissTxt: "OK", 
+                approveTxt:"Cool"
+            }
+        );
     }
     /**
      *  P5
@@ -46,9 +48,10 @@ export const sketch = (p5) => {
 
     p5.updateWithProps = (props) => {
         isMounted = true;
+        if(!toast && props.toast){ toast = props.toast};
         if(props.controls){ controls = props.controls; }
-        if(props.updateControls && !updateControls){ updateControls = props.updateControls; }
-        if(props.mainDispatch && !mainDispatch){mainDispatch = props.mainDispatch}
+        if(!updateControls && props.updateControls){ updateControls = props.updateControls; }
+        if(!mainDispatch && props.mainDispatch){mainDispatch = props.mainDispatch}
         if(props.anim){ 
             anim = props.anim;
             if(props.anim.isSet && !isSet){
@@ -111,12 +114,15 @@ export const sketch = (p5) => {
                         p5canvas: p5canvas, 
                         p5: p5,
                         drawing: true
-                    });
+                    }).then(res => res 
+                        ? toast.success("Anim downloaded") 
+                        : toast.error("Problem downloading anim")
+                    ).catch(err => console.error(err));
             }            
         }
         if(props.controls.preview && props.anim.isPreviewOpen){
                 updateControls({type: 'PREVIEW', data: false});        
-                const previewPromise = previewAnim(
+                previewAnim(
                     {
                         a: anim.anim, 
                         type: 'DRAWING',
@@ -130,8 +136,6 @@ export const sketch = (p5) => {
                 ).then(() => {
                         p5.resizeCanvas(10, 10);
                 });
-                handleProgress(previewPromise,
-                    `Rendering your anim`, `Anim rendered ok`, `Something went wrong :(`)
         }else if(props.controls.preview){
             if(anim.anim.frames.length < 1){
                 updateControls({type: 'PREVIEW', data: false});

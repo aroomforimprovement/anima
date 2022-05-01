@@ -1,5 +1,3 @@
-import { handleFailedConnection } from "../common/Toast";
-import { SITE } from "../shared/site";
 import { arrayRemove } from "../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -51,7 +49,7 @@ export const getAccountInfo = async (id, access) => {
     }).catch(err => console.error("Error fetching data: getAccountInfo"));
 }
 
-export const deleteAccount = async (userid, access) => {
+export const deleteAccount = async (userid, access, toast) => {
     return fetch(`${apiUrl}collection/${userid}`, {
         method: 'DELETE',
         mode: 'cors',
@@ -61,7 +59,7 @@ export const deleteAccount = async (userid, access) => {
     }).then((response) => {
         return response;
     }).catch((error) => {
-        handleFailedConnection(SITE.failed_delete_message);
+        console.error(`deleteAccount: ${error}`);
     })
 }
 
@@ -136,7 +134,6 @@ export const updateDisplayName = async (id, name, access) => {
         console.error("Error fetching data: updateDisplayName");
     }).catch((error) => {
         console.error("Error fetching data: updateDisplayName");
-        handleFailedConnection();
     })
 }
 

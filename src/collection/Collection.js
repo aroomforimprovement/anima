@@ -5,7 +5,6 @@ import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import { useToastRack } from 'buttoned-toaster';
-import { handleFailedConnection, handleProgress } from '../common/Toast';
 import './collection.css';
 import { SITE } from '../shared/site';
 import { Viewer } from './Viewer';
@@ -90,10 +89,14 @@ const Collection = ({browse}) => {
     const [isFailed, setIsFailed] = useState(false);
     
     useEffect(() => {
-        if(isFailed){
-            handleFailedConnection(SITE.failed_retrieval_message, true);        
+        const handleFailure = async () => {
+            //handleFailedConnection(SITE.failed_retrieval_message, true, toast);
+            console.error(SITE.failed_connection_message)
         }
-    }, [isFailed])
+        if(isFailed){
+            handleFailure();
+        }
+    }, )
 
     useEffect( () => {
         const controller = new AbortController();
@@ -104,7 +107,7 @@ const Collection = ({browse}) => {
         
         if(!isFailed && !collectionState.isSet && mainState.isSet){
             const access = mainState.user ? mainState.user.access : undefined
-            const collPromise = getCollection(splat, browse, access, signal)
+            getCollection(splat, browse, access, signal)
                 .then((response) => {
                     if(browse){
                         setCollection({anims: response, isSet: true, signal});
@@ -117,8 +120,6 @@ const Collection = ({browse}) => {
                 .catch((error) => {
                     setIsFailed(true, signal);
                 });
-            handleProgress(collPromise, 
-                "Loading animations...", "Animations ahoy!", "Failed to load animations")
         }
         return () => {
             controller.abort();

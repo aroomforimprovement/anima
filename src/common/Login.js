@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 import { Loading } from './Loading';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
-import { handleFailedConnection } from './Toast';
 import { SITE } from '../shared/site';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -10,7 +9,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const Login = () => {
 
     const { mainState  } = useMainContext();
-
     const putLogin = async (login, signal) => {
         return await fetch(`${apiUrl}login`, {
             method: 'POST',
@@ -40,7 +38,7 @@ const Login = () => {
         )
         .catch(error => { 
             dispatch({type: 'setIsFailed', data: true});
-            handleFailedConnection(SITE.failed_connection_message, true);
+            //handleFailedConnection(SITE.failed_connection_message, true, toast);
             console.error("Error fetching data: putLogin")
         });
     }
@@ -136,7 +134,8 @@ const Login = () => {
             await putLogin(login);
         }
         if(state.isFailed){
-            handleFailedConnection(SITE.failed_connection_message, true);
+            console.error(SITE.failed_connection_message)
+            //handleFailedConnection(SITE.failed_connection_message, true, toast);
         }
         if(!state.isRegistered && state.isLoaded 
             && (mainState && mainState.user && mainState.user.access) 

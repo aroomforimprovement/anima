@@ -9,7 +9,7 @@ import { Privacy } from '../controller/ControllerBtns';
 import { useMainContext } from '../../main/Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
-import { handleProgress } from '../../common/Toast';
+import { useToastRack } from 'buttoned-toaster';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -21,7 +21,7 @@ export const useAnimContext = () => {
 
 
 export const Animation = ({edit, splat, loggingIn}) => {
-
+    const toast = useToastRack();
     const { mainState, mainDispatch } = useMainContext();
     
     const [ access, setAccess ] = useState(null);
@@ -79,8 +79,7 @@ export const Animation = ({edit, splat, loggingIn}) => {
             updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
         }
         if(!anim.isSet && splat && mainState.user && access){
-            const animPromise = getSavedAnim(splat, signal);
-            handleProgress(animPromise, "Loading animation", "Animation ready to edit!", "Something went wrong :(");
+            getSavedAnim(splat, signal);
         }
         return () => {
             controller.abort();
@@ -93,6 +92,9 @@ export const Animation = ({edit, splat, loggingIn}) => {
         updateAnim({type: 'USERID', data: true});
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
+            if(anim.save){
+
+            }
         }else{
             redirectAfterTempSave(anim.temp);
         }
@@ -145,7 +147,7 @@ export const Animation = ({edit, splat, loggingIn}) => {
             <ControlContext.Consumer> 
                 {() => (
                 <AnimContext.Provider value={animState} >
-                    <ReactP5Wrapper sketch={sketch} 
+                    <ReactP5Wrapper sketch={sketch} toast={toast}
                         controls={controls} updateControls={updateControls}
                         anim={anim} updateAnim={updateAnim} index={'temp'}
                         mainDispatch={mainDispatch}

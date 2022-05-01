@@ -5,7 +5,6 @@ import { DisplayName } from './components/DisplayName';
 import { useMainContext } from '../main/Main';
 import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
 import { useToastRack } from 'buttoned-toaster';
-import { handleFailedConnection } from '../common/Toast';
 import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
 import { SITE } from '../shared/site';
@@ -27,12 +26,6 @@ const Account = () => {
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
     const [isFailed, setIsFailed] = useState(false);
-
-    useEffect(() => {
-        if(isFailed){
-            handleFailedConnection(SITE.failed_retrieval_message, false);
-        }
-    }, [isFailed])
 
     useEffect(() => {
         const getAccountId = () => {
@@ -59,6 +52,13 @@ const Account = () => {
             setAccountInfo();
         }
     },[mainState.user, state.notices, state.contacts, state.isSet, isFailed]);
+
+    useEffect(() => {
+        if(isFailed && !state.isSet){
+            console.error(SITE.failed_connection_message);
+            //handleFailedConnection(SITE.failed_retrieval_message, false, toast);
+        }
+    }, [isFailed, state.isSet])
 
     const handleShowContacts = () => {
         setHideContacts(!hideContacts);
@@ -89,7 +89,7 @@ const Account = () => {
             toast.dismiss(id);
         }
 
-        toast.error(
+        toast.warn(
             { 
                 approveFunc: approve, 
                 dismissFunc: dismiss,

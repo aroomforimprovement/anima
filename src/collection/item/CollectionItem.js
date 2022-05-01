@@ -5,7 +5,7 @@ import LazyLoad from "react-lazyload";
 import { useMainContext } from "../../main/Main";
 import { useCollectionContext } from "../Collection";
 import { useToastRack } from "buttoned-toaster";
-import { collectionItemReducer } from './collectionItemReducer';
+import { collectionItemReducer, deleteAnim } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
 import { Info } from "./Info";
@@ -16,7 +16,6 @@ const collectionItemInitialState = {viewFile: null, viewName: null,
     previewFile: null, previewName: null, hidden: false, deleted: false,
     progressFrame: {max: 0, now: 0}
 }
-
 
 export const CollectionItem = ({anim, index}) => {
     const [isDownloading, setIsDownloading] = useState(false);
@@ -44,19 +43,22 @@ export const CollectionItem = ({anim, index}) => {
     }
     
     const handleDelete = (e) => {
+
         const approve = (id) => {
-            collectionItemDispatch(
-                {
-                    type: 'DELETE_ANIM', 
-                    data: {
-                        animid: anim.animid,
-                        user: mainState.user
-                    }
+            console.dir(anim);
+            deleteAnim(anim.animid, mainState.user)
+            .then((res) => {
+                if(res){
+                    toast.success("Anim deleted");
+                    collectionItemDispatch({type: 'DELETE_ANIM'});
+                    setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
+                }else{
+                    toast.error("Error deleting the anim");
                 }
-            );
-            setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
-            // eslint-disable-next-line no-self-assign
-            //window.location.href = window.location.href;
+            })
+            .catch((err) => {
+                console.error("Error fetching data: deleteAnim");
+            })
             toast.dismiss(id);
         };
         const dismiss = (id) => {
@@ -65,8 +67,8 @@ export const CollectionItem = ({anim, index}) => {
 
         toast.warn(
             {
-                approveFunc: approve,
-                dismissFunc: dismiss,
+                approveFunc: (id, dontshow) => approve(id, dontshow),
+                dismissFunc: (id, dontshow) => dismiss(id, dontshow),
                 message:`Are you sure you want to permanently delete anim \n"${anim.name}"`,
                 approveTxt: "Delete", 
                 dismissTxt: "Cancel"
