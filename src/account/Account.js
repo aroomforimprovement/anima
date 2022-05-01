@@ -4,8 +4,8 @@ import { Contact } from './components/Contact';
 import { DisplayName } from './components/DisplayName';
 import { useMainContext } from '../main/Main';
 import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
-import toast from 'react-hot-toast';
-import { handleFailedConnection, ToastConfirm, toastConfirmStyle } from '../common/Toast';
+import { useToastRack } from 'buttoned-toaster';
+import { handleFailedConnection } from '../common/Toast';
 import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
 import { SITE } from '../shared/site';
@@ -22,6 +22,7 @@ const Account = () => {
     const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
     const { mainState } = useMainContext();
     const { logout } = useAuth0();
+    const toast = useToastRack();
 
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
@@ -88,9 +89,11 @@ const Account = () => {
             toast.dismiss(id);
         }
 
-        toast((t) => (
-            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
-                message={
+        toast.error(
+            { 
+                approveFunc: approve, 
+                dismissFunc: dismiss,
+                message:
                     <div>
                         <p>
                             You are about to delete your Anima account, all your anims and
@@ -100,9 +103,11 @@ const Account = () => {
                             (If you log in with the same username and password again, Anima will
                             create a new account)
                         </p>
-                    </div>}
-                approveBtn={"Delete everything"} dismissBtn={"Maybe later"} />
-        ), toastConfirmStyle());
+                    </div>,
+                approveTxt: "Delete everything", 
+                dismissTxt: "Maybe later"
+            }
+        );
     }
 
     const notices = state.notices && state.notices.length > 0 

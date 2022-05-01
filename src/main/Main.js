@@ -16,8 +16,7 @@ import './main.css';
 import { SITE } from '../shared/site';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { TopProgressBar } from '../common/ProgressBar';
-import toast, { Toaster } from 'react-hot-toast';
-
+import { ToastRack, useToastRack} from 'buttoned-toaster';
 
 const MainContext = createContext({});
 
@@ -31,7 +30,7 @@ const Main = () => {
     const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
     const [mainState, mainDispatch] = useReducer(mainReducer, {progressFrame: {max: 0, now: 0}});
     const stateOfMain = { mainState, mainDispatch };
-    
+    const toast = useToastRack();
     const {history} = useHistory();
     
     const HomePage = () => { return <Home /> }
@@ -73,7 +72,7 @@ const Main = () => {
             //console.log("unverified")
         }
         
-    },[isLoading, mainState.user, isAuthenticated, user]);
+    },[isLoading, mainState.user, isAuthenticated, user, toast]);
 
     useEffect(() => {
         const setAccessToken = async () => {
@@ -124,7 +123,7 @@ const Main = () => {
                 <MainContext.Consumer>
                     {() => (
                     <div>
-                        <Toaster />
+                        <ToastRack />
                         <Header />
                         <Switch>
                             <Route path='/account' history={history} component={AccountPage} />

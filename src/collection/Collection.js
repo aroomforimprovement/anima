@@ -4,8 +4,8 @@ import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
-import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle, handleFailedConnection, handleProgress } from '../common/Toast';
+import { useToastRack } from 'buttoned-toaster';
+import { handleFailedConnection, handleProgress } from '../common/Toast';
 import './collection.css';
 import { SITE } from '../shared/site';
 import { Viewer } from './Viewer';
@@ -26,7 +26,8 @@ const Collection = ({browse}) => {
 
     const { mainState, mainDispatch } = useMainContext();
     const splat = useParams()[0];
-      
+    const toast = useToastRack();
+
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
@@ -71,13 +72,17 @@ const Collection = ({browse}) => {
             toast.dismiss(id);
         }     
 
-        toast((t) => (
-            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
-                message={`You are about to send a contact request to ${collectionState.username}. 
+        toast.info( 
+            {
+                approveFunc: approve, 
+                dismissFunc: dismiss,
+                message: `You are about to send a contact request to ${collectionState.username}. 
                     After they approve the request, you will be able view all of eachother's anims,
-                     even the ones marked Private`}
-                approveBtn={"Send Contact Request"} dismissBtn={"Maybe later"} />
-        ), toastConfirmStyle());
+                     even the ones marked Private`,
+                approveTxt: "Send Contact Request", 
+                dismissTxt: "Maybe later"
+            }
+        );
     }
     
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 

@@ -4,8 +4,7 @@ import { preview } from "../../create/animation/preview";
 import LazyLoad from "react-lazyload";
 import { useMainContext } from "../../main/Main";
 import { useCollectionContext } from "../Collection";
-import toast from "react-hot-toast";
-import { ToastConfirm, toastConfirmStyle } from "../../common/Toast";
+import { useToastRack } from "buttoned-toaster";
 import { collectionItemReducer } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
@@ -24,6 +23,7 @@ export const CollectionItem = ({anim, index}) => {
     const { mainState, mainDispatch } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
+    const toast = useToastRack();
 
     const handleView = async (e) => {
         setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
@@ -63,11 +63,15 @@ export const CollectionItem = ({anim, index}) => {
             toast.dismiss(id);
         } 
 
-        toast((t) => (
-            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
-                message={`Are you sure you want to permanently delete anim \n"${anim.name}"`}
-                approveBtn={"Delete"} dismissBtn={"Cancel"} />
-        ), toastConfirmStyle());
+        toast.warn(
+            {
+                approveFunc: approve,
+                dismissFunc: dismiss,
+                message:`Are you sure you want to permanently delete anim \n"${anim.name}"`,
+                approveTxt: "Delete", 
+                dismissTxt: "Cancel"
+            }
+        );
     }
 
 

@@ -5,12 +5,13 @@ import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../shared/site';
 import { useMainContext } from '../main/Main';
-import { toast } from 'react-hot-toast';
+import { useToastRack } from 'buttoned-toaster';
 
 const Header = () => {
     
     const { mainState } = useMainContext();
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const toast = useToastRack();
     const logo = process.env.REACT_APP_URL + '/assets/site-logo.svg'
     
     const toggleNav = () => {

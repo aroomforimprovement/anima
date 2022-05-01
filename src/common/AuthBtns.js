@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from './Toast';
+import { useToastRack } from 'buttoned-toaster';
 
-const loginPop = async (loginWithPopup, screenHint) => {
+const loginPop = async (loginWithPopup, screenHint, toast) => {
         
     const doLogin = (t) => {
         t ? toast.dismiss(t) : console.debug();
@@ -14,20 +13,23 @@ const loginPop = async (loginWithPopup, screenHint) => {
     }
     window.location.href.indexOf('/create') > -1
     ?
-    toast((t) => (
-        <ToastConfirm t={t} approve={doLogin} dismiss={dismiss}
-            message={`If you log in now, you will lose any unsaved changes in your animation.
-             Click cancel to go back and save your work. Click OK to proceed without saving`}
-             dismissBtn={"Cancel"} approveBtn={"OK"}/>
-
-    ), toastConfirmStyle())
-    :
+    toast.fire(
+        { 
+            message: `If you log in now, you will lose any unsaved changes in your animation.
+             Click cancel to go back and save your work. Click OK to proceed without saving`,
+            approveFunc: doLogin,
+            dismissFunc: dismiss,
+            dismissTxt: "Cancel", 
+            approveTxt: "OK",
+        }
+    ) :     
     doLogin();
 }
 
 export const LoginBtn = ({size}) => {
     const classes = `btn btn-secondary ${size} m-1`;
     const { loginWithPopup, user } = useAuth0();
+    const toast = useToastRack();
 
     useEffect(() => {
         if(user){
@@ -36,7 +38,7 @@ export const LoginBtn = ({size}) => {
     }, [user]);
 
     return <button 
-            onClick={() => loginPop(loginWithPopup, 'login')}
+            onClick={() => loginPop(loginWithPopup, 'login', toast)}
             type='button' 
             className={classes}
             >Login</button>
@@ -47,6 +49,7 @@ export const LogoutBtn = (props) => {
     const classes = `btn btn-secondary ${props.size} m-1`;
     const url = `${process.env.REACT_APP_URL}/logout`;
     const { logout } = useAuth0();
+
     const handleLogout = () => {
         logout({url});
         localStorage.removeItem('userid');
@@ -65,9 +68,10 @@ export const LogoutBtn = (props) => {
 export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
     const { loginWithPopup } = useAuth0();
-    
+    const toast = useToastRack();
+
     return <button
-            onClick={() => loginPop(loginWithPopup, 'signup')}
+            onClick={() => loginPop(loginWithPopup, 'signup', toast)}
             type='button'
             className={classes}
             >Sign up</button>

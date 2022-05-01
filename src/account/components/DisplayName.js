@@ -4,13 +4,13 @@ import { useAccountContext } from '../Account';
 import { updateDisplayName } from '../accountReducer';
 import { Loading } from '../../common/Loading';
 import { Form, FormGroup, InputGroup, Input, Button } from 'reactstrap';
-import toast from 'react-hot-toast';
+import { useToastRack } from 'buttoned-toaster';
 
 export const DisplayName = () => {
 
     const [hideNameEdit, setHideNameEdit] = useState(true);
     const [isNameUpdating, setIsNameUpdating] = useState(false);
-
+    const toast = useToastRack();
     const { mainState, mainDispatch } = useMainContext();
     const { state, dispatch } = useAccountContext();
     const handleEditUsername = (e) => {

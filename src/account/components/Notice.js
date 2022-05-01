@@ -3,14 +3,14 @@ import {SITE} from '../../shared/site';
 import { useMainContext } from '../../main/Main';
 import { useAccountContext } from '../Account';
 import { addContact, deleteNotice } from '../accountReducer';
-import toast from 'react-hot-toast';
-import { ToastConfirm, toastConfirmStyle } from '../../common/Toast';
+import { useToastRack } from 'buttoned-toaster';
 
 
 export const Notice = ({notice, i, link}) => {
 
     const { mainState } = useMainContext();    
     const { state, dispatch } = useAccountContext();
+    const toast = useToastRack();
 
     useEffect(() => {
         
@@ -37,13 +37,17 @@ export const Notice = ({notice, i, link}) => {
             toast.dismiss(id);
         }
 
-        toast((t) => (
-            <ToastConfirm t={t} approve={approve} dismiss={dismiss}
-                message={`By approving this contact request, you are allowing 
+        toast.info(
+            {
+                approveFunc: approve, 
+                dismissFunc: dismiss,
+                message: `By approving this contact request, you are allowing 
                     the user "${state.notices[i].reqUsername}" to view all of 
-                    your anims, including those marked Private`}
-                approveBtn={"Approve"} dismissBtn={"Maybe later"} />
-        ), toastConfirmStyle());
+                    your anims, including those marked Private`,
+                approveTxt: "Approve", 
+                dismissTxt:"Maybe later",
+            }
+        );
         
     }
 

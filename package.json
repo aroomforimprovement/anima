@@ -12,6 +12,7 @@
     "bootstrap": "^5.1.1",
     "browserify-zlib": "^0.2.0",
     "buffer-browserify": "^0.2.5",
+    "buttoned-toaster": "0.1.2",
     "chai": "^4.3.4",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
