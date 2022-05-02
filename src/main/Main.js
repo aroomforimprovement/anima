@@ -5,17 +5,15 @@ import Footer from '../common/Footer';
 import Home from './Home';
 import Login from '../common/Login';
 import Logout from '../common/Logout';
-import Create from '../create/Create';
-import Collection from '../collection/Collection';
-import Account from '../account/Account';
+import Create from './create/Create';
+import Collection from './collection/Collection';
+import Account from './account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getAccountInfo } from '../account/accountReducer';
+import { getAccountInfo } from './account/accountReducer';
 import './main.css';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
-import { TopProgressBar } from '../common/ProgressBar';
-import toast from 'buttoned-toaster';
-import { ToastRack } from 'buttoned-toaster';
+import toast, { ToastRack } from 'buttoned-toaster';
 import { SITE } from '../shared/site';
 import { handleFailedConnection } from '../common/Toast';
 
@@ -139,10 +137,6 @@ const Main = () => {
                             <Route path='/' history={history} component={HomePage} />
                             <Redirect to='/home' history={history}/>
                         </Switch>
-                        <div>{(isLoading || mainState.progressFrame.max > 0)
-                             && <TopProgressBar />}
-                             {/**this is pointless with out a show prop */}
-                        </div>
                         <Footer />
                         <ToastRack />
                     </div>

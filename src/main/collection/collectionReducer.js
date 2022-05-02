@@ -1,4 +1,4 @@
-import { arrayRemove } from "../utils/utils";
+import { arrayRemove } from "../../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

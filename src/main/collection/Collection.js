@@ -1,17 +1,17 @@
 import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './item/CollectionItem';
-import { Loading } from '../common/Loading';
-import { useMainContext } from '../main/Main';
+import { Loading } from '../../common/Loading';
+import { useMainContext } from '../Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
 import './collection.css';
-import { SITE } from '../shared/site';
+import { SITE } from '../../shared/site';
 import { Viewer } from './Viewer';
-import { Div } from '../common/Div';
+import { Div } from '../../common/Div';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
-import { handleFailedConnection } from '../common/Toast';
+import { handleFailedConnection } from '../../common/Toast';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,

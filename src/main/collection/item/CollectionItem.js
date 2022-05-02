@@ -2,16 +2,16 @@ import React, { useState, useReducer } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
 import LazyLoad from "react-lazyload";
-import { useMainContext } from "../../main/Main";
+import { useMainContext } from "../../Main";
 import { useCollectionContext } from "../Collection";
 import toast from "buttoned-toaster";
 import { collectionItemReducer, deleteAnim } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
 import { Buttons } from "./Buttons";
 import { Info } from "./Info";
-import { Div } from "../../common/Div";
+import { Div } from "../../../common/Div";
 import { saveAs } from "file-saver";
-import { Loading } from "../../common/Loading";
+import { Loading } from "../../../common/Loading";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false,

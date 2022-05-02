@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
     FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import { SITE } from '../../shared/site';
+import { SITE } from '../../../shared/site';
 import { CC, CONTROLS, values } from '../values';
 import { useControlContext } from '../Create';
 import { ShortcutInfo } from './ControllerInfo';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useControlContext } from '../Create'; 
 import { CC } from '../values';
-import { SITE } from '../../shared/site';
+import { SITE } from '../../../shared/site';
 
 export const ControllerInfo = () => {
     

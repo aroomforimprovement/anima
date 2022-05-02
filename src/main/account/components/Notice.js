@@ -1,6 +1,6 @@
 import React from 'react';
-import {SITE} from '../../shared/site';
-import { useMainContext } from '../../main/Main';
+import {SITE} from '../../../shared/site';
+import { useMainContext } from '../../Main';
 import { useAccountContext } from '../Account';
 import { addContact, deleteNotice } from '../accountReducer';
 import { useToastRack } from 'buttoned-toaster';

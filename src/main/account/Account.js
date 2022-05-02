@@ -2,13 +2,13 @@ import React, { useEffect, useReducer, createContext, useContext, useState } fro
 import { Notice } from './components/Notice';
 import { Contact } from './components/Contact';
 import { DisplayName } from './components/DisplayName';
-import { useMainContext } from '../main/Main';
+import { useMainContext } from '../Main';
 import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
 import toast from 'buttoned-toaster';
 import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
-import { SITE } from '../shared/site';
-import { handleFailedConnection } from '../common/Toast';
+import { SITE } from '../../shared/site';
+import { handleFailedConnection } from '../../common/Toast';
 
 const AccountContext = createContext({});
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Problem } from '../common/Problem';
+import { Problem } from '../../common/Problem';
 import { useCollectionContext } from './Collection';
 
 export const Viewer = ({viewFile, anim, name}) => {

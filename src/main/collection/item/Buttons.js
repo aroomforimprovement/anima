@@ -1,7 +1,7 @@
 import React from 'react';
-import { SITE } from '../../shared/site';
-import { Loading } from '../../common/Loading';
-import { Div } from '../../common/Div';
+import { SITE } from '../../../shared/site';
+import { Loading } from '../../../common/Loading';
+import { Div } from '../../../common/Div';
 
 export const Buttons = ({anim, user, handleDelete, handleView, handleDownload, isViewerOpen}) => {
     

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loading } from '../../common/Loading';
+import { Loading } from '../../../common/Loading';
 //import { isMobile } from 'react-device-detect';
 //import { ViewerProgressBar } from '../../common/ProgressBar';
 

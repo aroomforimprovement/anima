@@ -6,7 +6,7 @@ import { animReducer, newAnimState } from './animationReducer';
 import { sketch } from './sketch';
 import { values } from '../values';
 import { Privacy } from '../controller/ControllerBtns';
-import { useMainContext } from '../../main/Main';
+import { useMainContext } from '../../Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 import toast from 'buttoned-toaster';

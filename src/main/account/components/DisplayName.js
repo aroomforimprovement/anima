@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useMainContext } from '../../main/Main';
+import { useMainContext } from '../../Main';
 import { useAccountContext } from '../Account';
 import { updateDisplayName } from '../accountReducer';
-import { Loading } from '../../common/Loading';
+import { Loading } from '../../../common/Loading';
 import { Form, FormGroup, InputGroup, Input, Button } from 'reactstrap';
 import { useToastRack } from 'buttoned-toaster';
-import { handleFailedConnection } from '../../common/Toast';
-import { SITE } from '../../shared/site';
+import { SITE } from '../../../shared/site';
+import { handleFailedConnection } from '../../../common/Toast';
 
 export const DisplayName = () => {
 
