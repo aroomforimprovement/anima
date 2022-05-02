@@ -46,7 +46,7 @@ const Account = () => {
                 if(response){
                     setIsLoading(false);
                     dispatch({type: 'SET_ACCOUNT_INFO', data: response, signal});
-                    toast.success({message:"Account info fetched ok", toastId: 'account_fetch'})
+                    toast.success({message:"Account page ready", toastId: 'account_fetch'})
                 }else{
                     setIsFailed(true, signal);
                     dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}, signal})

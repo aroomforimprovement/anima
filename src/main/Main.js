@@ -97,7 +97,9 @@ const Main = () => {
                             type: 'SET_ACCOUNT_INFO',
                             data: result
                         });
-                        toast.success("Account info ready");
+                        if(window.location.href.indexOf('/home' > -1)){
+                            toast.success({message: "User is logged in", duration: 1000});
+                        }
                     }else{
                         mainDispatch({
                             type: 'SET_ACCOUNT_INFO',
