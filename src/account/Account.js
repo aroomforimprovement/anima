@@ -4,10 +4,11 @@ import { Contact } from './components/Contact';
 import { DisplayName } from './components/DisplayName';
 import { useMainContext } from '../main/Main';
 import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
 import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
 import { SITE } from '../shared/site';
+import { handleFailedConnection } from '../common/Toast';
 
 const AccountContext = createContext({});
 
@@ -21,13 +22,16 @@ const Account = () => {
     const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
     const { mainState } = useMainContext();
     const { logout } = useAuth0();
-    const toast = useToastRack();
-
+    
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
+    const [isLoading, setIsLoading] = useState(false);
     const [isFailed, setIsFailed] = useState(false);
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const getAccountId = () => {
             if(mainState.user){
                 return mainState.user.userid;
@@ -35,30 +39,37 @@ const Account = () => {
                 console.error("no user");
             }
         }
-        const setAccountInfo = async () => {
+        const setAccountInfo = async (signal) => {
             const id = getAccountId();
-            getAccountInfo(id, mainState.user.access)
-                .then((response) => {
-                    if(response){
-                        dispatch({type: 'SET_ACCOUNT_INFO', data: response});
-                    }else{
-                        //dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
-                        setIsFailed(true);
-                    }
-                });
-            
+            getAccountInfo(id, mainState.user.access, signal)
+            .then((response) => {
+                if(response){
+                    setIsLoading(false);
+                    dispatch({type: 'SET_ACCOUNT_INFO', data: response, signal});
+                    toast.success({message:"Account info fetched ok", toastId: 'account_fetch'})
+                }else{
+                    setIsFailed(true, signal);
+                    dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}, signal})
+                    console.error(SITE.failed_connection_message);
+                }
+            });
         }
-        if(!state.isSet && !isFailed){// && mainState.user && mainState.user.access){
-            setAccountInfo();
-        }
-    },[mainState.user, state.notices, state.contacts, state.isSet, isFailed]);
 
-    useEffect(() => {
-        if(isFailed && !state.isSet){
+        if(!state.isSet && !isFailed && !isLoading){
+            setIsLoading(true, signal);
+            setAccountInfo(signal);
+        }else if(isFailed && isLoading){
+            setIsLoading(false);
             console.error(SITE.failed_connection_message);
-            //handleFailedConnection(SITE.failed_retrieval_message, false, toast);
+            handleFailedConnection(SITE.failed_retrieval_message, false, toast, signal);
         }
-    }, [isFailed, state.isSet])
+
+        return() => {
+            controller.abort();
+        }
+        
+    },[isFailed, isLoading, mainState.user, state.isSet])//[isLoading, mainState.user, state.isSet, isFailed]);
+
 
     const handleShowContacts = () => {
         setHideContacts(!hideContacts);
@@ -98,7 +109,7 @@ const Account = () => {
                         <p>
                             You are about to delete your Anima account, all your anims and
                             all your contacts. Are you sure you want to delete everything?
-                        </p> 
+                        </p>
                         <p>
                             (If you log in with the same username and password again, Anima will
                             create a new account)

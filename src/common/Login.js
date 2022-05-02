@@ -3,45 +3,16 @@ import { Loading } from './Loading';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
 import { SITE } from '../shared/site';
+import { handleFailedConnection } from './Toast';
+import { useToastRack } from 'buttoned-toaster';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
 
+    const {dismiss, error} = useToastRack();
     const { mainState  } = useMainContext();
-    const putLogin = async (login, signal) => {
-        return await fetch(`${apiUrl}login`, {
-            method: 'POST',
-            mode: 'cors',
-            signal: signal,
-            body: JSON.stringify(login),
-            headers: {
-                Authorization: `Bearer ${login.access}`,
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => {
-            if(response.ok){ 
-                dispatch(
-                    {
-                        type: 'setLogin', 
-                        data: login
-                    });
-            }else{ 
-                dispatch({type: 'setIsFailed', data: true});
-                console.error("response not ok") }
-        }, error => { 
-            dispatch({type: 'setIsFailed', data: true});
-            console.error(error);
-            console.error("error fetching login");
-         }
-        )
-        .catch(error => { 
-            dispatch({type: 'setIsFailed', data: true});
-            //handleFailedConnection(SITE.failed_connection_message, true, toast);
-            console.error("Error fetching data: putLogin")
-        });
-    }
+    
 
     const saveAnimToAccount = async (anim, access, signal) => {
         return await fetch(`${apiUrl}anim`, {
@@ -56,10 +27,8 @@ const Login = () => {
         })
         .then(response => {
             if(response.ok){
-                //console.log("response ok");
                 return response;
             }else{
-                //console.log('response not ok');
             }
         }, error => {
             console.error('error saving anim');
@@ -69,7 +38,6 @@ const Login = () => {
     }
 
     const loginReducer = (state, action) => {
-        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -84,7 +52,6 @@ const Login = () => {
                 return ({...state, isFailed: action.data, isSending: !action.data});
             }
             case 'setLogin':{
-                //console.dir('setLogin: ', action.data);
                 window.localStorage.setItem('userid', action.data.userid);
                 window.localStorage.setItem('username', action.data.username);
                 window.localStorage.setItem('email', action.data.email);
@@ -129,13 +96,46 @@ const Login = () => {
         const controller = new AbortController();
         const signal = controller.signal;
 
+        const putLogin = async (login, signal) => {
+            return await fetch(`${apiUrl}login`, {
+                method: 'POST',
+                mode: 'cors',
+                signal: signal,
+                body: JSON.stringify(login),
+                headers: {
+                    Authorization: `Bearer ${login.access}`,
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+                if(response.ok){ 
+                    dispatch(
+                        {
+                            type: 'setLogin', 
+                            data: login
+                        });
+                }else{ 
+                    dispatch({type: 'setIsFailed', data: true});
+                    console.error("response not ok") }
+            }, error => { 
+                dispatch({type: 'setIsFailed', data: true});
+                console.error(error);
+                console.error("error fetching login");
+             }
+            )
+            .catch(error => { 
+                dispatch({type: 'setIsFailed', data: true});
+                handleFailedConnection(SITE.failed_connection_message, true, {dismiss: dismiss, error: error});
+                console.error("Error fetching data: putLogin")
+            });
+        }
         
         const putLoginCall = async (login) => {
             await putLogin(login);
         }
         if(state.isFailed){
             console.error(SITE.failed_connection_message)
-            //handleFailedConnection(SITE.failed_connection_message, true, toast);
+            handleFailedConnection(SITE.failed_connection_message, true, {dismiss: dismiss, error: error});
         }
         if(!state.isRegistered && state.isLoaded 
             && (mainState && mainState.user && mainState.user.access) 
@@ -151,7 +151,7 @@ const Login = () => {
         return () => {
             controller.abort();
         }
-    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
+    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered, dismiss, error]);
 
     useEffect(() => {
         if(!state.isLoaded && mainState.isSet){
@@ -174,7 +174,6 @@ const Login = () => {
         }
 
         return () => {
-            //console.log("abort save");
             controller.abort();
         }
     }, [mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);

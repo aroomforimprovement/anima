@@ -14,7 +14,11 @@ import { getAccountInfo } from '../account/accountReducer';
 import './main.css';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { TopProgressBar } from '../common/ProgressBar';
+import toast from 'buttoned-toaster';
 import { ToastRack } from 'buttoned-toaster';
+import { SITE } from '../shared/site';
+import { handleFailedConnection } from '../common/Toast';
+
 
 const MainContext = createContext({});
 
@@ -29,7 +33,6 @@ const Main = () => {
     const [mainState, mainDispatch] = useReducer(mainReducer, {progressFrame: {max: 0, now: 0}});
     const stateOfMain = { mainState, mainDispatch };
     const {history} = useHistory();
-    
     const HomePage = () => { return <Home /> }
     const LoginPage = () => { return <Login /> }
     const LogoutPage = () => { return <Logout /> }
@@ -42,15 +45,15 @@ const Main = () => {
     
 
     useEffect(() =>{
-        const dismiss = (id) => {
-            //toast.dismiss(id);
+        const dismissToast = (id) => {
+            toast.dismiss(id);
         }
         const setUnverifiedWarning = () => {
-            /*toast.warn(
+            toast.warn(
                 { 
                     duration: 1661,
-                    approveFunc: dismiss, 
-                    dismissFunc: dismiss,
+                    approveFunc: dismissToast, 
+                    dismissFunc: dismissToast,
                     message: "Thanks for signing up to use Animator. "+
                         "You'll need to verify your account to access some features. "+ 
                         "Check your email and follow the link to verify.",
@@ -58,7 +61,7 @@ const Main = () => {
                     approveTxt: "Cool",
                     toastId: "unverified"
                 }
-            );*/
+            );
         }
         
         if(!isLoading && !mainState.user){
@@ -94,13 +97,13 @@ const Main = () => {
                             type: 'SET_ACCOUNT_INFO',
                             data: result
                         });
-                        //toast.success("Account info ready");
+                        toast.success("Account info ready");
                     }else{
                         mainDispatch({
                             type: 'SET_ACCOUNT_INFO',
                             data: {isSet: true}
                         });
-                        //handleFailedConnection(SITE.failed_retrieval_message, false, toast);
+                        handleFailedConnection(SITE.failed_retrieval_message, false, toast);
                     }
                     
                 });
@@ -120,7 +123,6 @@ const Main = () => {
                 <MainContext.Consumer>
                     {() => (
                     <div>
-                        <ToastRack />
                         <Header />
                         <Switch>
                             <Route path='/account' history={history} component={AccountPage} />
@@ -140,6 +142,7 @@ const Main = () => {
                              {/**this is pointless with out a show prop */}
                         </div>
                         <Footer />
+                        <ToastRack />
                     </div>
                     )}
                 </MainContext.Consumer>

@@ -9,7 +9,7 @@ import { Privacy } from '../controller/ControllerBtns';
 import { useMainContext } from '../../main/Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -21,7 +21,6 @@ export const useAnimContext = () => {
 
 
 export const Animation = ({edit, splat, loggingIn}) => {
-    const toast = useToastRack();
     const { mainState, mainDispatch } = useMainContext();
     
     const [ access, setAccess ] = useState(null);

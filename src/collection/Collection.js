@@ -4,13 +4,14 @@ import { Loading } from '../common/Loading';
 import { useMainContext } from '../main/Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
 import './collection.css';
 import { SITE } from '../shared/site';
 import { Viewer } from './Viewer';
 import { Div } from '../common/Div';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
+import { handleFailedConnection } from '../common/Toast';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
@@ -25,8 +26,7 @@ const Collection = ({browse}) => {
 
     const { mainState, mainDispatch } = useMainContext();
     const splat = useParams()[0];
-    const toast = useToastRack();
-
+    
     const isContact = (id) => {
         if(mainState && mainState.contacts){
                 for(let i = 0; i < mainState.contacts.length; i++){
@@ -90,13 +90,13 @@ const Collection = ({browse}) => {
     
     useEffect(() => {
         const handleFailure = async () => {
-            //handleFailedConnection(SITE.failed_retrieval_message, true, toast);
+            handleFailedConnection(SITE.failed_retrieval_message, true, toast);
             console.error(SITE.failed_connection_message)
         }
         if(isFailed){
             handleFailure();
         }
-    }, )
+    },[isFailed] )
 
     useEffect( () => {
         const controller = new AbortController();

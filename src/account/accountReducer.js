@@ -140,7 +140,6 @@ export const updateDisplayName = async (id, name, access) => {
 export const accountReducer = (state, action) => {
     switch(action.type){
         case 'SET_ACCOUNT_INFO':
-            
             return({...state, 
                 userid: action.data.userid,
                 username: action.data.username,
