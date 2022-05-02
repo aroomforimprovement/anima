@@ -124,7 +124,7 @@ export const renderAnim = async (params) => {
         framerate: params.a.frate
     });
     capturer.start();
-    const startTime = performance.now();
+    //const startTime = performance.now();
     setBgOverlay(params.p5, true);
     setBgOverlay(params.p5, true);
     let frames = [...params.a.frames];
@@ -135,7 +135,7 @@ export const renderAnim = async (params) => {
         setFrameCaptured(f, capturer, params.p5canvas, params.p5, params.clip);
     });
     capturer.stop();
-    const duration = performance.now() - startTime;
+    //const duration = performance.now() - startTime;
     //console.log("Capture took "+duration);
     capturer.save((blob) => {
         if(params.type.indexOf('VIEW') > -1){ 
@@ -151,7 +151,7 @@ export const renderAnim = async (params) => {
             ).then(() => {
                 //params.mainDispatch ? params.mainDispatch({type: 'PROGRESS_FRAME', data: {max: 0, now: 0}}) : console.log('no main dispatch');
                 if(params.setCollectionState && params.type === 'PREVIEW'){
-                    params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
+                        params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
                 }else if(params.setCollectionState){
                     params.setCollectionState({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
                 }else if(params.updateAnim){params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});

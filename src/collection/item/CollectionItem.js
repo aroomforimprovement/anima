@@ -11,6 +11,7 @@ import { Buttons } from "./Buttons";
 import { Info } from "./Info";
 import { Div } from "../../common/Div";
 import { saveAs } from "file-saver";
+import { Loading } from "../../common/Loading";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false,
@@ -147,7 +148,7 @@ export const CollectionItem = ({anim, index}) => {
             {
             mainState.isSet 
             ? 
-            <LazyLoad height={300} offset={10} once>
+            <LazyLoad height={300} offset={10} placeholder={<Loading/>}>
                 <Thumb previewFile={collectionItemState.previewFile}
                     name={anim.name}/>
                 <Info anim={anim} />
@@ -167,7 +168,7 @@ export const CollectionItem = ({anim, index}) => {
                 }
             </LazyLoad>
             : 
-            <Div/>
+            <Loading/>
             }
     </div>
     );

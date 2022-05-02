@@ -107,8 +107,10 @@ const Collection = ({browse}) => {
         
         if(!isFailed && !collectionState.isSet && mainState.isSet){
             const access = mainState.user ? mainState.user.access : undefined
+            toast.info("Fetching anima");
             getCollection(splat, browse, access, signal)
                 .then((response) => {
+                    toast.info("Rendering anima");
                     if(browse){
                         setCollection({anims: response, isSet: true, signal});
                     }else{
@@ -119,6 +121,7 @@ const Collection = ({browse}) => {
                 })
                 .catch((error) => {
                     setIsFailed(true, signal);
+                    toast.error("Failed to fetch anima");
                 });
         }
         return () => {
@@ -126,36 +129,48 @@ const Collection = ({browse}) => {
         }
     },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
 
+    const collectionHeading = collectionState.username
+        ? <div className='container collection-header mt-4 mb-4'>
+            <div className='row'>
+                <h5 className='col col-8'>
+                    {collectionState.username}
+                </h5>
+                {
+                !mainState.user || !mainState.user.isAuth || !mainState.user.isVerified ||
+                collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
+                ? 
+                <div></div> 
+                : 
+                <button className='col btn btn-outline-light btn-sm fa fa-users'
+                    onClick={handleAddContact} hidden={!collectionState.contactReqEnabled}>{'Add as contact'}
+                </button>
+                }
+            </div>
+        </div>
+        : <div className='container collection-header mt-5 mb-5'>
+            <h5>Latest anims</h5>
+        </div>
 
-    const collectionItems = collectionState.anims ? collectionState.anims.map((anim, index) => {
+    const [collection, setCollection] = useState([]);
+
+    useEffect(() => {
+        if(collectionState.anims){
+            if(collectionState.anims.length >= collectionState.index){
+                const col = collectionState.anims.slice(0, collectionState.index+1);
+                setTimeout(() => {
+                    setCollection(col);
+                }, 100)
+                 
+            }
+        }
+    }, [collectionState.anims, collectionState.index]);
+
+    const collectionItems = collection ? collection.map((anim, index) => {
         return(
             <CollectionItem key={index} index={index} anim={anim}/>
         );
     }) : <Loading />
-    
-    
-    const collectionHeading = collectionState.username
-    ? <div className='container collection-header mt-4 mb-4'>
-        <div className='row'>
-            <h5 className='col col-8'>
-                {collectionState.username}
-            </h5>
-            {
-            !mainState.user || !mainState.user.isAuth || !mainState.user.isVerified ||
-            collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
-            ? 
-            <div></div> 
-            : 
-            <button className='col btn btn-outline-light btn-sm fa fa-users'
-                onClick={handleAddContact} hidden={!collectionState.contactReqEnabled}>{'Add as contact'}
-            </button>
-            }
-        </div>
-    </div>
-    : <div className='container collection-header mt-5 mb-5'>
-        <h5>Latest anims</h5>
-    </div>
-   
+
 
     return(
         <div>
@@ -172,9 +187,11 @@ const Collection = ({browse}) => {
                                 </div>
                                 {collectionState.isViewerOpen && collectionState.viewFile 
                                 ?
-                                <Viewer viewFile={collectionState.viewFile} 
-                                anim={collectionState.selectedAnim}
-                                name={collectionState.viewFileName}/> 
+                                <Viewer 
+                                    viewFile={collectionState.viewFile} 
+                                    anim={collectionState.selectedAnim}
+                                    name={collectionState.viewFileName}
+                                /> 
                                 : 
                                 <Div/>
                                 }
