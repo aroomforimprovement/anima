@@ -1,17 +1,21 @@
 /* !coll-item-btns, etc is used on Contact and Notice components but
 the css is not in this file (check index.css) */
+
+@use '../../sass/colours';
+
 .account-page{
     text-align: start;
     display:inline-block;
   }
 
   .section{
-    background-color: rgb(94, 94, 94);
+    background-color: colours.$bg;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .2);
     margin-bottom:3%;
   }
 
   .section-header{
+    background-color: colours.$bg-dark;
     min-height:100%;
     cursor:pointer;
     font-size:larger;
@@ -24,10 +28,11 @@ the css is not in this file (check index.css) */
   }
 
   .section-header:hover{
-    background-color: rgb(104, 104, 104);
+    background-color: colours.$bg;
   }
 
   .section-content{
+    background-color: colours.$bg;
     padding:2%;
   }
 

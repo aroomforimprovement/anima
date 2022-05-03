@@ -1,7 +1,8 @@
+@use '../../../sass/colours';
 
 .btn-ctl {
     border-radius: 5px;
-    border-color:rgb(42, 42, 42);
+    border-color: colours.$bg-darker;
     display:inline-block;
   }
 
