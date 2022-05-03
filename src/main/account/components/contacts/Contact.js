@@ -1,16 +1,15 @@
 import React from 'react';
-import { SITE } from '../../../shared/site';
-import { useAccountContext } from '../Account';
-import { useMainContext } from '../../Main';
-import { deleteContact } from '../accountReducer';
-import { useToastRack } from 'buttoned-toaster';
+import { SITE } from '../../../../shared/site';
+import { useAccountContext } from '../../Account';
+import { useMainContext } from '../../../Main';
+import { deleteContact } from '../../accountReducer';
+import toast from 'buttoned-toaster';
 
 
 export const Contact = ({contact, i}) => {
     
     const { mainState } = useMainContext();
     const { state, dispatch } = useAccountContext();
-    const toast = useToastRack();
     
     const handleVisitContact = (i) => {
         const id = state.contacts[i].userid;

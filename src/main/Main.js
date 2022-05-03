@@ -96,7 +96,7 @@ const Main = () => {
                             data: result
                         });
                         if(window.location.href.indexOf('/home' > -1)){
-                            toast.success({message: "User is logged in", duration: 1000});
+                            toast.success({message: "Account data ready", duration: 1000, toastId: 'data_fetch'});
                         }
                     }else{
                         mainDispatch({

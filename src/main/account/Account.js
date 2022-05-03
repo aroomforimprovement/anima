@@ -1,15 +1,15 @@
 import React, { useEffect, useReducer, createContext, useContext, useState } from 'react';
-import { Notice } from './components/Notice';
-import { Contact } from './components/Contact';
-import { DisplayName } from './components/DisplayName';
 import { useMainContext } from '../Main';
-import { accountReducer, getAccountInfo, deleteAccount } from './accountReducer';
+import { accountReducer, getAccountInfo } from './accountReducer';
 import toast from 'buttoned-toaster';
-import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
 import { SITE } from '../../shared/site';
 import { handleFailedConnection } from '../../common/Toast';
-import { Div } from '../../common/Div';
+import { Section } from './components/Section';
+import { Contacts } from './components/contacts/Contacts';
+import { Notices } from './components/notices/Notices';
+import { Settings } from './components/settings/Settings';
+import { DeleteAccount } from './components/settings/DeleteAccount';
 
 const AccountContext = createContext({});
 
@@ -19,17 +19,19 @@ export const useAccountContext = () => {
 
 const Account = () => {
 
-    const [hideNotices, setHideNotices] = useState(true);
-    const [hideContacts, setHideContacts] = useState(true);
-    const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
-    const [hideSettings, setHideSettings] = useState(true);
     const { mainState } = useMainContext();
-    const { logout } = useAuth0();
     
     const [state, dispatch] = useReducer(accountReducer, {});
     const stateOfAccount = { state, dispatch };
     const [isLoading, setIsLoading] = useState(false);
     const [isFailed, setIsFailed] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+
+    useEffect(() => {
+        if(mainState.user && mainState.user.isVerified){
+            setIsVerified(mainState.user.isVerified);
+        }
+    }, [mainState.user])
 
     useEffect(() => {
         const controller = new AbortController();
@@ -49,7 +51,7 @@ const Account = () => {
                 if(response){
                     setIsLoading(false);
                     dispatch({type: 'SET_ACCOUNT_INFO', data: response, signal});
-                    toast.success({message:"Account page ready", toastId: 'account_fetch'})
+                    toast.success({message:"Account page ready", toastId: 'data_fetch'})
                 }else{
                     setIsFailed(true, signal);
                     dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}, signal})
@@ -71,163 +73,26 @@ const Account = () => {
             controller.abort();
         }
         
-    },[isFailed, isLoading, mainState.user, state.isSet])//[isLoading, mainState.user, state.isSet, isFailed]);
+    },[isFailed, isLoading, mainState.user, state.isSet]);
 
-
-    const handleShowContacts = () => {
-        setHideContacts(!hideContacts);
-    }
-
-    const handleShowNotices = () => {
-        setHideNotices(!hideNotices);
-    }
-
-    const handleShowSettings = () => {
-        setHideSettings(!hideSettings)
-    }
-
-    const handleShowDeleteAccount = () => {
-        setHideDeleteAccount(!hideDeleteAccount);
-    }
-
-    const handleDeleteAccount = () => {
-        const approve = (id) => {
-            deleteAccount(mainState.user.userid, mainState.user.access)
-                .then((response) => {
-                    if(response && response.ok){
-                        toast.success("Account deleted");
-                        logout(`${process.env.REACT_APP_URL}/logout`);
-                    }else{
-                        toast.error("Error deleting account");
-                    }
-                })
-            toast.dismiss(id);
-        }
-        const dismiss = (id) => {
-            toast.dismiss(id);
-        }
-
-        toast.warn(
-            { 
-                approveFunc: approve, 
-                dismissFunc: dismiss,
-                message:
-                    <div>
-                        <p>
-                            You are about to delete your Anima account, all your anims and
-                            all your contacts. Are you sure you want to delete everything?
-                        </p>
-                        <p>
-                            (If you log in with the same username and password again, Anima will
-                            create a new account)
-                        </p>
-                    </div>,
-                approveTxt: "Delete everything", 
-                dismissTxt: "Maybe later"
-            }
-        );
-    }
-
-    const notices = state.notices && state.notices.length > 0 
-        ? state.notices.map((notice, i) => {
-            
-            const link = `/collection/${notice.actions.accept}`;
-            return(
-                <Notice notice={notice} link={link} i={i} key={i}/>
-            );
-        })
-        : <div>Nothing to report</div>
-
-    const contacts = state.contacts && state.contacts.length > 0
-        ? state.contacts.map((contact, i) => {
-            return(
-                <Contact contact={contact} i={i} key={i} />
-            );
-        }) 
-        : <div>Nobody here</div>
-
-    const Unverfied = () => {
-        return(
-            <div>Verify your account to use this feature</div>
-        )
-    }
-
-    const resetChoices = () => {
-        Object.keys(window.localStorage).forEach((key) => {
-            if(key.indexOf('dontshow_') > -1)
-            window.localStorage.removeItem(key);
-        })
-        toast.success("Choices cleared from browser memory");
-        setHadSomethingToHide(false);
-    }
-
-    const [hasSomethingToHide, setHadSomethingToHide] = useState(false);
-
-    useEffect(() => {
-        Object.keys(window.localStorage).forEach((key) => {
-            if(key.indexOf('dontshow_') > -1
-                && !hasSomethingToHide)
-            setHadSomethingToHide(true);
-        })
-    }, [hasSomethingToHide])
-    
     return(
         <div className='container account-page'>
             <AccountContext.Provider value={stateOfAccount} >
                 <AccountContext.Consumer>
                     {() => (
                         <div>
-                            <div className='row notices mt-5'>
-                                <div className='notices-header' 
-                                    onClick={handleShowNotices}>Notifications:</div>
-                                <div className='container' hidden={hideNotices}>
-                                    {mainState.user && mainState.user.isVerified
-                                    ? <div className='row mb-4'>{notices}</div>
-                                    : <Unverfied className='row mb-4'/>}
-                                </div>
-                            </div>
-                            <div className='row notices'>
-                                <div className='contacts-header' 
-                                    onClick={handleShowContacts}>Contacts:</div>
-                                <div className='container' hidden={hideContacts}>
-                                    {mainState.user && mainState.user.isVerified
-                                    ? <div className='row'>{contacts}</div>
-                                    : <Unverfied className='row mb-4' />}
-                                </div>
-                            </div>
-                            <div className='row notices'>
-                                <div className='notices-header'
-                                    onClick={handleShowSettings}>Settings</div>                            
-                                <div className='container' hidden={hideSettings}>
-                                    <DisplayName />
-                                    <div className='row'>
-                                        <div className='row'>
-                                            <div className='col col-8'>
-                                            <h5>Reset choices:</h5>
-                                                {hasSomethingToHide 
-                                                ? `Push this button to clear all "don't show this again" choices you've made`
-                                                : `You have no user experience choices saved to this browser`}
-                                            </div>
-                                            {hasSomethingToHide ? <div className='col col-3 float-end'>
-                                                <button className='btn btn-warning fa fa-lg fa-check-circle border border-danger shadow p-4'
-                                                    onClick={resetChoices}></button>
-                                            </div> : <Div/>}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='row notices'>
-                                <div className='notices-header'
-                                    onClick={handleShowDeleteAccount}>Delete Account:</div>
-                                <div className='container' hidden={hideDeleteAccount}>
-                                    <div className='row col-10 col-lg-7 m-auto'>
-                                        <button className='btn btn-lg btn-danger shadow shadow-lg'
-                                            onClick={handleDeleteAccount}>
-                                                Delete my account and all of my anims forever.
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <Section name={`Notices`}>
+                                <Notices verified={isVerified} />
+                            </Section>
+                            <Section name={`Contacts`} >
+                                <Contacts verified={isVerified}/>
+                            </Section>
+                            <Section name={`Settings`} >
+                                <Settings />
+                            </Section>
+                            <Section name={`Danger zone`}>
+                                <DeleteAccount user={mainState.user} />
+                            </Section>
                         </div>
                     )}
                 </AccountContext.Consumer>

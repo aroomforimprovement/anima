@@ -5,11 +5,30 @@ the css is not in this file (check index.css) */
     display:inline-block;
   }
 
-  .display-name-area, .notices, .contacts{
+  .section{
     background-color: rgb(94, 94, 94);
     box-shadow: 0 10px 20px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .2);
-    padding: 5%;
     margin-bottom:3%;
+  }
+
+  .section-header{
+    min-height:100%;
+    cursor:pointer;
+    font-size:larger;
+    padding:5%;
+    
+  }
+  .section-text{
+    margin-left:5%;
+    font-weight:bolder;
+  }
+
+  .section-header:hover{
+    background-color: rgb(104, 104, 104);
+  }
+
+  .section-content{
+    padding:2%;
   }
 
   .display-name{
@@ -21,14 +40,7 @@ the css is not in this file (check index.css) */
     color:rgba(255, 255, 255, 0.7);
     cursor:pointer;
   }
-  
-  .notices-header, .contacts-header{
-    cursor:pointer;
-    font-size:larger;
-    margin-top:3%;
-    margin-bottom:3%;
-  }
-  
+    
   .notices-header:hover, .contacts-header:hover{
     transform: scale(1.02);
   }
@@ -57,5 +69,3 @@ the css is not in this file (check index.css) */
   .contact-name{
     font-size:larger;
   }
-
-  
