@@ -20,7 +20,7 @@ export const Thumb = ({previewFile, name, max, now}) => {
     }, [previewFile, name]);
     */
     return(
-        <div>
+        <div className='coll-item-thumb'>
             {
             previewFile 
             ?
@@ -35,8 +35,11 @@ export const Thumb = ({previewFile, name, max, now}) => {
                         alt={name} />
                 </div>
                 :
-                <div className='row'>
-                    <video autoPlay loop className='rounded p-0'>
+                <div className='row '>
+                    <video autoPlay loop 
+                    //className='coll-item-video'
+                    className='rounded-3 p-0'
+                    >
                         <source key={Date.now()} src={previewFile}
                             //ref={previewRef}
                             type='video/webm'

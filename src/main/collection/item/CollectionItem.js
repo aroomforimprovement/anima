@@ -23,7 +23,6 @@ export const CollectionItem = ({anim, index}) => {
     const { mainState, mainDispatch } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
-    
     const handleView = async (e) => {
         setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
         setCollectionState({type: 'SET_VIEWER_OPEN', data: true})
@@ -83,7 +82,6 @@ export const CollectionItem = ({anim, index}) => {
         
     }
 
-
     const RenderWrapper = ({anim, index, id, type, clip}) => {
         return(
             <div>
@@ -95,41 +93,6 @@ export const CollectionItem = ({anim, index}) => {
             </div>
         );
     }
-
-/***
-    const Viewer = ({isViewerOpen, setIsViewerOpen, viewFile, anim}) => {
-        return(
-            <Modal show={isViewerOpen} fullscreen={isMobile}
-                onShow={() => {setIsViewerOpen(true)}}
-                onHide={() => {setIsViewerOpen(false)}}>
-                {
-                isViewerOpen && !viewFile
-                ?  
-                <PreviewWrapper anim={anim} index={'temp'} id={`temp`}
-                type={'VIEW'} clip={false}/>
-                : 
-                <Div/>
-                }
-                {
-                viewFile ?
-                <video controls loop autoPlay muted className='coll-modal-video p-2'> 
-                    <source src={viewFile} type='video/webm' alt={`Viewing ${anim.name}`} />
-                </video> 
-                :
-                <Loading />
-                }
-                <Modal.Footer>
-                    <div className='preview-name'>
-                        <span >{anim.name}</span>
-                    </div>
-                    <Button size='sm' 
-                        onClick={() => setIsViewerOpen(false)}
-                    >Close</Button>
-                </Modal.Footer>
-            </Modal >
-        );
-    }
-*/
 
     const PreviewGen = () => {
         return(
@@ -150,18 +113,26 @@ export const CollectionItem = ({anim, index}) => {
     }
 
     return(
-        <div className={`col col-12 col-sm-5 col-md-3 col-lg-3 
-            py-1 px-3 m-1 coll-item`}>
+        <div className={`col col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2
+            py-1 px-3 my-2 mx-1 coll-item`}>
             {
             mainState.isSet 
             ? 
-            <LazyLoad height={300} offset={10} placeholder={<Loading/>}>
+            <LazyLoad height={300} offset={10} placeholder={<Loading/>}
+                style={{minHeight:'100%'}}>
                 <Thumb previewFile={collectionItemState.previewFile}
                     name={anim.name}/>
-                <Info anim={anim} />
-                <Buttons anim={anim} user={mainState.user}
-                    handleDelete={handleDelete} handleView={handleView}
-                    handleDownload={handleDownload} isViewerOpen={collectionState.isViewerOpen}/> 
+                <div className="coll-item-body">
+                    <Info anim={anim} />
+                    <Buttons 
+                        anim={anim} 
+                        user={mainState.user}
+                        handleDelete={handleDelete} 
+                        handleView={handleView}
+                        handleDownload={handleDownload} 
+                        isViewerOpen={collectionState.isViewerOpen}
+                    /> 
+                </div>
                 {
                 collectionItemState.viewFile || (collectionItemState.index <= index) 
                 ? <Div hidden={true} />

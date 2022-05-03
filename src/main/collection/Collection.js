@@ -180,9 +180,9 @@ const Collection = ({browse}) => {
                 <CollectionContext.Provider value={stateOfCollection}>
                     {/*<CollectionContext.Consumer>*/}
                         {/*{() => {*/}
-                            <div className='container'>
+                            <div className=''>
                                 {collectionHeading}
-                                <div className='col col-12'>
+                                <div className='col col-12 collection'>
                                     {collectionItems}
                                 </div>
                                 {collectionState.isViewerOpen && collectionState.viewFile 

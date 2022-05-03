@@ -29,25 +29,50 @@ but is not in this css file (check index.css) */
   font-weight: bold;
 }
 
-.collection-header h5{
-    text-align: start;
-    font-size: xx-large;
-  }
+.collection{
+  min-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items:center;
+}
 
-  .coll-item {
-    display:inline-block;
-    color:rgb(80, 80, 80);
-    margin-top: 5px;
-    text-align: start;
-    font-size:smaller;
-    background: rgb(223, 223, 223);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .6), 0 4px 8px rgba(200, 200, 200, .02);
-  
-  }
+.collection-header h5{
+  text-align: start;
+  font-size: xx-large;
+}
+
+.coll-item {
+  display:inline-block;
+  align-items: center;
+  color:rgb(80, 80, 80);
+  margin-top: 5px;
+  text-align: start;
+  font-size:smaller;
+  background: rgb(223, 223, 223);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .6), 0 4px 8px rgba(200, 200, 200, .02);
+  border-radius: 10px;
+}
 
   .coll-item:hover{
-    transform: scale(1.02);
     box-shadow: 0 10px 20px rgba(200, 200, 200, .6), 0 4px 8px rgba(200, 200, 200, .06);
+  }
+
+  .coll-item-thumb {
+    position:relative;
+    padding:5px;
+  }
+
+  .coll-item-video{
+    position:relative;
+    left:0px;
+    top:0px;
+    opacity:1;
+  }
+
+  .coll-item-body{
+    align-items: flex-end;
+    min-height:100%;
   }
   
   .coll-item a{
@@ -57,6 +82,7 @@ but is not in this css file (check index.css) */
   .coll-item-name{
     font-size:large;
     font-weight: bolder;
+    min-height:70px;
   }
   
   .coll-item-detail{
@@ -67,7 +93,13 @@ but is not in this css file (check index.css) */
     text-align:start;
   }
   
+  .coll-item-nums{
+    position:relative;
+  }
+
   .coll-item-date{
+    position:absolute;
+    right:0px;
     text-align:end;
   }
 

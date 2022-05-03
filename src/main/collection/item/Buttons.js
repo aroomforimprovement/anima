@@ -7,7 +7,7 @@ export const Buttons = ({anim, user, handleDelete, handleView, handleDownload, i
     
     const Edit = ({animid}) => {
         return(
-            <div className='col col-3'>
+            <div className='col col-3 coll-item-btn'>
                 <button className='btn btn-outline-secondary'>
                     <a href={`/create/${animid}`} alt='edit'>
                         <img src={SITE.icons.penColour} alt='edit' />
@@ -19,7 +19,7 @@ export const Buttons = ({anim, user, handleDelete, handleView, handleDownload, i
 
     const View = ({isViewerOpen, handleView}) => {
         return(
-            <div className='col col-3'>
+            <div className='col col-3 coll-item-btn'>
                 <button className='btn btn-outline-secondary'
                     onClick={handleView}>
                     {isViewerOpen ? <Loading /> : <img src={SITE.icons.preview} alt='preview'></img>}
@@ -30,7 +30,7 @@ export const Buttons = ({anim, user, handleDelete, handleView, handleDownload, i
 
     const Download = ({handleDownload}) => {
         return(
-            <div className='col col-3'>
+            <div className='col col-3 coll-item-btn'>
                 <button className='btn btn-outline-secondary'
                     onClick={handleDownload}>
                         <img src={SITE.icons.download} alt='download'></img>
@@ -41,7 +41,7 @@ export const Buttons = ({anim, user, handleDelete, handleView, handleDownload, i
 
     const Delete = ({handleDelete}) => {
         return(
-            <div className='col col-3'>
+            <div className='col col-3 coll-item-btn'>
                 <button className='btn btn-outline-secondary'
                     onClick={handleDelete}>
                     <img src={SITE.icons.wipe} alt='delete'></img>

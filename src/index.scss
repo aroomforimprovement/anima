@@ -97,6 +97,14 @@ body {
 
 .coll-item-btns{
   text-align: center;
+  display:flex;
+  position:relative;
+  align-items: flex-end;
+  min-height:50px;
+}
+
+.coll-item-btn{
+  bottom:5px;
 }
 
 .coll-item-btns button{
@@ -121,10 +129,10 @@ body {
   background: linear-gradient(45deg, rgb(170, 170, 170),rgb(223, 223, 223));
 }
 
-.coll-items-btns a:hover, button:hover{
+.coll-items-btns a:hover, .coll-item-btns button:hover{
   background: linear-gradient(45deg, rgb(160, 160, 160), rgb(220, 220, 220));
 }
-.coll-items-btns a:active, button:active{
+.coll-items-btns a:active, .coll-item-btns button:active{
   background: linear-gradient(45deg, rgb(160, 160, 160), rgb(100, 100, 100));
 }
 
