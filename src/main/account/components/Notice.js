@@ -27,23 +27,32 @@ export const Notice = ({notice, i, link}) => {
                         }
                     });
             }); 
-            toast.dismiss(id);   
+            if(id){
+                toast.dismiss(id);
+            }   
         }
         const dismiss = (id) => {
             toast.dismiss(id);
         }
 
-        toast.info(
-            {
-                approveFunc: approve, 
-                dismissFunc: dismiss,
-                message: `By approving this contact request, you are allowing 
-                    the user "${state.notices[i].reqUsername}" to view all of 
-                    your anims, including those marked Private`,
-                approveTxt: "Approve", 
-                dismissTxt:"Maybe later",
-            }
-        );
+        if(window.localStorage.getItem('dontshow_APPROVE_CONTACT_REQUEST')){
+            approve();
+        }else{
+            toast.info(
+                {
+                    approveFunc: approve, 
+                    dismissFunc: dismiss,
+                    message: `By approving this contact request, you are allowing 
+                        the user "${state.notices[i].reqUsername}" to view all of 
+                        your anims, including those marked Private`,
+                    approveTxt: "Approve", 
+                    dismissTxt:"Maybe later",
+                    canHide: true,
+                    dontShowType: 'APPROVE_CONTACT_REQUEST'
+                }
+            );
+        }
+        
         
     }
 

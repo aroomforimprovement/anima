@@ -59,21 +59,28 @@ export const CollectionItem = ({anim, index}) => {
             .catch((err) => {
                 console.error("Error fetching data: deleteAnim");
             })
-            toast.dismiss(id);
+            if(id) toast.dismiss(id);
         };
         const dismiss = (id) => {
             toast.dismiss(id);
         } 
 
-        toast.warn(
-            {
-                approveFunc: approve,
-                dismissFunc: dismiss,
-                message:`Are you sure you want to permanently delete anim \n"${anim.name}"`,
-                approveTxt: "Delete", 
-                dismissTxt: "Cancel"
-            }
-        );
+        if(window.localStorage.getItem('dontshow_DELETE_ANIM')){
+            approve();
+        }else{
+            toast.warn(
+                {
+                    approveFunc: approve,
+                    dismissFunc: dismiss,
+                    message:`Are you sure you want to permanently delete anim \n"${anim.name}"`,
+                    approveTxt: "Delete", 
+                    dismissTxt: "Cancel",
+                    canHide: true,
+                    dontShowType: "DELETE_ANIM"
+                }
+            );
+        }
+        
     }
 
 

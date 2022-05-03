@@ -9,6 +9,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import './account.css';
 import { SITE } from '../../shared/site';
 import { handleFailedConnection } from '../../common/Toast';
+import { Div } from '../../common/Div';
 
 const AccountContext = createContext({});
 
@@ -17,9 +18,11 @@ export const useAccountContext = () => {
 }
 
 const Account = () => {
+
     const [hideNotices, setHideNotices] = useState(true);
     const [hideContacts, setHideContacts] = useState(true);
     const [hideDeleteAccount, setHideDeleteAccount] = useState(true);
+    const [hideSettings, setHideSettings] = useState(true);
     const { mainState } = useMainContext();
     const { logout } = useAuth0();
     
@@ -77,6 +80,10 @@ const Account = () => {
 
     const handleShowNotices = () => {
         setHideNotices(!hideNotices);
+    }
+
+    const handleShowSettings = () => {
+        setHideSettings(!hideSettings)
     }
 
     const handleShowDeleteAccount = () => {
@@ -144,6 +151,25 @@ const Account = () => {
             <div>Verify your account to use this feature</div>
         )
     }
+
+    const resetChoices = () => {
+        Object.keys(window.localStorage).forEach((key) => {
+            if(key.indexOf('dontshow_') > -1)
+            window.localStorage.removeItem(key);
+        })
+        toast.success("Choices cleared from browser memory");
+        setHadSomethingToHide(false);
+    }
+
+    const [hasSomethingToHide, setHadSomethingToHide] = useState(false);
+
+    useEffect(() => {
+        Object.keys(window.localStorage).forEach((key) => {
+            if(key.indexOf('dontshow_') > -1
+                && !hasSomethingToHide)
+            setHadSomethingToHide(true);
+        })
+    }, [hasSomethingToHide])
     
     return(
         <div className='container account-page'>
@@ -151,7 +177,6 @@ const Account = () => {
                 <AccountContext.Consumer>
                     {() => (
                         <div>
-                            <DisplayName />
                             <div className='row notices'>
                                 <div className='notices-header' 
                                     onClick={handleShowNotices}>Notifications:</div>
@@ -168,6 +193,27 @@ const Account = () => {
                                     {mainState.user && mainState.user.isVerified
                                     ? <div className='row'>{contacts}</div>
                                     : <Unverfied className='row mb-4' />}
+                                </div>
+                            </div>
+                            <div className='row notices'>
+                                <div className='notices-header'
+                                    onClick={handleShowSettings}>Settings</div>                            
+                                <div className='container' hidden={hideSettings}>
+                                    <DisplayName />
+                                    <div className='row'>
+                                        <div className='row'>
+                                            <div className='col col-8'>
+                                            <h5>Reset choices:</h5>
+                                                {hasSomethingToHide 
+                                                ? `Push this button to clear all "don't show this again" choices you've made`
+                                                : `You have no user experience choices saved to this browser`}
+                                            </div>
+                                            {hasSomethingToHide ? <div className='col col-3 float-end'>
+                                                <button className='btn btn-warning fa fa-lg fa-check-circle border border-danger shadow p-4'
+                                                    onClick={resetChoices}></button>
+                                            </div> : <Div/>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className='row notices'>

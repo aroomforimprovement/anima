@@ -13,24 +13,38 @@ export const Contact = ({contact, i}) => {
     const toast = useToastRack();
     
     const handleVisitContact = (i) => {
-        //console.log("handleVisitContact");
         const id = state.contacts[i].userid;
         window.location.href = `/collection/${id}`;
     }
 
     const handleDeleteContact = (i) => {
-        //console.log("handleDeleteContact");
-        deleteContact(state.contacts[i], mainState.user.userid, 
-            mainState.user.username, mainState.user.access)
-                .then((response) => {
-                    if(response && response.ok){
-                        dispatch({type: 'DELETE_CONTACT', data: i});
-                        toast.success("Contact deleted");
-                    }else{
-                        toast.error(SITE.failed_delete_message);
-                    }
-                    //console.log("should toast to this");
-                });
+        const approve = (id) => {
+            deleteContact(state.contacts[i], mainState.user.userid, 
+                mainState.user.username, mainState.user.access)
+            .then((response) => {
+                if(response && response.ok){
+                    dispatch({type: 'DELETE_CONTACT', data: i});
+                    toast.success("Contact deleted");
+                }else{
+                    toast.error(SITE.failed_delete_message);
+                }
+            });
+            if (id) toast.dismiss(id);
+        }
+
+        const dismiss = (id) => {
+            toast.dismiss(id);
+        }
+        if(window.localStorage.getItem('dontshow_DELETE_CONTACT')){
+            approve();
+        }else{
+            toast.warn(
+                {
+                    approveFunc: approve,
+                    dismissFunc: dismiss,
+                }
+            );
+        }
     }
 
     return(
