@@ -36,7 +36,7 @@ export const DisplayName = () => {
     }
 
     return(
-        <div className='row mt-5 mb-5'>
+        <div className='row mt-2 mb-5'>
             <div className='col col-3 mt-1'>
                 Display name:
             </div>

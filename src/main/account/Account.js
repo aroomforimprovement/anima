@@ -177,7 +177,7 @@ const Account = () => {
                 <AccountContext.Consumer>
                     {() => (
                         <div>
-                            <div className='row notices'>
+                            <div className='row notices mt-5'>
                                 <div className='notices-header' 
                                     onClick={handleShowNotices}>Notifications:</div>
                                 <div className='container' hidden={hideNotices}>
