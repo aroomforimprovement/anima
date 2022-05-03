@@ -5,7 +5,7 @@ import { useMainContext } from '../Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
-import './collection.css';
+import './collection.scss';
 import { SITE } from '../../shared/site';
 import { Viewer } from './Viewer';
 import { Div } from '../../common/Div';

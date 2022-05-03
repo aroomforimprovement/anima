@@ -11,7 +11,7 @@ import Account from './account/Account';
 import { mainReducer } from './mainReducer';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getAccountInfo } from './account/accountReducer';
-import './main.css';
+import './main.scss';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import toast, { ToastRack } from 'buttoned-toaster';
 import { SITE } from '../shared/site';

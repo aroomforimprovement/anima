@@ -4,7 +4,7 @@ import { MobileController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
     Background, Next, Download, Save, Preview, EnableShortcuts } from './ControllerBtns';
 import { ControllerInfo } from './ControllerInfo';
-import './controller.css';
+import './controller.scss';
 
 
 export const Controller = () => {

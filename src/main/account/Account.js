@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, createContext, useContext, useState } fro
 import { useMainContext } from '../Main';
 import { accountReducer, getAccountInfo } from './accountReducer';
 import toast from 'buttoned-toaster';
-import './account.css';
+import './account.scss';
 import { SITE } from '../../shared/site';
 import { handleFailedConnection } from '../../common/Toast';
 import { Section } from './components/Section';
