@@ -92,7 +92,7 @@ export const Animation = ({edit, splat, loggingIn}) => {
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
             if(anim.save){
-
+                
             }
         }else{
             redirectAfterTempSave(anim.temp);
@@ -114,7 +114,7 @@ export const Animation = ({edit, splat, loggingIn}) => {
     const NameInput = () => {
         return(
             <Form.Control type='text' id='name' name='name' autoFocus={true}
-                onChange={handleNameChange} ref={inputRef} 
+                onChange={handleNameChange} ref={inputRef} maxLength='140'
                 value={anim.anim.name ? anim.anim.name : undefined}/>
         );
     }
@@ -138,8 +138,6 @@ export const Animation = ({edit, splat, loggingIn}) => {
             <Redirect to='/login'/>
         );
     }
-
-    
     
     return(
         <div>

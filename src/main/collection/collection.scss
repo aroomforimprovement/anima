@@ -1,33 +1,7 @@
 /* ! coll-item-btns coll-item-btn is used in CollectionItem.js
 but is not in this css file (check index.css) */
 
-.fullscreen{
-  position:fixed;
-  top:0;
-  left:0;
-  padding-top:2vh;
-  min-height:100%;
-  min-width:100%;
-  margin:auto;
-  background: linear-gradient(45deg, rgb(180, 180, 180), rgb(130, 130, 130));
-  color: black;
-}
 
-
-.fullscreen-header {
-  text-align:right;
-  color:black;
-}
-.fullscreen-header button{
-  color:white;
-  background-color:grey;
-}
-
-.fullscreen-footer{
-  text-align:center;
-  padding-left:5em;
-  font-weight: bold;
-}
 
 .collection{
   min-width: 100%;
@@ -109,4 +83,50 @@ but is not in this css file (check index.css) */
 
   .preview-name, span{
     text-align:start;
+  }
+
+  .fullscreen{
+    position:fixed;
+    top:0;
+    left:0;
+    padding-top:2vh;
+    min-height:100%;
+    min-width:100%;
+    margin:auto;
+    background-color: rgba(0, 0, 0, 0.99);
+    color: rgb(179, 179, 179);
+  }
+  
+  
+  .fullscreen-header {
+    text-align:right;
+    color:black;
+  }
+  .fullscreen-header button{
+    color:white;
+    background-color:rgb(179, 179, 179);
+  }
+  
+  .fullscreen-footer{
+    font-weight: bold;
+  }
+
+  .coll-viewer-video{
+    border: 10px solid;
+    border-color: linear-gradient(45deg,rgb(109, 109, 129), rgb(59, 59, 59));
+  }
+
+  @media all and (display-mode: fullscreen){
+    .coll-viewer-video{
+      border: 0px;
+    }
+  }
+
+  .coll-viewer-info a{
+    color:rgb(179, 179, 179);
+    font-size:large;
+  }
+
+  .coll-viewer-info-name{
+    font-size:large;
   }
