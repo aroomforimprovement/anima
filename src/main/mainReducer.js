@@ -31,7 +31,7 @@ export const mainReducer = (state, action) => {
         }
         case 'SET_ACCOUNT_INFO':{
             return({...state, contacts: action.data.contacts, notices: action.data.notices, 
-                isSet: action.data.isSet});
+                user: {...state.user, username: action.data.username ? action.data.username : state.user.username},isSet: action.data.isSet});
         }
         case 'PROGRESS_FRAME':{
             return({...state, progressFrame: {max: 0, now: 0}});
