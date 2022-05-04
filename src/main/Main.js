@@ -86,32 +86,32 @@ const Main = () => {
     },[getAccessTokenSilently, isAuthenticated, mainState.user])
 
     useEffect(() => {
-        if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices && !mainState.isSet){
-            getAccountInfo(mainState.user.userid, mainState.user.access)
-                .then((result) => {
-                    if(result){
-                        result.isSet = true;
-                        mainDispatch({
-                            type: 'SET_ACCOUNT_INFO',
-                            data: result
-                        });
-                        if(window.location.href.indexOf('/home' > -1)){
-                            toast.success({message: "Account data ready", duration: 1000, toastId: 'data_fetch'});
+        if(isAuthenticated && mainState.user && mainState.user.access && !mainState.notices && !mainState.isSet && (mainState.loggedIn || !mainState.loggingIn) ){
+                getAccountInfo(mainState.user.userid, mainState.user.access)
+                    .then((result) => {
+                        if(result){
+                            result.isSet = true;
+                            mainDispatch({
+                                type: 'SET_ACCOUNT_INFO',
+                                data: result
+                            });
+                            if(window.location.href.indexOf('/home' > -1)){
+                                toast.success({message: "Account data ready", duration: 1000, toastId: 'data_fetch'});
+                            }
+                        }else{
+                            mainDispatch({
+                                type: 'SET_ACCOUNT_INFO',
+                                data: {isSet: true}
+                            });
+                            handleFailedConnection(SITE.failed_retrieval_message, false, toast);
                         }
-                    }else{
-                        mainDispatch({
-                            type: 'SET_ACCOUNT_INFO',
-                            data: {isSet: true}
-                        });
-                        handleFailedConnection(SITE.failed_retrieval_message, false, toast);
-                    }
-                    
-                });
+                        
+                    });
 
         }else if(!isLoading && !isAuthenticated && !mainState.isSet){
             mainDispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}});
         }
-    },[isLoading, isAuthenticated, getAccessTokenSilently, mainState.user, mainState.notices, mainState.isSet]);
+    },[isLoading, isAuthenticated, getAccessTokenSilently, mainState.user, mainState.notices, mainState.isSet, mainState.loggedIn, mainState.loggingIn]);
 
 
         

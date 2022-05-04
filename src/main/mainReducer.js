@@ -31,13 +31,16 @@ export const mainReducer = (state, action) => {
         }
         case 'SET_ACCOUNT_INFO':{
             return({...state, contacts: action.data.contacts, notices: action.data.notices, 
-                user: {...state.user, username: action.data.username}, isSet: action.data.isSet});
+                isSet: action.data.isSet});
         }
         case 'PROGRESS_FRAME':{
             return({...state, progressFrame: {max: 0, now: 0}});
         }
         case 'LOGGING_IN':{
             return({...state, loggingIn: action.data});
+        }
+        case 'LOGGED_IN':{
+            return({...state, loggedIn: action.data, logginIn: action.data ? false : true});
         }
         case 'ANIM':{
             return({...state, anim: action.data})

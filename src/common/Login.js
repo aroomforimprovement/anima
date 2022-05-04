@@ -4,39 +4,14 @@ import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
 import { SITE } from '../shared/site';
 import { handleFailedConnection } from './Toast';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
 import { getUserJwt } from '../utils/utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
 
-    const {dismiss, error} = useToastRack();
-    const { mainState  } = useMainContext();
-    
-
-    const saveAnimToAccount = async (anim, access, signal) => {
-        return await fetch(`${apiUrl}anim`, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify(anim),
-            signal: signal,
-            headers: {
-                Authorization: `Bearer ${access}`,
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => {
-            if(response.ok){
-                return response;
-            }else{
-            }
-        }, error => {
-            console.error('error saving anim');
-            dispatch({type: 'setSaveFailed'});
-        })
-        .catch(error => {console.error("Error fetching data: saveAnimToAccount")});
-    }
+    const { mainState, mainDispatch  } = useMainContext();
 
     const loginReducer = (state, action) => {
         switch(action.type){
@@ -126,18 +101,16 @@ const Login = () => {
              }
             )
             .catch(error => { 
-                dispatch({type: 'setIsFailed', data: true});
-                handleFailedConnection(SITE.failed_connection_message, true, {dismiss: dismiss, error: error});
+                if(!state.isFailed){
+                    dispatch({type: 'setIsFailed', data: true});
+                    handleFailedConnection(SITE.failed_connection_message, true, toast);    
+                }
                 console.error("Error fetching data: putLogin")
             });
         }
         
         const putLoginCall = async (login) => {
             await putLogin(login);
-        }
-        if(state.isFailed){
-            console.error(SITE.failed_connection_message)
-            handleFailedConnection(SITE.failed_connection_message, true, {dismiss: dismiss, error: error});
         }
         if(!state.isRegistered && state.isLoaded 
             && (mainState && mainState.user && mainState.user.access) 
@@ -146,15 +119,21 @@ const Login = () => {
                 putLoginCall({ 
                     userid: mainState.user.userid,
                     email: mainState.user.email,
-                    username: mainState.user.name, 
+                    username: mainState.user.username, 
                     access: mainState.user.access,
                 }, signal).catch((error) => {console.error("Error registering login")});
         }
         return () => {
             controller.abort();
         }
-    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered, dismiss, error]);
+    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
 
+    useEffect(() => {
+        if(state.isFailed){
+            console.error(SITE.failed_connection_message)
+            handleFailedConnection(SITE.failed_connection_message, true, toast);
+        }
+    }, [state.isFailed])
     useEffect(() => {
         if(!state.isLoaded && mainState.isSet){
             dispatch({type: 'setIsLoaded', data: true});
@@ -164,6 +143,30 @@ const Login = () => {
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
+
+        const saveAnimToAccount = async (anim, access, signal) => {
+            return await fetch(`${apiUrl}anim`, {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify(anim),
+                signal: signal,
+                headers: {
+                    Authorization: `Bearer ${access}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if(response.ok){
+                    mainDispatch({type: 'LOGGED_IN', data: true});
+                    return response;
+                }else{
+                }
+            }, error => {
+                console.error('error saving anim');
+                dispatch({type: 'setSaveFailed'});
+            })
+            .catch(error => {console.error("Error fetching data: saveAnimToAccount")});
+        }
 
         const saveAnimToAccountCall = async (anim, access) => {
             await saveAnimToAccount(anim, access, signal).then(() => {
@@ -178,11 +181,11 @@ const Login = () => {
         return () => {
             controller.abort();
         }
-    }, [mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
+    }, [mainDispatch, mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
 
     if(state.isFailed){
         return(
-            <Loading message={"Loading..."} />
+            <Loading message={"Failed..."} />
         )
     }
     
@@ -191,7 +194,6 @@ const Login = () => {
             <Loading message={"Loading authentication..."} />
         );
     }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
-            
             dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
             window.localStorage.removeItem('tempAnim');
             return <Loading message={"Saving your animation...1"} />
