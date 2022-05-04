@@ -17,6 +17,7 @@
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "hooks-for-redux": "^2.0.3",
+    "jose": "^4.8.1",
     "mocha": "^9.1.1",
     "mocha-jsdom": "^2.0.0",
     "node-polyfill-webpack-plugin": "^1.1.4",

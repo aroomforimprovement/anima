@@ -3,6 +3,7 @@ import { Loading } from './Loading';
 import { Problem } from './Problem';
 import { Redirect } from 'react-router';
 import { useMainContext } from '../main/Main';
+import { getUserJwtDecrypted } from '../utils/utils';
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -12,9 +13,7 @@ const Logout = () => {
 
     const putLogout = async (signal) => {
         //console.log('putLogout');
-        const userid = localStorage.getItem('userid');
-        const email = localStorage.getItem('email');
-        const username = localStorage.getItem('username');
+        const { userid, email, username} = await JSON.parse(await getUserJwtDecrypted(localStorage.getItem('anima_user')));
         const logout = {userid: userid, email: email, username: username};
         return await fetch(`${apiUrl}logout`, {
             method: 'POST',
@@ -51,9 +50,7 @@ const Logout = () => {
                 return ({...state, isFailed: action.data});
             }
             case 'setLogout':{
-                localStorage.removeItem('userid');
-                localStorage.removeItem('username');
-                localStorage.removeItem('email');
+                localStorage.removeItem('anima_user');
                 return ({...state, logout: action.data});
             }
             default:

@@ -13,7 +13,7 @@ module.exports = function override (config, env) {
         Buffer: ['buffer', 'Buffer'],
     }));
     plugs.push(new webpack.ProvidePlugin({
-        process: 'process/browser'
+        process: 'process/browser.js'
     }))
     
     return config

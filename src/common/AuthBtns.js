@@ -52,9 +52,7 @@ export const LogoutBtn = (props) => {
 
     const handleLogout = () => {
         logout({url});
-        localStorage.removeItem('userid');
-        localStorage.removeItem('username');
-        localStorage.removeItem('email');
+        localStorage.removeItem('anima_user');
     }
     return <button 
             onClick={() => handleLogout()}

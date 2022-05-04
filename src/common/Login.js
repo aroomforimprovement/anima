@@ -5,6 +5,7 @@ import { useMainContext } from '../main/Main';
 import { SITE } from '../shared/site';
 import { handleFailedConnection } from './Toast';
 import { useToastRack } from 'buttoned-toaster';
+import { getUserJwt } from '../utils/utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -52,9 +53,10 @@ const Login = () => {
                 return ({...state, isFailed: action.data, isSending: !action.data});
             }
             case 'setLogin':{
-                window.localStorage.setItem('userid', action.data.userid);
-                window.localStorage.setItem('username', action.data.username);
-                window.localStorage.setItem('email', action.data.email);
+                getUserJwt(action.data.username, action.data.email, action.data.userid)
+                    .then((userJwt) => {
+                        window.localStorage.setItem('anima_user', userJwt);
+                    }).catch((err) =>  console.error(err))
                 return ({...state, login: action.data, isRegistered: true, isSending: false});
             }
             case 'setAnim':{
