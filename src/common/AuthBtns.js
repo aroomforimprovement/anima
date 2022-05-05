@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
 
-const loginPop = async (loginWithPopup, screenHint, toast) => {
+const loginPop = async (loginWithPopup, screenHint) => {
         
     const doLogin = (t) => {
         t ? toast.dismiss(t) : console.debug();
-        loginWithPopup({screen_hint: screenHint});
+        loginWithPopup({screen_hint: screenHint})
+        .then(() => {
+            window.location.href = './login';
+            //<Redirect to='/login' />
+        });
     }
     const dismiss = (t) => {
         toast.dismiss(t);
@@ -16,7 +20,7 @@ const loginPop = async (loginWithPopup, screenHint, toast) => {
     toast.fire(
         { 
             message: `If you log in now, you will lose any unsaved changes in your animation.
-             Click cancel to go back and save your work. Click OK to proceed without saving`,
+                Click cancel to go back and save your work. Click OK to proceed without saving`,
             approveFunc: doLogin,
             dismissFunc: dismiss,
             dismissTxt: "Cancel", 
@@ -28,17 +32,10 @@ const loginPop = async (loginWithPopup, screenHint, toast) => {
 
 export const LoginBtn = ({size}) => {
     const classes = `btn btn-secondary ${size} m-1`;
-    const { loginWithPopup, user } = useAuth0();
-    const toast = useToastRack();
-
-    useEffect(() => {
-        if(user){
-            window.location.href = '/login';
-        }
-    }, [user]);
+    const { loginWithPopup } = useAuth0();
 
     return <button 
-            onClick={() => loginPop(loginWithPopup, 'login', toast)}
+            onClick={() => loginPop(loginWithPopup, 'login')}
             type='button' 
             className={classes}
             >Login</button>
@@ -66,10 +63,9 @@ export const LogoutBtn = (props) => {
 export const SignupBtn = (props) => {
     const classes = `btn btn-success ${props.size} m-1`;
     const { loginWithPopup } = useAuth0();
-    const toast = useToastRack();
-
+    
     return <button
-            onClick={() => loginPop(loginWithPopup, 'signup', toast)}
+            onClick={() => loginPop(loginWithPopup, 'signup')}
             type='button'
             className={classes}
             >Sign up</button>

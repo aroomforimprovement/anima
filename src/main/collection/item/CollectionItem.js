@@ -2,7 +2,6 @@ import React, { useState, useReducer } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
 import LazyLoad from "react-lazyload";
-import { useMainContext } from "../../Main";
 import { useCollectionContext } from "../Collection";
 import toast from "buttoned-toaster";
 import { collectionItemReducer, deleteAnim } from './collectionItemReducer';
@@ -12,6 +11,7 @@ import { Info } from "./Info";
 import { Div } from "../../../common/Div";
 import { saveAs } from "file-saver";
 import { Loading } from "../../../common/Loading";
+import { useAccount } from "../../../shared/account";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
     previewFile: null, previewName: null, hidden: false, deleted: false,
@@ -20,9 +20,10 @@ const collectionItemInitialState = {viewFile: null, viewName: null,
 
 export const CollectionItem = ({anim, index}) => {
     const [isDownloading, setIsDownloading] = useState(false);
-    const { mainState, mainDispatch } = useMainContext();
     const { collectionState, setCollectionState } = useCollectionContext();
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
+    const {account} = useAccount();
+
     const handleView = async (e) => {
         setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
         setCollectionState({type: 'SET_VIEWER_OPEN', data: true})
@@ -45,7 +46,7 @@ export const CollectionItem = ({anim, index}) => {
 
         const approve = (id) => {
             console.dir(anim);
-            deleteAnim(anim.animid, mainState.user)
+            deleteAnim(anim.animid, account.user)
             .then((res) => {
                 if(res){
                     toast.success("Anim deleted");
@@ -107,7 +108,7 @@ export const CollectionItem = ({anim, index}) => {
         return(
             <div hidden={true}>
                 <RenderWrapper anim={anim} index={'temp'} id={`temp`}
-                    type='DOWNLOAD' clip={false} mainDispatch={mainDispatch}/>
+                    type='DOWNLOAD' clip={false} />
             </div> 
         );
     }
@@ -116,7 +117,7 @@ export const CollectionItem = ({anim, index}) => {
         <div className={`col col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2
             py-1 px-3 my-2 mx-1 coll-item`}>
             {
-            mainState.isSet 
+            account.isSet 
             ? 
             <LazyLoad height={300} offset={10} placeholder={<Loading/>}
                 style={{minHeight:'100%'}}>
@@ -126,7 +127,7 @@ export const CollectionItem = ({anim, index}) => {
                     <Info anim={anim} />
                     <Buttons 
                         anim={anim} 
-                        user={mainState.user}
+                        user={account.user}
                         handleDelete={handleDelete} 
                         handleView={handleView}
                         handleDownload={handleDownload} 

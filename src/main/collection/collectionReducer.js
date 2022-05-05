@@ -35,7 +35,6 @@ export const getCollection = async (id, isBrowse, access, signal) => {
 }
 
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
-    //console.log("addContactRequest: "+ userid + ":" + username);
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
         mode: 'cors',

@@ -4,12 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { LoginBtn, LogoutBtn, SignupBtn } from './AuthBtns';
 import { Loading } from './Loading';
 import { SITE } from '../shared/site';
-import { useMainContext } from '../main/Main';
 import toast from 'buttoned-toaster';
+import { useAccount } from '../shared/account';
 
 const Header = () => {
     
-    const { mainState } = useMainContext();
+    const {account} = useAccount();
     const [isNavOpen, setIsNavOpen] = useState(false);
     const logo = process.env.REACT_APP_URL + '/assets/site-logo.svg'
     
@@ -34,12 +34,12 @@ const Header = () => {
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
                                 </NavLink>
                             </NavItem>
-                            {!mainState 
+                            {!account || !account.isSet
                                 ? <Loading /> 
-                                : mainState.user && mainState.user.isAuth 
-                                ? mainState.user.isVerified
+                                : account.user && account.user.isAuth 
+                                ? account.user.isVerified
                                 ? <NavItem className='nav-item nav-i'>
-                                    <a className='nav-link' href={`/collection/${mainState.user.userid}`}>
+                                    <a className='nav-link' href={`/collection/${account.user.userid}`}>
                                         <span className='fa fa-film fa-md m-1'></span> Collection
                                     </a>
                                 </NavItem>
@@ -56,19 +56,19 @@ const Header = () => {
                             </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>
-                            {!mainState ? <Loading /> :
+                            {!account || !account.isSet ? <Loading /> :
                             <Nav className='auth-nav' navbar >
                                 <NavItem className='nav-item nav-i'>
-                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? null : <LoginBtn size='btn-sm mt-2' href='/login' />}
+                                    {!account || (account && account.user && account.user.isAuth) ? null : <LoginBtn size='btn-sm mt-2' href='/login' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? <LogoutBtn size='btn-sm mt-2' href='/logout' /> : null}
+                                    {!account || (account && account.user && account.user.isAuth) ? <LogoutBtn size='btn-sm mt-2' href='/logout' /> : null}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i'>
-                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) ? null : <SignupBtn size='btn-sm mt-2' href='/signup' />}
+                                    {!account || (account && account.user && account.user.isAuth) ? null : <SignupBtn size='btn-sm mt-2' href='/signup' />}
                                 </NavItem>
                                 <NavItem className='nav-item nav-i ms-3'>
-                                    {!mainState || (mainState && mainState.user && mainState.user.isAuth) 
+                                    {!account || (account && account.user && account.user.isAuth) 
                                         ? <NavLink className='nav-link account-nav mt-1 mt-md-0 border rounded-circle' 
                                             to='/account' >
                                             <span className='fa fa-md fa-user text-center'>{''}</span> 

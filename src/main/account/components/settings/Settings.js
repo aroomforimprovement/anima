@@ -2,11 +2,11 @@ import React from "react";
 import { DisplayName } from "./DisplayName";
 import { ClearChoices } from "./ClearChoices";
 
-export const Settings = () => {
+export const Settings = ({account}) => {
 
     return(
         <div>
-            <DisplayName />
+            <DisplayName account={account}/>
             <ClearChoices />
         </div>
     )

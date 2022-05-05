@@ -1,25 +1,24 @@
 import React from 'react';
 import { SITE } from '../../../../shared/site';
-import { useAccountContext } from '../../Account';
-import { useMainContext } from '../../../Main';
 import { deleteContact } from '../../accountReducer';
 import toast from 'buttoned-toaster';
+import { useAccount } from '../../../../shared/account';
+import { Redirect } from 'react-router-dom';
 
 
 export const Contact = ({contact, i}) => {
     
-    const { mainState } = useMainContext();
-    const { state, dispatch } = useAccountContext();
+    const {account, dispatch} = useAccount();
     
     const handleVisitContact = (i) => {
-        const id = state.contacts[i].userid;
-        window.location.href = `/collection/${id}`;
+        const id = account.contacts[i].userid;
+        <Redirect to={`/collection/${id}`} />;
     }
 
     const handleDeleteContact = (i) => {
         const approve = (id) => {
-            deleteContact(state.contacts[i], mainState.user.userid, 
-                mainState.user.username, mainState.user.access)
+            deleteContact(account.contacts[i], account.user.userid, 
+                account.user.username, account.user.access)
             .then((response) => {
                 if(response && response.ok){
                     dispatch({type: 'DELETE_CONTACT', data: i});
@@ -41,6 +40,10 @@ export const Contact = ({contact, i}) => {
                 {
                     approveFunc: approve,
                     dismissFunc: dismiss,
+                    approveTxt: "Remove Contact",
+                    message: "Are you sure you want to remove this contact?",
+                    canHide: true,
+                    dontShowType: 'DELETE_CONTACT'
                 }
             );
         }

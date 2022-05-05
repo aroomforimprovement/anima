@@ -139,29 +139,7 @@ export const updateDisplayName = async (id, name, access) => {
 
 export const accountReducer = (state, action) => {
     switch(action.type){
-        case 'SET_ACCOUNT_INFO':
-            return({...state, 
-                userid: action.data.userid,
-                username: action.data.username,
-                notices: action.data.notices,
-                contacts: action.data.contacts,
-                isSet: true,
-            });
-        case 'SET_DISPLAY_NAME':
-            
-            return ({...state, username: action.data});
-        case 'DELETE_NOTICE':{
-            let notices = [...state.notices];
-            const notice = notices[action.data];
-            const newNotices = arrayRemove(notices, notice); 
-            return ({...state, notices: newNotices});
-        }
-        case 'DELETE_CONTACT':{
-            let contacts = [...state.contacts];
-            const contact = contacts[action.data];
-            const newContacts = arrayRemove(contacts, contact);
-            return ({...state, contacts: newContacts});
-        }
+        
         default:
             break;
     }

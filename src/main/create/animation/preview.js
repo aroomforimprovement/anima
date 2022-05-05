@@ -16,8 +16,6 @@ export const preview = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
-        //console.log("udpateWithProps");
-        //console.dir(props);
         if(props.anim && p5 && props.anim.name !== 'nothing' 
             && props.collectionState 
             && (props.collectionState.index === props.index 
@@ -39,7 +37,6 @@ export const preview = (p5) => {
                     }
                 );
             }else{
-                //console.log("previewAnim")
                 previewAnim(
                     {
                         a: props.anim, 

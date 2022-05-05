@@ -1,6 +1,7 @@
 import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
+import toast from 'buttoned-toaster';
 
 export const sketch = (p5) => {
     let p5canvas = undefined;
@@ -13,8 +14,7 @@ export const sketch = (p5) => {
     let isStroke = false;
     let isMounted = false;
     let isSet = false;
-    let toast;
-
+   
     const handleNoFramesAlert = () => {
         const dismiss = (id) => {
             toast.dismiss(id);
@@ -26,7 +26,8 @@ export const sketch = (p5) => {
                 message: `Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`,
                 dismissTxt: "OK", 
-                approveTxt:"Cool"
+                approveTxt:"Cool",
+                toastId: 'no_frames'
             }
         );
     }
@@ -48,7 +49,6 @@ export const sketch = (p5) => {
 
     p5.updateWithProps = (props) => {
         isMounted = true;
-        if(!toast && props.toast){ toast = props.toast};
         if(props.controls){ controls = props.controls; }
         if(!updateControls && props.updateControls){ updateControls = props.updateControls; }
         if(!mainDispatch && props.mainDispatch){mainDispatch = props.mainDispatch}

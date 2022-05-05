@@ -1,3 +1,4 @@
+import toast from 'buttoned-toaster';
 import { v4 as uuidv4 } from 'uuid';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -86,6 +87,7 @@ export const animReducer = (state, action) => {
         })
         .then(response => {
             if(response.ok){ 
+                toast.success("Anim saved to account");
                 return true;
             }else{ 
                 console.error("response not ok") }
@@ -95,6 +97,7 @@ export const animReducer = (state, action) => {
             return false;
         })
         .catch(error => { 
+            toast.error("Error saving anim to account");
             console.error(error)
             return false;
         });

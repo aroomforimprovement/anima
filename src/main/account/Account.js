@@ -1,15 +1,12 @@
-import React, { useEffect, useReducer, createContext, useContext, useState } from 'react';
-import { useMainContext } from '../Main';
-import { accountReducer, getAccountInfo } from './accountReducer';
-import toast from 'buttoned-toaster';
+import React, { useEffect, createContext, useContext, useState } from 'react';
 import './account.scss';
-import { SITE } from '../../shared/site';
-import { handleFailedConnection } from '../../common/Toast';
 import { Section } from './components/Section';
 import { Contacts } from './components/contacts/Contacts';
 import { Notices } from './components/notices/Notices';
 import { Settings } from './components/settings/Settings';
 import { DeleteAccount } from './components/settings/DeleteAccount';
+import { useAccount } from '../../shared/account';
+import { Loading } from '../../common/Loading';
 
 const AccountContext = createContext({});
 
@@ -19,68 +16,22 @@ export const useAccountContext = () => {
 
 const Account = () => {
 
-    const { mainState } = useMainContext();
-    
-    const [state, dispatch] = useReducer(accountReducer, {});
-    const stateOfAccount = { state, dispatch };
-    const [isLoading, setIsLoading] = useState(false);
-    const [isFailed, setIsFailed] = useState(false);
+    const {account} = useAccount();
     const [isVerified, setIsVerified] = useState(false);
 
     useEffect(() => {
-        if(mainState.user && mainState.user.isVerified){
-            setIsVerified(mainState.user.isVerified);
+        if(account.user && account.user.isVerified){
+            setIsVerified(account.user.isVerified);
         }
-    }, [mainState.user])
-
-    useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-
-        const getAccountId = () => {
-            if(mainState.user){
-                return mainState.user.userid;
-            }else{
-                console.error("no user");
-            }
-        }
-        const setAccountInfo = async (signal) => {
-            const id = getAccountId();
-            getAccountInfo(id, mainState.user.access, signal)
-            .then((response) => {
-                if(response){
-                    setIsLoading(false);
-                    dispatch({type: 'SET_ACCOUNT_INFO', data: response, signal});
-                    toast.success({message:"Account page ready", toastId: 'data_fetch'})
-                }else{
-                    setIsFailed(true, signal);
-                    dispatch({type: 'SET_ACCOUNT_INFO', data: {isSet: true}, signal})
-                    console.error(SITE.failed_connection_message);
-                }
-            });
-        }
-
-        if(!state.isSet && !isFailed && !isLoading){
-            setIsLoading(true, signal);
-            setAccountInfo(signal);
-        }else if(isFailed && isLoading){
-            setIsLoading(false);
-            console.error(SITE.failed_connection_message);
-            handleFailedConnection(SITE.failed_retrieval_message, false, toast, signal);
-        }
-
-        return() => {
-            controller.abort();
-        }
-        
-    },[isFailed, isLoading, mainState.user, state.isSet]);
+    }, [account.user])
 
     return(
         <div className='container account-page'>
-            <AccountContext.Provider value={stateOfAccount} >
+            <AccountContext.Provider value={{}} >
                 <AccountContext.Consumer>
                     {() => (
                         <div>
+                        {account.isSet && account.user ? <div>
                             <Section name={`Notices`}>
                                 <Notices verified={isVerified} />
                             </Section>
@@ -88,11 +39,12 @@ const Account = () => {
                                 <Contacts verified={isVerified}/>
                             </Section>
                             <Section name={`Settings`} >
-                                <Settings />
+                                <Settings account={account}/>
                             </Section>
                             <Section name={`Danger zone`}>
-                                <DeleteAccount user={mainState.user} />
+                                <DeleteAccount user={account.user} />
                             </Section>
+                        </div> : <Loading />}
                         </div>
                     )}
                 </AccountContext.Consumer>

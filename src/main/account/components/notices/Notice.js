@@ -1,23 +1,19 @@
 import React from 'react';
 import {SITE} from '../../../../shared/site';
-import { useMainContext } from '../../../Main';
-import { useAccountContext } from '../../Account';
 import { addContact, deleteNotice } from '../../accountReducer';
-import { useToastRack } from 'buttoned-toaster';
+import toast from 'buttoned-toaster';
+import { useAccount } from '../../../../shared/account';
 
 
-export const Notice = ({notice, i, link}) => {
-
-    const { mainState } = useMainContext();    
-    const { state, dispatch } = useAccountContext();
-    const toast = useToastRack();
+export const Notice = ({notice, i}) => {
+    const {account, dispatch} = useAccount();
 
     const handleAcceptNotice = (i) => {
         //only handling contact req for the moment
         const approve = (id) => {
-            addContact(state.notices[i], i, mainState.user.access)
+            addContact(account.notices[i], i, account.user.access)
             .then((response) => {
-                deleteNotice(state.notices[i], i, mainState.user.access)
+                deleteNotice(account.notices[i], i, account.user.access)
                     .then((response) => {
                         if(response && response.ok){
                             toast.success('Contact request approved');
@@ -43,7 +39,7 @@ export const Notice = ({notice, i, link}) => {
                     approveFunc: approve, 
                     dismissFunc: dismiss,
                     message: `By approving this contact request, you are allowing 
-                        the user "${state.notices[i].reqUsername}" to view all of 
+                        the user "${account.notices[i].reqUsername}" to view all of 
                         your anims, including those marked Private`,
                     approveTxt: "Approve", 
                     dismissTxt:"Maybe later",
@@ -57,9 +53,7 @@ export const Notice = ({notice, i, link}) => {
     }
 
     const handleRejectNotice = (i) => {
-        //console.log("handleRejectNotice");
-        //console.dir(state.notices[i]);
-        deleteNotice(state.notices[i], i, mainState.user.access)
+        deleteNotice(account.notices[i], i, account.user.access)
             .then((response) => {
                 if(response && response.ok){
                     dispatch({type: 'DELETE_NOTICE', data: i});
@@ -71,12 +65,11 @@ export const Notice = ({notice, i, link}) => {
     }
 
     const handleVisitContactReq = (i) => {
-        //console.log("handleVisitContact");
         let id;
-        if(state.notices[i].targetUserid){
-            id = state.notices[i].targetUserid;
+        if(account.notices[i].targetUserid){
+            id = account.notices[i].targetUserid;
         }else{
-            id = state.notices[i].userid;
+            id = account.notices[i].userid;
         }
         window.location.href = `/collection/${id}`;
     }
@@ -101,7 +94,6 @@ export const Notice = ({notice, i, link}) => {
                         <img src={SITE.icons.save} alt={`Accept`} />
                     </button>
                     }
-                    
                 </div>
             </div>
         </div>

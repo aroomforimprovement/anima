@@ -6,10 +6,10 @@ import { animReducer, newAnimState } from './animationReducer';
 import { sketch } from './sketch';
 import { values } from '../values';
 import { Privacy } from '../controller/ControllerBtns';
-import { useMainContext } from '../../Main';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 import toast from 'buttoned-toaster';
+import { useAccount } from '../../../shared/account';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -20,13 +20,13 @@ export const useAnimContext = () => {
 }
 
 
-export const Animation = ({edit, splat, loggingIn}) => {
-    const { mainState, mainDispatch } = useMainContext();
+export const Animation = ({splat}) => {
+    const {account} = useAccount();
     
     const [ access, setAccess ] = useState(null);
 
     const { controls, updateControls } = useControlContext();
-    const initAnimState = newAnimState(mainState.user);
+    const initAnimState = newAnimState(account.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
 
@@ -35,7 +35,7 @@ export const Animation = ({edit, splat, loggingIn}) => {
     const tempSave = () => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
     }
-    const redirectAfterTempSave = async (temp) => {
+    const redirectAfterTempSave = async () => {
         tempSave();
         loginWithPopup(
             {
@@ -73,27 +73,27 @@ export const Animation = ({edit, splat, loggingIn}) => {
                 })
                 .catch(err => console.error(err));
         }
-        if(mainState.user && mainState.user.isAuth && mainState.user.access){
-            setAccess(mainState.user.access, signal);
-            updateAnim({type: 'UPDATE_ANIM_USER', data: mainState.user, signal: signal});
+        if(account.user && account.user.isAuth && account.user.access){
+            setAccess(account.user.access, signal);
+            updateAnim({type: 'UPDATE_ANIM_USER', data: account.user, signal: signal});
         }
-        if(!anim.isSet && splat && mainState.user && access){
+        if(!anim.isSet && splat && account.user && access){
             getSavedAnim(splat, signal);
         }
         return () => {
             controller.abort();
         }
-    },[anim.isSet, splat, mainState.user, access]);
+    },[anim.isSet, splat, account.user, access]);
     
+    useEffect(() => {
+
+    })
 
     const handleSaveSubmission = (e) => {
         //console.debug(`handleSaveSubmission`)
         updateAnim({type: 'USERID', data: true});
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
-            if(anim.save){
-                
-            }
         }else{
             redirectAfterTempSave(anim.temp);
         }
@@ -132,8 +132,8 @@ export const Animation = ({edit, splat, loggingIn}) => {
     //        handleLoggingIn();
     //    }
     //}, [loggingIn, anim])
-
-    if(window.localStorage.getItem('tempAnim') && !loggingIn){
+    
+    if(window.localStorage.getItem('tempAnim')){
         return(
             <Redirect to='/login'/>
         );
@@ -147,7 +147,6 @@ export const Animation = ({edit, splat, loggingIn}) => {
                     <ReactP5Wrapper sketch={sketch} toast={toast}
                         controls={controls} updateControls={updateControls}
                         anim={anim} updateAnim={updateAnim} index={'temp'}
-                        mainDispatch={mainDispatch}
                         id='animCanvas' clip={false}/>
                     <Modal show={anim.isPreviewOpen} 
                         onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}

@@ -1,19 +1,77 @@
 import React, { useEffect, useReducer } from 'react';
 import { Loading } from './Loading';
 import { Redirect } from 'react-router';
-import { useMainContext } from '../main/Main';
-import { SITE } from '../shared/site';
 import { handleFailedConnection } from './Toast';
-import toast from 'buttoned-toaster';
+import { SITE } from '../shared/site';
 import { getUserJwt } from '../utils/utils';
+import { useAccount } from '../shared/account';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
 
-    const { mainState, mainDispatch  } = useMainContext();
+    const {account} = useAccount();
+
+    const putLogin = async (login, signal) => {
+        return await fetch(`${apiUrl}login`, {
+            method: 'POST',
+            mode: 'cors',
+            signal: signal,
+            body: JSON.stringify(login),
+            headers: {
+                Authorization: `Bearer ${login.access}`,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if(response.ok){ 
+                dispatch(
+                    {
+                        type: 'setLogin', 
+                        data: login
+                    });
+            }else{ 
+                dispatch({type: 'setIsFailed', data: true});
+                console.error("response not ok") }
+        }, error => { 
+            dispatch({type: 'setIsFailed', data: true});
+            console.error("error fetching login");
+         }
+        )
+        .catch(error => { 
+            dispatch({type: 'setIsFailed', data: true});
+            handleFailedConnection(SITE.failed_connection_message, true);
+            console.error("Error fetching data: putLogin")
+        });
+    }
+
+    const saveAnimToAccount = async (anim, access, signal) => {
+        return await fetch(`${apiUrl}anim`, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(anim),
+            signal: signal,
+            headers: {
+                Authorization: `Bearer ${access}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                //console.log("response ok");
+                return response;
+            }else{
+                //console.log('response not ok');
+            }
+        }, error => {
+            console.error('error saving anim');
+            dispatch({type: 'setSaveFailed', signal: signal});
+        })
+        .catch(error => {console.error("Error fetching data: saveAnimToAccount")});
+    }
 
     const loginReducer = (state, action) => {
+        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -36,8 +94,8 @@ const Login = () => {
             }
             case 'setAnim':{
                 let anim = action.data;
-                anim.userid = mainState.user.userid;
-                anim.username = mainState.user.username;
+                anim.userid = account.user.userid;
+                anim.username = account.user.username;
                 return({...state, anim: action.data});
             }
             case 'setIsSaving':{
@@ -73,100 +131,40 @@ const Login = () => {
         const controller = new AbortController();
         const signal = controller.signal;
 
-        const putLogin = async (login, signal) => {
-            return await fetch(`${apiUrl}login`, {
-                method: 'POST',
-                mode: 'cors',
-                signal: signal,
-                body: JSON.stringify(login),
-                headers: {
-                    Authorization: `Bearer ${login.access}`,
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => {
-                if(response.ok){ 
-                    dispatch(
-                        {
-                            type: 'setLogin', 
-                            data: login
-                        });
-                }else{ 
-                    dispatch({type: 'setIsFailed', data: true});
-                    console.error("response not ok") }
-            }, error => { 
-                dispatch({type: 'setIsFailed', data: true});
-                console.error(error);
-                console.error("error fetching login");
-             }
-            )
-            .catch(error => { 
-                if(!state.isFailed){
-                    dispatch({type: 'setIsFailed', data: true});
-                    handleFailedConnection(SITE.failed_connection_message, true, toast);    
-                }
-                console.error("Error fetching data: putLogin")
-            });
-        }
         
         const putLoginCall = async (login) => {
+            console.dir(login);
             await putLogin(login);
         }
+        if(state.isFailed){
+            handleFailedConnection(SITE.failed_connection_message, true);
+        }
         if(!state.isRegistered && state.isLoaded 
-            && (mainState && mainState.user && mainState.user.access) 
+            && (account.user && account.user.access ) 
             && !state.isSending && !state.isFailed){
-                dispatch({type: 'setIsSending', data: true});
-                putLoginCall({ 
-                    userid: mainState.user.userid,
-                    email: mainState.user.email,
-                    username: mainState.user.username, 
-                    access: mainState.user.access,
-                }, signal).catch((error) => {console.error("Error registering login")});
+            dispatch({type: 'setIsSending', data: true});
+            console.dir(account.user)
+            putLoginCall({ 
+                userid: account.user.userid,
+                email: account.user.email,
+                username: account.user.username, 
+                access: account.user.access,
+            }, signal).catch((error) => {console.error("Error registering login")});
         }
         return () => {
             controller.abort();
         }
-    },[state.isLoaded, mainState, state.isSending, state.isFailed, state.isRegistered]);
+    },[state.isLoaded, state.isSending, state.isFailed, state.isRegistered, account.user]);
 
     useEffect(() => {
-        if(state.isFailed){
-            console.error(SITE.failed_connection_message)
-            handleFailedConnection(SITE.failed_connection_message, true, toast);
-        }
-    }, [state.isFailed])
-    useEffect(() => {
-        if(!state.isLoaded && mainState.isSet){
+        if(!state.isLoaded && account.isSet){
             dispatch({type: 'setIsLoaded', data: true});
         }       
-    },[state.isLoaded, mainState.isSet]);
+    },[state.isLoaded, account.isSet]);
 
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-
-        const saveAnimToAccount = async (anim, access, signal) => {
-            return await fetch(`${apiUrl}anim`, {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify(anim),
-                signal: signal,
-                headers: {
-                    Authorization: `Bearer ${access}`,
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => {
-                if(response.ok){
-                    mainDispatch({type: 'LOGGED_IN', data: true});
-                    return response;
-                }else{
-                }
-            }, error => {
-                console.error('error saving anim');
-                dispatch({type: 'setSaveFailed'});
-            })
-            .catch(error => {console.error("Error fetching data: saveAnimToAccount")});
-        }
 
         const saveAnimToAccountCall = async (anim, access) => {
             await saveAnimToAccount(anim, access, signal).then(() => {
@@ -175,25 +173,27 @@ const Login = () => {
             }).catch((error) => {console.error("Error saving Anim to account");});
         }
         if(state.anim && !state.isSaved && !state.isSaving){
-            saveAnimToAccountCall(state.anim, mainState.user.access, signal);
+            saveAnimToAccountCall(state.anim, account.user.access, signal);
         }
 
         return () => {
+            //console.log("abort save");
             controller.abort();
         }
-    }, [mainDispatch, mainState.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
+    }, [account.user, state.anim, state.isFailed, state.isSaved, state.isSaving]);
 
     if(state.isFailed){
         return(
-            <Loading message={"Failed..."} />
+            <Loading message={"Loading..."} />
         )
     }
     
-    if(!mainState){
+    if(!account){
         return(
             <Loading message={"Loading authentication..."} />
         );
-    }else if(state.isRegistered && mainState.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
+    }else if(state.isRegistered && account.user.userid && window.localStorage.getItem('tempAnim') && !state.isSaved){
+            
             dispatch({type: 'setAnim', data: JSON.parse(window.localStorage.getItem('tempAnim')).anim});
             window.localStorage.removeItem('tempAnim');
             return <Loading message={"Saving your animation...1"} />
@@ -214,7 +214,7 @@ const Login = () => {
             <Redirect to={`/create/${animid}`} />
         );
     
-    }else if(state.isRegistered && mainState.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
+    }else if(state.isRegistered && account.user.userid && !window.localStorage.getItem('tempAnim') && !state.isSaved && !state.anim && !state.isSaving){
     
         return(
            //<Loading message="redirect blocked" />
@@ -223,7 +223,7 @@ const Login = () => {
     }else{
     
         return(
-           <Loading/>
+           <Loading message="oh dear"/>
         );
     
     }

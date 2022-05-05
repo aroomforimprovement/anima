@@ -12,6 +12,7 @@ import { Div } from '../../common/Div';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
 import { handleFailedConnection } from '../../common/Toast';
+import { useAccount } from '../../shared/account';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
@@ -24,13 +25,13 @@ export const useCollectionContext = () => {
 
 const Collection = ({browse}) => {
 
-    const { mainState, mainDispatch } = useMainContext();
+    const {account} = useAccount();
     const splat = useParams()[0];
     
     const isContact = (id) => {
-        if(mainState && mainState.contacts){
-                for(let i = 0; i < mainState.contacts.length; i++){
-                    if(mainState.contacts[0].userid === id){
+        if(account && account.contacts){
+                for(let i = 0; i < account.contacts.length; i++){
+                    if(account.contacts[0].userid === id){
                         return true;
                     }
                 }
@@ -39,10 +40,10 @@ const Collection = ({browse}) => {
         return false;
     }
     const isContactRequested = (id) => {
-        if(mainState && mainState.notices){
-            for(let i = 0; i < mainState.notices.length; i++){
-                if(mainState.notices[i].type.indexOf('pending-contact') > -1){
-                    if(mainState.notices[i].targetUserid === id){
+        if(account && account.notices){
+            for(let i = 0; i < account.notices.length; i++){
+                if(account.notices[i].type.indexOf('pending-contact') > -1){
+                    if(account.notices[i].targetUserid === id){
                         return true;
                     }
                 }
@@ -54,7 +55,7 @@ const Collection = ({browse}) => {
     const handleAddContact = (e) => {
         const approve = (id) => {
             addContactRequest(collectionState.userid, collectionState.username, 
-                mainState.user.username, mainState.user.userid, mainState.user.access)
+                account.user.username, account.user.userid, account.user.access)
                 .then((response) => {
                     //should check and set this on page load as well - would have to retrieve contacts and notices from target collection on fetch
                     setCollectionState({type: 'SET_CONTACT_REQ_ENABLED', data: false});
@@ -91,7 +92,6 @@ const Collection = ({browse}) => {
     useEffect(() => {
         const handleFailure = async () => {
             handleFailedConnection(SITE.failed_retrieval_message, true, toast);
-            console.error(SITE.failed_connection_message)
         }
         if(isFailed){
             handleFailure();
@@ -105,29 +105,29 @@ const Collection = ({browse}) => {
             setCollectionState({type: 'SET_COLLECTION', data: data, signal}); 
         }
         
-        if(!isFailed && !collectionState.isSet && mainState.isSet){
-            const access = mainState.user ? mainState.user.access : undefined
-            toast.info("Fetching anima");
+        if(!isFailed && !collectionState.isSet && account.isSet){
+            const access = account.user ? account.user.access : undefined
+            toast.info({message: "Fetching anima", toastId: 'data_fetch'});
             getCollection(splat, browse, access, signal)
                 .then((response) => {
-                    toast.info("Rendering anima");
+                    toast.info({message: "Rendering anima", toastId: 'data_fetch'});
                     if(browse){
                         setCollection({anims: response, isSet: true, signal});
                     }else{
                         setCollection({anims: response.anims, isSet: true,
                             username: response.username, userid: response.userid,
-                            isOwn: response.userid === mainState.user.userid, signal});
+                            isOwn: response.userid === account.user.userid, signal});
                     }
                 })
                 .catch((error) => {
-                    setIsFailed(true, signal);
-                    toast.error("Failed to fetch anima");
+                    setIsFailed(true);
+                    toast.error({message: "Failed to fetch anima", toastId: 'data_fetch'});
                 });
         }
         return () => {
             controller.abort();
         }
-    },[collectionState.isSet, mainState.isSet, browse, mainState.user, splat, isFailed]);
+    },[collectionState.isSet, account.isSet, browse, account.user, splat, isFailed]);
 
     const collectionHeading = collectionState.username
         ? <div className='container collection-header mt-4 mb-4'>
@@ -136,7 +136,7 @@ const Collection = ({browse}) => {
                     {collectionState.username}
                 </h5>
                 {
-                !mainState.user || !mainState.user.isAuth || !mainState.user.isVerified ||
+                !account.user || !account.user.isAuth || !account.user.isVerified ||
                 collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
                 ? 
                 <div></div> 
@@ -174,7 +174,7 @@ const Collection = ({browse}) => {
 
     return(
         <div>
-            {mainState.isSet && collectionState.anims 
+            {account.isSet && collectionState.anims 
             ?
             <div>
                 <CollectionContext.Provider value={stateOfCollection}>
@@ -201,7 +201,7 @@ const Collection = ({browse}) => {
                                 <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
                                     collectionState={collectionState} type={'VIEW'}
                                     setCollectionState={setCollectionState} clip={false}
-                                    mainDispatch={mainDispatch}/> 
+                                    /> 
                                 : <Div/>
                                 }
                             </div>

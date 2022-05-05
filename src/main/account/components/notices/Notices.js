@@ -1,14 +1,14 @@
 import React from "react";
 import { Unverfied } from "../../../../common/Unverified";
-import { useAccountContext } from "../../Account";
+import { useAccount } from "../../../../shared/account";
 import { Notice } from "./Notice";
 
 export const Notices = ({verified}) => {
     
-    const state = useAccountContext()[0];
+    const {account} = useAccount();
 
-    const notices = state && state.notices && state.notices.length > 0 
-        ? state.notices.map((notice, i) => {
+    const notices = account && account.notices && account.notices.length > 0 
+        ? account.notices.map((notice, i) => {
             
             const link = `/collection/${notice.actions.accept}`;
             return(

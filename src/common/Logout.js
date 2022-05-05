@@ -2,17 +2,16 @@ import React, { useEffect, useReducer } from 'react';
 import { Loading } from './Loading';
 import { Problem } from './Problem';
 import { Redirect } from 'react-router';
-import { useMainContext } from '../main/Main';
 import { getUserJwtDecrypted } from '../utils/utils';
+import { useAccount } from '../shared/account';
 
 const apiUrl = process.env.REACT_APP_API_URL
 
 const Logout = () => {
 
-    const {mainState} = useMainContext();
-
+    const { account } = useAccount();
+    
     const putLogout = async (signal) => {
-        //console.log('putLogout');
         const { userid, email, username} = await JSON.parse(await getUserJwtDecrypted(localStorage.getItem('anima_user')));
         const logout = {userid: userid, email: email, username: username};
         return await fetch(`${apiUrl}logout`, {
@@ -35,7 +34,6 @@ const Logout = () => {
     }
 
     const logoutReducer = (state, action) => {
-        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -69,7 +67,6 @@ const Logout = () => {
     
  
     useEffect(() => {
-        //console.log('mount');
         const controller = new AbortController();
         const signal = controller.signal;
         const putLogoutCall = async (signal) => {
@@ -88,16 +85,15 @@ const Logout = () => {
             putLogoutCall(signal)
         }
         return () => {
-            //console.log("abort");
             controller.abort();
         }
     },[state.isLoaded, state.isFailed, state.isSending, state.isRegistered]);
 
     useEffect(() => {
-        if(!state.isLoaded && mainState.isSet){
+        if(!state.isLoaded && account.isSet){
             dispatch({type: 'setIsLoaded', data: true});
         }
-    }, [state.isLoaded, mainState.isSet]);
+    }, [state.isLoaded, account.isSet]);
 
     useEffect(() => {
         if(!state.isRegistered && state.isFailed && state.isSending){
@@ -106,7 +102,7 @@ const Logout = () => {
         }
     }, [state.isRegistered, state.isFailed, state.isSending]);
 
-    if(!mainState.isSet){
+    if(!account.isSet){
         return(
             <Loading message={"Loading..."} />
         );
@@ -120,7 +116,6 @@ const Logout = () => {
         );
     }else if(state.isRegistered){
         return(
-            //<Loading message={"Redirect blocked..."} />
             <Redirect to='/'/>
         );
     }
