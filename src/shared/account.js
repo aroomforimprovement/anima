@@ -8,7 +8,6 @@ import { arrayRemove } from '../utils/utils';
 
 /**Very much a draft, not working at all */
 const reducer = (state, action) => {
-    console.log(action.type);
     switch(action.type){
         case 'CHECK_AUTH':{
             let storedUser = {isAuth: false};

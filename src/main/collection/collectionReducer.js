@@ -88,10 +88,19 @@ export const collectionReducer = (state, action) => {
             return({...state, contactReqEnabled: action.data});
         }
         case 'DELETE_ANIM':{
-            let anims = [...state.anims];
-            const anim = anims.filter(a => {return a.animid === action.data});
+            const anims = [...state.anims];
+            const files = [...state.previewFiles];
+            let ind;
+            const anim = anims.filter((a, i) => {
+                if(a.animid === action.data){
+                    ind = i;
+                    return true;
+                }
+                return false;
+            });
             const newAnims = arrayRemove(anims, anim[0]);
-            return({...state, anims: newAnims});
+            files.splice(ind, 1);
+            return({...state, anims: [...newAnims], previewFiles: [...files], index:0});
         }
         case 'SET_VIEW_FILE':{
             if(action.data){
@@ -100,6 +109,16 @@ export const collectionReducer = (state, action) => {
             }
             return({...state, viewFile: null, viewFileName: null, selectedAnim: null});
             
+        }
+        case 'ADD_PREVIEW_FILE':{
+            if(action.data){
+                const url = URL.createObjectURL(action.data.blob);
+                const files = [...state.previewFiles];
+                //files[action.data.index] = url;
+                files.push(url);
+                return({...state, previewFiles: files, index: action.data.index+1})
+            }
+            return({...state})
         }
         case 'SET_SELECTED_ANIM':{
             return({...state, selectedAnim: action.data});

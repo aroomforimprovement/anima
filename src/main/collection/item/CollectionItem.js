@@ -1,8 +1,8 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
 import LazyLoad from "react-lazyload";
-import { useCollectionContext } from "../Collection";
+import { CollectionContext, useCollectionContext } from "../Collection";
 import toast from "buttoned-toaster";
 import { collectionItemReducer, deleteAnim } from './collectionItemReducer';
 import { Thumb } from "./Thumb";
@@ -18,7 +18,7 @@ const collectionItemInitialState = {viewFile: null, viewName: null,
     progressFrame: {max: 0, now: 0}
 }
 
-export const CollectionItem = ({anim, index}) => {
+export const CollectionItem = ({anim, index, previewFile}) => {
     const [isDownloading, setIsDownloading] = useState(false);
     const { collectionState, setCollectionState } = useCollectionContext();
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
@@ -49,7 +49,8 @@ export const CollectionItem = ({anim, index}) => {
             .then((res) => {
                 if(res){
                     toast.success("Anim deleted");
-                    collectionItemDispatch({type: 'DELETE_ANIM'});
+                    //collectionItemDispatch({type: 'DELETE_ANIM', data:anim.animid});
+
                     setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
                 }else{
                     toast.error("Error deleting the anim");
@@ -113,41 +114,45 @@ export const CollectionItem = ({anim, index}) => {
     }
 
     return(
-        <div className={`col col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2
-            py-1 px-3 my-2 mx-1 coll-item`}>
-            {
-            account.isSet 
-            ? 
-            <LazyLoad height={300} offset={10} placeholder={<Loading/>}
-                style={{minHeight:'100%'}}>
-                <Thumb previewFile={collectionItemState.previewFile}
-                    name={anim.name}/>
-                <div className="coll-item-body">
-                    <Info anim={anim} />
-                    <Buttons 
-                        anim={anim} 
-                        user={account.user}
-                        handleDelete={handleDelete} 
-                        handleView={handleView}
-                        handleDownload={handleDownload} 
-                        isViewerOpen={collectionState.isViewerOpen}
-                    /> 
-                </div>
+        <CollectionContext.Consumer >
+            {() => (
+            <div className={`col col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2
+                py-1 px-3 my-2 mx-1 coll-item`}>
                 {
-                collectionItemState.viewFile || (collectionItemState.index <= index) 
-                ? <Div hidden={true} />
-                : <PreviewGen />
-                } 
-                {
-                collectionItemState.viewFile  
-                || !isDownloading 
-                ? <Div hidden={true}/>
-                : <DownloadGen />             
+                account.isSet 
+                ? 
+                <LazyLoad height={300} offset={10} placeholder={<Loading/>}
+                    style={{minHeight:'100%'}}>
+                    <Thumb previewFile={previewFile}
+                        name={anim.name}/>
+                    <div className="coll-item-body">
+                        <Info anim={anim} />
+                        <Buttons 
+                            anim={anim} 
+                            user={account.user}
+                            handleDelete={handleDelete} 
+                            handleView={handleView}
+                            handleDownload={handleDownload} 
+                            isViewerOpen={collectionState.isViewerOpen}
+                        /> 
+                    </div>
+                    {
+                    collectionItemState.viewFile || (collectionItemState.index <= index) 
+                    ? <Div hidden={true} />
+                    : <PreviewGen />
+                    } 
+                    {
+                    collectionItemState.viewFile  
+                    || !isDownloading 
+                    ? <Div hidden={true}/>
+                    : <DownloadGen />             
+                    }
+                </LazyLoad>
+                : 
+                <Loading/>
                 }
-            </LazyLoad>
-            : 
-            <Loading/>
-            }
-    </div>
+            </div>
+            )}
+        </CollectionContext.Consumer>
     );
 }

@@ -1,7 +1,6 @@
 import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../../common/Loading';
-import { useMainContext } from '../Main';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
@@ -16,8 +15,8 @@ import { useAccount } from '../../shared/account';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
-    selectedAnim: null, progressFrame: {max: 0, now: 0}};
-const CollectionContext = createContext(INIT_COLLECTION_STATE);
+    selectedAnim: null, previewFiles: [], progressFrame: {max: 0, now: 0}};
+export const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
     return useContext(CollectionContext);
@@ -39,6 +38,7 @@ const Collection = ({browse}) => {
         }
         return false;
     }
+
     const isContactRequested = (id) => {
         if(account && account.notices){
             for(let i = 0; i < account.notices.length; i++){
@@ -105,7 +105,7 @@ const Collection = ({browse}) => {
             setCollectionState({type: 'SET_COLLECTION', data: data, signal}); 
         }
         
-        if(!isFailed && !collectionState.isSet && account.isSet){
+        if(!isFailed && !collectionState?.isSet && account?.isSet){
             const access = account.user ? account.user.access : undefined
             toast.info({message: "Fetching anima", toastId: 'data_fetch'});
             getCollection(splat, browse, access, signal)
@@ -127,9 +127,9 @@ const Collection = ({browse}) => {
         return () => {
             controller.abort();
         }
-    },[collectionState.isSet, account.isSet, browse, account.user, splat, isFailed]);
+    },[collectionState?.isSet, account?.isSet, account?.user, browse, splat, isFailed]);
 
-    const collectionHeading = collectionState.username
+    const collectionHeading = collectionState && collectionState.username
         ? <div className='container collection-header mt-4 mb-4'>
             <div className='row'>
                 <h5 className='col col-8'>
@@ -154,32 +154,51 @@ const Collection = ({browse}) => {
     const [collection, setCollection] = useState([]);
 
     useEffect(() => {
-        if(collectionState.anims){
-            if(collectionState.anims.length >= collectionState.index){
+        if(collectionState?.anims){
+            if(collectionState.anims.length > collectionState.index){
                 const col = collectionState.anims.slice(0, collectionState.index+1);
                 setTimeout(() => {
-                    setCollection(col);
+                    setCollection(col); 
                 }, 100)
                  
             }
         }
-    }, [collectionState.anims, collectionState.index]);
+    }, [collectionState?.anims, collectionState?.index]);
+
+    const [previewFiles, setPreviewFiles] = useState();
+
+    useEffect(() => {
+        if(collectionState?.previewFiles){
+            setPreviewFiles(collectionState.previewFiles);
+        }
+    }, [collectionState?.previewFiles])
+
+    
 
     const collectionItems = collection ? collection.map((anim, index) => {
-        return(
-            <CollectionItem key={index} index={index} anim={anim}/>
-        );
+        return <CollectionItem 
+            key={index} 
+            index={index} 
+            anim={anim} 
+            previewFile={
+                previewFiles 
+                && previewFiles[index] 
+                ? previewFiles[index] 
+                : undefined}/>
     }) : <Loading />
 
+    useEffect(() => {
+
+    }, [collection])
 
     return(
         <div>
-            {account.isSet && collectionState.anims 
+            {account?.isSet && collectionState?.anims 
             ?
             <div>
                 <CollectionContext.Provider value={stateOfCollection}>
-                    {/*<CollectionContext.Consumer>*/}
-                        {/*{() => {*/}
+                    {/*<CollectionContext.Consumer>
+                        {() => {*/}
                             <div className=''>
                                 {collectionHeading}
                                 <div className='col col-12 collection'>
@@ -205,8 +224,8 @@ const Collection = ({browse}) => {
                                 : <Div/>
                                 }
                             </div>
-                        {/*}}*/}
-                    {/*</CollectionContext.Consumer>*/}
+                        {/*}}
+                    </CollectionContext.Consumer>*/}
                 </CollectionContext.Provider>
             </div>
             :

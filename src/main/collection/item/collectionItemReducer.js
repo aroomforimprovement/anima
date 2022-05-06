@@ -22,7 +22,9 @@ export const deleteAnim = async (animid, user) => {
 export const collectionItemReducer = (state, action) => {
     switch(action.type){
         case 'SET_PREVIEW_FILE':{
-            const previewFile = URL.createObjectURL(action.data.blob);
+            const previewFile = action.data 
+            ? URL.createObjectURL(action.data.blob)
+            : undefined;
             if(previewFile){
                 return ({...state, 
                     previewFile: previewFile, 

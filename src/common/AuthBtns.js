@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import toast from 'buttoned-toaster';
-import { useAccount } from '../shared/account';
 
 const loginPop = async (loginWithPopup, screenHint) => {
     
@@ -10,7 +9,6 @@ const loginPop = async (loginWithPopup, screenHint) => {
         loginWithPopup({screen_hint: screenHint})
         .then(() => {
             window.location.href = './login';
-//            <Redirect to='/login'/>
         });
     }
     const dismiss = (t) => {

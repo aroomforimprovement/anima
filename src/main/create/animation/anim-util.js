@@ -232,21 +232,17 @@ export const downloadAnimAsWebm = async (params) => {
 
 
  export const playPreview = async (params) => {
-    //console.debug("playPreview");
-    if(params.collectionItemDispatch && params.clip){
-        //console.log("dispatch & clip");
-        await params.collectionItemDispatch({
-            type: 'SET_PREVIEW_FILE', 
-            data: {blob : params.blob, name: params.name}
+    if(params.setCollectionState && params.clip){
+        await params.setCollectionState({
+            type: 'ADD_PREVIEW_FILE', 
+            data: {blob : params.blob, name: params.name, index: params.index}
         });  
     }else if(params.setCollectionState){
-        //console.log("dispatch");
         await params.setCollectionState({
             type: 'SET_VIEW_FILE',
             data: {blob: params.blob, name: params.name}
         });
     }else if(params.updateAnim){
-        //console.log("dispatch");
         await params.updateAnim({
             type: 'SET_VIEW_FILE',
             data: {blob: params.blob, name: params.name}
@@ -255,19 +251,13 @@ export const downloadAnimAsWebm = async (params) => {
 }
 
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
-    //console.debug("setThumb");
-    if(dispatch){
+    if(dispatch)
         dispatch({
             type: 'SET_PREVIEW_FILE',
             data: {blob: blob, name: name}
         });
-    }else{
-        //console.debug('no collection item dispatch');
-    }
-    if(setCollectionState){
+
+    if(setCollectionState)
         setCollectionState({type: 'SET_INDEX', data: index+1});
-    }else{
-        //console.debug('no collection state');
-    }
 }
 
