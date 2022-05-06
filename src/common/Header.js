@@ -70,6 +70,7 @@ const Header = () => {
                                 <NavItem className='nav-item nav-i ms-3'>
                                     {!account || (account && account.user && account.user.isAuth) 
                                         ? <NavLink className='nav-link account-nav mt-1 mt-md-0 border rounded-circle' 
+                                            style={account && account.notices && account.notices.length > 0 ?{color:'green'} : {}}
                                             to='/account' >
                                             <span className='fa fa-md fa-user text-center'>{''}</span> 
                                         </NavLink> 

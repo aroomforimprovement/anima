@@ -1,24 +1,9 @@
 import React from 'react';
 import { Loading } from '../../../common/Loading';
-//import { isMobile } from 'react-device-detect';
-//import { ViewerProgressBar } from '../../common/ProgressBar';
 
 export const Thumb = ({previewFile, name, max, now}) => {
     const isMobile = false;  
 
-    /***ANIM-229 - useRef didn't work to fix preview image
-     * not updating after anim delete
-     * const previewRef = useRef(null);
-
-    useEffect(() => {
-        const setRef = () => {
-            previewRef && previewRef.current 
-            ? previewRef.current.src = previewFile 
-            : console.debug("no ref");
-        }
-        setRef();
-    }, [previewFile, name]);
-    */
     return(
         <div className='coll-item-thumb'>
             {

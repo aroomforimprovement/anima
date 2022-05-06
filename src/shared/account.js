@@ -6,7 +6,7 @@ import { SITE } from './site';
 import { getAccountInfo } from '../main/account/accountReducer';
 import { arrayRemove } from '../utils/utils';
 
-/**Very much a draft, not working at all */
+
 const reducer = (state, action) => {
     switch(action.type){
         case 'CHECK_AUTH':{
