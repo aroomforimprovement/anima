@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import toast from 'buttoned-toaster';
+import { useAccount } from '../shared/account';
 
 const loginPop = async (loginWithPopup, screenHint) => {
-        
-    const doLogin = (t) => {
+    
+    const doLogin = async (t) => {
         t ? toast.dismiss(t) : console.debug();
         loginWithPopup({screen_hint: screenHint})
         .then(() => {
             window.location.href = './login';
-            //<Redirect to='/login' />
+//            <Redirect to='/login'/>
         });
     }
     const dismiss = (t) => {
@@ -34,12 +35,15 @@ export const LoginBtn = ({size}) => {
     const classes = `btn btn-secondary ${size} m-1`;
     const { loginWithPopup } = useAuth0();
 
+    const handleLogin = () => {
+        loginPop(loginWithPopup, 'login');
+    }
+
     return <button 
-            onClick={() => loginPop(loginWithPopup, 'login')}
-            type='button' 
-            className={classes}
+                onClick={handleLogin}
+                type='button' 
+                className={classes}
             >Login</button>
-               
 }
 
 export const LogoutBtn = (props) => {

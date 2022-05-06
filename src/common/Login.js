@@ -8,6 +8,7 @@ import { useAccount } from '../shared/account';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
+
 const Login = () => {
 
     const {account} = useAccount();
@@ -58,10 +59,9 @@ const Login = () => {
         })
         .then(response => {
             if(response.ok){
-                //console.log("response ok");
                 return response;
             }else{
-                //console.log('response not ok');
+                dispatch({type: 'setSaveFailed', signal: signal});
             }
         }, error => {
             console.error('error saving anim');
@@ -71,7 +71,6 @@ const Login = () => {
     }
 
     const loginReducer = (state, action) => {
-        //console.log(action.type+':'+action.data);
         switch(action.type){
             case 'setIsLoaded':{
                 return ({...state, isLoaded: action.data});
@@ -128,22 +127,23 @@ const Login = () => {
     });
 
     useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-
-        
-        const putLoginCall = async (login) => {
-            console.dir(login);
-            await putLogin(login);
-        }
         if(state.isFailed){
             handleFailedConnection(SITE.failed_connection_message, true);
         }
+    }, [state.isFailed])
+
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const putLoginCall = async (login) => {
+            await putLogin(login);
+        }
+        
         if(!state.isRegistered && state.isLoaded 
             && (account.user && account.user.access ) 
             && !state.isSending && !state.isFailed){
             dispatch({type: 'setIsSending', data: true});
-            console.dir(account.user)
             putLoginCall({ 
                 userid: account.user.userid,
                 email: account.user.email,
@@ -221,9 +221,12 @@ const Login = () => {
            <Redirect to='/create'/>
         );
     }else{
-    
+        if(state.isLoaded){
+
+        }
         return(
-           <Loading message="oh dear"/>
+            //window.location.href = '/'
+           <Loading message="Waiting for log in"/>
         );
     
     }

@@ -11,7 +11,6 @@ const reducer = (state, action) => {
     console.log(action.type);
     switch(action.type){
         case 'CHECK_AUTH':{
-            //should get really get display name from db (or update on auth0)
             let storedUser = {isAuth: false};
             if(action.data.isAuthenticated){
                 const user = action.data.user;
@@ -116,9 +115,11 @@ const useAccountStore = () => {
                 }
             });
         }
+
         if(accountStore.user && accountStore.user.isAuth && !accountStore.user.isVerified){
             setUnverifiedWarning();
         }
+        
     },[isLoading, isAuthenticated, user]);
 
     useEffect(() => {

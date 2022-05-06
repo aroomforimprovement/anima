@@ -45,7 +45,6 @@ export const CollectionItem = ({anim, index}) => {
     const handleDelete = (e) => {
 
         const approve = (id) => {
-            console.dir(anim);
             deleteAnim(anim.animid, account.user)
             .then((res) => {
                 if(res){

@@ -1,7 +1,6 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const deleteAnim = async (animid, user) => {
-    console.log("deleteAnim")
     const url = `${apiUrl}anim/${animid}`;
     const req = {
         method: 'DELETE',
@@ -14,7 +13,6 @@ export const deleteAnim = async (animid, user) => {
         }
     }
     return fetch(url, req).then(response => {
-        console.log("fetch")
         return response.ok ? true : false
     }, error => {
         return false
