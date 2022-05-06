@@ -118,20 +118,6 @@ export const Animation = ({splat}) => {
                 value={anim.anim.name ? anim.anim.name : undefined}/>
         );
     }
-
-    //useEffect(() => {
-    //    console.dir(anim);
-    //    console.log(loggingIn);
-    //    const saveTemp = () => {
-    //        window.localStorage.setItem("tempAnim", JSON.stringify(anim));
-    //    }
-    //    const handleLoggingIn = async () => {
-    //        saveTemp();
-    //    }
-    //    if(loggingIn){
-    //        handleLoggingIn();
-    //    }
-    //}, [loggingIn, anim])
     
     if(window.localStorage.getItem('tempAnim')){
         return(
