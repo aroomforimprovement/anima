@@ -1,7 +1,7 @@
 export const SITE = {
     "name": "Anima",
     "home_heading": "ANIMA",
-    "home_sub_heading" : "Old-timey Animation Online",
+    "home_sub_heading" : "Old-timey Animation online",
     "failed_connection_message": `It looks like there has been an issue contacting the server.
         Try again in a few minutes, or contact support if this is a persistent problem.`,
     "failed_delete_message": `It looks like there has been an issue deleting the resource.
