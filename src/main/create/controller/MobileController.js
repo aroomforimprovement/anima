@@ -22,10 +22,10 @@ const ControllerExpandedItem = ({title, func, iSrc, text, c}) => {
 }
 
 const ModeExpandable = ({closeExpandable}) => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
         closeExpandable();
-        dispatch({type: 'MODE', data: val});
+        updateControls({type: 'MODE', data: val});
     }
 
     return(
@@ -55,10 +55,10 @@ const Mode = ({func}) => {
 }
 
 const PenSizeExpandable = ({closeExpandable}) => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
         closeExpandable();
-        dispatch({type: 'PS', data: val});
+        updateControls({type: 'PS', data: val});
     }
 
     const sizes = values.penSizes.map((size) => {
@@ -103,10 +103,10 @@ const PenSize = ({func}) => {
 }
 
 const PenColourExpandable = ({closeExpandable}) => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
         closeExpandable();
-        dispatch({type: 'PC', data: val});
+        updateControls({type: 'PC', data: val});
     }
     return(
         <div>
@@ -156,10 +156,10 @@ const PenColour = ({func}) => {
 }
 
 const FrameRateExpandable = ({closeExpandable}) => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
         closeExpandable();
-        dispatch({type: 'FRAME_RATE', data: val});
+        updateControls({type: 'FRAME_RATE', data: val});
     }
 
     const rates = values.frameRates.map((rate) => {
@@ -186,10 +186,10 @@ const FrameRate = ({func}) => {
 }
 
 const BackgroundExpandable = ({closeExpandable}) => {
-    const { dispatch } = useControlContext();
+    const { updateControls } = useControlContext();
     const handle = (val) => {
         closeExpandable();
-        dispatch({type: val, data: true});
+        updateControls({type: val, data: true});
     }
     return(
         <div>
