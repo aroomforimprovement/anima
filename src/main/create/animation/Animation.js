@@ -109,9 +109,10 @@ export const Animation = ({splat}) => {
         e.preventDefault();
     }
 
-    const inputRef = useRef();
-    useEffect(() => {inputRef.current && inputRef.current.focus()});
+    
     const NameInput = () => {
+        const inputRef = useRef();
+        useEffect(() => {inputRef.current && inputRef.current.focus()});
         return(
             <Form.Control type='text' id='name' name='name' autoFocus={true}
                 onChange={handleNameChange} ref={inputRef} maxLength='140'
