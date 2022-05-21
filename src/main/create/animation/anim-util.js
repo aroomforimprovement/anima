@@ -6,12 +6,10 @@ import { saveAs } from 'file-saver';
  */
 
 export const setBgOverlay = async (p5, render, opacity) => {
-    console.dir(typeof opacity);
     let c = typeof opacity === 'undefined' ? values.bgc : [20, 255*opacity];
     if(render){
         c = p5.color(20);
     }
-    console.dir(c);
     p5.background(c);
 }
 
