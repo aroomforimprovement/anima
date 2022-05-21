@@ -5,16 +5,18 @@ import { saveAs } from 'file-saver';
  * DRAWING
  */
 
-export const setBgOverlay = async (p5, render) => {
-    let c = values.bgc;
+export const setBgOverlay = async (p5, render, opacity) => {
+    console.dir(typeof opacity);
+    let c = typeof opacity === 'undefined' ? values.bgc : [20, 255*opacity];
     if(render){
-        c = p5.color(0);
+        c = p5.color(20);
     }
+    console.dir(c);
     p5.background(c);
 }
 
-export const drawBg = async (bg, p5, render) => {
-    setBgOverlay(p5, render);
+export const drawBg = async (bg, p5, render, opacity) => {
+    setBgOverlay(p5, render, opacity);
     if(bg && bg.length > 0){
         drawPoints(bg, p5);
     }

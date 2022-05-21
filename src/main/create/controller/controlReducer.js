@@ -75,6 +75,9 @@ export const controlReducer = (state, action) => {
         case 'LOGGING_IN':{
             return({...state, loggingIn: action.data});
         }
+        case 'ADJUST_BG_OVERLAY':{
+            return({...state, bgOpacity: action.data});
+        }
         default:
             return state;
     }

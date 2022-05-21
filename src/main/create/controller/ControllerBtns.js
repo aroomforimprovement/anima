@@ -345,6 +345,44 @@ export const Preview = () => {
     )
 }
 
+export const AdjustBgDropdown = () => {
+    const { updateControls } = useControlContext();
+    const handle = (val) => {
+        updateControls({type: 'ADJUST_BG_OVERLAY', data: val});
+        updateControls({type: 'ENABLE', data: true});
+    }
+    const options = values.bgOverlayVals.map((value) => {
+        return(
+            <ControllerDropdownItem 
+                key={value}
+                title={`Opacity to ${value}`}
+                func={() => handle(value)}
+                iSrc={SITE.icons.bg} text={value} />
+        )
+    })
+    return(
+        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+            {options}
+        </DropdownMenu>
+    )
+}
+
+export const AdjustBg = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle>
+                <img src={SITE.icons.bg}
+                    title='Adjust background opacity'
+                    alt='Ajust background opacity' />
+            </DropdownToggle>
+            <AdjustBgDropdown />
+        </Dropdown> 
+    )
+}
+
 export const EnableShortcuts = () => {
 
     const { updateControls } = useControlContext();

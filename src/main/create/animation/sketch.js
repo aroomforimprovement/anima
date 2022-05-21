@@ -14,6 +14,7 @@ export const sketch = (p5) => {
     let isStroke = false;
     let isMounted = false;
     let isSet = false;
+    let bgOpacity = 0.75;
    
     const handleNoFramesAlert = () => {
         const dismiss = (id) => {
@@ -96,12 +97,12 @@ export const sketch = (p5) => {
         if(props.controls.drawBg){
             updateControls({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
-            drawBg(anim.bg, p5);
+            drawBg(anim.bg, p5, false, bgOpacity);
         }
         if(props.controls.next){
             updateControls({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
-            drawBg(anim.bg, p5);
+            drawBg(anim.bg, p5, false, bgOpacity);
         }
         if(props.controls.download){
             updateControls({type: 'DOWNLOAD', data: false});
@@ -169,6 +170,9 @@ export const sketch = (p5) => {
             updateControls({type: 'PRIVACY', data: null});
             updateControls({type: 'SET_PRIVACY', data: p});
             
+        }
+        if(props.controls.bgOpacity !== bgOpacity){
+            bgOpacity = props.controls.bgOpacity;
         }
         
         return () => { isMounted = false};
@@ -325,11 +329,7 @@ export const sketch = (p5) => {
         if(anim.anim && anim.anim.lastFrame && anim.anim.lastFrame.points
             && anim.anim.lastFrame.points.length > 0){
             drawPoints(anim.anim.lastFrame.points, p5);
-
-            setBgOverlay(p5);
-            //if(anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0){
-            //    drawPoints(anim.anim.lastFrame.bg, p5);
-            //}
+            setBgOverlay(p5, true);
         }
     }
 
@@ -345,18 +345,15 @@ export const sketch = (p5) => {
     }
 
     const redrawLastFrame = () => {
-        //console.log("redrawLastFrame");
-        setBgOverlay(p5);
+        console.log(bgOpacity)
+        setBgOverlay(p5, false, bgOpacity);
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
-            //console.log('drawing last frame');
             drawPoints(anim.anim.lastFrame.points, p5);
-            setBgOverlay(p5);
+            setBgOverlay(p5, false, bgOpacity);
             
             if((anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0)){
-                //console.log('drawing lastframe background');
                 drawPoints(anim.anim.lastFrame.bg, p5);
             }else if(anim.anim.bg && anim.anim.bg.length > 0){
-                //console.log('drawing background');
                 drawPoints(anim.anim.bg, p5);
             }
         }
@@ -364,13 +361,10 @@ export const sketch = (p5) => {
     }
 
     const redrawCurrentFrame = () => {
-        //console.log("redrawCurrentFrame");
         if(anim.bg && anim.bg.length > 0){
-            //console.log('drawing background');
             drawPoints(anim.bg, p5);
         }
         if(anim.undos && anim.undos.length > 0){
-            //console.log("drawing undos");
             drawPoints(anim.undos, p5);
         }
     }

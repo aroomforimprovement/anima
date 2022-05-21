@@ -14,7 +14,7 @@ export const CC =
 export const values = {
     defaultSize: 600,
     initialBgc: [20, 20, 20, 255],
-    bgc: [20, 20, 20, 240],
+    bgc: [20, 20, 20, 255*0.9],
     penWhite: [200, 200, 200, 200],
     initialControlState: {
         mode: CC.SINGLE,
@@ -35,7 +35,8 @@ export const values = {
         isPreviewOpen: false,
         isSaveOpen: false,
         privacy: 0,
-        currentPrivacy: 0
+        currentPrivacy: 0,
+        bgOpacity:0.9,
     },
     initialAnimState: {
         enabled: true,
@@ -76,7 +77,7 @@ export const values = {
     fg_shade: [220, 220, 220, 50],
     frameRates: [4, 8, 16, 20, 24, 28],
     penSizes: [1, 2, 3, 4, 5, 6, 7],
-    
+    bgOverlayVals: [0, 0.25, 0.5, 0.75, 0.9, 1],
 }
 
 export const CONTROLS = 
