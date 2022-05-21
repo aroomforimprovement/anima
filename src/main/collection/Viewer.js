@@ -24,7 +24,7 @@ export const Viewer = ({viewFile, anim, name}) => {
     })
 
     useEffect(() => {
-        toast.fire({message: "Press ESC to close viewer", duration: 2000, });
+        toast.fire({message: "Press ESC to close viewer", duration: 2000, toastId: 'fullscreen'});
     }, [])
 
     const Footer = () => {

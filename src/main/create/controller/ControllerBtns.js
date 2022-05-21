@@ -318,8 +318,10 @@ export const Background = () => {
 const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { updateControls } = useControlContext();
     const handle = async () => {
-        updateControls({type: dispatchType, data: true});
         toast.success({message: dispatchType, duration:1000});
+        setTimeout(() => {
+            updateControls({type: dispatchType, data: true});
+        }, 100)
     }
     return(
         <div>

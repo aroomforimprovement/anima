@@ -25,8 +25,11 @@ export const CollectionItem = ({anim, index, previewFile}) => {
     const {account} = useAccount();
 
     const handleView = async (e) => {
-        setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
-        setCollectionState({type: 'SET_VIEWER_OPEN', data: true})
+        toast.info({message: "Rendering anim"});
+        setTimeout(() => {
+            setCollectionState({type: 'SET_SELECTED_ANIM', data: anim});
+            setCollectionState({type: 'SET_VIEWER_OPEN', data: true})    
+        }, 100);
     }
 
     const handleDownload = async (e) => {
