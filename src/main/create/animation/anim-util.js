@@ -30,19 +30,7 @@ export const drawFrame = async (f, p5, render, clip) => {
 }
 
 export const drawPoints = async (points, p5, clip) => {
-    //let time = performance.now();
-    //const wait = 1000;
     points.forEach((element) => {
-    //    let now = performance.now();
-    //    while(now - time < wait){
-    //        //wait;
-    //        now = performance.now() + 1;
-    //        console.log(`waiting ${now}`);
-    //        console.log(`${time}:${wait}`);
-    //    }
-    //    console.log(`NOT waiting ${now}`);
-    //    console.log(`${time}:${wait}`);
-    //    time = performance.now();
         drawStroke(element, p5, clip);            
         
     });
