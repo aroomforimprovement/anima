@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'buttoned-toaster';
 
 export const ResendVerfication = ({user}) => {
     const endpoint = `${process.env.REACT_APP_API_URL}verify`
+    const [sent, setSent] = useState(false);
     
     const resendVerification = () => {
+        setSent(true);
         fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -20,7 +22,7 @@ export const ResendVerfication = ({user}) => {
         })
         .catch(error => console.error(error))
     }
-
+    
     const Verified = () => {
         return <div>{`You're account has been verified`}</div>
     }
@@ -41,14 +43,30 @@ export const ResendVerfication = ({user}) => {
             </div>
         )
     }
+
+    const Sent = () => {
+        return(
+            <div>{`Verification email requested`}</div>
+        )
+    }
     
     return(
         <div className='row mb-4 ms-2 section-content'>
             <div >
-                {user && user.isAuth 
-                ? <h5>Account verification:</h5> : <div></div>}
-                {user ? user.isVerified ? 
-                <Verified /> : <Unverified/> : <div></div>} 
+                {
+                    user && user.isAuth 
+                    ? <h5>Account verification:</h5> 
+                    : <div></div>
+                }
+                {
+                    sent 
+                    ? <Sent/> 
+                    : user 
+                    ? user.isVerified 
+                    ? <Verified /> 
+                    : <Unverified/> 
+                    : <div></div>
+                } 
             </div>       
         </div>
     )
