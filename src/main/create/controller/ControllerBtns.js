@@ -5,7 +5,7 @@ import { SITE } from '../../../shared/site';
 import { CC, CONTROLS, values } from '../values';
 import { useControlContext } from '../Create';
 import { ShortcutInfo } from './ControllerInfo';
-
+import toast from 'buttoned-toaster';
 
 const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
     const classes = `dropicon ${c}`;
@@ -91,14 +91,17 @@ export const PenSize = () => {
     useEffect(() => {
         //pretty hacky - would need to reorganise the CONTROLS object
         const handleSizeChange = () => {
+            let size;
             CONTROLS.forEach((controlObj) => {
                 if(controlObj.t === CC.TYPE_SIZE){
                     if(controlObj.v === controls.ps){
-                        setSize(parseInt(controlObj.n.substring(3,4)));
+                        size = parseInt(controlObj.n.substring(3,4));
+                        setSize(size);
                         return;
                     }
                 }
             });
+            toast.success({message: size, duration:1000});
         }
         handleSizeChange();
     },[controls.ps]);
@@ -168,37 +171,59 @@ export const PenColour = () => {
     const [colour, setColour] = useState(null)
 
     const toggle = () => setIsOpen(prevState => !prevState);
-    
-    const classes = `btn-colour-caption ${colour}`;
-    //const classes = `btn-colour-caption`
-    //console.log(classes);
 
     useEffect(() => {
         const handleColourChange = () => {
-            //console.log('handleColorChange');
+            let colour = 'black';
             switch(controls.pc){
-                case values.red: setColour('red'); break;
-                case values.green: setColour('green'); break;
-                case values.blue: setColour('blue'); break;
-                case values.yellow: setColour('yellow'); break;
-                case values.orange: setColour('orange'); break;
-                case values.cyan: setColour('cyan'); break;
-                case values.purple: setColour('purple'); break;
-                case values.pink: setColour('pink'); break;
+                case values.red:{
+                    colour = 'red'; 
+                    break;
+                }
+                case values.green: {
+                    colour = 'green';
+                    break;
+                }
+                case values.blue: {
+                    colour = 'blue'; 
+                    break;
+                }
+                case values.yellow: {
+                    colour = 'yellow'; 
+                    break;
+                }
+                case values.orange: {
+                    colour = 'orange'; 
+                    break;
+                }
+                case values.cyan: {
+                    colour = 'cyan'; 
+                    break;
+                }
+                case values.purple: {
+                    colour = 'purple'; 
+                    break;
+                }
+                case values.pink: {
+                    colour = 'pink'; 
+                    break;
+                }
                 case values.bg_solid:
-                case values.bg_shade: 
-                    setColour('black');
-                        break;
+                case values.bg_shade:{ 
+                    colour = 'black';
+                    break;
+                }
                 case values.fg_solid: 
-                case values.fg_shade: 
-                    setColour('white');
-                        break;
+                case values.fg_shade:{ 
+                    colour = 'white';
+                    break;
+                }
                 default:
-                    //console.log('no match');
                     break;
             }
+            setColour(colour);
+            toast.success({message: colour, duration:1000});
         }
-        //console.log("useEffect: handleColourChange " + controls.pc);
         handleColourChange();
     },[controls.pc]);
     
@@ -210,7 +235,7 @@ export const PenColour = () => {
                     <img src={SITE.icons.penColour} 
                         title='Pen colour' alt='Pen colour'/>
                 </DropdownToggle>
-                <div className={classes} ></div>
+                <div className={`btn-colour-caption`} style={{backgroundColor: colour}} ></div>
             </div>
             <PenColourDropdown />
         </Dropdown>
@@ -222,6 +247,7 @@ const FrameRateDropdown = () => {
     const handle = (val) => {
         updateControls({ type: 'FRAME_RATE', data: val});
         updateControls({ type: 'ENABLE', data: true });
+        toast.success({message: val, duration:1000});
     }
 
     const rates = values.frameRates.map((rate) => {
@@ -258,6 +284,7 @@ export const BackgroundDropdown = () => {
     const handle = (val) => {
         updateControls({type: val, data: true});
         updateControls({type: 'ENABLE', data: true});
+        toast.success({message: val, duration:1000});
     }
     return(
         <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
@@ -292,6 +319,7 @@ const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     const { updateControls } = useControlContext();
     const handle = async () => {
         updateControls({type: dispatchType, data: true});
+        toast.success({message: dispatchType, duration:1000});
     }
     return(
         <div>
