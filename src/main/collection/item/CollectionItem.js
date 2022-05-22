@@ -129,7 +129,8 @@ export const CollectionItem = ({anim, index, previewFile}) => {
                     offset={100} 
                     placeholder={<Loading/>}
                     style={{minHeight:'100%'}}
-                    once>
+                    unmountIfInvisible={true}
+                    once={true}>
                     <Thumb previewFile={previewFile}
                         name={anim.name}/>
                     <div className="coll-item-body">
