@@ -131,10 +131,12 @@ export const CollectionItem = ({anim, index, previewFile, thumbFile}) => {
                     style={{minHeight:'100%'}}
                     unmountIfInvisible={true}
                     once={true}>
-                    <Thumb previewFile={previewFile}
-                        thumbFile={thumbFile}
-                        name={anim.name}
-                        onClick={handleView}/>
+                    <div onClick={handleView}>
+                        <Thumb previewFile={previewFile}
+                            thumbFile={thumbFile}
+                            name={anim.name}
+                        />
+                    </div>
                     <div className="coll-item-body">
                         <Info anim={anim} />
                         <Buttons 
