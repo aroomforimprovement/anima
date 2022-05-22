@@ -24,7 +24,7 @@ export const preview = (p5) => {
                 //p5.resizeCanvas(
                 //props.anim.size ? props.anim.size : values.defaultSize, 
                 //props.anim.size ? props.anim.size : values.defaultSize);
-            if(isMobile && props.clip){
+            //if(isMobile && props.clip){
                 //console.debug("isMobile + clip");
                 previewAnimMobile(
                     {
@@ -35,23 +35,24 @@ export const preview = (p5) => {
                         index: props.index, 
                         setCollectionState: props.setCollectionState
                     }
-                );
-            }else{
-                previewAnim(
-                    {
-                        a: props.anim, 
-                        type: props.type, 
-                        p5canvas: p5canvas,
-                        p5: p5, 
-                        collectionItemDispatch: props.collectionItemDispatch, 
-                        index: props.index, 
-                        setCollectionState: props.setCollectionState, 
-                        clip: props.clip,
-                        drawing: false,
-                        mainDispatch: props.mainDispatch
-                    }
-                );
-            }
+                ).then(() => {
+            //}else{
+                    previewAnim(
+                        {
+                            a: props.anim, 
+                            type: props.type, 
+                            p5canvas: p5canvas,
+                            p5: p5, 
+                            collectionItemDispatch: props.collectionItemDispatch, 
+                            index: props.index, 
+                            setCollectionState: props.setCollectionState, 
+                            clip: props.clip,
+                            drawing: false,
+                            mainDispatch: props.mainDispatch
+                        }
+                    );
+                });
+            //}
             
         }
     }

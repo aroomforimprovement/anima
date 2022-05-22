@@ -1,36 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Loading } from '../../../common/Loading';
 
-export const Thumb = ({previewFile, name, max, now}) => {
-    const isMobile = false;  
+export const Thumb = ({previewFile, thumbFile, name, max, now}) => {
 
+    const [preview, setPreview] = useState(false);
+    console.log(thumbFile)
     return(
-        <div className='coll-item-thumb'>
+        <div className='coll-item-thumb'
+            onMouseEnter={() => {setPreview(true)}}
+            onMouseLeave={() => {setPreview(false)}}>
             {
-            previewFile 
+            thumbFile
             ?
             <div>
                 {
-                isMobile
+                !preview
                 ?
                 <div className='row'>
-                    <img key={Date.now()}
-                        src={previewFile}
+                    <img className='rounded-3 p-0'
+                        key={Date.now()}
+                        src={thumbFile}
                         //ref={previewRef}
                         alt={name} />
                 </div>
-                :
+                : previewFile ?
                 <div className='row '>
                     <video autoPlay loop 
                     //className='coll-item-video'
                     className='rounded-3 p-0'
                     >
-                        <source key={Date.now()} src={previewFile}
+                        <source 
+                            key={Date.now()} 
+                            src={previewFile}
                             //ref={previewRef}
                             type='video/webm'
                             alt={`Previewing ${name}`}/>
                     </video>
-                </div>
+                </div> : <Loading />
                 }
             </div>
             :

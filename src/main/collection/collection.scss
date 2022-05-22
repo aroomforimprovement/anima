@@ -33,6 +33,7 @@ but is not in this css file (check index.css) */
   }
 
   .coll-item-thumb {
+    transition-timing-function: ease-in;
     position:relative;
     padding:5px;
   }

@@ -14,11 +14,11 @@ import { Loading } from "../../../common/Loading";
 import { useAccount } from "../../../shared/account";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
-    previewFile: null, previewName: null, hidden: false, deleted: false,
+    previewFile: null, thumbFile: null, previewName: null, hidden: false, deleted: false,
     progressFrame: {max: 0, now: 0}
 }
 
-export const CollectionItem = ({anim, index, previewFile}) => {
+export const CollectionItem = ({anim, index, previewFile, thumbFile}) => {
     const [isDownloading, setIsDownloading] = useState(false);
     const { collectionState, setCollectionState } = useCollectionContext();
     const [collectionItemState, collectionItemDispatch] = useReducer(collectionItemReducer, collectionItemInitialState);
@@ -132,7 +132,9 @@ export const CollectionItem = ({anim, index, previewFile}) => {
                     unmountIfInvisible={true}
                     once={true}>
                     <Thumb previewFile={previewFile}
-                        name={anim.name}/>
+                        thumbFile={thumbFile}
+                        name={anim.name}
+                        onClick={handleView}/>
                     <div className="coll-item-body">
                         <Info anim={anim} />
                         <Buttons 

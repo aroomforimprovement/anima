@@ -34,6 +34,17 @@ export const collectionItemReducer = (state, action) => {
             return(state);
             
         }
+        case 'SET_THUMB_FILE':{
+            const thumbFile = action.data
+            ? URL.createObjectURL(action.data.blob)
+            : undefined;
+            if(thumbFile){
+                return({...state,
+                    thumbFile: thumbFile,
+                    previewName: action.data.name});
+            }
+            return(state);
+        }
         case 'SET_VIEW_FILE':{
             const viewFile = URL.createObjectURL(action.data.blob);
             return({...state,

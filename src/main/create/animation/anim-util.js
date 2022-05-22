@@ -241,11 +241,17 @@ export const downloadAnimAsWebm = async (params) => {
 export const setThumb = async (blob, name, index, dispatch, setCollectionState) => {
     if(dispatch)
         dispatch({
-            type: 'SET_PREVIEW_FILE',
+            type: 'SET_THUMB_FILE',
             data: {blob: blob, name: name}
         });
 
-    if(setCollectionState)
-        setCollectionState({type: 'SET_INDEX', data: index+1});
+    if(setCollectionState){
+        setCollectionState({
+            type: 'ADD_THUMB_FILE',
+            data: {blob: blob, name: name}
+        })
+    }
+        
+        //setCollectionState({type: 'SET_INDEX', data: index+1});
 }
 

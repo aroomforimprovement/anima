@@ -3,7 +3,6 @@ import { arrayRemove } from "../../utils/utils";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
     return fetch(`${apiUrl}collection`, {
         method: 'PUT',
@@ -87,6 +86,18 @@ export const collectionReducer = (state, action) => {
                 //files[action.data.index] = url;
                 files.push(url);
                 return({...state, previewFiles: files, index: action.data.index+1})
+            }
+            return({...state})
+        }
+        case 'ADD_THUMB_FILE':{
+            const thumbFile = action.data
+            ? URL.createObjectURL(action.data.blob)
+            : undefined;
+            if(thumbFile){
+                const files = [...state.thumbFiles];
+                files.push(thumbFile);
+                return({...state,
+                    thumbFiles: files});
             }
             return({...state})
         }

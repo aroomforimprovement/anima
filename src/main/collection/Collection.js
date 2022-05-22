@@ -15,7 +15,7 @@ import { useAccount } from '../../shared/account';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
-    selectedAnim: null, previewFiles: [], progressFrame: {max: 0, now: 0}};
+    selectedAnim: null, previewFiles: [], thumbFiles: [], progressFrame: {max: 0, now: 0}};
 export const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
@@ -218,16 +218,23 @@ const Collection = ({browse}) => {
         }
     }, [collectionState?.anims, collectionState?.index]);
 
+    const [thumbFiles, setThumbFiles] = useState();
+
+    useEffect(() => {
+        if(collectionState?.thumbFiles){
+            setThumbFiles(collectionState.thumbFiles);
+        }
+    }, [collectionState?.thumbFiles]);
+
     const [previewFiles, setPreviewFiles] = useState();
 
     useEffect(() => {
         if(collectionState?.previewFiles){
             setPreviewFiles(collectionState.previewFiles);
         }
-    }, [collectionState?.previewFiles])
+    }, [collectionState?.previewFiles]);
 
     
-
     const collectionItems = collection ? collection.map((anim, index) => {
         return <CollectionItem 
             key={index} 
@@ -237,7 +244,14 @@ const Collection = ({browse}) => {
                 previewFiles 
                 && previewFiles[index] 
                 ? previewFiles[index] 
-                : undefined}/>
+                : undefined
+            }
+            thumbFile={
+                thumbFiles 
+                && thumbFiles[index]
+                ? thumbFiles[index]
+                : undefined
+            } />
     }) : <Loading />
 
     useEffect(() => {
