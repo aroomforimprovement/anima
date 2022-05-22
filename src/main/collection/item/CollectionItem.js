@@ -124,8 +124,12 @@ export const CollectionItem = ({anim, index, previewFile}) => {
                 {
                 account.isSet 
                 ? 
-                <LazyLoad height={300} offset={10} placeholder={<Loading/>}
-                    style={{minHeight:'100%'}}>
+                <LazyLoad 
+                    height={300} 
+                    offset={100} 
+                    placeholder={<Loading/>}
+                    style={{minHeight:'100%'}}
+                    once>
                     <Thumb previewFile={previewFile}
                         name={anim.name}/>
                     <div className="coll-item-body">

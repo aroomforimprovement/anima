@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
+import React, { useReducer, useContext, createContext, useEffect, useState, PureComponent } from 'react';
 import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../../common/Loading';
 import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
@@ -22,10 +22,67 @@ export const useCollectionContext = () => {
     return useContext(CollectionContext);
 }
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Collection = ({browse}) => {
 
     const {account} = useAccount();
     const splat = useParams()[0];
+    const [ coll, updateColl] = useState([]);
+
+    const parseAnim = () => {
+
+    }
+    const getCollection = async (id, isBrowse, access, signal) => {
+        let url;
+        let req = {
+            method: 'GET',
+            mode: 'cors',
+            signal: signal,
+            headers: {}
+        };
+        if(isBrowse){
+            url = `${apiUrl}collection`;
+        }else{
+            url = `${apiUrl}collection/${id}`; 
+        }
+        if(access){
+            req.headers = {
+                Authorization: `Bearer ${access}`
+            }
+        }
+        return fetch(url, req)
+        .then(response => {
+            if(response.ok){
+                const reader = response.body.getReader();
+                return new ReadableStream({
+                    start(controller){
+                        const pump = () => {
+                            return reader.read().then(({done, value}) => {
+                                if(done){
+                                    controller.close();
+                                    return;
+                                }
+                                controller.enqueue(value);
+                                return pump();
+                            });
+                        }
+                        return pump();
+                    }
+                })
+            }
+        }, error => {
+            console.error("Error fetching data: getCollection");
+            return false;
+        })
+        .then(stream => new Response(stream))
+        .then(response => response.json())
+        .then(body => body)
+        .catch(err => {
+            console.error("Error fetching data: getCollection");
+            return false;
+        });
+    }
     
     const isContact = (id) => {
         if(account && account.contacts){

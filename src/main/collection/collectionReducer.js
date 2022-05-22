@@ -2,37 +2,7 @@ import { arrayRemove } from "../../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const getCollection = async (id, isBrowse, access, signal) => {
-    let url;
-    let req = {
-        method: 'GET',
-        mode: 'cors',
-        signal: signal,
-        headers: {}
-    };
-    if(isBrowse){
-        url = `${apiUrl}collection`;
-    }else{
-        url = `${apiUrl}collection/${id}`; 
-    }
-    if(access){
-        req.headers = {
-            Authorization: `Bearer ${access}`
-        }
-    }
-    return await fetch(url, req)
-    .then(response => {
-        if(response.ok){
-            return response.json();
-        }
-    }, error => {
-        console.error("Error fetching data: getCollection");
-        return false;
-    }).catch(err => {
-        console.error("Error fetching data: getCollection");
-        return false;
-    });
-}
+
 
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
     return fetch(`${apiUrl}collection`, {
