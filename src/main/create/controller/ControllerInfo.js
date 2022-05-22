@@ -96,8 +96,8 @@ export const ControllerInfo = () => {
             <span title='Current drawing mode'>Mode: {mode}</span>
             <span>, </span><br/>
             <span title='Current pen size'>Pen size: {controls.ps}</span>
-            <span>, </span><br/>
-            <span title='Current pen size'>Pen size: {controls.ps}</span>
+            <span>, </span>
+            <span title='Current pen size' style={{colour: colour}}>Pen colour: {colour}</span>
         </div>
     );
 }

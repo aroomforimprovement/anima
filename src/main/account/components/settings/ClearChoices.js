@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'buttoned-toaster';
 import { Div } from '../../../../common/Div';
+import { useAccount } from '../../../../shared/account';
 
 export const ClearChoices = () => {
+    
+    const {account} = useAccount();
 
     const resetChoices = () => {
         Object.keys(window.localStorage).forEach((key) => {
-            if(key.indexOf('dontshow_') > -1)
+            if(key.indexOf('dontshow_') > -1 && key.indexOf(account?.user?.userid) > -1)
             window.localStorage.removeItem(key);
         })
         toast.success("Choices cleared from browser memory");
@@ -18,10 +21,11 @@ export const ClearChoices = () => {
     useEffect(() => {
         Object.keys(window.localStorage).forEach((key) => {
             if(key.indexOf('dontshow_') > -1
+                && key.indexOf(account?.user?.userid) > -1
                 && !hasSomethingToHide)
             setHadSomethingToHide(true);
         })
-    }, [hasSomethingToHide])
+    }, [hasSomethingToHide, account?.user?.userid])
 
     return(
         <div className='row mb-4 ms-2 section-content'>

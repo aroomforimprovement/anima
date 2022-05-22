@@ -31,7 +31,7 @@ export const Notice = ({notice, i}) => {
             toast.dismiss(id);
         }
 
-        if(window.localStorage.getItem('dontshow_APPROVE_CONTACT_REQUEST')){
+        if(window.localStorage.getItem(`dontshow_APPROVE_CONTACT_REQUEST_${account.user.userid}`)){
             approve();
         }else{
             toast.info(
@@ -44,7 +44,7 @@ export const Notice = ({notice, i}) => {
                     approveTxt: "Approve", 
                     dismissTxt:"Maybe later",
                     canHide: true,
-                    dontShowType: 'APPROVE_CONTACT_REQUEST'
+                    dontShowType: `APPROVE_CONTACT_REQUEST_${account.user.userid}`
                 }
             );
         }

@@ -33,7 +33,7 @@ export const Contact = ({contact, i}) => {
         const dismiss = (id) => {
             toast.dismiss(id);
         }
-        if(window.localStorage.getItem('dontshow_DELETE_CONTACT')){
+        if(window.localStorage.getItem(`dontshow_DELETE_CONTACT_${account.user.userid}`)){
             approve();
         }else{
             toast.warn(
@@ -43,7 +43,7 @@ export const Contact = ({contact, i}) => {
                     approveTxt: "Remove Contact",
                     message: "Are you sure you want to remove this contact?",
                     canHide: true,
-                    dontShowType: 'DELETE_CONTACT'
+                    dontShowType: `DELETE_CONTACT_${account.user.userid}`
                 }
             );
         }

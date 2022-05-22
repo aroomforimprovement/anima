@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { preview } from "../../create/animation/preview";
 import LazyLoad from "react-lazyload";
@@ -68,7 +68,7 @@ export const CollectionItem = ({anim, index, previewFile}) => {
             toast.dismiss(id);
         } 
 
-        if(window.localStorage.getItem('dontshow_DELETE_ANIM')){
+        if(window.localStorage.getItem(`dontshow_DELETE_ANIM_${account.user.userid}`)){
             approve();
         }else{
             toast.warn(
@@ -79,7 +79,7 @@ export const CollectionItem = ({anim, index, previewFile}) => {
                     approveTxt: "Delete", 
                     dismissTxt: "Cancel",
                     canHide: true,
-                    dontShowType: "DELETE_ANIM"
+                    dontShowType: `DELETE_ANIM_${account.user.userid}`
                 }
             );
         }

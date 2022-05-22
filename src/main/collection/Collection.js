@@ -1,7 +1,7 @@
-import React, { useReducer, useContext, createContext, useEffect, useState, PureComponent } from 'react';
+import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../../common/Loading';
-import { collectionReducer, addContactRequest, getCollection } from './collectionReducer';
+import { collectionReducer, addContactRequest } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
 import './collection.scss';
@@ -28,11 +28,7 @@ const Collection = ({browse}) => {
 
     const {account} = useAccount();
     const splat = useParams()[0];
-    const [ coll, updateColl] = useState([]);
-
-    const parseAnim = () => {
-
-    }
+    
     const getCollection = async (id, isBrowse, access, signal) => {
         let url;
         let req = {
