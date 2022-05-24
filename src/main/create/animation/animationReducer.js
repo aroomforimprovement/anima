@@ -69,8 +69,10 @@ export const newAnimState = (user) => {
  * @returns 
  */
 export const animReducer = (state, action) => {
-    console.log(`${action.type}:${action.data}`)
     //save anim and send to auth
+    //console.log(action.type)
+    //console.dir(action.data)
+    //console.dir(state)
     const saveTempAnim = async (anim) => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
         return anim.id;

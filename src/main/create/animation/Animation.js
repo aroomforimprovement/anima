@@ -94,12 +94,10 @@ export const Animation = ({splat}) => {
         }
     },[anim.isSet, splat, account.user, access]);
 
-
     const handleSaveSubmission = (e) => {
         //console.debug(`handleSaveSubmission`)
         e.preventDefault();
         updateAnim({type: 'USERID', data: true})
-        console.log(name)
         updateAnim({type: 'NAME', data: name})
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
@@ -107,8 +105,6 @@ export const Animation = ({splat}) => {
             redirectAfterTempSave(anim.temp);
         }
     }
-
-    
 
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -121,7 +117,6 @@ export const Animation = ({splat}) => {
         e.preventDefault();
     }
 
-    
     const NameInput = () => {
         const inputRef = useRef(null);
 

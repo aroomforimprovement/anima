@@ -162,6 +162,7 @@ export const sketch = (p5) => {
             p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
                 isMobile ? p5.displayWidth : values.defaultSize);
             updateAnim({type: 'SAVE_CLOSE', data: false});
+            redrawLastFrame();
         }
         if(props.controls.privacy !== null 
             && (anim && anim.anim && anim.anim.privacy !== props.controls.privacy)){
@@ -361,6 +362,7 @@ export const sketch = (p5) => {
 
     const redrawCurrentFrame = () => {
         if(anim.bg && anim.bg.length > 0){
+            console.log("drawing background")
             drawPoints(anim.bg, p5);
         }
         if(anim.undos && anim.undos.length > 0){
