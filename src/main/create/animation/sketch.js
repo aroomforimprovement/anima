@@ -345,7 +345,6 @@ export const sketch = (p5) => {
     }
 
     const redrawLastFrame = () => {
-        console.log(bgOpacity)
         setBgOverlay(p5, false, bgOpacity);
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
             drawPoints(anim.anim.lastFrame.points, p5);

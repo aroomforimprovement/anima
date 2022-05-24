@@ -10,6 +10,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 import toast from 'buttoned-toaster';
 import { useAccount } from '../../../shared/account';
+import { isMobile } from 'react-device-detect';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -29,6 +30,14 @@ export const Animation = ({splat}) => {
     const initAnimState = newAnimState(account.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
+
+    const [name, setName] = useState(anim.anim.name);
+
+    useEffect(() => {
+        if(anim.anim.name){
+            setName(anim.anim.name)
+        }
+    }, [anim.anim.name])
 
     const { loginWithPopup } = useAuth0();
     
@@ -84,24 +93,27 @@ export const Animation = ({splat}) => {
             controller.abort();
         }
     },[anim.isSet, splat, account.user, access]);
-    
-    useEffect(() => {
 
-    })
 
     const handleSaveSubmission = (e) => {
         //console.debug(`handleSaveSubmission`)
-        updateAnim({type: 'USERID', data: true});
+        e.preventDefault();
+        updateAnim({type: 'USERID', data: true})
+        console.log(name)
+        updateAnim({type: 'NAME', data: name})
         if(access){
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
         }else{
             redirectAfterTempSave(anim.temp);
         }
-        e.preventDefault();
     }
 
+    
+
     const handleNameChange = (e) => {
-        updateAnim({type: 'NAME', data: e.target.value});
+        setName(e.target.value);
+        e.preventDefault();
+        
     }
 
     const handleCancelSave = (e) => {
@@ -111,12 +123,20 @@ export const Animation = ({splat}) => {
 
     
     const NameInput = () => {
-        const inputRef = useRef();
+        const inputRef = useRef(null);
+
         useEffect(() => {inputRef.current && inputRef.current.focus()});
+        
         return(
-            <Form.Control type='text' id='name' name='name' autoFocus={true}
-                onChange={handleNameChange} ref={inputRef} maxLength='140'
-                value={anim.anim.name ? anim.anim.name : undefined}/>
+            <Form.Control 
+                type='text' 
+                id='name' 
+                name='name' 
+                autoFocus={isMobile ? false : true}
+                onChange={handleNameChange} 
+                ref={inputRef} 
+                maxLength='140'
+                defaultValue={name}/>
         );
     }
     
