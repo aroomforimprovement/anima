@@ -30,9 +30,9 @@ const Header = () => {
                     <Collapse isOpen={isNavOpen} navbar>
                         <Nav className='col-10 col-md-9' navbar>
                             <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link' to='/create'>
+                                <a className='nav-link' href='/create'>
                                     <span className='fa fa-paint-brush fa-md m-1'></span> Create
-                                </NavLink>
+                                </a>
                             </NavItem>
                             {!account || !account.isSet
                                 ? <Loading /> 

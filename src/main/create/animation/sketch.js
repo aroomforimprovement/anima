@@ -316,7 +316,7 @@ export const sketch = (p5) => {
                     thisStroke = []; 
                     updateAnim({type: 'DO_STROKE', data: stk});
                 }else{
-                    //console.warn("unmounted while doing stroke");
+                    console.warn("unmounted while doing stroke");
                 }
                 return true;
             }
