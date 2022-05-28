@@ -17,17 +17,10 @@ export const sketch = (p5) => {
     let bgOpacity = 0.75;
    
     const handleNoFramesAlert = () => {
-        const dismiss = (id) => {
-            toast.dismiss(id);
-        }
         toast.info(
             {
-                approveFunc: dismiss,
-                dismissFunc: dismiss,
                 message: `Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`,
-                dismissTxt: "OK", 
-                approveTxt:"Cool",
                 toastId: 'no_frames'
             }
         );
@@ -162,6 +155,7 @@ export const sketch = (p5) => {
             p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
                 isMobile ? p5.displayWidth : values.defaultSize);
             updateAnim({type: 'SAVE_CLOSE', data: false});
+            redrawLastFrame();
         }
         if(props.controls.privacy !== null 
             && (anim && anim.anim && anim.anim.privacy !== props.controls.privacy)){
@@ -315,7 +309,7 @@ export const sketch = (p5) => {
                     thisStroke = []; 
                     updateAnim({type: 'DO_STROKE', data: stk});
                 }else{
-                    //console.warn("unmounted while doing stroke");
+                    console.warn("unmounted while doing stroke");
                 }
                 return true;
             }
@@ -345,7 +339,6 @@ export const sketch = (p5) => {
     }
 
     const redrawLastFrame = () => {
-        console.log(bgOpacity)
         setBgOverlay(p5, false, bgOpacity);
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
             drawPoints(anim.anim.lastFrame.points, p5);
@@ -362,6 +355,7 @@ export const sketch = (p5) => {
 
     const redrawCurrentFrame = () => {
         if(anim.bg && anim.bg.length > 0){
+            console.log("drawing background")
             drawPoints(anim.bg, p5);
         }
         if(anim.undos && anim.undos.length > 0){

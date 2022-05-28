@@ -4,7 +4,7 @@ import { Loading } from '../../../common/Loading';
 export const Thumb = ({previewFile, thumbFile, name, max, now}) => {
 
     const [preview, setPreview] = useState(false);
-    console.log(thumbFile)
+    //console.log(thumbFile)
     return(
         <div className='coll-item-thumb'
             onMouseEnter={() => {setPreview(true)}}
