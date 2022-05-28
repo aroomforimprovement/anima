@@ -8,7 +8,6 @@ import { values } from '../values';
 import { Privacy } from '../controller/ControllerBtns';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
-import toast from 'buttoned-toaster';
 import { useAccount } from '../../../shared/account';
 import { isMobile } from 'react-device-detect';
 
@@ -146,7 +145,7 @@ export const Animation = ({splat}) => {
             <ControlContext.Consumer> 
                 {() => (
                 <AnimContext.Provider value={animState} >
-                    <ReactP5Wrapper sketch={sketch} toast={toast}
+                    <ReactP5Wrapper sketch={sketch}
                         controls={controls} updateControls={updateControls}
                         anim={anim} updateAnim={updateAnim} index={'temp'}
                         id='animCanvas' clip={false}/>

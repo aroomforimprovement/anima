@@ -17,17 +17,10 @@ export const sketch = (p5) => {
     let bgOpacity = 0.75;
    
     const handleNoFramesAlert = () => {
-        const dismiss = (id) => {
-            toast.dismiss(id);
-        }
         toast.info(
             {
-                approveFunc: dismiss,
-                dismissFunc: dismiss,
                 message: `Looks like you tried to render an animation with no frames. 
                     Save a frame and try again`,
-                dismissTxt: "OK", 
-                approveTxt:"Cool",
                 toastId: 'no_frames'
             }
         );
