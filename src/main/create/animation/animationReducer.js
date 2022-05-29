@@ -52,9 +52,11 @@ export const newAnimState = (user) => {
         redos:[],
         undid:[],
         redid:[],
-        bg:{},
+        bg:[],
         fid: 0,
         isPreviewOpen: false,
+        isSaveOpen: false,
+        isWiped: true,
     }
 }
 
@@ -165,20 +167,30 @@ export const animReducer = (state, action) => {
             return ({...state, "anim": {...state["anim"], frate: action.data}});
         }
         case 'SAVE_BG':{
-            let bg = []
+            console.dir(state.bg)
+            let bg = [];
             if(action.data){
-                bg = action.data;
+                if(state.isWiped){
+                    bg = action.data;
+                }else{
+                    bg = [...state.bg]?.concat(action.data);
+                }
             }else{
-                bg = state.undos.length > 0 ? [...state.undos] : [];
+                if(state.isWiped){
+                    bg = state.undos.length > 0 ? [...state.undos] : [];
+                }else{
+                    bg = state.undos.length > 0 ? [...state.bg]?.concat([...state.undos]) : [...state.bg];
+                }
+                
             } 
             //console.dir(bg)
             return ({...state, bg: bg});
         }
         case 'DRAW_BG':{
-            return ({...state, undos: [], redos: [], undid: [], redid: []});
+            return ({...state, undos: [], redos: [], undid: [], redid: [], isWiped: false});
         }
         case 'WIPE':{
-            return ({...state, redos: [], undos: [], redid:[], undid:[]});
+            return ({...state, redos: [], undos: [], redid:[], undid:[], isWiped: true});
         }
         case 'NEXT':{
             const points = state.undos.length > 0 ? [...state.undos] : [];

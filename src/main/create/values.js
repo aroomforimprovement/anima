@@ -61,7 +61,8 @@ export const values = {
         bg:[],
         fid: 0,
         isPreviewOpen: false,
-        isSaveOpen: false
+        isSaveOpen: false,
+        isWiped: true,
     },
     red: [185, 70, 70, 200],
     green: [70, 185, 70, 200],
