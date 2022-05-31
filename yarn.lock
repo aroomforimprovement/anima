@@ -3071,10 +3071,10 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-buttoned-toaster@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/buttoned-toaster/-/buttoned-toaster-0.2.1.tgz#f3d60de8130a2da41ff4f09f928922ad1bec2710"
-  integrity sha512-TAnU6dOqQQ1rCP0RWIHnYj6UJTvQjt1LNO7KG/8B/1Ruw+Ey9jE1RQ7uSQ/E/sFJONw6p+AMmFa8MJZanmPk9A==
+buttoned-toaster@0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/buttoned-toaster/-/buttoned-toaster-0.2.8.tgz#b23e399c713f85289b62228a0b6dabaf86c3357f"
+  integrity sha512-ncW3b3kj6XsG4SBVhakPROVwaq4gYwvIbdXTcaK5PMHeG69m/TmgLEnxKd1OQ60zR1oN4E9T1XJqkZvxl7ziuw==
   dependencies:
     uuid "^8.3.2"
 

@@ -109,7 +109,9 @@ export const animReducer = (state, action) => {
     }
     
     //console.debug(`animReducer:${action.type}:${action.data}`);
-    switch(action.type){
+    console.log(action.type);
+    console.dir(state);
+    switch(action.type){    
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});
         }
@@ -139,7 +141,7 @@ export const animReducer = (state, action) => {
                 newRedos = [];
             }
             return ({...state, undos: newUndos, 
-                redid: [], undid:[], redos: newRedos });
+                redid: [], undid:[], redos: newRedos, isWiped: false });
         }
         case 'UNDO_STROKE':{
             let newRedos = [...state.redos];
@@ -171,14 +173,18 @@ export const animReducer = (state, action) => {
             let bg = [];
             if(action.data){
                 if(state.isWiped){
+                    console.log("data, isWiped")
                     bg = action.data;
                 }else{
+                    console.log("data, notWiped")
                     bg = [...state.bg]?.concat(action.data);
                 }
             }else{
                 if(state.isWiped){
+                    console.log("no data, isWiped")
                     bg = state.undos.length > 0 ? [...state.undos] : [];
                 }else{
+                    console.log("no data, notWiped")
                     bg = state.undos.length > 0 ? [...state.bg]?.concat([...state.undos]) : [...state.bg];
                 }
                 
