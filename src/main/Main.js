@@ -11,9 +11,9 @@ import Account from './account/Account';
 import './main.scss';
 import SmoothScroll from 'smoothscroll-for-websites/SmoothScroll.js';
 import { ToastRack } from 'buttoned-toaster';
-
 import { useAccount } from '../shared/account';
 import { Loading } from '../common/Loading';
+import { Help } from './help/Help';
 
 
 const Main = () => {
@@ -27,6 +27,7 @@ const Main = () => {
     const EditPage = () => { return <Create  />}
     const CollectionPage = () => { return <Collection browse={false} /> }
     const BrowsePage = () => { return <Collection browse={true} /> }
+    const HelpPage = () => { return <Help />}
     const AccountPage = () => { return <Account />}
 
     
@@ -56,6 +57,7 @@ const Main = () => {
                 <Route path='/home' history={history} component={HomePage} />
                 <Route path='/login' history={history} component={LoginPage} />
                 <Route path='/logout' history={history} component={LogoutPage} />
+                <Route path='/help' history={history} component={HelpPage} />
                 <Route path='/' history={history} component={HomePage} />
                 <Redirect to='/login' history={history}/>
             </Switch>

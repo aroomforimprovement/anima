@@ -54,6 +54,11 @@ const Header = () => {
                                     <span className='fa fa-eye fa-md m-1'></span> Browse
                                 </a>
                             </NavItem>
+                            <NavItem className='nav-item nav-i'>
+                                <NavLink className='nav-link'  to='/help'>
+                                    <span className='fa fa-info fa-md m-1'></span> Help
+                                </NavLink>
+                            </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>
                             {!account || !account.isSet ? <Loading /> :

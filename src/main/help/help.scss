@@ -1,0 +1,25 @@
+@use '../../sass/colours';
+
+.help-page{
+    text-align: start;
+    color: colours.$fg_shade;
+}
+
+.help-section{
+    background-color: colours.$bg-dark;
+    border-radius: 20px;
+    padding: 20px;
+    padding-left: 30px;
+}
+
+.help-img{
+    text-align: end;
+    display:inline;
+    vertical-align: middle;
+}
+
+.help-text{
+    text-align: start;
+    display:inline;
+}
+

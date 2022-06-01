@@ -34,6 +34,11 @@ export const SITE = {
         "save": process.env.REACT_APP_URL + '/assets/save.svg',
         "preview": process.env.REACT_APP_URL + '/assets/preview.svg',
     },
+    "help": {
+        "image_001": process.env.REACT_APP_URL + '/assets/help/image_001.png',
+        "image_alt_001": "The main Create page, containing drawing canvas and control buttons.",
+        
+    },
     "shortcuts": [
         {"key": "s", "text":"Single point drawing mode"},
         {"key": "m", "text":"Horizontal double point drawing mode"},

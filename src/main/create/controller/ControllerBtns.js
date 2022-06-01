@@ -7,6 +7,8 @@ import { useControlContext } from '../Create';
 import { ShortcutInfo } from './ControllerInfo';
 import toast from 'buttoned-toaster';
 
+const dum = () => {}
+
 const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
     const classes = `dropicon ${c}`;
     return(
@@ -18,17 +20,18 @@ const ControllerDropdownItem = ({title, func, iSrc, text, c}) => {
     );
 }
 
-const ModeDropdown = () => {
+const ModeDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy){return}
         updateControls({ type: 'MODE', data: val });
         updateControls({ type: 'ENABLE', data: true });
     }
-    
+
     return(
         <DropdownMenu 
-            onMouseOver={() => updateControls({type: 'DISABLE', data: true})} 
-            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+            onMouseOver={() => {!dummy ? updateControls({type: 'DISABLE', data: true}) : dum()}}
+            onMouseOut={() => {!dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}}>
                 <ControllerDropdownItem 
                     title='SINGLE mode' func={() => handle(CC.SINGLE)}
                     iSrc={SITE.icons.single} text='Single'/>
@@ -45,7 +48,7 @@ const ModeDropdown = () => {
     );
 }
 
-export const Mode = () => {
+export const Mode = ({dummy}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
@@ -54,18 +57,19 @@ export const Mode = () => {
                 <img src={SITE.icons.drawingMode} 
                     title='Drawing Mode' alt='Drawing Mode'/>
             </DropdownToggle>
-            <ModeDropdown />
+            <ModeDropdown dummy={dummy}/>
         </Dropdown>
     );
 }
 
-const PenSizeDropdown = () => {
+const PenSizeDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy){return}
         updateControls({ type: 'PS', data: val});
         updateControls({ type: 'ENABLE', data: true });
     }
-
+    
     const sizes = values.penSizes.map((size) => {
         return(
             <ControllerDropdownItem key={size}
@@ -74,14 +78,15 @@ const PenSizeDropdown = () => {
         );
     });
     return(
-        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => {!dummy ? updateControls({type: 'DISABLE', data: true}) : dum()}} 
+            onMouseOut={() => {!dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}}>
                 {sizes}
         </DropdownMenu>  
     );
 
 }
 
-export const PenSize = () => {
+export const PenSize = ({dummy}) => {
     const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
@@ -94,7 +99,7 @@ export const PenSize = () => {
             let size;
             CONTROLS.forEach((controlObj) => {
                 if(controlObj.t === CC.TYPE_SIZE){
-                    if(controlObj.v === controls.ps){
+                    if(controlObj.v === controls?.ps){
                         size = parseInt(controlObj.n.substring(3,4));
                         setSize(size);
                         return;
@@ -104,7 +109,7 @@ export const PenSize = () => {
             toast.success({message: size, duration:1000});
         }
         handleSizeChange();
-    },[controls.ps]);
+    },[controls?.ps]);
 
     return(
         <Dropdown isOpen={isOpen} toggle={toggle} >
@@ -115,19 +120,22 @@ export const PenSize = () => {
                 </DropdownToggle>
             </div>
             <div className='btn-caption'>{size}</div>
-            <PenSizeDropdown />
+            <PenSizeDropdown dummy={dummy}/>
         </Dropdown>
     );
 }
 
-const PenColourDropdown = () => {
+const PenColourDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy){return;}
         updateControls({ type: 'PC', data: val});
         updateControls({ type: 'ENABLE', data: true });
     }
+
     return(
-        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => {!dummy ? updateControls({type: 'DISABLE', data: true}) : dum()}} 
+            onMouseOut={() => {!dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}}>
             <ControllerDropdownItem 
                 title='BG Solid' func={() => handle(values.bg_solid)}
                 iSrc={SITE.icons.penColour} c='bg_solid' text='BG Solid'/>
@@ -165,7 +173,7 @@ const PenColourDropdown = () => {
     );
 }
  
-export const PenColour = () => {
+export const PenColour = ({dummy}) => {
     const { controls } = useControlContext();
     const [isOpen, setIsOpen] = useState(false);
     const [colour, setColour] = useState(null)
@@ -175,7 +183,7 @@ export const PenColour = () => {
     useEffect(() => {
         const handleColourChange = () => {
             let colour = 'white';
-            switch(controls.pc){
+            switch(controls?.pc){
                 case values.red:{
                     colour = 'red'; 
                     break;
@@ -225,7 +233,7 @@ export const PenColour = () => {
             toast.success({message: colour, duration:1000});
         }
         handleColourChange();
-    },[controls.pc]);
+    },[controls?.pc]);
     
     
     return(
@@ -237,14 +245,15 @@ export const PenColour = () => {
                 </DropdownToggle>
                 <div className={`btn-colour-caption`} style={{backgroundColor: colour}} ></div>
             </div>
-            <PenColourDropdown />
+            <PenColourDropdown dummy={true}/>
         </Dropdown>
     );
 }
 
-const FrameRateDropdown = () => {
+const FrameRateDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy)return;
         updateControls({ type: 'FRAME_RATE', data: val});
         updateControls({ type: 'ENABLE', data: true });
         toast.success({message: val, duration:1000});
@@ -259,14 +268,15 @@ const FrameRateDropdown = () => {
     })
 
     return(
-        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => !dummy ? updateControls({type: 'DISABLE', data: true}) : dum()} 
+            onMouseOut={() => !dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}>
                 {rates}
         </DropdownMenu>  
     );
 
 }
 
-export const FrameRate = () => {
+export const FrameRate = ({dummy}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
@@ -274,20 +284,22 @@ export const FrameRate = () => {
             <DropdownToggle >
                 <img src={SITE.icons.frate} title='Frame rate' alt='Frame rate'/>
             </DropdownToggle>
-            <FrameRateDropdown />
+            <FrameRateDropdown dummy={dummy}/>
         </Dropdown>
     );
 }
 
-export const BackgroundDropdown = () => {
+export const BackgroundDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy)return;
         updateControls({type: val, data: true});
         updateControls({type: 'ENABLE', data: true});
         toast.success({message: val, duration:1000});
     }
     return(
-        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+        <DropdownMenu onMouseOver={() => !dummy ? updateControls({type: 'DISABLE', data: true}) : dum()} 
+            onMouseOut={() => !dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}>
             <ControllerDropdownItem 
                 title='Save background' func={() => handle('SAVE_BG')}
                 iSrc={SITE.icons.saveBg} text="Save this frame as background"/>
@@ -301,7 +313,7 @@ export const BackgroundDropdown = () => {
     );
 }
 
-export const Background = () => {
+export const Background = ({dummy}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
     return(
@@ -310,15 +322,16 @@ export const Background = () => {
                 <img src={SITE.icons.bg}
                     title='Background' alt='Background'/>
             </DropdownToggle>
-            <BackgroundDropdown />
+            <BackgroundDropdown dummy={dummy}/>
         </Dropdown>
     ); 
 }
 
-const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
+const ControllerBtn = ({ dispatchType, btnText, icon, dummy }) =>{
     const { updateControls } = useControlContext();
     const handle = async () => {
-        toast.success({message: dispatchType, duration:1000});
+        if(dummy){return}
+        toast.success({message: dispatchType, duration: 1000});
         setTimeout(() => {
             updateControls({type: dispatchType, data: true});
         }, 100)
@@ -333,51 +346,52 @@ const ControllerBtn = ({ dispatchType, btnText, icon }) =>{
     );
 }
 
-export const Undo = () => {
+export const Undo = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='UNDO' 
+        <ControllerBtn dispatchType='UNDO' dummy={dummy}
             btnText={'Undo stroke'} icon={SITE.icons.undo}/>
     );
 }
 
-export const Redo = () => {
+export const Redo = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='REDO' 
+        <ControllerBtn dispatchType='REDO' dummy={dummy}
             btnText={'Redo stroke'} icon={SITE.icons.redo}/>
     );
 }
 
-export const Next = () => {
+export const Next = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='NEXT'
+        <ControllerBtn dispatchType='NEXT' dummy={dummy}
             btnText={'Next frame'} icon={SITE.icons.next} />
     );
 }
 
-export const Download = () => {
+export const Download = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='DOWNLOAD'
+        <ControllerBtn dispatchType='DOWNLOAD' dummy={dummy}
             btnText={'Download as gif'} icon={SITE.icons.download} />
     );
 }
 
-export const Save = () => {
+export const Save = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='SAVE'
+        <ControllerBtn dispatchType='SAVE' dummy={dummy}
             btnText={'Save to account'} icon={SITE.icons.save} />
     );
 }
 
-export const Preview = () => {
+export const Preview = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='PREVIEW'
+        <ControllerBtn dispatchType='PREVIEW' dummy={dummy}
             btnText={'Preview animation'} icon={SITE.icons.preview} />
     )
 }
 
-export const AdjustBgDropdown = () => {
+export const AdjustBgDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy)return;
         updateControls({type: 'ADJUST_BG_OVERLAY', data: val});
         updateControls({type: 'ENABLE', data: true});
     }
@@ -394,14 +408,14 @@ export const AdjustBgDropdown = () => {
     })
     return(
         <DropdownMenu 
-            onMouseOver={() => updateControls({type: 'DISABLE', data: true})} 
-            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+            onMouseOver={() => !dummy ? updateControls({type: 'DISABLE', data: true}) : dum()} 
+            onMouseOut={() => !dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}>
                 {options}
         </DropdownMenu>
     )
 }
 
-export const AdjustBg = () => {
+export const AdjustBg = ({dummy}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
 
@@ -412,14 +426,15 @@ export const AdjustBg = () => {
                     title='Adjust background opacity'
                     alt='Ajust background opacity' />
             </DropdownToggle>
-            <AdjustBgDropdown />
+            <AdjustBgDropdown dummy={dummy}/>
         </Dropdown> 
     )
 }
 
-export const AdjustBgFrameDropdown = () => {
+export const AdjustBgFrameDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {
+        if(dummy)return;
         updateControls({type: 'ADJUST_BG_FRAME', data: val});
         updateControls({type: 'ENABLE', data: true});
     }
@@ -436,15 +451,15 @@ export const AdjustBgFrameDropdown = () => {
     });
     return(
         <DropdownMenu 
-            onMouseOver={() => updateControls({type: 'DISABLE', data: true})}
-            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+            onMouseOver={() => !dummy ? updateControls({type: 'DISABLE', data: true}) : dum()}
+            onMouseOut={() => !dummy ? updateControls({type: 'ENABLE', data: true}) : dum()}>
                 {options}
         </DropdownMenu>
 
     )
 }
 
-export const AdjustBgFrame = () => {
+export const AdjustBgFrame = ({dummy}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(prevState => !prevState);
 
@@ -456,7 +471,7 @@ export const AdjustBgFrame = () => {
                     alt='Adjust background drawing opacity'
                 />
             </DropdownToggle>
-            <AdjustBgFrameDropdown />
+            <AdjustBgFrameDropdown dummy={dummy}/>
         </Dropdown>
     )
 }
