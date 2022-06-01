@@ -174,7 +174,7 @@ export const PenColour = () => {
 
     useEffect(() => {
         const handleColourChange = () => {
-            let colour = 'black';
+            let colour = 'white';
             switch(controls.pc){
                 case values.red:{
                     colour = 'red'; 
@@ -387,7 +387,7 @@ export const AdjustBgDropdown = () => {
                 key={value}
                 title={`Bg opacity to ${value}`}
                 func={() => handle(value)}
-                iSrc={SITE.icons.bg} 
+                iSrc={SITE.icons.bgOpacity} 
                 text={value} 
             />
         )
@@ -429,7 +429,7 @@ export const AdjustBgFrameDropdown = () => {
                 key={value}
                 title={`Bg drawing opacity to ${value}`}
                 func={() => handle(value)}
-                iSrc={SITE.icons.bg} 
+                iSrc={SITE.icons.bgFrameOpacity} 
                 text={value}
             />
         )

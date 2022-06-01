@@ -37,7 +37,7 @@ export const ControllerInfo = () => {
 
     useEffect(() => {
         const handleColourChange = () => {
-            let colour = 'black';
+            let colour = 'white';
             switch(controls.pc){
                 case values.red:{
                     colour = 'red'; 
