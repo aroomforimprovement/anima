@@ -3,7 +3,8 @@ import { Button } from 'reactstrap';
 import { SITE } from '../../../shared/site';
 import { values, CC, CONTROLS } from '../values';
 import { useControlContext } from '../Create';
-import { Next, Undo, Redo } from './ControllerBtns';
+import { Next, Undo, Redo, Save, Download, Preview } from './ControllerBtns';
+import toast from 'buttoned-toaster';
 
 
 const Expanse = () => {
@@ -275,6 +276,111 @@ export const MobileController = () => {
                 <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
                     <Next/>
                 </div> 
+            </div>
+            <div className='m-1'>{state}</div>
+        </div>
+    )
+}
+
+const BgOverlayExpandable = ({closeExpandable, type}) => {
+    const { updateControls } = useControlContext();
+    const handle = (val) => {
+        toast.success({message: `BG: ${val}`, duration: 1000});
+        closeExpandable();
+        updateControls({type: type, data: val});
+    }
+    return(
+        <div>
+            {values.bgOverlayVals.map((val, i) => {
+                return(
+                    <ControllerExpandedItem key={val}
+                        title={`Background ${type === 'ADJUST_BG_FRAME' ? 'drawing' : 'overlay'} opacity: ${val}`}
+                        func={() => handle(val)}
+                        iSrc={type === 'ADJUST_BG_FRAME' ? SITE.icons.bgFrameOpacity : SITE.icons.bgOpacity}
+                        text={val}
+                    />
+                )
+            })}
+        </div>
+    )
+}
+
+const BgOverlayOpacity = ({func}) => {
+    return(
+        <Button className={'btn-ctl'} onClick={func}>
+            <img 
+                src={SITE.icons.bgOpacity} 
+                title={'Background overlay opacity'}
+                alt='Background overlay opacity' />
+        </Button>
+    )
+}
+
+const BgFrameOpacity = ({func}) => {
+    return(
+        <Button className='btn-ctl' onClick={func}>
+            <img 
+                src={SITE.icons.bgFrameOpacity} 
+                title={'Background drawing opacity'}
+                alt='Background drawing opacity' />
+        </Button>
+    )
+}
+
+export const MobileSaveController = () => {
+    
+    const closeExpandable = () => {
+        dispatch({type: 'Close'});
+    }
+
+    const reducer = (state, action) => {
+        switch(action.type){
+            case 'BgOverlay':{
+                return(state 
+                    ? null 
+                    : <BgOverlayExpandable 
+                        closeExpandable={closeExpandable}
+                        type='ADJUST_BG_OVERLAY'/>
+                    );
+            }
+            case 'BgFrame':{
+                return(state
+                    ? null
+                    : <BgOverlayExpandable
+                        closeExpandable={closeExpandable} 
+                        type='ADJUST_BG_FRAME'/>)
+            }
+            case 'Close':{
+                return(null)
+            }
+            default:
+                console.warn("No control matched");
+                break;
+        }
+    }
+
+    const [state, dispatch] = useReducer(reducer, <Expanse />);
+
+    return(
+        <div className='container controller col-12'>
+            <div className='row'>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <Save/>
+                </div>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <Download/>
+                </div>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <Preview/>
+                </div>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <BgOverlayOpacity
+                        func={() => dispatch({type: 'BgOverlay'})} />
+                </div>
+                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                    <BgFrameOpacity
+                        func={() => dispatch({type: 'BgOverlay'})} />
+                </div>
             </div>
             <div className='m-1'>{state}</div>
         </div>

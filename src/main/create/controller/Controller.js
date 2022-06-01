@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
-import { MobileController } from './MobileController';
+import { MobileController, MobileSaveController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
     Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame } from './ControllerBtns';
 import { ControllerInfo } from './ControllerInfo';
@@ -34,24 +34,31 @@ export const Controller = () => {
 
 export const SaveController = () => {
     return(
-        <div className='container controller col-12 col-md-8 col-lg-8 col-xl-8 col-xxl-7 mt-1 mb-1'> 
-            <div className='row'>
-                    <div className='save-controller col col-sm-6 col-xl-7'>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Save /></div>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Download /></div>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBg /></div>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBgFrame/></div>
-                    </div>
-                <div className='col col-6 col-md-5 col-lg-4 col-xl-3'>    
+        <div>
+            <BrowserView>
+                <div className='container controller col-12 col-md-8 col-lg-8 col-xl-8 col-xxl-7 mt-1 mb-1'> 
                     <div className='row'>
-                        <div ><EnableShortcuts id='enable-shortcuts'/></div>
-                    </div>
-                    <div className='row'>
-                        <ControllerInfo />
+                            <div className='save-controller col col-sm-6 col-xl-7'>
+                                <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Save /></div>
+                                <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Download /></div>
+                                <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
+                                <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBg /></div>
+                                <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBgFrame/></div>
+                            </div>
+                        <div className='col col-6 col-md-5 col-lg-4 col-xl-3'>    
+                            <div className='row'>
+                                <div ><EnableShortcuts id='enable-shortcuts'/></div>
+                            </div>
+                            <div className='row'>
+                                <ControllerInfo />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </BrowserView>
+            <MobileView>
+                <MobileSaveController />
+            </MobileView>
         </div>
     );
 }
