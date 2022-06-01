@@ -55,9 +55,9 @@ const Header = () => {
                                 </a>
                             </NavItem>
                             <NavItem className='nav-item nav-i'>
-                                <NavLink className='nav-link'  to='/help'>
+                                <a className='nav-link'  href='/help'>
                                     <span className='fa fa-info fa-md m-1'></span> Help
-                                </NavLink>
+                                </a>
                             </NavItem>
                         </Nav>
                         <div className='auth-nav-wrapper'>
