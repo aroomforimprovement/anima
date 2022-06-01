@@ -10,6 +10,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from 'react-router';
 import { useAccount } from '../../../shared/account';
 import { isMobile } from 'react-device-detect';
+import toast from 'buttoned-toaster';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -94,11 +95,11 @@ export const Animation = ({splat}) => {
     },[anim.isSet, splat, account.user, access]);
 
     const handleSaveSubmission = (e) => {
-        //console.debug(`handleSaveSubmission`)
         e.preventDefault();
         updateAnim({type: 'USERID', data: true})
         updateAnim({type: 'NAME', data: name})
         if(access){
+            toast.info("Saving to account...");
             updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
         }else{
             redirectAfterTempSave(anim.temp);
