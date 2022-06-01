@@ -362,25 +362,23 @@ export const MobileSaveController = () => {
     const [state, dispatch] = useReducer(reducer, <Expanse />);
 
     return(
-        <div className='container controller col-12'>
-            <div className='row'>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                    <Save/>
-                </div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                    <Download/>
-                </div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                    <Preview/>
-                </div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                    <BgOverlayOpacity
-                        func={() => dispatch({type: 'BgOverlay'})} />
-                </div>
-                <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                    <BgFrameOpacity
-                        func={() => dispatch({type: 'BgOverlay'})} />
-                </div>
+        <div className='save-controller col col-sm-6 col-xl-7'>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <Save/>
+            </div>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <Download/>
+            </div>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <Preview/>
+            </div>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <BgOverlayOpacity
+                    func={() => dispatch({type: 'BgOverlay'})} />
+            </div>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <BgFrameOpacity
+                    func={() => dispatch({type: 'BgOverlay'})} />
             </div>
             <div className='m-1'>{state}</div>
         </div>

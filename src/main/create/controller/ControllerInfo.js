@@ -3,6 +3,7 @@ import { useControlContext } from '../Create';
 import { CC, values } from '../values';
 import { SITE } from '../../../shared/site';
 import toast from 'buttoned-toaster';
+import { isMobile } from 'react-device-detect';
 
 export const ControllerInfo = () => {
     
@@ -90,7 +91,7 @@ export const ControllerInfo = () => {
     }, [controls.pc])
 
     return(
-        <div className='create-info container'>
+        <div className={`container ${isMobile ? 'col col-12 mobile-create-info' : 'create-info'}`}>
             <span title='Current frame rate'>fR: {controls.frate}</span>
             <span>, </span>
             <span title='Current drawing mode'>Mode: {mode}</span>
