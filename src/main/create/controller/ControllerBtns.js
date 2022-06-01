@@ -385,14 +385,18 @@ export const AdjustBgDropdown = () => {
         return(
             <ControllerDropdownItem 
                 key={value}
-                title={`Opacity to ${value}`}
+                title={`Bg opacity to ${value}`}
                 func={() => handle(value)}
-                iSrc={SITE.icons.bg} text={value} />
+                iSrc={SITE.icons.bg} 
+                text={value} 
+            />
         )
     })
     return(
-        <DropdownMenu onMouseOver={() => updateControls({type: 'DISABLE', data: true})} onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
-            {options}
+        <DropdownMenu 
+            onMouseOver={() => updateControls({type: 'DISABLE', data: true})} 
+            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+                {options}
         </DropdownMenu>
     )
 }
@@ -404,12 +408,56 @@ export const AdjustBg = () => {
     return(
         <Dropdown isOpen={isOpen} toggle={toggle}>
             <DropdownToggle>
-                <img src={SITE.icons.bg}
+                <img src={SITE.icons.bgOpacity}
                     title='Adjust background opacity'
                     alt='Ajust background opacity' />
             </DropdownToggle>
             <AdjustBgDropdown />
         </Dropdown> 
+    )
+}
+
+export const AdjustBgFrameDropdown = () => {
+    const { updateControls } = useControlContext();
+    const handle = (val) => {
+        updateControls({type: 'ADJUST_BG_FRAME', data: val});
+        updateControls({type: 'ENABLE', data: true});
+    }
+    const options = values.bgOverlayVals.map((value) => {
+        return(
+            <ControllerDropdownItem
+                key={value}
+                title={`Bg drawing opacity to ${value}`}
+                func={() => handle(value)}
+                iSrc={SITE.icons.bg} 
+                text={value}
+            />
+        )
+    });
+    return(
+        <DropdownMenu 
+            onMouseOver={() => updateControls({type: 'DISABLE', data: true})}
+            onMouseOut={() => updateControls({type: 'ENABLE', data: true})}>
+                {options}
+        </DropdownMenu>
+
+    )
+}
+
+export const AdjustBgFrame = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(prevState => !prevState);
+
+    return(
+        <Dropdown isOpen={isOpen} toggle={toggle}>
+            <DropdownToggle>
+                <img src={SITE.icons.bgFrameOpacity}
+                    title='Adjust background drawing opacity'
+                    alt='Adjust background drawing opacity'
+                />
+            </DropdownToggle>
+            <AdjustBgFrameDropdown />
+        </Dropdown>
     )
 }
 

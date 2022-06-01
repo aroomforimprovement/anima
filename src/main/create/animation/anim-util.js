@@ -13,10 +13,10 @@ export const setBgOverlay = async (p5, render, opacity) => {
     p5.background(c);
 }
 
-export const drawBg = async (bg, p5, render, opacity) => {
-    setBgOverlay(p5, render, opacity);
+export const drawBg = async (bg, p5, render, bgOpacity, bgFrameOpacity) => {
+    setBgOverlay(p5, render, bgOpacity);
     if(bg && bg.length > 0){
-        drawPoints(bg, p5);
+        drawPoints(bg, p5, false, bgFrameOpacity);
     }
 }
 
@@ -29,15 +29,16 @@ export const drawFrame = async (f, p5, render, clip) => {
     drawPoints(f.points, p5, clip);
 }
 
-export const drawPoints = async (points, p5, clip) => {
+export const drawPoints = async (points, p5, clip, bgFrameOpacity) => {
     points.forEach((element) => {
-        drawStroke(element, p5, clip);
+        drawStroke(element, p5, clip, bgFrameOpacity);
     });
 }
 
-export const drawPoint = async (point, p5) => {
+export const drawPoint = async (point, p5, opacity) => {
     let p = {...point};
-    p5.fill(p.pc[0], p.pc[1], p.pc[2], p.pc[3]);
+    const opa = typeof opacity !== 'undefined' ? 255*opacity : p.pc[3];
+    p5.fill(p.pc[0], p.pc[1], p.pc[2], opa);
     if(p.size !== p5.width){
         p.x = p5.map(p.x, 0, p.size ? p.size : values.defaultSize, 0, p5.width);
         p.y = p5.map(p.y, 0, p.size ? p.size : values.defaultSize, 0, p5.height);
@@ -68,15 +69,15 @@ export const drawPoint = async (point, p5) => {
     return true;
 }
 
-export const drawStroke = async (stroke, p5, clip) => {
+export const drawStroke = async (stroke, p5, clip, opacity) => {
     if(stroke){
         stroke.forEach((point, i) => {
             if(clip){
                 if(i%2 === 0){
-                    drawPoint(point, p5);
+                    drawPoint(point, p5, opacity);
                 }
             }else{
-                drawPoint(point, p5);
+                drawPoint(point, p5, opacity);
             }
             
         });

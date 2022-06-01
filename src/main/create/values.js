@@ -37,6 +37,7 @@ export const values = {
         privacy: 0,
         currentPrivacy: 0,
         bgOpacity:0.9,
+        bgFrameOpacity:1,
     },
     initialAnimState: {
         enabled: true,

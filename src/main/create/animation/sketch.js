@@ -14,7 +14,8 @@ export const sketch = (p5) => {
     let isStroke = false;
     let isMounted = false;
     let isSet = false;
-    let bgOpacity = 0.75;
+    let bgOpacity = 0.9;
+    let bgFrameOpacity = 1;
    
     const handleNoFramesAlert = () => {
         toast.info(
@@ -90,12 +91,12 @@ export const sketch = (p5) => {
         if(props.controls.drawBg){
             updateControls({type: 'DRAW_BG', data: false});
             updateAnim({type: 'DRAW_BG', data: true});
-            drawBg(anim.bg, p5, false, bgOpacity);
+            drawBg(anim.bg, p5, false, bgOpacity, bgFrameOpacity);
         }
         if(props.controls.next){
             updateControls({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
-            drawBg(anim.bg, p5, false, bgOpacity);
+            drawBg(anim.bg, p5, false, bgOpacity, bgFrameOpacity);
         }
         if(props.controls.download){
             updateControls({type: 'DOWNLOAD', data: false});
@@ -167,6 +168,11 @@ export const sketch = (p5) => {
         }
         if(props.controls.bgOpacity !== bgOpacity){
             bgOpacity = props.controls.bgOpacity;
+            redrawLastFrame();
+            redrawCurrentFrame();
+        }
+        if(props.controls.bgFrameOpacity !== bgFrameOpacity){
+            bgFrameOpacity = props.controls.bgFrameOpacity;
             redrawLastFrame();
             redrawCurrentFrame();
         }
