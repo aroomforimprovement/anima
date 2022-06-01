@@ -245,7 +245,7 @@ export const PenColour = ({dummy}) => {
                 </DropdownToggle>
                 <div className={`btn-colour-caption`} style={{backgroundColor: colour}} ></div>
             </div>
-            <PenColourDropdown dummy={true}/>
+            <PenColourDropdown dummy={dummy}/>
         </Dropdown>
     );
 }
