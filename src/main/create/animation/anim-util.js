@@ -98,10 +98,14 @@ export const previewAnim = async (params) => {
 }
 
 export const previewAnimMobile = async (params) => {
-    try{
-        renderThumb(params);
-    }catch(err){
-        console.err(err);
+    if(params.index === 'temp'){
+        return;
+    }else{
+        try{
+            renderThumb(params);
+        }catch(err){
+            console.err(err);
+        }
     }
 }
 

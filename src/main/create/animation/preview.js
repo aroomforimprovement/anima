@@ -16,44 +16,36 @@ export const preview = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
-        if(props.anim && p5 && props.anim.name !== 'nothing' 
-            && props.collectionState 
-            && (props.collectionState.index === props.index 
-                || props.index === 'temp')){
-                //console.log(props.clip);
-                //p5.resizeCanvas(
-                //props.anim.size ? props.anim.size : values.defaultSize, 
-                //props.anim.size ? props.anim.size : values.defaultSize);
-            //if(isMobile && props.clip){
-                //console.debug("isMobile + clip");
-                previewAnimMobile(
+        if(props.anim 
+        && p5 
+        && props.anim.name !== 'nothing' 
+        && props.collectionState 
+        && (props.collectionState.index === props.index || props.index === 'temp')){
+            previewAnimMobile(
+                {
+                    a: props.anim, 
+                    p5canvas: p5canvas,
+                    p5: p5, 
+                    collectionItemDispatch: props.collectionItemDispatch, 
+                    index: props.index, 
+                    setCollectionState: props.setCollectionState
+                }
+            ).then(() => {
+                previewAnim(
                     {
                         a: props.anim, 
+                        type: props.type, 
                         p5canvas: p5canvas,
                         p5: p5, 
                         collectionItemDispatch: props.collectionItemDispatch, 
                         index: props.index, 
-                        setCollectionState: props.setCollectionState
+                        setCollectionState: props.setCollectionState, 
+                        clip: props.clip,
+                        drawing: false,
+                        mainDispatch: props.mainDispatch
                     }
-                ).then(() => {
-            //}else{
-                    previewAnim(
-                        {
-                            a: props.anim, 
-                            type: props.type, 
-                            p5canvas: p5canvas,
-                            p5: p5, 
-                            collectionItemDispatch: props.collectionItemDispatch, 
-                            index: props.index, 
-                            setCollectionState: props.setCollectionState, 
-                            clip: props.clip,
-                            drawing: false,
-                            mainDispatch: props.mainDispatch
-                        }
-                    );
-                });
-            //}
-            
+                );
+            });
         }
     }
     
