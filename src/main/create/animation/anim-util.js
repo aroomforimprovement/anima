@@ -31,8 +31,7 @@ export const drawFrame = async (f, p5, render, clip) => {
 
 export const drawPoints = async (points, p5, clip) => {
     points.forEach((element) => {
-        drawStroke(element, p5, clip);            
-        
+        drawStroke(element, p5, clip);
     });
 }
 

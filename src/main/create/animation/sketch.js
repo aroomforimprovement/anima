@@ -144,7 +144,7 @@ export const sketch = (p5) => {
             updateAnim({type: 'END_PREVIEW', data: false});
             isMounted ? p5.resizeCanvas(isMobile ? p5.displayWidth : values.defaultSize,
                 isMobile ? p5.displayWidth : values.defaultSize) : console.debug("unmounted before canvas resize");
-            isMounted ? redrawLastFrame() : console.log("unmounted before redrawLastFrame");
+            isMounted ? redrawLastFrame() : console.warn("unmounted before redrawLastFrame");
         }
         if(props.controls.save){
             updateControls({type: 'SAVE', data: false});
@@ -167,6 +167,8 @@ export const sketch = (p5) => {
         }
         if(props.controls.bgOpacity !== bgOpacity){
             bgOpacity = props.controls.bgOpacity;
+            redrawLastFrame();
+            redrawCurrentFrame();
         }
         
         return () => { isMounted = false};
@@ -235,7 +237,7 @@ export const sketch = (p5) => {
     const setControlTriggered = (controlObj) => {
         switch(controlObj.v){
 			case CC.NEXT:
-                isMounted ? updateControls({type: 'NEXT', data: true}) : console.log("unmounted");
+                isMounted ? updateControls({type: 'NEXT', data: true}) : console.warn("unmounted");
     			break;
 			case CC.BG:
                 updateControls({type: 'DRAW_BG', data: true})
@@ -253,7 +255,7 @@ export const sketch = (p5) => {
                 updateControls({type: 'WIPE', data: true});
                 break;
             default:
-                //console.log('no control found');
+                console.warn('no control found matching provided code');
 		}
     }
 
@@ -328,11 +330,9 @@ export const sketch = (p5) => {
     }
 
     const setSavedBackground = (props) => {
-        //console.log("setSavedBackground");
         if(props.anim.anim && props.anim.anim.frames
             && props.anim.anim.frames.length > 0
             && props.anim.anim.frames[props.anim.anim.frames.length-1].bg){
-                //console.log("saving background");
                 updateAnim({type: 'SAVE_BG', data: props.anim.anim.frames[props.anim.anim.frames.length-1].bg});
                 updateAnim({type: 'DRAW_BG', data: true});
         }
@@ -355,7 +355,6 @@ export const sketch = (p5) => {
 
     const redrawCurrentFrame = () => {
         if(anim.bg && anim.bg.length > 0){
-            console.log("drawing background")
             drawPoints(anim.bg, p5);
         }
         if(anim.undos && anim.undos.length > 0){
@@ -384,12 +383,9 @@ export const sketch = (p5) => {
      */
 
     const isPointOnCanvas = (x, y) => {
-        //if(x < 0 || x > p5.width || y < 0 || y > p5.height)
         if(x < 0 || x > p5.width || y < 0 || y > p5.height){
-            //console.log("not on canvas")
             return false;
         }else{
-            //console.log("on canvas")
             return true;
         }
         
