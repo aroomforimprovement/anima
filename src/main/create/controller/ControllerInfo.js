@@ -91,7 +91,7 @@ export const ControllerInfo = () => {
     }, [controls.pc])
 
     return(
-        <div className={`container ${isMobile ? 'col col-12 mobile-create-info' : 'create-info'}`}>
+        <div className={` ${isMobile ? 'col col-12 mobile-create-info' : 'create-info'} container`}>
             <span title='Current frame rate'>fR: {controls.frate}</span>
             <span>, </span>
             <span title='Current drawing mode'>Mode: {mode}</span>
