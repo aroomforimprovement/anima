@@ -1,6 +1,6 @@
 import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
-import { downloadAnimAsWebm, drawBg, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
+import { downloadAnimAsWebm, drawBg, drawFrame, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 import toast from 'buttoned-toaster';
 
 export const sketch = (p5) => {
@@ -97,6 +97,14 @@ export const sketch = (p5) => {
             updateControls({type: 'NEXT', data: false});
             updateAnim({type: 'NEXT', data: true});
             drawBg(anim.bg, p5, false, bgOpacity, bgFrameOpacity);
+            if(anim.anim.layers && anim.anim.layers.length > 0){
+                anim.anim.layers.forEach((layer) => {
+                    if(layer.length > anim.anim.frames.length){
+                        drawFrame(layer[anim.anim.frames.length], p5, false, false)
+                    }
+                })
+            }
+            
         }
         if(props.controls.download){
             updateControls({type: 'DOWNLOAD', data: false});
@@ -176,7 +184,28 @@ export const sketch = (p5) => {
             redrawLastFrame();
             redrawCurrentFrame();
         }
-        
+        if(props.controls.newLayer){
+            updateControls({type: 'NEW_LAYER', data: false});
+            const dismiss = (id) => {
+                toast.dismiss(id)
+            }
+            const approve = (id) => {
+                toast.dismiss(id);
+                updateAnim({type: 'NEW_LAYER', data: true});
+            }
+            toast.warn({
+                toastId: 'newLayer',
+                message: `Warning: You are about to add a new layer. 
+                    This means your animation will be saved as a layer 
+                    and you will return to the first frame, 
+                    with ability to draw a new layer over each frame in sequence. 
+                    Is this what you intend to do?`,
+                dismissFunc: dismiss,
+                approveFunc: approve,
+                dismissTxt: "Nope",
+                approveTxt: "Yes, take me to the layerverse"
+            })
+        }
         return () => { isMounted = false};
     }
 

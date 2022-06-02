@@ -21,7 +21,6 @@ export const drawBg = async (bg, p5, render, bgOpacity, bgFrameOpacity) => {
 }
 
 export const drawFrame = async (f, p5, render, clip) => {
-    setBgOverlay(p5, render);
     if(f.bg && f.bg.length > 0){
         
         drawPoints(f.bg, p5, clip);   
@@ -120,11 +119,20 @@ export const renderAnim = async (params) => {
     setBgOverlay(params.p5, true);
     setBgOverlay(params.p5, true);
     let frames = [...params.a.frames];
-    if(params.clip && frames.length > 4){
-        frames = frames.splice(0, 4);
+    if(params.clip && frames.length > 8){
+        frames = frames.splice(0, 8);
     }
     frames.forEach((f, i) => {
-        setFrameCaptured(f, capturer, params.p5canvas, params.p5, params.clip);
+        const frameWithLayers = [];
+        if(params.a.layers?.length > 0){
+            params.a.layers.forEach((layer) => {
+                if(layer.length >= f.fid){
+                    frameWithLayers.push(layer[f.fid])
+                }
+            })
+        }
+        frameWithLayers.push(f);
+        setFrameCaptured(frameWithLayers, capturer, params.p5canvas, params.p5, params.clip);
     });
     capturer.stop();
     //const duration = performance.now() - startTime;
@@ -159,7 +167,6 @@ export const renderAnim = async (params) => {
                     collectionItemDispatch: params.collectionItemDispatch}
 
             );
-                //setCollectionState({type:'DOWNLOADED', data: index});
         }else if(params.type === 'DRAWING'){
             playPreview(
                 {
@@ -176,9 +183,12 @@ export const renderAnim = async (params) => {
 }
 
 export const setFrameCaptured = async (f, capturer, p5canvas, p5, clip) => {
-    //console.debug("setFrameCaptured");
     const render = true;
-    drawFrame(f, p5, render, clip);
+    setBgOverlay(p5, render);
+    f.forEach((layer) => {
+        drawFrame(layer, p5, render, clip)
+    })
+    
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);

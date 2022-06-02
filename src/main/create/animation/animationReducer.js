@@ -46,6 +46,7 @@ export const newAnimState = (user) => {
             "size": 600,
             "privacy": 0,
             "frames": [],
+            "layers": [],
             "lastFrame":{},
         },
         undos:[],
@@ -202,6 +203,15 @@ export const animReducer = (state, action) => {
                 anim:{...state["anim"], lastFrame: lastFrame,
                 frames: [...state["anim"]["frames"], frame]},
                 undos: [], redos: [], undid: [], redid: [], fid: newFid,
+            });
+        }
+        case 'NEW_LAYER':{
+            const layers = [...state.anim.layers];
+            const newLayer = [...state.anim.frames];
+            layers.push(newLayer);
+            return({...state, 
+                anim:{...state["anim"], layers: layers, frames: []},
+                undos: [], redos: [], undid: [], redid: [], fid: 0
             });
         }
         case 'PREVIEW':{

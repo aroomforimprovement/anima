@@ -33,6 +33,7 @@ export const SITE = {
         "download": process.env.REACT_APP_URL + '/assets/download.svg',
         "save": process.env.REACT_APP_URL + '/assets/save.svg',
         "preview": process.env.REACT_APP_URL + '/assets/preview.svg',
+        "layers": process.env.REACT_APP_URL + '/assets/layers.svg',
     },
     "help": {
         "image_001": process.env.REACT_APP_URL + '/assets/help/image_001.png',

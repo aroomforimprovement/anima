@@ -81,6 +81,9 @@ export const controlReducer = (state, action) => {
         case 'ADJUST_BG_FRAME':{
             return({...state, bgFrameOpacity: action.data})
         }
+        case 'NEW_LAYER':{
+            return({...state, newLayer: action.data})
+        }
         default:
             return state;
     }

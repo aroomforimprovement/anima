@@ -388,6 +388,14 @@ export const Preview = ({dummy}) => {
     )
 }
 
+export const Layer = ({dummy}) => {
+    return(
+        <ControllerBtn dispatchType='NEW_LAYER' dummy={dummy}
+            btnText={'Add new layer'} icon={SITE.icons.layers} />
+    )    
+}
+
+
 export const AdjustBgDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();
     const handle = (val) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { MobileController, MobileSaveController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame } from './ControllerBtns';
+    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame, Layer } from './ControllerBtns';
 import { ControllerInfo } from './ControllerInfo';
 import './controller.scss';
 
@@ -44,6 +44,7 @@ export const SaveController = () => {
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBg /></div>
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBgFrame/></div>
+                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Layer/></div>
                     </div>
                         <div className='col col-6 col-md-5 col-lg-4 col-xl-3'>    
                         <div className='row'>
