@@ -2,6 +2,7 @@ import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawFrame, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 import toast from 'buttoned-toaster';
+import { getDontShowChoice } from '../../../utils/utils';
 
 export const sketch = (p5) => {
     let p5canvas = undefined;
@@ -190,21 +191,33 @@ export const sketch = (p5) => {
                 toast.dismiss(id)
             }
             const approve = (id) => {
-                toast.dismiss(id);
+                if(id)toast.dismiss(id);
                 updateAnim({type: 'NEW_LAYER', data: true});
             }
-            toast.warn({
-                toastId: 'newLayer',
-                message: `Warning: You are about to add a new layer. 
-                    This means your animation will be saved as a layer 
-                    and you will return to the first frame, 
-                    with ability to draw a new layer over each frame in sequence. 
-                    Is this what you intend to do?`,
-                dismissFunc: dismiss,
-                approveFunc: approve,
-                dismissTxt: "Nope",
-                approveTxt: "Yes, take me to the layerverse"
-            })
+            if(window.localStorage.getItem(`dontshow_NEW_LAYER_${anim.anim.userid}`)){
+                console.log("item")
+                getDontShowChoice(`dontshow_NEW_LAYER_${anim.anim.userid}`)
+                    .then((item) => {
+                        if(item.choice){
+                            approve(false);
+                        }
+                    })
+            }else{
+                toast.warn({
+                    toastId: 'newLayer',
+                    message: `Warning: You are about to add a new layer. 
+                        This means your animation will be saved as a layer 
+                        and you will return to the first frame, 
+                        with ability to draw a new layer over each frame in sequence. 
+                        Is this what you intend to do?`,
+                    dismissFunc: dismiss,
+                    approveFunc: approve,
+                    dismissTxt: "Nope",
+                    approveTxt: "Yes, take me to the layerverse",
+                    canHide: true,
+                    dontShowType: `NEW_LAYER_${anim.anim.userid}`
+                })
+            }
         }
         return () => { isMounted = false};
     }

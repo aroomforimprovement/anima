@@ -20,3 +20,8 @@ export const getUserJwt = async (name, email, id) => {
 export const getUserJwtDecrypted = async (jwt) => {
     return await jwtDecrypt(jwt, process.env.REACT_APP_LOCAL_SECRET);
 }
+
+export const getDontShowChoice = async (key) => {
+    const choice = await JSON.parse(key);
+    return choice.choice;
+}
