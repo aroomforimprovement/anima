@@ -88,8 +88,8 @@ export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
                 console.warn('drawing mode has been set to a an invalid value');
                 return false;        
     }
-    console.dir(p);
-    console.dir(capturer)
+    //console.dir(p);
+    //console.dir(capturer)
     if(p.r && capturer && i%20 === 0){
         console.log('here')
         let img = p5.get(0, 0, 600, 600);

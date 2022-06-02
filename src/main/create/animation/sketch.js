@@ -193,36 +193,7 @@ export const sketch = (p5) => {
         }
         if(props.controls.newLayer){
             updateControls({type: 'NEW_LAYER', data: false});
-            const dismiss = (id) => {
-                toast.dismiss(id)
-            }
-            const approve = (id) => {
-                if(id)toast.dismiss(id);
-                updateAnim({type: 'NEW_LAYER', data: true});
-            }
-            if(window.localStorage.getItem(`dontshow_NEW_LAYER_${anim.anim.userid}`)){
-                getDontShowChoice(`dontshow_NEW_LAYER_${anim.anim.userid}`)
-                    .then((item) => {
-                        if(item.choice){
-                            approve(false);
-                        }
-                    })
-            }else{
-                toast.warn({
-                    toastId: 'newLayer',
-                    message: `Warning: You are about to add a new layer. 
-                        This means your animation will be saved as a layer 
-                        and you will return to the first frame, 
-                        with ability to draw a new layer over each frame in sequence. 
-                        Is this what you intend to do?`,
-                    dismissFunc: dismiss,
-                    approveFunc: approve,
-                    dismissTxt: "Nope",
-                    approveTxt: "Yes, take me to the layerverse",
-                    canHide: true,
-                    dontShowType: `NEW_LAYER_${anim.anim.userid}`
-                })
-            }
+            updateAnim({type: 'NEW_LAYER', data: true});
         }
         if(props.controls.recTrigger){
             updateControls({type: 'RECORD', data: {recOn: !props.controls.recOn, recTrigger: false}})
