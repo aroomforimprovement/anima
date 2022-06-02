@@ -195,9 +195,8 @@ export const animReducer = (state, action) => {
             const points = state.undos.length > 0 ? [...state.undos] : [];
             const fid = state.fid; 
             const newFid = state.fid + 1;
-            const animid = state.animid ? state.animid : '1234567890';
             const bg = state.bg;
-            const frame = {fid: fid, animid: animid, points: points, bg: bg};
+            const frame = {fid: fid, points: points, bg: bg};
             const lastFrame = frame;
             return ({...state, 
                 anim:{...state["anim"], lastFrame: lastFrame,
