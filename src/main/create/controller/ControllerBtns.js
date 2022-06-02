@@ -332,6 +332,10 @@ const ControllerBtn = ({ dispatchType, btnText, icon, dummy }) =>{
     const handle = async () => {
         if(dummy){return}
         toast.success({message: dispatchType, duration: 1000});
+        if(dispatchType === 'RECORD'){
+            toast.error({message: "Experimental", duration: 2000});
+            toast.warn("Results may vary.");
+        }
         setTimeout(() => {
             updateControls({type: dispatchType, data: true});
         }, 100)

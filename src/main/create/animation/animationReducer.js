@@ -72,10 +72,6 @@ export const newAnimState = (user) => {
  * @returns 
  */
 export const animReducer = (state, action) => {
-    //save anim and send to auth
-    //console.log(action.type)
-    //console.dir(action.data)
-    //console.dir(state)
     const saveTempAnim = async (anim) => {
         window.localStorage.setItem("tempAnim", JSON.stringify(anim));
         return anim.id;
@@ -109,7 +105,6 @@ export const animReducer = (state, action) => {
         });
     }
     
-    //console.debug(`animReducer:${action.type}:${action.data}`);
     switch(action.type){    
         case 'SET_ANIM':{
             return ({...state, anim: action.data, isSet: true, temp: false});
@@ -183,7 +178,6 @@ export const animReducer = (state, action) => {
                 }
                 
             } 
-            //console.dir(bg)
             return ({...state, bg: bg});
         }
         case 'DRAW_BG':{
@@ -207,15 +201,37 @@ export const animReducer = (state, action) => {
         }
         case 'NEW_LAYER':{
             const layers = [...state.anim.layers];
-            const newLayer = [...state.anim.frames];
-            layers.push(newLayer);
+            const oldLayer = [...state.anim.frames];
+            let recLayer = [];
+            oldLayer.forEach((layerFrame, frameIndex) => {
+                if(layerFrame.points[0] && layerFrame.points[0][0]?.r){
+                    let newPoints = [];
+                    layerFrame.points.forEach((points) => {
+                        points.forEach((point, pointIndex) => {
+                            newPoints.push(point);
+                            if(pointIndex%20 === 0 || pointIndex === layerFrame.points.length-1){
+                                const newFrame = {
+                                    fid: frameIndex + '.' + pointIndex,
+                                    bg: layerFrame.bg,
+                                    points: newPoints
+                                }
+                                    recLayer.push(newFrame);
+                                    //newPoints = [];
+                            }
+    
+                        })
+                    })
+                }else{
+                    recLayer.push(layerFrame);
+                }
+            })
+            layers.push(recLayer);
             return({...state, 
                 anim:{...state["anim"], layers: layers, frames: []},
                 undos: [], redos: [], undid: [], redid: [], fid: 0
             });
         }
         case 'PREVIEW':{
-            //console.log("Creation: PREVIEW");
             return({...state,
                 isPreviewOpen: true});
         }
@@ -245,7 +261,6 @@ export const animReducer = (state, action) => {
             return ({...state, enabled: false, isSaveOpen: true, anim: anim});
         }
         case 'SAVE_TO_ACCOUNT':{
-            //console.debug('SAVE_TO_ACCOUNT');
             let temp = false;
             if(!action.data && !window.localStorage.getItem('tempAnim')){
                 saveTempAnim(state.anim);
@@ -275,7 +290,6 @@ export const animReducer = (state, action) => {
                 userid: state.anim.userid}})
         }
         default:
-            //console.log("reached DEFAULT");
             return state;
     }
 }

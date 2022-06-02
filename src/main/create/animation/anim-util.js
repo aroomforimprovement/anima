@@ -36,7 +36,7 @@ export const drawFrame = async (params) => {
         });
     }
     drawPoints({
-        points: params.f.points, 
+        points: params.f.points ? params.f.points : [], 
         p5: params.p5, 
         clip: params.clip, 
         capturer: params.capturer, 
@@ -45,7 +45,7 @@ export const drawFrame = async (params) => {
 }
 
 export const drawPoints = async (params) => {
-    params.points.forEach((element) => {
+    params.points.forEach((element, i) => {
         drawStroke({
             stroke: element, 
             p5: params.p5, 
@@ -53,6 +53,7 @@ export const drawPoints = async (params) => {
             opacity: params.bgFrameOpacity,
             p5canvas: params.p5canvas,
             capturer: params.capturer,
+            i: i
         });
     });
 }
@@ -88,10 +89,7 @@ export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
                 console.warn('drawing mode has been set to a an invalid value');
                 return false;        
     }
-    //console.dir(p);
-    //console.dir(capturer)
     if(p.r && capturer && i%20 === 0){
-        console.log('here')
         let img = p5.get(0, 0, 600, 600);
         img.loadPixels();
         p5.image(img, 0, 0);
@@ -101,7 +99,9 @@ export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
 }
 
 export const drawStroke = async (params) => {
-    if(params.stroke){
+    if(params.stroke && params.stroke.r){
+        drawPoint(params.stroke, params.p5, params.opacity, params.capturer, params.p5canvas, params.i)
+    }else if(params.stroke){
         params.stroke.forEach((point, i) => {
             if(params.clip){
                 if(i%2 === 0){
@@ -158,14 +158,15 @@ export const renderAnim = async (params) => {
         const frameWithLayers = [];
         if(params.a.layers?.length > 0){
             params.a.layers.forEach((layer) => {
-                if(layer.length >= f.fid){
-                    frameWithLayers.push(layer[f.fid])
+                if(layer.length >= i){
+                    frameWithLayers.push(layer[i])
                 }
             })
         }
         frameWithLayers.push(f);
+        //console.dir(frameWithLayers)
         setFrameCaptured({
-            f: frameWithLayers, 
+            f: frameWithLayers ? frameWithLayers : [], 
             capturer: capturer, 
             p5canvas: params.p5canvas, 
             p5: params.p5, 
@@ -222,10 +223,19 @@ export const renderAnim = async (params) => {
 
 export const setFrameCaptured = async (params) => {
     const render = true;
-    setBgOverlay(params.p5, render);
+    let rec = false;
+    for(let i = 0; i < params.f.length; i++){
+        if(params.f[i].points[0]?.r){
+            rec = true;
+            break;
+        }
+    }
+    if(!rec){
+        setBgOverlay(params.p5, render);
+    }
     params.f.forEach((layer) => {
         drawFrame({
-            f: layer, 
+            f: layer ? layer : [], 
             p5: params.p5, 
             render: render, 
             clip: params.clip, 
@@ -241,7 +251,6 @@ export const setFrameCaptured = async (params) => {
 }
 
 export const renderThumb = async (params) => {
-        //console.debug("renderThumb");
         setBgOverlay(params.p5, true);
         setBgOverlay(params.p5, true);
         let frames = [...params.a.frames];
@@ -252,7 +261,6 @@ export const renderThumb = async (params) => {
 
 export const setThumbCaptured = async (f, name, index, p5, p5canvas,
     dispatch, setCollectionState) => {
-    //console.debug("setThumbCaptured");
     const render = true;
     drawFrame({
         f: f, 

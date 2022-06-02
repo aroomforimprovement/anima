@@ -31,13 +31,13 @@ export const Animation = ({splat}) => {
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
 
-    const [name, setName] = useState(anim.anim.name);
+    const [name, setName] = useState(anim?.anim?.name);
 
     useEffect(() => {
         if(anim.anim.name){
             setName(anim.anim.name)
         }
-    }, [anim.anim.name])
+    }, [anim?.anim?.name])
 
     const { loginWithPopup } = useAuth0();
     
@@ -92,7 +92,7 @@ export const Animation = ({splat}) => {
         return () => {
             controller.abort();
         }
-    },[anim.isSet, splat, account.user, access]);
+    },[anim?.isSet, splat, account?.user, access]);
 
     const handleSaveSubmission = (e) => {
         e.preventDefault();

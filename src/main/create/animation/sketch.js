@@ -2,7 +2,6 @@ import { values, CC, CONTROLS } from '../values';
 import { isMobile } from 'react-device-detect';
 import { downloadAnimAsWebm, drawBg, drawFrame, drawPoint, drawPoints, previewAnim, setBgOverlay } from './anim-util';
 import toast from 'buttoned-toaster';
-import { getDontShowChoice } from '../../../utils/utils';
 
 export const sketch = (p5) => {
     let p5canvas = undefined;
@@ -196,7 +195,8 @@ export const sketch = (p5) => {
             updateAnim({type: 'NEW_LAYER', data: true});
         }
         if(props.controls.recTrigger){
-            updateControls({type: 'RECORD', data: {recOn: !props.controls.recOn, recTrigger: false}})
+            updateControls({type: 'RECORD', data: {recOn: !props.controls.recOn, recTrigger: false}});
+            updateAnim({type: 'NEXT', data: true})
         }
         return () => { isMounted = false};
     }
