@@ -22,6 +22,6 @@ export const getUserJwtDecrypted = async (jwt) => {
 }
 
 export const getDontShowChoice = async (key) => {
-    const choice = await JSON.parse(key);
+    const choice = await JSON.parse(window.localStorage.getItem(key));
     return choice.choice;
 }

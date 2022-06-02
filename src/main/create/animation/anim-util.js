@@ -16,25 +16,48 @@ export const setBgOverlay = async (p5, render, opacity) => {
 export const drawBg = async (bg, p5, render, bgOpacity, bgFrameOpacity) => {
     setBgOverlay(p5, render, bgOpacity);
     if(bg && bg.length > 0){
-        drawPoints(bg, p5, false, bgFrameOpacity);
+        drawPoints({
+            points: bg, 
+            p5: p5, 
+            render: render,
+            clip: false, 
+            opacity: bgFrameOpacity
+        });
     }
 }
 
-export const drawFrame = async (f, p5, render, clip) => {
-    if(f.bg && f.bg.length > 0){
-        
-        drawPoints(f.bg, p5, clip);   
+export const drawFrame = async (params) => {
+    if(params.f.bg && params.f.bg.length > 0){
+        drawPoints({
+            points: params.f.bg, 
+            p5: params.p5, 
+            clip: params.clip,
+            p5canvas: params.p5canvas
+        });
     }
-    drawPoints(f.points, p5, clip);
-}
-
-export const drawPoints = async (points, p5, clip, bgFrameOpacity) => {
-    points.forEach((element) => {
-        drawStroke(element, p5, clip, bgFrameOpacity);
+    drawPoints({
+        points: params.f.points, 
+        p5: params.p5, 
+        clip: params.clip, 
+        capturer: params.capturer, 
+        p5canvas: params.p5canvas
     });
 }
 
-export const drawPoint = async (point, p5, opacity) => {
+export const drawPoints = async (params) => {
+    params.points.forEach((element) => {
+        drawStroke({
+            stroke: element, 
+            p5: params.p5, 
+            clip: params.clip, 
+            opacity: params.bgFrameOpacity,
+            p5canvas: params.p5canvas,
+            capturer: params.capturer,
+        });
+    });
+}
+
+export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
     let p = {...point};
     const opa = typeof opacity !== 'undefined' ? 255*opacity : p.pc[3];
     p5.fill(p.pc[0], p.pc[1], p.pc[2], opa);
@@ -65,18 +88,27 @@ export const drawPoint = async (point, p5, opacity) => {
                 console.warn('drawing mode has been set to a an invalid value');
                 return false;        
     }
+    console.dir(p);
+    console.dir(capturer)
+    if(p.r && capturer && i%20 === 0){
+        console.log('here')
+        let img = p5.get(0, 0, 600, 600);
+        img.loadPixels();
+        p5.image(img, 0, 0);
+        capturer.capture(p5canvas.elt)
+    }
     return true;
 }
 
-export const drawStroke = async (stroke, p5, clip, opacity) => {
-    if(stroke){
-        stroke.forEach((point, i) => {
-            if(clip){
+export const drawStroke = async (params) => {
+    if(params.stroke){
+        params.stroke.forEach((point, i) => {
+            if(params.clip){
                 if(i%2 === 0){
-                    drawPoint(point, p5, opacity);
+                    drawPoint(point, params.p5, params.opacity, params.capturer, params.p5canvas, i);
                 }
             }else{
-                drawPoint(point, p5, opacity);
+                drawPoint(point, params.p5, params.opacity, params.capturer, params.p5canvas, i);
             }
             
         });
@@ -132,7 +164,13 @@ export const renderAnim = async (params) => {
             })
         }
         frameWithLayers.push(f);
-        setFrameCaptured(frameWithLayers, capturer, params.p5canvas, params.p5, params.clip);
+        setFrameCaptured({
+            f: frameWithLayers, 
+            capturer: capturer, 
+            p5canvas: params.p5canvas, 
+            p5: params.p5, 
+            clip: params.clip
+        });
     });
     capturer.stop();
     //const duration = performance.now() - startTime;
@@ -182,17 +220,24 @@ export const renderAnim = async (params) => {
     }
 }
 
-export const setFrameCaptured = async (f, capturer, p5canvas, p5, clip) => {
+export const setFrameCaptured = async (params) => {
     const render = true;
-    setBgOverlay(p5, render);
-    f.forEach((layer) => {
-        drawFrame(layer, p5, render, clip)
+    setBgOverlay(params.p5, render);
+    params.f.forEach((layer) => {
+        drawFrame({
+            f: layer, 
+            p5: params.p5, 
+            render: render, 
+            clip: params.clip, 
+            capturer: params.capturer, 
+            p5canvas: params.p5canvas
+        })
     })
     
-    let img = p5.get(0, 0, 600, 600);
+    let img = params.p5.get(0, 0, 600, 600);
     img.loadPixels();
-    p5.image(img, 0, 0);
-    capturer.capture(p5canvas.elt);
+    params.p5.image(img, 0, 0);
+    params.capturer.capture(params.p5canvas.elt);
 }
 
 export const renderThumb = async (params) => {
@@ -209,7 +254,12 @@ export const setThumbCaptured = async (f, name, index, p5, p5canvas,
     dispatch, setCollectionState) => {
     //console.debug("setThumbCaptured");
     const render = true;
-    drawFrame(f, p5, render);
+    drawFrame({
+        f: f, 
+        p5: p5, 
+        render: render,
+        p5canvas: p5canvas
+    });
     let img = p5.get(0, 0, 600, 600);
     img.loadPixels();
     p5.image(img, 0, 0);

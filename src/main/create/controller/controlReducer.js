@@ -84,6 +84,18 @@ export const controlReducer = (state, action) => {
         case 'NEW_LAYER':{
             return({...state, newLayer: action.data})
         }
+        case 'RECORD':{
+            let recOn = false;
+            let recTrigger = false;
+            if(typeof action.data === 'object'){
+                recOn = action.data.recOn;
+                recTrigger = action.data.recTrigger
+            }else{
+                recTrigger = action.data;
+                recOn = state.recOn;
+            }
+            return({...state, recOn: recOn, recTrigger: recTrigger})
+        }
         default:
             return state;
     }

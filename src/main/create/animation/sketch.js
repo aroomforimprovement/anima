@@ -101,7 +101,13 @@ export const sketch = (p5) => {
             if(anim.anim.layers && anim.anim.layers.length > 0){
                 anim.anim.layers.forEach((layer) => {
                     if(layer.length > anim.anim.frames.length){
-                        drawFrame(layer[anim.anim.frames.length], p5, false, false)
+                        drawFrame({
+                            f: layer[anim.anim.frames.length], 
+                            p5: p5, 
+                            p5canvas: p5canvas,
+                            render: false, 
+                            clip: false
+                        })
                     }
                 })
             }
@@ -195,7 +201,6 @@ export const sketch = (p5) => {
                 updateAnim({type: 'NEW_LAYER', data: true});
             }
             if(window.localStorage.getItem(`dontshow_NEW_LAYER_${anim.anim.userid}`)){
-                console.log("item")
                 getDontShowChoice(`dontshow_NEW_LAYER_${anim.anim.userid}`)
                     .then((item) => {
                         if(item.choice){
@@ -218,6 +223,9 @@ export const sketch = (p5) => {
                     dontShowType: `NEW_LAYER_${anim.anim.userid}`
                 })
             }
+        }
+        if(props.controls.recTrigger){
+            updateControls({type: 'RECORD', data: {recOn: !props.controls.recOn, recTrigger: false}})
         }
         return () => { isMounted = false};
     }
@@ -372,7 +380,10 @@ export const sketch = (p5) => {
         p5.background(values.initialBgc);
         if(anim.anim && anim.anim.lastFrame && anim.anim.lastFrame.points
             && anim.anim.lastFrame.points.length > 0){
-            drawPoints(anim.anim.lastFrame.points, p5);
+            drawPoints({
+                points: anim.anim.lastFrame.points, 
+                p5: p5
+            });
             setBgOverlay(p5, true);
         }
     }
@@ -389,13 +400,22 @@ export const sketch = (p5) => {
     const redrawLastFrame = () => {
         setBgOverlay(p5, false, bgOpacity);
         if(anim.anim.lastFrame && anim.anim.lastFrame.points){
-            drawPoints(anim.anim.lastFrame.points, p5);
+            drawPoints({
+                points: anim.anim.lastFrame.points, 
+                p5: p5
+            });
             setBgOverlay(p5, false, bgOpacity);
             
             if((anim.anim.lastFrame.bg && anim.anim.lastFrame.bg.length > 0)){
-                drawPoints(anim.anim.lastFrame.bg, p5);
+                drawPoints({
+                    points: anim.anim.lastFrame.bg, 
+                    p5: p5
+                });
             }else if(anim.anim.bg && anim.anim.bg.length > 0){
-                drawPoints(anim.anim.bg, p5);
+                drawPoints({
+                    points: anim.anim.bg, 
+                    p5: p5
+                });
             }
         }
         
@@ -403,10 +423,16 @@ export const sketch = (p5) => {
 
     const redrawCurrentFrame = () => {
         if(anim.bg && anim.bg.length > 0){
-            drawPoints(anim.bg, p5);
+            drawPoints({
+                points: anim.bg, 
+                p5: p5
+            });
         }
         if(anim.undos && anim.undos.length > 0){
-            drawPoints(anim.undos, p5);
+            drawPoints({
+                points: anim.undos, 
+                p5: p5
+            });
         }
     }
 
@@ -422,7 +448,8 @@ export const sketch = (p5) => {
             size: p5.width,
             pc: controls.pc,
             ps: controls.ps,
-            m: controls.mode
+            m: controls.mode,
+            r: controls.recOn
         }
     }
 

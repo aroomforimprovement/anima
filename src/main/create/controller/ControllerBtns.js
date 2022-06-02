@@ -395,6 +395,14 @@ export const Layer = ({dummy}) => {
     )    
 }
 
+export const Record = ({dummy}) => {
+    const { controls } = useControlContext();
+    return(
+        <ControllerBtn dispatchType={'RECORD'} dummy={dummy}
+            btnText={'Record strokes as frames'} 
+            icon={controls.recOn ? SITE.icons.recOn : SITE.icons.recOff} />
+    )
+}
 
 export const AdjustBgDropdown = ({dummy}) => {
     const { updateControls } = useControlContext();

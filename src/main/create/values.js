@@ -38,6 +38,8 @@ export const values = {
         currentPrivacy: 0,
         bgOpacity:0.9,
         bgFrameOpacity:1,
+        recOn: false,
+        recTrigger: false,
     },
     initialAnimState: {
         enabled: true,

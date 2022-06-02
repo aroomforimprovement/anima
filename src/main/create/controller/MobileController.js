@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { SITE } from '../../../shared/site';
 import { values, CC, CONTROLS } from '../values';
 import { useControlContext } from '../Create';
-import { Next, Undo, Redo, Save, Download, Preview, Layer } from './ControllerBtns';
+import { Next, Undo, Redo, Save, Download, Preview, Layer, Record } from './ControllerBtns';
 import toast from 'buttoned-toaster';
 
 
@@ -382,6 +382,9 @@ export const MobileSaveController = () => {
             </div>
             <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
                 <Layer/>
+            </div>
+            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+                <Record/>
             </div>
             <div className='m-1'>{state}</div>
         </div>
