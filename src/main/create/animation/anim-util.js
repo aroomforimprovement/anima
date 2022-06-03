@@ -103,13 +103,13 @@ export const drawStroke = async (params) => {
         drawPoint(params.stroke, params.p5, params.opacity, params.capturer, params.p5canvas, params.i)
     }else if(params.stroke){
         params.stroke.forEach((point, i) => {
-            if(params.clip){
-                if(i%2 === 0){
-                    drawPoint(point, params.p5, params.opacity, params.capturer, params.p5canvas, i);
-                }
-            }else{
+            //if(params.clip){
+            //    if(i%2 === 0){
+            //        drawPoint(point, params.p5, params.opacity, params.capturer, params.p5canvas, i);
+            //    }
+            //}else{
                 drawPoint(point, params.p5, params.opacity, params.capturer, params.p5canvas, i);
-            }
+            //}
             
         });
     }
