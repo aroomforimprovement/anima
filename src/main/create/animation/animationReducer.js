@@ -205,15 +205,15 @@ export const animReducer = (state, action) => {
             let recLayer = [];
             oldLayer.forEach((layerFrame, frameIndex) => {
                 if(layerFrame.points[0] && layerFrame.points[0][0]?.r){
-                    let newPoints = [];
                     layerFrame.points.forEach((points) => {
+                        let newPoints = [];
                         points.forEach((point, pointIndex) => {
                             newPoints.push(point);
                             if(pointIndex%20 === 0 || pointIndex === layerFrame.points.length-1){
                                 const newFrame = {
                                     fid: frameIndex + '.' + pointIndex,
                                     bg: layerFrame.bg,
-                                    points: newPoints
+                                    points: [...newPoints]
                                 }
                                     recLayer.push(newFrame);
                                     //newPoints = [];
