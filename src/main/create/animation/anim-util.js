@@ -221,7 +221,6 @@ export const renderAnim = async (params) => {
 }
 
 export const setFrameCaptured = async (params) => {
-    console.dir(params.f)
     const render = true;
     let rec = false;
     for(let i = 0; i < params.f.length; i++){
