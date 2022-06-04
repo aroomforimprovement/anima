@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { MobileController, MobileSaveController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame, Layer, Record } from './ControllerBtns';
+    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame, Layer } from './ControllerBtns';
 import { ControllerInfo } from './ControllerInfo';
 import './controller.scss';
 
