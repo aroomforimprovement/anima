@@ -287,7 +287,7 @@ const Collection = ({browse}) => {
                                 <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
                                     collectionState={collectionState} type={'VIEW'}
                                     setCollectionState={setCollectionState} clip={false}
-                                    /> 
+                                /> 
                                 : <Div/>
                                 }
                             </div>

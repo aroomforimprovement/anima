@@ -63,9 +63,15 @@ export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
     const opa = typeof opacity !== 'undefined' ? 255*opacity : p.pc[3];
     p5.fill(p.pc[0], p.pc[1], p.pc[2], opa);
     if(p.size !== p5.width){
+        console.log("here");
         p.x = p5.map(p.x, 0, p.size ? p.size : values.defaultSize, 0, p5.width);
         p.y = p5.map(p.y, 0, p.size ? p.size : values.defaultSize, 0, p5.height);
     }
+
+    console.dir(p.ps);
+    console.log(p5.width);
+    console.log(p.size);
+    
     switch(p.m)
     {
         case CC.SINGLE:

@@ -383,9 +383,9 @@ export const MobileSaveController = () => {
             <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
                 <Layer/>
             </div>
-            <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
+            {/*<div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
                 <Record/>
-            </div>
+            </div>*/}
             <div className='m-1'>{state}</div>
         </div>
     )
