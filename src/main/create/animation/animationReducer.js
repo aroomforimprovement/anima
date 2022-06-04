@@ -215,8 +215,8 @@ export const animReducer = (state, action) => {
                                     bg: layerFrame.bg,
                                     points: [...newPoints]
                                 }
-                                    recLayer.push(newFrame);
-                                    //newPoints = [];
+                                recLayer.push(newFrame);
+                                //newPoints = [];
                             }
     
                         })
