@@ -67,12 +67,11 @@ export const drawPoint = async (point, p5, opacity, capturer, p5canvas, i) => {
         p.x = p5.map(p.x, 0, p.size ? p.size : values.defaultSize, 0, p5.width);
         p.y = p5.map(p.y, 0, p.size ? p.size : values.defaultSize, 0, p5.height);
         //ANIM-321 - need resize points so that relative size when drawing on mobile matches what is rendered at full size
+        const diff = (p.size ? p.size : values.defaultSize) / (p5.height);
+        p.ps = p5.map(p.ps, 0, 60, 0, 60 * (1+diff));
+
     }
 
-    console.dir(p.ps);
-    console.log(p5.width);
-    console.log(p.size);
-    
     switch(p.m)
     {
         case CC.SINGLE:
