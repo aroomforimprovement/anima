@@ -95,12 +95,6 @@
     "comp-test": "./node_modules/.bin/mocha --require babel-register ./test/components",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
