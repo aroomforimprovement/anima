@@ -90,7 +90,9 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "run-script-os",
+    "build:darwin:linux": "react-app-rewired build  && cp ./web-config/_redirects ./build/_redirects && cp ./web-config/_headers ./build/_headers && cd ./api/ && npm install && npm run build",
+    "build:win32": "react-app-rewired build && copy .\\web-config\\_redirects .\\build\\_redirects && copy .\\web-config\\_headers .\\build\\_headers && cd .\\api\\ && npm install && npm run build",
     "test": "react-app-rewired test",
     "comp-test": "./node_modules/.bin/mocha --require babel-register ./test/components",
     "eject": "react-scripts eject"
