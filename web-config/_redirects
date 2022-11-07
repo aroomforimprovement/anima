@@ -3,7 +3,8 @@
 /create/*   /create/:splat   200
 /browse  /   200
 /collection  /   200
-/collection/*  /collection/*   200
+/collection/*  /collection/:splat   200
 /login  /   200
 /logout /   200
 /help   /   200
+/home   /   200
