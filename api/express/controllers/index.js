@@ -64,7 +64,7 @@ module.exports = {
     },
     hasExistingCollection: async (data) => {
         let count;
-        const db = mongoUtil.getDb();
+        const db = await mongoUtil.getDb();
         try{
             count = await db.collection('Collection').countDocuments({userid: data.userid});
         }catch (error) {
