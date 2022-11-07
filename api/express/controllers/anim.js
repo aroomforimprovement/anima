@@ -91,14 +91,15 @@ module.exports = {
         }
     },
     getAnimById: async (animid) => {
-        return new Promise(async (resolve, reject) => {
-            const db = await mongoUtil.getDb();
-            db.collection('Collection').findOne(
-                {'anims.animid': animid}, {'anims.$': 1}, (err, result) => {
-                    if(result) resolve(result.anims.filter((a) => { return a.animid == animid})[0]);
-                    if(err) reject(err);
-                }
-            );
+        return new Promise((resolve, reject) => {
+            mongoUtil.getDb().then((db) => {
+                db.collection('Collection').findOne(
+                    {'anims.animid': animid}, {'anims.$': 1}, (err, result) => {
+                        if(result) resolve(result.anims.filter((a) => { return a.animid == animid})[0]);
+                        if(err) reject(err);
+                    }
+                );
+            });
         });
     },
     setGetAnimResponse: (anim, requser, res) => {
