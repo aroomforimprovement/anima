@@ -1,1 +1,7 @@
-/*  /   200
+/create  /   200
+/create/*   /   200
+/browse  /   200
+/collection  /   200
+/collection/*  /   200
+/login  /   200
+/help   /   200
