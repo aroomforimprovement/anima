@@ -1,0 +1,68 @@
+{
+  "name": "animator-api",
+  "version": "0.0.1",
+  "description": "create, update and retrieve anim, collection, and contact objects",
+  "main": "express/server.js",
+  "scripts": {
+    "start": "node express/server.js",
+    "prebuild": "node ./installer.mjs",
+    "build": "run-script-os",
+    "build:darwin:linux": "node ./installer.mjs && netlify-lambda install functions && netlify-lambda build express --config ./webpack.function.js",
+    "build:win32": "node ./installer.mjs && netlify-lambda install functions && netlify-lambda build express --config ./webpack.functions.js",
+    "test": "mocha --reporter spec",
+    "dev": "npm run build && neflify dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://aroomforimprovement@bitbucket.org/aroomforimprovement/animator-api.git"
+  },
+  "keywords": [
+    "node",
+    "json",
+    "animator"
+  ],
+  "author": "arfi720",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/aroomforimprovement/animator-api#readme",
+  "dependencies": {
+    "auth0": "^2.41.0",
+    "body-parser": "^1.19.0",
+    "chai": "^4.3.4",
+    "child_process": "^1.0.2",
+    "connect-busboy": "0.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "express-openid-connect": "^2.5.0",
+    "express-rate-limit": "^6.3.0",
+    "globby": "^13.1.2",
+    "jwks-rsa": "^2.0.4",
+    "mocha": "^9.1.0",
+    "mongodb": "^4.1.1",
+    "netlify-lambda": "^2.0.15",
+    "node-esapi": "0.0.1",
+    "node-fetch": "^2.6.7",
+    "request": "^2.88.2",
+    "run-script-os": "^1.1.6",
+    "serverless-http": "^3.1.0",
+    "superagent-proxy": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.19.4",
+    "@babel/plugin-transform-object-assign": "^7.18.6",
+    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-typescript": "^7.18.6",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8",
+    "eslint": "^7.32.0",
+    "node-loader": "^2.0.0",
+    "nodemon": "^2.0.15",
+    "raw-loader": "^4.0.2",
+    "shell-loader": "^1.2.1",
+    "webpack": "^5.74.0",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
