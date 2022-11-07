@@ -1,7 +1,10 @@
+/.netlify/functions/server/* /.netlify/functions/server/:splat 200
+/account    /   200
 /create  /   200
 /create/*   /create/:splat   200
 /browse  /   200
 /collection  /   200
-/collection/*  /   200
+/collection/*  /collection/*   200
 /login  /   200
+/logout /   200
 /help   /   200
