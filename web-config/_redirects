@@ -1,7 +1,7 @@
 /create  /   200
-/create/*   /   200
+/create/*   /:splat   200
 /browse  /   200
 /collection  /   200
-/collection/*  /   200
+/collection/*  /:splat   200
 /login  /   200
 /help   /   200
