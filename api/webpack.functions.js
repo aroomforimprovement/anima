@@ -6,6 +6,7 @@ const nodeExternals = require('webpack-node-externals');
 const config = {
   entry: './server.js',
   output: {
+    // eslint-disable-next-line no-undef
     path: path.resolve(__dirname, './functions/'),
     filename: 'server.js',
     publicPath: './functions/'
