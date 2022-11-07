@@ -107,6 +107,7 @@ module.exports = {
         }
     },
     resendVerification: async (req, res) => {
+        // eslint-disable-next-line no-undef
         const endpoint = `https://${process.env.AUTH_DOMAIN}/api/v2/jobs/verification-email`;
         const token = await auth.getAuthManToken();
         const headers = {
