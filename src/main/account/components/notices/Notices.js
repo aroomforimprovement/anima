@@ -7,7 +7,9 @@ export const Notices = ({verified}) => {
     
     const {account} = useAccount();
 
-    const notices = account && account.notices && account.notices.length > 0 
+    const notices = account && account.notices 
+        && typeof account.notices === 'object' 
+        && account.notices.length > 0 
         ? account.notices.map((notice, i) => {
             
             const link = `/collection/${notice.actions.accept}`;
