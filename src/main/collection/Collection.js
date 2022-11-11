@@ -30,6 +30,7 @@ const Collection = ({browse}) => {
     const splat = useParams()[0];
     
     const getCollection = async (id, isBrowse, access, signal) => {
+        //console.log(access);
         let url;
         let req = {
             method: 'GET',

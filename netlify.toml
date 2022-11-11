@@ -1,0 +1,6 @@
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/server/:splat"
+status = 200
+    [redirects.headers]
+        X-From = "Netlify"

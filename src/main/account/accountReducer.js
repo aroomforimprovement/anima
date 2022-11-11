@@ -43,9 +43,13 @@ export const getAccountInfo = async (id, access) => {
             return false;
         }   
     }, error => {
+        console.error(error);
         console.error("Error fetching data: getAccountInfo");
         
-    }).catch(err => console.error("Error fetching data: getAccountInfo"));
+    }).catch(err => {
+        console.error(err);
+        console.error("Error fetching data: getAccountInfo")
+    });
 }
 
 export const deleteAccount = async (userid, access, toast) => {
