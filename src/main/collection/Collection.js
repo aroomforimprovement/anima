@@ -96,7 +96,7 @@ const Collection = ({browse}) => {
     const isContactRequested = (id) => {
         if(account && account.notices && account.notices.length > 0){
             for(let i = 0; i < account.notices.length; i++){
-                if(account.notices[i].type.indexOf('pending-contact') > -1){
+                if(account.notices[i].type && account.notices[i].type.indexOf('pending-contact') > -1){
                     if(account.notices[i].targetUserid === id){
                         return true;
                     }
