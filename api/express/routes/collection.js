@@ -35,6 +35,8 @@ router.post('/', util.jwtCheck(true), (req, res) => {
 router.put('/', util.jwtCheck(true), (req, res) => {
     console.log("reached /collection PUT/");
     const checkedData = coll.isValidPostReqBody(req);
+    console.log("checkedData:");
+    console.dir(checkedData);
     if(checkedData.isValid){
         coll.updateCollection(req.body, res);
     }else{
