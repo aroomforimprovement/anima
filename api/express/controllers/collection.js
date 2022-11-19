@@ -221,7 +221,7 @@ module.exports = {
         const requser = req.user.sub.replace('auth0|', '');
         console.log(`${requser} =? ${body.userid}`);
         console.log(`${requser} =? ${body.targetUserid}`);
-        if(body.userid && typeof body.userid == 'string' && (body.userid === requser || body.targetUserid === requser)){
+        if(body.userid && typeof body.userid == 'string' && (body.userid === requser || body.targetUserid === requser || body.reqUserId === requser)){
             if((body.username && typeof body.username == 'string') || !body.username){
                 return {
                     isValid: true,
