@@ -39,8 +39,10 @@ export const addContactRequest = async (userid, username, requsername, requserid
         }
     }, error => {
         console.error("Error fetching data: addContactRequest");
+        console.error(error);
     }).catch((error) => {
         console.error("Error fetching data: addContactRequest");
+        console.error(error);
     })
 }
 
