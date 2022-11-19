@@ -431,7 +431,7 @@ module.exports = {
         const db = await mongoUtil.getDb();
         const notice = update.deleteNotice;
         let id = notice.userid;
-        if(notice.type === 'pending-notice'){
+        if(notice.type === 'pending-contact'){
             id = notice.targetUserid;
         }
         console.log("deleteNotices:");
