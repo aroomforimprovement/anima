@@ -19,7 +19,7 @@ module.exports = {
         })
     },
     hasContact: async (requser, animuser) => {
-        const db = mongoUtil.getDb();
+        const db = await mongoUtil.getDb();
         let hasContact = 0;
         try{
             hasContact = await db.collection('Collection').countDocuments({userid: animuser, contacts : [ {userid: requser} ]});
