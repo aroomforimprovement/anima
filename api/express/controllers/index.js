@@ -40,7 +40,7 @@ module.exports = {
         }
     },
     addLoggingEntry: async (data, operation) => {
-        const db = mongoUtil.getDb();
+        const db = await mongoUtil.getDb();
         const val = new Date();
         let obj = {};
         obj[operation] = val;
@@ -57,8 +57,8 @@ module.exports = {
         }
         return result;
     },
-    cleanTestSignup: () => {
-        const db = mongoUtil.getDb();
+    cleanTestSignup: async () => {
+        const db = await mongoUtil.getDb();
         db.collection('Collection').deleteOne({'userid' : "123456789012345678901111"});    
 
     },

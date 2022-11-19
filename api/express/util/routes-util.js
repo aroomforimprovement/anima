@@ -11,6 +11,7 @@ module.exports = {
                 jwksRequestsPerMinute: 5,
                 jwksUri: 'https://dev-09xhkep2.eu.auth0.com/.well-known/jwks.json'
             }),
+            // eslint-disable-next-line no-undef
             audience: process.env.AUTH_AUDIENCE,
             issuer: 'https://dev-09xhkep2.eu.auth0.com/',
             algorithms: ['RS256'],
