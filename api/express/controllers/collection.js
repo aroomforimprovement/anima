@@ -362,7 +362,7 @@ module.exports = {
         const contact = update.deleteContact;
         console.log("deleteContact");
         console.dir(contact);
-        db.collection('Collection').bulkWrite([
+        db.collection('Contacts').bulkWrite([
             {updateOne: {filter: {userid: contact.userid},
                 update: {$pull: {contacts: {userid: contact.contacts[0].userid}}}}},
             {updateOne: {filter: {userid: contact.contacts[0].userid},
@@ -431,7 +431,7 @@ module.exports = {
         const notice = update.deleteNotice;
         console.log("deleteNotices:");
         //console.dir(notice);
-        db.collection('Collection').updateOne({userid: notice.userid},
+        db.collection('Notices').updateOne({userid: notice.userid},
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
             (err, result) => {
