@@ -155,10 +155,10 @@ module.exports = {
         try{
 
             await getAccount(userid).then((result) => {
-                if(result){
+                if(result.ok){
                     console.log('result');
                     console.dir(result);
-                    const collection = result;
+                    const collection = result.account;
                     //filter the result based on ownership, contact/privacy
                     module.exports.setGetCollectionResponse(collection, requser, res)
                 //}else if(err){
