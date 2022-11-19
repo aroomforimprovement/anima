@@ -141,6 +141,7 @@ const useAccountStore = () => {
             .then((result) => {
                 if(result){
                     result.isSet = true;
+                    console.dir(result);
                     dispatch({
                         type: 'SET_ACCOUNT_INFO',
                         data: result
