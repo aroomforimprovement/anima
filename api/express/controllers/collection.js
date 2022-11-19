@@ -217,6 +217,7 @@ module.exports = {
             return {isValid: false, error: {code: 403, message: "User is not authorized"}};
         }
         const body = req.body;
+        console.dir(body);
         const requser = req.user.sub.replace('auth0|', '');
         console.log(`${requser} =? ${body.userid}`);
         console.log(`${requser} =? ${body.targetUserid}`);
