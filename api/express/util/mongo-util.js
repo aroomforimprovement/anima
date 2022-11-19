@@ -46,7 +46,7 @@ module.exports = {
             return client;
         }else{
             console.debug(`${here}${sig}no existing client`);
-            client = await MongoClient(uri).connect();
+            client = await new MongoClient(uri).connect();
             console.debug(`${here}${sig}returning new client`);
             return client;
         }
