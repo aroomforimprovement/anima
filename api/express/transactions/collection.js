@@ -186,5 +186,56 @@ module.exports = {
             pendings.push(pending);
         });
         return pendings;
+    },
+    getAccount: async (id) => {
+        const client = await getClient();
+        const db = await getDb();
+
+        const session = client.startSession();
+
+        try{
+            session.startTransaction(transactionOptions);
+
+            try{
+                const accountResult = await db.collection('Collection')
+                    .findOne({userid: id}, { session });
+
+                const notices = [];
+                const noticesCursor = db.collection('Notices')
+                    .find({userid: id}, { session });
+                await noticesCursor.forEach((doc) => {
+                    doc.notices.forEach((notice) => {
+                        notices.push(notice);
+                    });
+                });
+                accountResult.notices = notices;
+
+                const contacts = [];
+                const contactsCursor = db.collection('Contacts')
+                    .find({userid: id}, { session });
+                await contactsCursor.forEach((doc) => {
+                    doc.contacts.forEach((contact) => {
+                        contacts.push(contact);
+                    });
+                });
+                accountResult.contacts = contacts;
+
+                return {ok: 1, account: accountResult};
+            }catch(error){
+                console.error(error);
+                if(error instanceof MongoError && error.hasErrorLabel('UnknownTransactionCommitResult')){
+                    return {ok: 0};
+                }else if(error instanceof MongoError && error.hasErrorLabel('TransientTransactionError')){
+                    module.exports.getAccount(id);
+                }
+                await session.abortTransaction();
+            }finally{
+                await session.endSession();
+            }
+        }catch(error){
+            await session.abortTransaction();
+        }finally{
+            await session.endSession();
+        }
     }
 }

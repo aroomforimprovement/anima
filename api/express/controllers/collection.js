@@ -1,6 +1,7 @@
 const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 const transactions = require('../transactions/collection');
+const { getAccount } = require('../transactions/collection');
 
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
 
@@ -148,10 +149,27 @@ module.exports = {
     },
     getCollectionById: async (req, res) => {
         console.log("getCollectionById");
-        const db = await mongoUtil.getDb();
+        //const db = await mongoUtil.getDb();
         const userid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
         try{
+
+            await getAccount(userid).then((result) => {
+                if(result){
+                    console.log('result');
+                    console.dir(result);
+                    const collection = result;
+                    //filter the result based on ownership, contact/privacy
+                    module.exports.setGetCollectionResponse(collection, requser, res)
+                //}else if(err){
+                //    console.log(err);
+                //    res.status(500).send(err);
+                }else{
+                    res.status(404).send('No existing account found');
+                }
+                //module.exports.setGetCollectionResponse(result, requser, res);
+            })
+/*
             await db.collection('Collection').findOne({
                 'userid': userid
             }, (err, result) => {
@@ -168,6 +186,7 @@ module.exports = {
                     res.status(404).send('No existing account found');
                 }
             });
+*/
         }catch(error) {
             console.error(error);
             res.status(500).send(error);
