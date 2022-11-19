@@ -363,7 +363,7 @@ module.exports = {
     deleteContacts: async (update, res) => {
         const db = await mongoUtil.getDb();
         const contact = update.deleteContact;
-        console.log("deleteContact");
+        console.log("deleteContacts");
         console.dir(contact);
         db.collection('Contacts').bulkWrite([
             {updateOne: {filter: {userid: contact.userid},
