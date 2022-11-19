@@ -52,5 +52,4 @@ router.delete('/*', util.jwtCheck(true), (req, res) => {
     }
 });
 
-
 module.exports = router;
