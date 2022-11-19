@@ -3,7 +3,6 @@ import { SITE } from '../../../../shared/site';
 import { deleteContact } from '../../accountReducer';
 import toast from 'buttoned-toaster';
 import { useAccount } from '../../../../shared/account';
-import { Redirect } from 'react-router-dom';
 
 
 export const Contact = ({contact, i}) => {
@@ -12,7 +11,7 @@ export const Contact = ({contact, i}) => {
     
     const handleVisitContact = (i) => {
         const id = account.contacts[i].userid;
-        <Redirect to={`/collection/${id}`} />;
+        window.location.href = `/collection/${id}`;
     }
 
     const handleDeleteContact = (i) => {

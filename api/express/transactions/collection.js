@@ -95,9 +95,9 @@ module.exports = {
             session.startTransaction(transactionOptions);
             try{
                 const noticesId = await module.exports
-                    .getLastDocumentId('Notices', pendingNotices[0].userid,db, session);
+                    .getLastDocumentId('Notices', notices[0].userid,db, session);
                 const otherNoticesId = await module.exports   
-                    .getLastDocumentId('Notices', notices[0].userid, db, session);
+                    .getLastDocumentId('Notices', pendingNotices[0].userid, db, session);
 
                 const noticesResult = await db.collection('Notices').bulkWrite([
                     {updateOne: {filter: {_id: noticesId},

@@ -222,7 +222,7 @@ module.exports = {
         console.log(`${requser} =? ${body.userid}`);
         console.log(`${requser} =? ${body.targetUserid}`);
         console.log(`${requser} =? ${body.reqUserid}`);
-        if(body.userid && typeof body.userid == 'string' && (body.userid === requser || body.targetUserid === requser || body.reqUserId === requser)){
+        if(body.userid && typeof body.userid == 'string' && (body.userid === requser || body.targetUserid === requser || body.reqUserid === requser)){
             if((body.username && typeof body.username == 'string') || !body.username){
                 return {
                     isValid: true,
