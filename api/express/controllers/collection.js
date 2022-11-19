@@ -436,6 +436,7 @@ module.exports = {
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
             (err, result) => {
+                console.error(err);
                 err
                 ? res.status(500).send(err)
                 : result && result.modifiedCount
