@@ -430,9 +430,13 @@ module.exports = {
     deleteNotices: async (update, res) => {
         const db = await mongoUtil.getDb();
         const notice = update.deleteNotice;
+        let id = notice.userid;
+        if(notice.type === 'pending-notice'){
+            id = notice.targetUserid;
+        }
         console.log("deleteNotices:");
         //console.dir(notice);
-        db.collection('Notices').updateOne({userid: notice.userid},
+        db.collection('Notices').updateOne({userid: id},
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
             (err, result) => {
