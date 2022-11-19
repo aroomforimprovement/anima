@@ -368,6 +368,7 @@ module.exports = {
             {updateOne: {filter: {userid: contact.contacts[0].userid},
                 update: {$pull: {contacts: {userid: contact.userid}}}}}
         ], (err, result) => {
+            console.error(err);
             err
             ? res.status(500).send("Error deleting contact")
             : result && result.modifiedCount
