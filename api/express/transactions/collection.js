@@ -3,6 +3,85 @@ const { MongoError } = require('mongodb');
 const BSON = require('bson');
 
 module.exports = {
+    deleteCollection: async (id) => {
+        console.log(`/transactions/collection: deleteCollection: ${id}`);
+        const client = await getClient();
+        const db = await getDb();
+
+        const session = client.startSession();
+
+        try{
+            session.startTransaction(transactionOptions);
+
+            const accountResult = await db.collection('Collection')
+                .deleteOne({userid: id});
+            console.dir(accountResult);
+
+            let otherContactsResult = true;
+            const userContacts = await db.collection('Contacts')
+                .findOne({userid: id});
+            await userContacts.contacts.forEach(async (contact) => {
+                await db.collection('Contacts').bulkWrite([
+                    {updateOne: {filter: {userid: contact.userid},
+                        update: {$pull: {contacts: {userid: id}}}}}
+                ], (err, res) => {
+                    console.error(err);
+                    console.log(res);
+                    if(err){
+                        otherContactsResult = false;
+                    }
+                })
+            })
+            console.log(otherContactsResult);
+
+            const userContactsResult = await db.collection('Contacts')
+                .deleteOne({userid: id});
+            console.dir(userContactsResult);
+
+            let otherNoticesResult = true;
+            const userNotices = await db.collection('Notices')
+                .findOne({userid: id});
+            await userNotices.notices.forEach(async (notice) => {
+                const contactId = notice.type === 'pending-contact'
+                    ? notice.targetUserid : notice.reqUserid;
+                
+                await db.collection('Notices').bulkWrite([
+                    {updateOne: {filter: {userid: contactId},
+                        update: {$pull: {notices: {
+                            ...notice.type === 'pending-contact' 
+                                && {targetUserid: id}, 
+                            ...notice.type != 'pending-contact' 
+                                && {reqUserid: id}
+                        }}}}
+                    }
+                ], (err, res) => {
+                    console.error(err);
+                    console.log(res);
+                    if(err){
+                        otherNoticesResult = false;
+                    }
+                })
+            })
+            console.log(otherNoticesResult);
+
+            const userNoticesResult = await db.collection('Notices')
+                .deleteOne({userid: id});
+            console.dir(userNoticesResult);
+
+            const commit = await session.commitTransaction();
+            return commit;
+        }catch(error){
+            console.error(error);
+            if(error instanceof MongoError && error.hasErrorLabel('UnknownTransactionCommitResult')){
+                return {ok: 0};
+            }else if(error instanceof MongoError && error.hasErrorLabel('TransientTransactionError')){
+                module.exports.deleteCollection(id);
+            }
+            await session.abortTransaction();
+        }finally{
+            await session.endSession();
+        }
+    },
     newCollection: async (colObj) => {
         console.dir(colObj);
         const client = await getClient();

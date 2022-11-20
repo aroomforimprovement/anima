@@ -1,7 +1,7 @@
 const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 const transactions = require('../transactions/collection');
-const { getAccount } = require('../transactions/collection');
+const { getAccount, deleteCollection } = require('../transactions/collection');
 
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
 
@@ -71,7 +71,6 @@ module.exports = {
         );
     },*/
     deleteCollection: async (req, res) => {
-        const db = await mongoUtil.getDb();
         const userid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : null;
         if(requser !== userid){
@@ -80,7 +79,9 @@ module.exports = {
         }
         if( await module.exports.isExistingCollection({userid: userid})){
             try{
-                await db.collection('Collection')
+                await deleteCollection(userid);
+                res.status(200).send("Account deleted");
+/*                await db.collection('Collection')
                     .deleteOne({userid: userid}, (err, result) => {
                         if(result && result.deletedCount === 1){
                             console.log("Collection deleted");
@@ -89,7 +90,7 @@ module.exports = {
                             console.dir(result);
                         }
                     });
-
+*/
             }catch(error){
                 console.error(error);
                 res.status(500).send("Error deleting the resource");
@@ -372,6 +373,7 @@ module.exports = {
                 update: {$pull: {contacts: {userid: contact.userid}}}}}
         ], (err, result) => {
             console.error(err);
+            console.log(result);
             err
             ? res.status(500).send("Error deleting contact")
             : result && result.modifiedCount
