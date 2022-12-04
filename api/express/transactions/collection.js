@@ -95,15 +95,21 @@ module.exports = {
             const contactsResult = await db.collection('Contacts')
                 .insertOne(colObj.contacts, { session });
             colObj.contacts = contactsResult.insertedId;
-            
+
             const noticesResult = await db.collection('Notices')
                 .insertOne(colObj.notices, { session });
             colObj.notices = noticesResult.insertedId;
 
+            const animsResult = await db.collection('Anims')
+                .insertOne(colObj.anims, { session });
+            colObj.anims = animsResult.insertedId;
+
             await db.collection('Collection')
                 .insertOne(colObj, { session });
             const commit = await session.commitTransaction();
+            
             return commit;
+
         }catch(error){
             console.error(error);
             if(error instanceof MongoError && error.hasErrorLabel('UnknownTransactionCommitResult')){

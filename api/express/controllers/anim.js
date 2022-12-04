@@ -1,3 +1,4 @@
+const { newAnim } = require('../transactions/anim');
 const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 
@@ -12,13 +13,11 @@ module.exports = {
         }
     },
     postNewAnim: async (anim, res) => {
-        const db = await mongoUtil.getDb();
         const animToPost = module.exports.getAnimToPost(anim);
         console.dir(animToPost);
-        db.collection('Collection').updateOne({userid: animToPost.userid},
-            {$addToSet: {anims: animToPost}}).then((result, err) => {
-                err 
-                ? res.status(500).send("Error creating animation on database: " + err)
+        newAnim(animToPost).then((result) => {
+                !result.ok 
+                ? res.status(500).send("Error creating animation on database: " + result)
                 : result && result.modifiedCount
                 ? res.status(201).send(result)
                 : res.status(500).send("Something went wrong saving animation");
@@ -59,7 +58,7 @@ module.exports = {
     deleteAnimById: async (animid, res) => {
         const db = await mongoUtil.getDb();
         try{
-            db.collection('Collection')
+            db.collection('Anims')
                 .updateOne({'anims.animid': animid},
                     {$pull: {anims: { animid: animid}}}, 
                     (err, result) => {
@@ -93,7 +92,7 @@ module.exports = {
     getAnimById: async (animid) => {
         return new Promise((resolve, reject) => {
             mongoUtil.getDb().then((db) => {
-                db.collection('Collection').findOne(
+                db.collection('Anims').findOne(
                     {'anims.animid': animid}, {'anims.$': 1}, (err, result) => {
                         if(result) resolve(result.anims.filter((a) => { return a.animid == animid})[0]);
                         if(err) reject(err);
@@ -179,7 +178,7 @@ module.exports = {
         const db = await mongoUtil.getDb();
         if( await module.exports.isExistingAnim(anim) ){
             try{
-                await db.collection('Collection')
+                await db.collection('Anims')
                     .updateOne({userid: anim.userid, 'anims.animid': anim.animid},
                         {$set: { 'anims.$': anim}},
                         (err, result) => {

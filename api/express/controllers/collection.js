@@ -2,6 +2,7 @@ const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 const transactions = require('../transactions/collection');
 const { getAccount, deleteCollection } = require('../transactions/collection');
+const { getDb } = require('../util/mongo-util');
 
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
 
@@ -53,7 +54,7 @@ module.exports = {
             privacy: colObj.privacy ? colObj.privacy : 0,
             contacts: colObj.contacts ? colObj.contacts : {userid: colObj.userid, contacts: []},
             notices: colObj.notices ? colObj.notices : {userid: colObj.userid, notices: []},
-            anims: colObj.anims ? colObj.anims : [],
+            anims: colObj.anims ? colObj.anims : {userid: colObj.userid, anims: []},
             logins: colObj.logins ? colObj.logins : [],
             logouts: colObj.logouts ? colObj.logouts : []
         };
@@ -243,16 +244,16 @@ module.exports = {
             if(collection.userid === requser){
                 console.log(collection.userid + " === " + requser);
                 console.log("setGetCollectionResponse: requester is owner");
-                const response = module.exports.getCollectionResponseBody(collection, PRIVATE);
+                const response = await module.exports.getCollectionResponseBody(collection, PRIVATE);
                 res.status(200).send(response);
             }else if(await routeUtil.hasContact(collection.userid, requser)){
                 console.log("setGetCollectionResponse: requester is contact of owner");
-                const response = module.exports.getCollectionResponseBody(collection, PERMISSION);
+                const response = await module.exports.getCollectionResponseBody(collection, PERMISSION);
                 res.status(200).send(response);
             }else{
                 console.log("setGetCollectionResponse: requester is unknown to owner");
                 console.log(collection.userid + "::" + requser);
-                const response = module.exports.getCollectionResponseBody(collection, PUBLIC);
+                const response = await module.exports.getCollectionResponseBody(collection, PUBLIC);
                 res.status(200).send(response);
             }
         }else{
@@ -261,13 +262,15 @@ module.exports = {
             res.status('404').send("Couldn't find that user");
         }
     },
-    getCollectionResponseBody: (collection, contactLevel) => {
+    getCollectionResponseBody: async (collection, contactLevel) => {
         let response = {
             userid: collection.userid,
             username: collection.username,
             joined: collection.joined
         }
-        response.anims = module.exports.getAllowedAnims(collection.anims, contactLevel);
+        //just get most recent for the moment, paginate later
+        
+        response.anims = await module.exports.getAllowedAnims(collection.anims, contactLevel);
         if(contactLevel >= PERMISSION){
             response.logins = [collection.logins[collection.logins.length - 1]];
             response.contacts = collection.contacts;
@@ -279,11 +282,18 @@ module.exports = {
         }
         return response;
     },
-    getAllowedAnims: (anims, contactLevel) => {
+    getAllowedAnims: async (anims_id, contactLevel) => {
         console.log("allowedAnims: " + contactLevel);
-        const allowedAnims = anims.filter(anim => anim.privacy <= contactLevel);
+        const anims = await module.exports.getAnimsBy_id(anims_id);
+        const allowedAnims = anims.anims.filter(anim => anim.privacy <= contactLevel);
         console.dir(allowedAnims);
         return allowedAnims.reverse();
+    },
+    getAnimsBy_id: async (anims_id) => {
+        console.log("getAnimsFrom_id: " + anims_id);
+        const db = await getDb();
+        const anims = await db.collection('Anims').findOne({_id: anims_id});
+        return anims;
     },
     updateCollection: async (collection, res) => {
         console.log("updateCollection");        
@@ -323,7 +333,6 @@ module.exports = {
                 res.status(409).send("Anti-spam: contact already exists");
                 return;                
             }else{
-                //TODO call transaction from here
                 console.log("isExistingContactOrRequest: FALSE");
                 const result = await transactions.newContact(collection, update);
                 if(result){
