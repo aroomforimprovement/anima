@@ -127,7 +127,7 @@ module.exports = {
         let collection = [];
         //just getting all public anims for now
         
-        await db.collection('Collection')
+        await db.collection('Anims')
             //would prefer to filter out anims by privacy,
             //but having to to do it below after array is found
             .find({
