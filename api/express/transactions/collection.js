@@ -1,10 +1,12 @@
 const { getClient, getDb, transactionOptions } = require('../util/mongo-util');
 const { MongoError } = require('mongodb');
 const BSON = require('bson');
+const file = 'transactions/collection.js: ';
 
 module.exports = {
     deleteCollection: async (id) => {
-        console.log(`/transactions/collection: deleteCollection: ${id}`);
+        const sig = 'deleteCollection: ';
+        console.debug(`${file}${sig}`);
         const client = await getClient();
         const db = await getDb();
 
@@ -26,16 +28,16 @@ module.exports = {
                         update: {$pull: {contacts: {userid: id}}}}}
                 ], (err, res) => {
                     console.error(err);
-                    console.log(res);
+                    console.debug(res);
                     if(err){
                         otherContactsResult = false;
                     }
                 })
             })
-            console.log(otherContactsResult);
+            console.debug(otherContactsResult);
 
             const userContactsResult = await db.collection('Contacts')
-                .deleteOne({userid: id});
+                .deleteMany({userid: id});
             console.dir(userContactsResult);
 
             let otherNoticesResult = true;
@@ -56,17 +58,21 @@ module.exports = {
                     }
                 ], (err, res) => {
                     console.error(err);
-                    console.log(res);
+                    console.debug(res);
                     if(err){
                         otherNoticesResult = false;
                     }
                 })
             })
-            console.log(otherNoticesResult);
+            console.debug(otherNoticesResult);
 
             const userNoticesResult = await db.collection('Notices')
-                .deleteOne({userid: id});
+                .deleteMany({userid: id});
             console.dir(userNoticesResult);
+
+            const animsResult = await db.collection('Anims')
+                .deleteMany({userid: id});
+            console.dir(animsResult);
 
             const commit = await session.commitTransaction();
             return commit;
@@ -83,6 +89,8 @@ module.exports = {
         }
     },
     newCollection: async (colObj) => {
+        const sig = 'newCollection: ';
+        console.debug(`${file}${sig}`);
         console.dir(colObj);
         const client = await getClient();
         const db = await getDb();
@@ -123,6 +131,8 @@ module.exports = {
         }
     },
     newContact: async (collection, update) => {
+        const sig = 'newContact: ';
+        console.debug(`${file}${sig}`);
         const db = await getDb();
         const client = await getClient();
 
@@ -171,6 +181,8 @@ module.exports = {
         }
     },
     newNotice: async (update) => {
+        const sig = 'newNotice: ';
+        console.debug(`${file}${sig}`);
         const db = await getDb();
         const client = await getClient();
         const notices = update.notices;
@@ -213,6 +225,8 @@ module.exports = {
         }
     },
     getLastDocumentId: async (docType, userid, db, session) => {
+        const sig = 'getLastDocumentId: ';
+        console.debug(`${file}${sig}`);
         const userCollectionDocument = await db.collection('Collection').findOne(
             { userid: userid }, { session }
         );
@@ -221,7 +235,7 @@ module.exports = {
         let document = await db.collection(docType).findOne(
             { _id: lastDocId }, { session }
         )
-        console.log(`getLastDocumentId: documentId: ${document._id}`);
+        console.debug(`getLastDocumentId: documentId: ${document._id}`);
         let hasMore = true;
         while(hasMore){
             const more = document.next;
@@ -254,6 +268,8 @@ module.exports = {
         }
     },
     getPendingNotices: (notices) => {
+        const sig = 'getPendingNotices: ';
+        console.debug(`${file}${sig}`);
         let pendings = [];
         notices.forEach((notice) => {
             const pending = {
@@ -273,6 +289,8 @@ module.exports = {
         return pendings;
     },
     getAccount: async (id) => {
+        const sig = 'newAccount: ';
+        console.debug(`${file}${sig}`);
         const client = await getClient();
         const db = await getDb();
 

@@ -4,8 +4,8 @@
 
 module.exports = {
     getAccountInfo: async (req, res) => {
-        console.log("getAccountInfo");
-        console.log(req.params[0]);
-        console.log(res);
+        console.debug("getAccountInfo");
+        console.debug(req.params[0]);
+        console.debug(res);
     }
 }

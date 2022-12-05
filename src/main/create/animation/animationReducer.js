@@ -93,6 +93,7 @@ export const animReducer = (state, action) => {
                 return true;
             }else{ 
                 console.error("response not ok") }
+                toast.error("Error saving Anim");
                 return false;
         }, error => { 
             console.error("error saving anim");

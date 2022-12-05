@@ -1,8 +1,11 @@
 const BSON = require('bson');
 const { MongoError } = require('mongodb');
+const file = 'util/transaction-util.js: ';
 
 module.exports = {
     getLastDocumentId: async (docType, userid, db, session) => {
+        const sig = `${file}getLastDocumentId: `;
+        console.debug(`${sig}`);
         const userAccountDocument = await db.collection('Collection')
             .findOne({ userid: userid }, { session });
         const type = docType.toLowerCase();
@@ -23,17 +26,24 @@ module.exports = {
         }
         const size = BSON.calculateObjectSize(document);
 
-        if(size > 12*1024){
+        if(size > 12*1024*1024){
+            console.debug(`${sig}size too large: ${size}`);
+            let query = {userid: userid};
+            const name = docType.toLowerCase();
+            query[name] = [];
+            console.dir(query);
             const newDocResult = await db.collection(docType).insertOne(
-                { userid: userid, [docType]: [] }, { session }
+                query, { session }
             );
+            console.dir(newDocResult);
             if(newDocResult.insertedId){
                 await db.collection(docType).updateOne(
                     { _id: lastDocId },
-                    { next: newDocResult.insertedId },
+                    {$set: { next: newDocResult.insertedId }},
                     { session }
                 );
             }
+            return newDocResult.insertedId;
         }else{
             return lastDocId;
         }

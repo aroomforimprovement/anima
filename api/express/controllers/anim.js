@@ -3,9 +3,12 @@ const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
+const file = 'controllers/anim.js: ';
 
 module.exports = {
     createAnim: async (anim, res) => {
+        const sig = 'createAnim: ';
+        console.debug(`${file}${sig}`);
         if( await module.exports.isExistingAnim(anim) ){
             module.exports.updateAnim(anim, res)
         }else{
@@ -13,23 +16,18 @@ module.exports = {
         }
     },
     postNewAnim: async (anim, res) => {
+        const sig = 'postNewAnim: ';
+        console.debug(`${file}${sig}`);
         const animToPost = module.exports.getAnimToPost(anim);
         console.dir(animToPost);
-        newAnim(animToPost).then((result) => {
-                !result.ok 
-                ? res.status(500).send("Error creating animation on database: " + result)
-                : result && result.modifiedCount
-                ? res.status(201).send(result)
-                : res.status(500).send("Something went wrong saving animation");
-            }).catch((err) => {
-                res.status(500).send("Error saving animation");
-                console.error(err)
-            });
+        newAnim(animToPost, res);
     },
     deleteAnim: async (req, res) => {
+        const sig = 'deleteAnim: ';
+        console.log(`${file}${sig}`);
         console.dir(req.params);
         const animid = req.params[0];
-        console.log("animid: "+animid)
+        console.debug("animid: "+animid)
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
         if(await module.exports.isExistingAnim({animid: animid})){
             module.exports.isRequesterOwner(requser, animid).then((resolve, reject) => {
@@ -45,6 +43,8 @@ module.exports = {
         }
     },
     isRequesterOwner: async (requser, animid) => {
+        const sig = 'isRequesterOwner: ';
+        console.log(`${file}${sig}`);
         return new Promise((resolve, reject) => {
             module.exports.getAnimById(animid).then((res, rej) => {
                 if(res && requser === res.userid){
@@ -56,6 +56,8 @@ module.exports = {
         });
     },
     deleteAnimById: async (animid, res) => {
+        const sig = 'deleteAnimById: ';
+        console.log(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         try{
             db.collection('Anims')
@@ -74,6 +76,8 @@ module.exports = {
         }
     },
     getAnim: async (req, res) => {
+        const sig = 'getAnim: ';
+        console.log(`${file}${sig}`);
         const animid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
         try{
@@ -86,10 +90,12 @@ module.exports = {
             }
         });
         }catch(error){
-            console.log(error);
+            console.debug(error);
         }
     },
     getAnimById: async (animid) => {
+        const sig = 'getAnimById: ';
+        console.log(`${file}${sig}`);
         return new Promise((resolve, reject) => {
             mongoUtil.getDb().then((db) => {
                 db.collection('Anims').findOne(
@@ -102,6 +108,8 @@ module.exports = {
         });
     },
     setGetAnimResponse: (anim, requser, res) => {
+        const sig = 'setGetAnimResponse: ';
+        console.log(`${file}${sig}`);
         if(anim){
             if(anim.privacy === PUBLIC){
                 res.status(200).send(anim);
@@ -120,6 +128,8 @@ module.exports = {
         }
     },
     getAnimToPost: (anim) => {
+        const sig = 'getAnimToPost: ';
+        console.log(`${file}${sig}`);
         return {
             animid: anim.animid,
             userid: anim.userid,
@@ -137,24 +147,27 @@ module.exports = {
         }
     },
     isExistingAnim: async (anim) => {
+        const sig = 'isExistingAnim: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         let exists = 0;
         try{
-            exists = await db.collection('Collection')
+            exists = await db.collection('Anims')
                 .countDocuments({'anims.animid': anim.animid});
-            console.log("Anim EXISTS: " + exists);
+            console.debug("Anim EXISTS: " + exists);
         }catch(error){
-            console.log(error);
+            console.debug(error);
         }
-        console.log(anim.animid, "exists="+exists)
+        console.debug(anim.animid, "exists="+exists)
         return exists;
     },
     isValidPostReqBody: (req) => {
-        console.log('reached /anim isValidPostReqBody(req)');
-        console.log('REQUEST HEADERS: ' + req.headers);
+        const sig = 'isValidPostReqBody: ';
+        console.debug(`${file}${sig}`);
+        console.debug('REQUEST HEADERS: ' + req.headers);
         const body = req.body;
         const requser = req.user && req.user.sub ? req.user.sub.replace('auth0|', '') : '';
-        console.log("REQUSER: " + requser);
+        console.debug("REQUSER: " + requser);
         if(body.animid && typeof body.animid == 'string' 
             && body.userid && typeof body.userid == 'string' 
             && body.userid === requser){
@@ -171,10 +184,13 @@ module.exports = {
             }
     },
     hasValidGetParam: (req) => {
+        const sig = 'hasValidGetParams: ';
+        console.debug(`${file}${sig}`);
         return req.params[0] ? (typeof req.params[0] == 'string') : false;
     },
     updateAnim: async (anim, res) => {
-        console.log("updateAnim");
+        const sig = 'updateAnim: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         if( await module.exports.isExistingAnim(anim) ){
             try{

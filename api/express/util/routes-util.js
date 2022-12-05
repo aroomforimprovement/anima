@@ -27,7 +27,7 @@ module.exports = {
         }catch(error){
             console.error(error);
         }
-        console.log("hasContact " + hasContact);
+        console.debug("hasContact " + hasContact);
         return hasContact;
     },
     respondWithPermission: (hasPermission, res, body) => {

@@ -6,8 +6,11 @@ const { getDb } = require('../util/mongo-util');
 
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
 
+const file = 'controllers/collection.js: ';
 module.exports = {
     createCollection: async (colObj, res) => {
+        const sig = 'createCollection: ';
+        console.debug(`${file}${sig}`);
         const email = colObj.email;
         const db = await mongoUtil.getDb();
         let count;
@@ -32,7 +35,7 @@ module.exports = {
                 let returnCol;
                 try{
                     returnCol = await db.collection('Collection').findOne({'userid' : colObj.userid});
-                    console.log("Returning new collection");
+                    console.debug("Returning new collection");
                     res.status(201).send(returnCol); 
                 }catch{
                     res.status(500).send("Error retrieving new user info (but the user should exist)");
@@ -45,6 +48,8 @@ module.exports = {
         }        
     },
     getNewCollectionFromReq: (colObj) => {
+        const sig = 'getNewCollectionFromReq: ';
+        console.debug(`${file}${sig}`);
         const joined = new Date();
         return { 
             userid: colObj.userid ? colObj.userid : "ERROR",
@@ -61,7 +66,7 @@ module.exports = {
     },
     /**
     postNewCollection: async (collection, res) => {
-        console.log('postNewCollection');
+        console.debug('postNewCollection');
         const db = mongoUtil.getDb();
         const collectionToPost = await module.exports.getCollectionToPost(collection);
         db.collection('Collection')
@@ -72,6 +77,8 @@ module.exports = {
         );
     },*/
     deleteCollection: async (req, res) => {
+        const sig = 'deleteCollection: ';
+        console.debug(`${file}${sig}`);
         const userid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : null;
         if(requser !== userid){
@@ -85,7 +92,7 @@ module.exports = {
 /*                await db.collection('Collection')
                     .deleteOne({userid: userid}, (err, result) => {
                         if(result && result.deletedCount === 1){
-                            console.log("Collection deleted");
+                            console.debug("Collection deleted");
                             res.status(200).send("Account deleted");
                         }else{
                             console.dir(result);
@@ -99,7 +106,8 @@ module.exports = {
         }   
     },
     getCollection: async (req, res) => {
-        console.log("getCollection");
+        const sig = 'getCollection: ';
+        console.debug(`${file}${sig}`);
         //const requser = req.user.sub.replace('auth0|', '');
         try{
             //generate a sample collection
@@ -113,6 +121,8 @@ module.exports = {
     },
     //using conditions param as a placeholder for the moment
     getAnimSample: async (conditions, res) => {
+        const sig = 'getAnimSample: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         let collection = [];
         //just getting all public anims for now
@@ -150,7 +160,8 @@ module.exports = {
             });
     },
     getCollectionById: async (req, res) => {
-        console.log("getCollectionById");
+        const sig = 'getCollectionById: ';
+        console.debug(`${file}${sig}`);
         //const db = await mongoUtil.getDb();
         const userid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
@@ -158,13 +169,13 @@ module.exports = {
 
             await getAccount(userid).then((result) => {
                 if(result.ok){
-                    console.log('result');
+                    console.debug('result');
                     console.dir(result);
                     const collection = result.account;
                     //filter the result based on ownership, contact/privacy
                     module.exports.setGetCollectionResponse(collection, requser, res)
                 //}else if(err){
-                //    console.log(err);
+                //    console.debug(err);
                 //    res.status(500).send(err);
                 }else{
                     res.status(404).send('No existing account found');
@@ -176,13 +187,13 @@ module.exports = {
                 'userid': userid
             }, (err, result) => {
                 if(result){
-                    console.log('result');
+                    console.debug('result');
                     console.dir(result);
                     const collection = result;
                     //filter the result based on ownership, contact/privacy
                     module.exports.setGetCollectionResponse(collection, requser, res)
                 }else if(err){
-                    console.log(err);
+                    console.debug(err);
                     res.status(500).send(err);
                 }else{
                     res.status(404).send('No existing account found');
@@ -196,34 +207,41 @@ module.exports = {
     },
     getCollectionToPost: (collection) => {
         //stub
+        const sig = 'getCollectionToPost: ';
+        console.debug(`${file}${sig}`);
         return collection;
     },
     hasValidGetParam: (req) => {
+        const sig = 'hasValidGetParam: ';
+        console.debug(`${file}${sig}`);
         return req.params[0] ? (typeof req.params[0] == 'string') : false;
     },
     isExistingCollection: async (collection) => {
+        const sig = 'isExistingCollection: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         let exists = 0;
         try{
             exists = await db.collection('Collection')
                 .countDocuments({userid: collection.userid});
-                console.log("Collection EXISTS");
+                console.debug("Collection EXISTS");
         }catch(error){
-            console.log(error);
+            console.debug(error);
         }
         return exists;
     },
     isValidPostReqBody: (req) => {
-        console.log('reached /collection isValidPostReqBody(req)');
+        const sig = 'isValidPostReqBody: ';
+        console.debug(`${file}${sig}`);
         if(!req.user){
             return {isValid: false, error: {code: 403, message: "User is not authorized"}};
         }
         const body = req.body;
         console.dir(body);
         const requser = req.user.sub.replace('auth0|', '');
-        console.log(`${requser} =? ${body.userid}`);
-        console.log(`${requser} =? ${body.targetUserid}`);
-        console.log(`${requser} =? ${body.reqUserid}`);
+        console.debug(`${requser} =? ${body.userid}`);
+        console.debug(`${requser} =? ${body.targetUserid}`);
+        console.debug(`${requser} =? ${body.reqUserid}`);
         if(body.userid && typeof body.userid == 'string' && (body.userid === requser || body.targetUserid === requser || body.reqUserid === requser)){
             if((body.username && typeof body.username == 'string') || !body.username){
                 return {
@@ -240,19 +258,21 @@ module.exports = {
         }
     },
     setGetCollectionResponse: async (collection, requser, res) => {
+        const sig = 'setGetCollectionResponse: ';
+        console.debug(`${file}${sig}`);
         if(collection){
             if(collection.userid === requser){
-                console.log(collection.userid + " === " + requser);
-                console.log("setGetCollectionResponse: requester is owner");
+                console.debug(collection.userid + " === " + requser);
+                console.debug("setGetCollectionResponse: requester is owner");
                 const response = await module.exports.getCollectionResponseBody(collection, PRIVATE);
                 res.status(200).send(response);
             }else if(await routeUtil.hasContact(collection.userid, requser)){
-                console.log("setGetCollectionResponse: requester is contact of owner");
+                console.debug("setGetCollectionResponse: requester is contact of owner");
                 const response = await module.exports.getCollectionResponseBody(collection, PERMISSION);
                 res.status(200).send(response);
             }else{
-                console.log("setGetCollectionResponse: requester is unknown to owner");
-                console.log(collection.userid + "::" + requser);
+                console.debug("setGetCollectionResponse: requester is unknown to owner");
+                console.debug(collection.userid + "::" + requser);
                 const response = await module.exports.getCollectionResponseBody(collection, PUBLIC);
                 res.status(200).send(response);
             }
@@ -263,6 +283,8 @@ module.exports = {
         }
     },
     getCollectionResponseBody: async (collection, contactLevel) => {
+        const sig = 'getCollectionResponseBody: ';
+        console.debug(`${file}${sig}`);
         let response = {
             userid: collection.userid,
             username: collection.username,
@@ -276,31 +298,34 @@ module.exports = {
             response.contacts = collection.contacts;
         }
         if(contactLevel === PRIVATE){
-            console.log('PRIVATE');
+            console.debug('PRIVATE');
             console.dir(collection.notices);
             response.notices = collection.notices;
         }
         return response;
     },
     getAllowedAnims: async (anims_id, contactLevel) => {
-        console.log("allowedAnims: " + contactLevel);
+        const sig = 'getAllowedAnims: ';
+        console.debug(`${file}${sig}`);
         const anims = await module.exports.getAnimsBy_id(anims_id);
         const allowedAnims = anims.anims.filter(anim => anim.privacy <= contactLevel);
         console.dir(allowedAnims);
         return allowedAnims.reverse();
     },
     getAnimsBy_id: async (anims_id) => {
-        console.log("getAnimsFrom_id: " + anims_id);
+        const sig = 'getAnimsBy_id: ';
+        console.debug(`${file}${sig}`);
         const db = await getDb();
         const anims = await db.collection('Anims').findOne({_id: anims_id});
         return anims;
     },
     updateCollection: async (collection, res) => {
-        console.log("updateCollection");        
+        const sig = 'updateCollection: ';
+        console.debug(`${file}${sig}`);
         if( await module.exports.isExistingCollection(collection) ){
             const update = module.exports.getUpdateCollectionBody(collection);
             try{
-                console.log("UPDATE:");
+                console.debug("UPDATE:");
                 console.dir(update);
                 if(update.contacts){
                     console.debug("updateCollection: contacts");
@@ -328,12 +353,14 @@ module.exports = {
         }
     },
     updateContacts: async (collection, update, res) => {
+        const sig = 'updateContacts: ';
+        console.debug(`${file}${sig}`);
         try{
             if(await module.exports.isExistingContact(collection, update)){
                 res.status(409).send("Anti-spam: contact already exists");
                 return;                
             }else{
-                console.log("isExistingContactOrRequest: FALSE");
+                console.debug("isExistingContactOrRequest: FALSE");
                 const result = await transactions.newContact(collection, update);
                 if(result){
                     res.status(200).send("OK");
@@ -348,7 +375,8 @@ module.exports = {
 
     },
     isExistingContact: async (collection, update) => {
-        console.log("reached isExistingContact");
+        const sig = 'isExistingContact: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         let exists = 0;
         try{
@@ -360,6 +388,8 @@ module.exports = {
         return exists;
     },
     isExistingNotice: async (notices) => {
+        const sig = 'isExistingNotice: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         let exists = 0;
         try{
@@ -371,9 +401,10 @@ module.exports = {
         return exists;
     },
     deleteContacts: async (update, res) => {
+        const sig = 'deleteContacts: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         const contact = update.deleteContact;
-        console.log("deleteContacts");
         console.dir(contact);
         db.collection('Contacts').bulkWrite([
             {updateOne: {filter: {userid: contact.userid},
@@ -382,7 +413,7 @@ module.exports = {
                 update: {$pull: {contacts: {userid: contact.userid}}}}}
         ], (err, result) => {
             console.error(err);
-            console.log(result);
+            console.debug(result);
             err
             ? res.status(500).send("Error deleting contact")
             : result && result.modifiedCount
@@ -391,6 +422,8 @@ module.exports = {
         });
     },
     getPendingNotices: (notices) => {
+        const sig = 'getPendingNotices: ';
+        console.debug(`${file}${sig}`);
         let pendings = [];
         notices.forEach((notice) => {
             const pending = {
@@ -410,6 +443,8 @@ module.exports = {
         return pendings;
     },
     updateNotices: async (update, res) => {
+        const sig = 'updateNotices: ';
+        console.debug(`${file}${sig}`);
         const result = await transactions.newNotice(update);
         if(result){
             res.status(200).send("OK");
@@ -442,14 +477,14 @@ module.exports = {
     */    
    },
     deleteNotices: async (update, res) => {
+        const sig = 'deleteNotices: ';
+        console.debug(`${file}${sig}`);
         const db = await mongoUtil.getDb();
         const notice = update.deleteNotice;
         let id = notice.userid;
         if(notice.type === 'pending-contact'){
             id = notice.targetUserid;
         }
-        console.log("deleteNotices:");
-        //console.dir(notice);
         db.collection('Notices').updateOne({userid: id},
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
@@ -476,13 +511,13 @@ module.exports = {
         });
     },
     getUpdateCollectionBody: (collection) => {
-        console.log("getUpdateCollectionBody");
-        //console.dir(collection);
+        const sig = 'getUpdateCollectionBody: ';
+        console.debug(`${file}${sig}`);
         let received = {};
         switch(collection.verb){
             case 'update':
                 for (let [key, value] of Object.entries(collection)) {
-                    console.log(`${key}: ${value}`);
+                    console.debug(`${key}: ${value}`);
                     if(key === 'username'){
                         received.username = value;
                     }else if(key === 'contacts'){
@@ -496,7 +531,7 @@ module.exports = {
                 return;
             case 'delete':
                 for(let [key, value] of Object.entries(collection)){
-                    console.log(`${key}:${value}`);
+                    console.debug(`${key}:${value}`);
                     if(key === 'contacts'){
                         received.deleteContact = collection;
                     }
