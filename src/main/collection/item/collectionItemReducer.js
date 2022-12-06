@@ -53,7 +53,7 @@ export const collectionItemReducer = (state, action) => {
             });
         }
         case 'DELETE_ANIM':{
-            return({...state, deleted: true, previewFile: undefined});
+            return({...state, deleted: true, previewFile: undefined, thumbFile: undefined});
         }
         case 'PROGRESS_FRAME':{
             return({...state, progressFrame: action.data})

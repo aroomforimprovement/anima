@@ -137,6 +137,7 @@ const useAccountStore = () => {
 
     useEffect(() => {
         if(isAuthenticated && state.user && state.user.access && !state.notices && !state.isSet ){
+            //console.log(state.user.access);
             getAccountInfo(state.user.userid, state.user.access)
             .then((result) => {
                 if(result){

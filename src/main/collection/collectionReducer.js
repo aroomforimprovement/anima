@@ -60,7 +60,8 @@ export const collectionReducer = (state, action) => {
         }
         case 'DELETE_ANIM':{
             const anims = [...state.anims];
-            const files = [...state.previewFiles];
+            const previewFiles = [...state.previewFiles];
+            const thumbFiles = [...state.thumbFiles];
             let ind;
             const anim = anims.filter((a, i) => {
                 if(a.animid === action.data){
@@ -70,8 +71,9 @@ export const collectionReducer = (state, action) => {
                 return false;
             });
             const newAnims = arrayRemove(anims, anim[0]);
-            files.splice(ind, 1);
-            return({...state, anims: [...newAnims], previewFiles: [...files], index:0});
+            previewFiles.splice(ind, 1);
+            thumbFiles.splice(ind, 1);
+            return({...state, anims: [...newAnims], previewFiles: [...previewFiles], thumbFiles: [...thumbFiles], index:0});
         }
         case 'SET_VIEW_FILE':{
             if(action.data){

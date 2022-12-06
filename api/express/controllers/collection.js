@@ -89,16 +89,6 @@ module.exports = {
             try{
                 await deleteCollection(userid);
                 res.status(200).send("Account deleted");
-/*                await db.collection('Collection')
-                    .deleteOne({userid: userid}, (err, result) => {
-                        if(result && result.deletedCount === 1){
-                            console.debug("Collection deleted");
-                            res.status(200).send("Account deleted");
-                        }else{
-                            console.dir(result);
-                        }
-                    });
-*/
             }catch(error){
                 console.error(error);
                 res.status(500).send("Error deleting the resource");
@@ -108,7 +98,6 @@ module.exports = {
     getCollection: async (req, res) => {
         const sig = 'getCollection: ';
         console.debug(`${file}${sig}`);
-        //const requser = req.user.sub.replace('auth0|', '');
         try{
             //generate a sample collection
             //this algorithm is not great but will be fine 
@@ -162,7 +151,6 @@ module.exports = {
     getCollectionById: async (req, res) => {
         const sig = 'getCollectionById: ';
         console.debug(`${file}${sig}`);
-        //const db = await mongoUtil.getDb();
         const userid = req.params[0];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
         try{
