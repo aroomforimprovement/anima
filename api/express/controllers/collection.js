@@ -313,7 +313,7 @@ module.exports = {
         });
         animsStream.on('end', () => {
             console.log('end');
-            const allowedAnims = anims.anims.filter(anim => anim.privacy <= contactLevel);
+            const allowedAnims = anims.filter(anim => anim.privacy <= contactLevel);
             response.anims = allowedAnims;
             res.send(response);
         })
