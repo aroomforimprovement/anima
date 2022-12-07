@@ -70,6 +70,7 @@ const Collection = ({browse}) => {
             }
         }, error => {
             console.error("Error fetching data: getCollection");
+            console.error(error);
             return false;
         })
         .then(stream => new Response(stream))
@@ -77,6 +78,7 @@ const Collection = ({browse}) => {
         .then(body => body)
         .catch(err => {
             console.error("Error fetching data: getCollection");
+            console.error(err);
             return false;
         });
     }
