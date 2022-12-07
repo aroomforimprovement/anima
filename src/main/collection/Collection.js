@@ -164,6 +164,7 @@ const Collection = ({browse}) => {
             toast.info({message: "Fetching anima", toastId: 'data_fetch'});
             getCollection(splat, browse, access, signal)
                 .then((response) => {
+                    console.dir(response);
                     toast.info({message: "Rendering anima", toastId: 'data_fetch'});
                     if(browse){
                         setCollection({anims: response, isSet: true, signal});

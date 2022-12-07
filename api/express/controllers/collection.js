@@ -1,3 +1,4 @@
+const fs = require('fs');
 const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 const transactions = require('../transactions/collection');
@@ -7,6 +8,7 @@ const { getDb } = require('../util/mongo-util');
 const PUBLIC = 0; const PERMISSION = 1; const PRIVATE = 2;
 
 const file = 'controllers/collection.js: ';
+
 module.exports = {
     createCollection: async (colObj, res) => {
         const sig = 'createCollection: ';
@@ -252,17 +254,17 @@ module.exports = {
             if(collection.userid === requser){
                 console.debug(collection.userid + " === " + requser);
                 console.debug("setGetCollectionResponse: requester is owner");
-                const response = await module.exports.getCollectionResponseBody(collection, PRIVATE);
-                res.status(200).send(response);
+                const response = module.exports.getCollectionResponseBody(collection, PRIVATE, res);
+                //res.status(200).send(response);
             }else if(await routeUtil.hasContact(collection.userid, requser)){
                 console.debug("setGetCollectionResponse: requester is contact of owner");
-                const response = await module.exports.getCollectionResponseBody(collection, PERMISSION);
-                res.status(200).send(response);
+                const response = module.exports.getCollectionResponseBody(collection, PERMISSION, res);
+                //res.status(200).send(response);
             }else{
                 console.debug("setGetCollectionResponse: requester is unknown to owner");
                 console.debug(collection.userid + "::" + requser);
-                const response = await module.exports.getCollectionResponseBody(collection, PUBLIC);
-                res.status(200).send(response);
+                const response = module.exports.getCollectionResponseBody(collection, PUBLIC, res);
+                //res.status(200).send(response);
             }
         }else{
             //so if a user doesn't exist, it could be a generated, "browse" id,
@@ -270,7 +272,7 @@ module.exports = {
             res.status('404').send("Couldn't find that user");
         }
     },
-    getCollectionResponseBody: async (collection, contactLevel) => {
+    getCollectionResponseBody: async (collection, contactLevel, res) => {
         const sig = 'getCollectionResponseBody: ';
         console.debug(`${file}${sig}`);
         let response = {
@@ -279,26 +281,42 @@ module.exports = {
             joined: collection.joined
         }
         //just get most recent for the moment, paginate later
-        
-        response.anims = await module.exports.getAllowedAnims(collection.anims, contactLevel);
         if(contactLevel >= PERMISSION){
             response.logins = [collection.logins[collection.logins.length - 1]];
             response.contacts = collection.contacts;
         }
+
         if(contactLevel === PRIVATE){
             console.debug('PRIVATE');
             console.dir(collection.notices);
             response.notices = collection.notices;
         }
-        return response;
+        module.exports.getAllowedAnims(collection.userid, collection.anims, contactLevel, response, res);
     },
-    getAllowedAnims: async (anims_id, contactLevel) => {
+    getAllowedAnims: async (userid, anims_id, contactLevel, response, res) => {
         const sig = 'getAllowedAnims: ';
         console.debug(`${file}${sig}`);
-        const anims = await module.exports.getAnimsBy_id(anims_id);
-        const allowedAnims = anims.anims.filter(anim => anim.privacy <= contactLevel);
-        console.dir(allowedAnims);
-        return allowedAnims.reverse();
+        //const anims = await module.exports.getAnimsBy_id(anims_id);
+        const db = await getDb();
+        const animsStream = db.collection('Anims').find({userid: userid}).stream();
+        let anims = [];
+
+        animsStream.on('error', (err) => { 
+            console.log(err);
+            
+        });
+        animsStream.on('data', (doc) => { 
+            console.log(doc);
+            doc.anims.forEach((anim) => {
+                anims.push(anim);
+            });
+        });
+        animsStream.on('end', () => {
+            console.log('end');
+            const allowedAnims = anims.anims.filter(anim => anim.privacy <= contactLevel);
+            response.anims = allowedAnims;
+            res.send(response);
+        })
     },
     getAnimsBy_id: async (anims_id) => {
         const sig = 'getAnimsBy_id: ';
