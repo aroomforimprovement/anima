@@ -1,4 +1,3 @@
-const fs = require('fs');
 const mongoUtil = require('../util/mongo-util');
 const routeUtil = require('../util/routes-util');
 const transactions = require('../transactions/collection');
@@ -27,7 +26,6 @@ module.exports = {
             const collection = module.exports.getNewCollectionFromReq(colObj);
             let commit;
             try{
-                //result = await db.collection('Collection').insertOne(collection);
                 commit = await transactions.newCollection(collection, res);
             }catch(error){
                 console.error(error);
@@ -66,22 +64,11 @@ module.exports = {
             logouts: colObj.logouts ? colObj.logouts : []
         };
     },
-    /**
-    postNewCollection: async (collection, res) => {
-        console.debug('postNewCollection');
-        const db = mongoUtil.getDb();
-        const collectionToPost = await module.exports.getCollectionToPost(collection);
-        db.collection('Collection')
-            .insertOne(collectionToPost, (err, result) => {
-                if(err) res.status(500).send(err);
-                if(result) res.status(201).send(result);
-            }
-        );
-    },*/
     deleteCollection: async (req, res) => {
-        const sig = 'deleteCollection: ';
-        console.debug(`${file}${sig}`);
+        const sig = `${file}deleteCollection: `;
+        console.debug(`${sig}`);
         const userid = req.params[0];
+        console.debug(`${sig}userid: ${userid}`)
         const requser = req.user ? req.user.sub.replace('auth0|', '') : null;
         if(requser !== userid){
             res.status(403).send("Requester does not have mission to delete this resource");
@@ -98,62 +85,57 @@ module.exports = {
         }   
     },
     getCollection: async (req, res) => {
-        const sig = 'getCollection: ';
-        console.debug(`${file}${sig}`);
+        const sig = `${file}getCollection: `;
+        console.debug(`${sig}`);
+        const page = req.params[0]
+        console.log(`${sig} page: ${page}`);
         try{
             //generate a sample collection
             //this algorithm is not great but will be fine 
             //to get started
-             module.exports.getAnimSample(null, res);
+             module.exports.getAnimSample({page: page}, res);
         }catch(error){
             console.error(error);
             res.status(500).send(error);
         }
     },
-    //using conditions param as a placeholder for the moment
     getAnimSample: async (conditions, res) => {
-        const sig = 'getAnimSample: ';
-        console.debug(`${file}${sig}`);
+        const sig = `${file}getAnimSample: `;
+        console.debug(`${sig}`);
         const db = await mongoUtil.getDb();
-        let collection = [];
+        let anims = [];
+        const pageSize = 10;
         //just getting all public anims for now
-        
-        await db.collection('Anims')
-            //would prefer to filter out anims by privacy,
-            //but having to to do it below after array is found
-            .find({
-                "anims": { $elemMatch: {
-                    privacy: {$eq: 0},
-                }
-            }}, 
+        console.log(`${sig} conditions.page: ${conditions.page}`);
+        const animsStream = db.collection('Anims').find(
             {
-                projection: {_id: 0,"anims": 1},
-                limit: 100,
-                //skip: conditions.page * 10,
-            })
-            .sort({_id: 1})
-            .toArray((err, result) => {
-                if(err){
-                    console.error(err);
-                    res.status(500).send(err);
-                }
-                if(result){
-                    result.forEach((resultSet) => {
-                        const sample = resultSet.anims.filter((a) => {
-                            return a.privacy === 0;
-                        });
-                        collection.push(sample[sample.length-1]);
-                    });
-                    console.dir(collection);
-                    //currently returning most recent public anims of ever user
-                    res.status(200).send(collection);
-                }
-            });
+                privacy: {$eq: 0}
+            }
+        )
+        .limit(pageSize)
+        .skip(conditions.page > 0 ? conditions.page * pageSize : 0)
+        .sort({_id: 1})
+        .stream();
+            
+        animsStream.on('error', (err) => {
+            console.error(err);
+        });
+
+        animsStream.on('data', (doc) => {
+            console.log(doc);
+            anims.push(doc);
+        });
+
+        animsStream.on('end', () => {
+            console.log(`${sig}end`);
+            res.send(anims);
+        })
     },
     getCollectionById: async (req, res) => {
         const sig = 'getCollectionById: ';
         console.debug(`${file}${sig}`);
         const userid = req.params[0];
+        const page = req.params[1];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
         try{
 
@@ -163,33 +145,11 @@ module.exports = {
                     console.dir(result);
                     const collection = result.account;
                     //filter the result based on ownership, contact/privacy
-                    module.exports.setGetCollectionResponse(collection, requser, res)
-                //}else if(err){
-                //    console.debug(err);
-                //    res.status(500).send(err);
+                    module.exports.setGetCollectionResponse(collection, requser, page, res)
                 }else{
                     res.status(404).send('No existing account found');
                 }
-                //module.exports.setGetCollectionResponse(result, requser, res);
             })
-/*
-            await db.collection('Collection').findOne({
-                'userid': userid
-            }, (err, result) => {
-                if(result){
-                    console.debug('result');
-                    console.dir(result);
-                    const collection = result;
-                    //filter the result based on ownership, contact/privacy
-                    module.exports.setGetCollectionResponse(collection, requser, res)
-                }else if(err){
-                    console.debug(err);
-                    res.status(500).send(err);
-                }else{
-                    res.status(404).send('No existing account found');
-                }
-            });
-*/
         }catch(error) {
             console.error(error);
             res.status(500).send(error);
@@ -247,24 +207,21 @@ module.exports = {
             return {isValid: false, error: {code: 400, message: "Bad request, no user id in request body"}}
         }
     },
-    setGetCollectionResponse: async (collection, requser, res) => {
+    setGetCollectionResponse: async (collection, requser, page, res) => {
         const sig = 'setGetCollectionResponse: ';
         console.debug(`${file}${sig}`);
         if(collection){
             if(collection.userid === requser){
                 console.debug(collection.userid + " === " + requser);
                 console.debug("setGetCollectionResponse: requester is owner");
-                const response = module.exports.getCollectionResponseBody(collection, PRIVATE, res);
-                //res.status(200).send(response);
+                module.exports.getCollectionResponseBody(collection, PRIVATE, page, res);
             }else if(await routeUtil.hasContact(collection.userid, requser)){
                 console.debug("setGetCollectionResponse: requester is contact of owner");
-                const response = module.exports.getCollectionResponseBody(collection, PERMISSION, res);
-                //res.status(200).send(response);
+                module.exports.getCollectionResponseBody(collection, PERMISSION, page, res);
             }else{
                 console.debug("setGetCollectionResponse: requester is unknown to owner");
                 console.debug(collection.userid + "::" + requser);
-                const response = module.exports.getCollectionResponseBody(collection, PUBLIC, res);
-                //res.status(200).send(response);
+                module.exports.getCollectionResponseBody(collection, PUBLIC, page, res);
             }
         }else{
             //so if a user doesn't exist, it could be a generated, "browse" id,
@@ -272,7 +229,7 @@ module.exports = {
             res.status('404').send("Couldn't find that user");
         }
     },
-    getCollectionResponseBody: async (collection, contactLevel, res) => {
+    getCollectionResponseBody: async (collection, contactLevel, page, res) => {
         const sig = 'getCollectionResponseBody: ';
         console.debug(`${file}${sig}`);
         let response = {
@@ -291,32 +248,45 @@ module.exports = {
             console.dir(collection.notices);
             response.notices = collection.notices;
         }
-        module.exports.getAllowedAnims(collection.userid, collection.anims, contactLevel, response, res);
+        module.exports.getAllowedAnims(collection.userid, contactLevel, page, response, res);
     },
-    getAllowedAnims: async (userid, anims_id, contactLevel, response, res) => {
+    getAllowedAnims: async (userid, contactLevel, page, response, res) => {
         const sig = 'getAllowedAnims: ';
         console.debug(`${file}${sig}`);
+        const pageSize = 10;
+        let anims = [];
         //const anims = await module.exports.getAnimsBy_id(anims_id);
         const db = await getDb();
-        const animsStream = db.collection('Anims').find({userid: userid}).stream();
-        let anims = [];
+        const animsStream = db.collection('Anims').find(
+            {
+                userid: {$eq: userid},
+                //TODO filter by privacy
+                privacy: {$eq: 0},
+            },
+            {
+                projection: {_id: 0},
+                skip: page > 0 ? ((page) * pageSize) : 0,
+                limit: pageSize
+            }
+        )
+        .stream();
 
         animsStream.on('error', (err) => { 
             console.log(err);
-            
         });
+
         animsStream.on('data', (doc) => { 
             console.log(doc);
-            doc.anims.forEach((anim) => {
-                anims.push(anim);
-            });
+            anims.push(doc);
         });
+
         animsStream.on('end', () => {
             console.log('end');
-            const allowedAnims = anims.filter(anim => anim.privacy <= contactLevel);
+            const allowedAnims = anims ? anims.filter(anim => anim.privacy <= contactLevel) : [];
             response.anims = allowedAnims;
             res.send(response);
-        })
+        });
+
     },
     getAnimsBy_id: async (anims_id) => {
         const sig = 'getAnimsBy_id: ';
@@ -456,31 +426,7 @@ module.exports = {
             res.status(200).send("OK");
         }else{
             res.status(200).send("Not OK");
-        }
-/*        const db = mongoUtil.getDb();
-        const notices = update.notices;
-        //need check for duplicate
-        const pendingNotices = module.exports.getPendingNotices(notices);
-        try{
-            if( await module.exports.isExistingNotice(notices) ){
-                res.status(409).send("Anti-spam: contact request already exists");            
-            }else{
-                db.collection('Collection').bulkWrite([
-                    {updateOne: {filter: {userid: pendingNotices[0].userid},
-                        update: {$addToSet: {notices: {$each: pendingNotices}}}}},
-                    {updateOne: {filter: {userid: notices[0].userid},
-                        update: {$addToSet: {notices: {$each: notices}}}}}
-                ], (err, result) => {
-                    console.error(err);
-                    err 
-                    ? res.status(500).send("Error adding contact")
-                    : result && result.modifiedCount
-                    ? res.status(201).send(result)
-                    : res.status(500).send("Something went wrong adding contact");
-                });
-            }
-        }catch(error){console.error(error);}
-    */    
+        } 
    },
     deleteNotices: async (update, res) => {
         const sig = 'deleteNotices: ';

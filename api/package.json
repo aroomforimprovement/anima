@@ -10,7 +10,7 @@
     "build:darwin:linux": "node ./installer.mjs && netlify-lambda install functions && netlify-lambda build express --config ./webpack.functions.js",
     "build:win32": "node ./installer.mjs && netlify-lambda install functions && netlify-lambda build express --config ./webpack.functions.js",
     "test": "mocha --reporter spec",
-    "dev": "npm run build && neflify dev"
+    "dev": "npm run build && netlify dev"
   },
   "repository": {
     "type": "git",

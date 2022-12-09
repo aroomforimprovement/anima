@@ -108,9 +108,9 @@ module.exports = {
                 .insertOne(colObj.notices, { session });
             colObj.notices = noticesResult.insertedId;
 
-            const animsResult = await db.collection('Anims')
-                .insertOne(colObj.anims, { session });
-            colObj.anims = animsResult.insertedId;
+            //const animsResult = await db.collection('Anims')
+            //    .insertOne(colObj.anims, { session });
+            //colObj.anims = animsResult.insertedId;
 
             await db.collection('Collection')
                 .insertOne(colObj, { session });

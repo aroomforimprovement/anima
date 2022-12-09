@@ -55,6 +55,9 @@ export const collectionReducer = (state, action) => {
             return({...state, anims: action.data.anims, username: action.data.username,
                 userid: action.data.userid, isOwn: action.data.isOwn, isSet: action.data.isSet});
         }
+        case 'PAGE':{
+            return({...state, page: action.data, thumbFiles: [], previewFiles: [], anims: [], isSet: false, index: 0});
+        }
         case 'SET_CONTACT_REQ_ENABLED':{
             return({...state, contactReqEnabled: action.data});
         }
@@ -121,6 +124,7 @@ export const collectionReducer = (state, action) => {
             return({...state, downloaded: 100000});
         }
         default:
-            break;
+            console.error(`Should not reach default: ${action.type}`)
+            return state;
     }
 }

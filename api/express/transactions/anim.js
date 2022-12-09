@@ -1,5 +1,5 @@
 const { getClient, getDb, transactionOptions } = require('../util/mongo-util');
-const { getLastDocumentId, handleTransactionError } = require('../util/transaction-util');
+const { handleTransactionError } = require('../util/transaction-util');
 const file = 'transactions/anim.js: ';
 
 module.exports = {
@@ -13,13 +13,16 @@ module.exports = {
         try{
             session.startTransaction(transactionOptions);
             try{
-                const animsId = await getLastDocumentId('Anims', animToPost.userid, db, session);
-                console.debug(`${file}${sig}animsId: ${animsId}`);
-                const animResult = await db.collection('Anims').updateOne(
-                    {_id: animsId}, {$addToSet: {anims: animToPost}}, {session}
+                //const animsId = await getLastDocumentId('Anims', animToPost.userid, db, session);
+                //console.debug(`${file}${sig}animsId: ${animsId}`);
+                //const animResult = await db.collection('Anims').updateOne(
+                //    {_id: animsId}, {$addToSet: {anims: animToPost}}, {session}
+                //);
+                const animResult = await db.collection('Anims').insertOne(
+                    animToPost, { session }
                 );
                 console.dir(animResult);
-                if(animResult.modifiedCount){
+                if(animResult.insertedId){
                     commit = await session.commitTransaction();
                 }else{
                     commit = {ok: false};

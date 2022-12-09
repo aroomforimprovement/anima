@@ -4,6 +4,7 @@
 /browse  /   200
 /collection  /   200
 /collection/*  /   200
+/collection/*/* / 200
 /login  /   200
 /logout /   200
 /help   /   200

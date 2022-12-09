@@ -1,7 +1,7 @@
 import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../../common/Loading';
-import { collectionReducer, addContactRequest } from './collectionReducer';
+import { collectionReducer } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
 import './collection.scss';
@@ -12,9 +12,11 @@ import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
 import { handleFailedConnection } from '../../common/Toast';
 import { useAccount } from '../../shared/account';
+import { Button } from 'react-bootstrap';
+import { ContactButton } from './components/ContactButton';
 
-const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false, 
-    contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false,
+const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false,
+    contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false, page: 0,
     selectedAnim: null, previewFiles: [], thumbFiles: [], progressFrame: {max: 0, now: 0}};
 export const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
@@ -29,7 +31,7 @@ const Collection = ({browse}) => {
     const {account} = useAccount();
     const splat = useParams()[0];
     
-    const getCollection = async (id, isBrowse, access, signal) => {
+    const getCollection = async (id, isBrowse, access, signal, page) => {
         //console.log(access);
         let url;
         let req = {
@@ -39,9 +41,9 @@ const Collection = ({browse}) => {
             headers: {}
         };
         if(isBrowse){
-            url = `${apiUrl}collection`;
+            url = `${apiUrl}collection/${page}`;
         }else{
-            url = `${apiUrl}collection/${id}`; 
+            url = `${apiUrl}collection/${id}/${page}`; 
         }
         if(access){
             req.headers = {
@@ -107,39 +109,6 @@ const Collection = ({browse}) => {
         }
         return false;
     }
-
-    const handleAddContact = (e) => {
-        const approve = (id) => {
-            addContactRequest(collectionState.userid, collectionState.username, 
-                account.user.username, account.user.userid, account.user.access)
-                .then((response) => {
-                    //should check and set this on page load as well - would have to retrieve contacts and notices from target collection on fetch
-                    setCollectionState({type: 'SET_CONTACT_REQ_ENABLED', data: false});
-                    if(response){
-                        toast.success("Contact request sent");
-                    }else{
-                        toast.error("Error sending contact request");
-                    }
-                });
-            toast.dismiss(id);
-        }
-
-        const dismiss = (id) => {
-            toast.dismiss(id);
-        }     
-
-        toast.info( 
-            {
-                approveFunc: approve, 
-                dismissFunc: dismiss,
-                message: `You are about to send a contact request to ${collectionState.username}. 
-                    After they approve the request, you will be able view all of eachother's anims,
-                     even the ones marked Private`,
-                approveTxt: "Send Contact Request", 
-                dismissTxt: "Maybe later"
-            }
-        );
-    }
     
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
@@ -152,26 +121,28 @@ const Collection = ({browse}) => {
         if(isFailed){
             handleFailure();
         }
-    },[isFailed] )
+    },[isFailed]);
 
     useEffect( () => {
         const controller = new AbortController();
         const signal = controller.signal;
-        const setCollection = async (data) => {
+        const setCollectionToState = async (data) => {
             setCollectionState({type: 'SET_COLLECTION', data: data, signal}); 
         }
         
         if(!isFailed && !collectionState?.isSet && account?.isSet){
-            const access = account.user ? account.user.access : undefined
+            const access = account.user ? account.user.access : undefined;
             toast.info({message: "Fetching anima", toastId: 'data_fetch'});
-            getCollection(splat, browse, access, signal)
+            getCollection(splat, browse, access, signal, collectionState.page)
                 .then((response) => {
                     console.dir(response);
                     toast.info({message: "Rendering anima", toastId: 'data_fetch'});
                     if(browse){
-                        setCollection({anims: response, isSet: true, signal});
+                        console.log("browse");
+                        setCollectionToState({anims: response, isSet: true, signal});
                     }else{
-                        setCollection({anims: response.anims, isSet: true,
+                        console.log("not browse");
+                        setCollectionToState({anims: response.anims, isSet: true,
                             username: response.username, userid: response.userid,
                             isOwn: response.userid === account.user.userid, signal});
                     }
@@ -198,9 +169,7 @@ const Collection = ({browse}) => {
                 ? 
                 <div></div> 
                 : 
-                <button className='col btn btn-outline-light btn-sm fa fa-users'
-                    onClick={handleAddContact} hidden={!collectionState.contactReqEnabled}>{'Add as contact'}
-                </button>
+                <ContactButton />
                 }
             </div>
         </div>
@@ -208,59 +177,55 @@ const Collection = ({browse}) => {
             <h5>Latest anims</h5>
         </div>
 
-    const [collection, setCollection] = useState([]);
-
-    useEffect(() => {
-        if(collectionState?.anims){
-            if(collectionState.anims.length > collectionState.index){
-                const col = collectionState.anims.slice(0, collectionState.index+1);
-                setTimeout(() => {
-                    setCollection(col); 
-                }, 100)
-                 
+    const PageUp = () => {
+        const pageUp = () => {
+            setCollectionState({type: 'PAGE', data: collectionState.page+1});
+        }
+        return(
+            <Button 
+                type="button"
+                variant="outline-primary"
+                size="lg"
+                text=">" 
+                onClick={pageUp} 
+            />
+        )
+    }
+    const PageDown = () => {
+        const pageDown = () => {
+            if(collectionState.page > 0){
+                setCollectionState({type: 'PAGE', data: collectionState.page-1});
             }
         }
-    }, [collectionState?.anims, collectionState?.index]);
-
-    const [thumbFiles, setThumbFiles] = useState();
-
-    useEffect(() => {
-        if(collectionState?.thumbFiles){
-            setThumbFiles(collectionState.thumbFiles);
-        }
-    }, [collectionState?.thumbFiles]);
-
-    const [previewFiles, setPreviewFiles] = useState();
-
-    useEffect(() => {
-        if(collectionState?.previewFiles){
-            setPreviewFiles(collectionState.previewFiles);
-        }
-    }, [collectionState?.previewFiles]);
-
+        return(
+            <Button
+                type="button"
+                variant="outline-primary"
+                size="lg"
+                text="<" 
+                onClick={pageDown}
+            />
+        )
+    }
     
-    const collectionItems = collection ? collection.map((anim, index) => {
+    const collectionItems = collectionState ? collectionState.anims?.map((anim, index) => {
         return <CollectionItem 
             key={index} 
             index={index} 
             anim={anim} 
             previewFile={
-                previewFiles 
-                && previewFiles[index] 
-                ? previewFiles[index] 
+                collectionState?.previewFiles 
+                && collectionState.previewFiles[index] 
+                ? collectionState.previewFiles[index] 
                 : undefined
             }
             thumbFile={
-                thumbFiles 
-                && thumbFiles[index]
-                ? thumbFiles[index]
+                collectionState?.thumbFiles 
+                && collectionState.thumbFiles[index]
+                ? collectionState.thumbFiles[index]
                 : undefined
             } />
     }) : <Loading />
-
-    useEffect(() => {
-
-    }, [collection])
 
     return(
         <div>
@@ -274,6 +239,9 @@ const Collection = ({browse}) => {
                                 {collectionHeading}
                                 <div className='col col-12 collection'>
                                     {collectionItems}
+                                    <PageDown />
+                                    {`${collectionState.page+1}`}
+                                    <PageUp />
                                 </div>
                                 {collectionState.isViewerOpen && collectionState.viewFile 
                                 ?

@@ -195,8 +195,8 @@ module.exports = {
         if( await module.exports.isExistingAnim(anim) ){
             try{
                 await db.collection('Anims')
-                    .updateOne({userid: anim.userid, 'anims.animid': anim.animid},
-                        {$set: { 'anims.$': anim}},
+                    .updateOne({userid: anim.userid, animid: anim.animid},
+                        anim,
                         (err, result) => {
                             err
                             ? res.status(500).send("Error updating the resource: " + err)

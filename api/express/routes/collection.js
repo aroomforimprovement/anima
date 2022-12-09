@@ -3,18 +3,18 @@ const router = express.Router();
 const coll = require('../controllers/collection');
 const util = require('../util/routes-util');
 
-router.get('/', util.jwtCheck(false), (req, res) => {
-    console.log("reached /collection GET/");
-    coll.getCollection(req, res);
-});
-
-router.get('/*', util.jwtCheck(false), (req, res) => {
-    console.log("reached /collection GET/id");
+router.get('/*/*', util.jwtCheck(false), (req, res) => {
+    console.log("reached /collection GET/id/page");
     if(coll.hasValidGetParam(req)){
         coll.getCollectionById(req, res);
     }else{
         return res.status(500).send("Invalid request parameter");
     }
+});
+
+router.get('/*', util.jwtCheck(false), (req, res) => {
+    console.log("reached /collection GET/page");
+    coll.getCollection(req, res);
 });
 
 router.post('/', util.jwtCheck(true), (req, res) => {
