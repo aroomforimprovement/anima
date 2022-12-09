@@ -61,12 +61,12 @@ module.exports = {
         const db = await mongoUtil.getDb();
         try{
             db.collection('Anims')
-                .updateOne({'anims.animid': animid},
-                    {$pull: {anims: { animid: animid}}}, 
+                .deleteOne({animid: animid},
                     (err, result) => {
+                        console.dir(result);
                         err
                         ? res.status(500).send("Error deleting the resource")
-                        : result && result.modifiedCount
+                        : result && result.deletedCount
                         ? res.status(201).send("Resource deleted ok")
                         : res.status(500).send("Something went wrong deleting animation")
                     });
