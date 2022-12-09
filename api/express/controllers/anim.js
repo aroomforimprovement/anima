@@ -100,7 +100,7 @@ module.exports = {
             mongoUtil.getDb().then((db) => {
                 db.collection('Anims').findOne(
                     {animid: animid}, (err, result) => {
-                        if(result) resolve(result.anims.filter((a) => { return a.animid == animid})[0]);
+                        if(result) resolve(result)
                         if(err) reject(err);
                     }
                 );
@@ -120,8 +120,7 @@ module.exports = {
                 routeUtil.respondWithPermission(
                     routeUtil.hasContact(requser, anim.userid), res, anim);
             }else{
-                    
-                    res.status(500).send("The privacy setting of this resource could not be determined");
+                res.status(500).send("The privacy setting of this resource could not be determined");
                 }
         }else{
             res.status('404').send("Couldn't find that animation");
