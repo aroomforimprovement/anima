@@ -131,3 +131,14 @@ but is not in this css file (check index.css) */
   .coll-viewer-info-name{
     font-size:large;
   }
+
+  .page-btns {
+    display: 'block';
+    bottom: 0;
+    min-width: 100%;
+  }
+
+  .page-btn {
+    display: 'inline-block';
+    max-width: 30%;
+  }

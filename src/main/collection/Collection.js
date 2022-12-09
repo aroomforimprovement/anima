@@ -150,13 +150,13 @@ const Collection = ({browse}) => {
             setCollectionState({type: 'PAGE', data: collectionState.page+1});
         }
         return(
-            <Button 
+            <Button
                 type="button"
-                variant="outline-primary"
+                variant="secondary"
                 size="lg"
                 text=">" 
                 onClick={pageUp} 
-            />
+            >{'>'}</Button>
         )
     }
     const PageDown = () => {
@@ -168,11 +168,10 @@ const Collection = ({browse}) => {
         return(
             <Button
                 type="button"
-                variant="outline-primary"
+                variant="secondary"
                 size="lg"
-                text="<" 
                 onClick={pageDown}
-            />
+            >{'<'}</Button>
         )
     }
     
@@ -203,13 +202,22 @@ const Collection = ({browse}) => {
                 <CollectionContext.Provider value={stateOfCollection}>
                     {/*<CollectionContext.Consumer>
                         {() => {*/}
-                            <div className=''>
+                            <div>
                                 {collectionHeading}
                                 <div className='col col-12 collection'>
-                                    {collectionItems}
-                                    <PageDown />
-                                    {`${collectionState.page+1}`}
-                                    <PageUp />
+                                    <div className='row'>
+                                        <div className='col col-12'>
+                                            {collectionItems}
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div className='row page-btns'>
+                                        <PageDown className='col col-3 float-start page-btn'/>
+                                        <div className='col col-3'>
+                                                {`${collectionState.page+1}`}
+                                        </div>
+                                        <PageUp className='col col-3 float-end page-btn'/>
+                                    </div>
                                 </div>
                                 {collectionState.isViewerOpen && collectionState.viewFile 
                                 ?
