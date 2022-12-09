@@ -99,7 +99,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             mongoUtil.getDb().then((db) => {
                 db.collection('Anims').findOne(
-                    {'anims.animid': animid}, {'anims.$': 1}, (err, result) => {
+                    {animid: animid}, (err, result) => {
                         if(result) resolve(result.anims.filter((a) => { return a.animid == animid})[0]);
                         if(err) reject(err);
                     }
