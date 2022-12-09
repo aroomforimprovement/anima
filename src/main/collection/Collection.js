@@ -85,31 +85,6 @@ const Collection = ({browse}) => {
         });
     }
     
-    const isContact = (id) => {
-        if(account && account.contacts){
-                for(let i = 0; i < account.contacts.length; i++){
-                    if(account.contacts[0].userid === id){
-                        return true;
-                    }
-                }
-                return false;
-        }
-        return false;
-    }
-
-    const isContactRequested = (id) => {
-        if(account && account.notices && account.notices.length > 0){
-            for(let i = 0; i < account.notices.length; i++){
-                if(account.notices[i].type && account.notices[i].type.indexOf('pending-contact') > -1){
-                    if(account.notices[i].targetUserid === id){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
     const [isFailed, setIsFailed] = useState(false);
@@ -163,14 +138,7 @@ const Collection = ({browse}) => {
                 <h5 className='col col-8'>
                     {collectionState.username}
                 </h5>
-                {
-                !account.user || !account.user.isAuth || !account.user.isVerified ||
-                collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
-                ? 
-                <div></div> 
-                : 
                 <ContactButton />
-                }
             </div>
         </div>
         : <div className='container collection-header mt-5 mb-5'>

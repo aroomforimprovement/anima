@@ -114,7 +114,7 @@ module.exports = {
         )
         .limit(pageSize)
         .skip(conditions.page > 0 ? conditions.page * pageSize : 0)
-        .sort({_id: 1})
+        .sort({_id: -1})
         .stream();
             
         animsStream.on('error', (err) => {
@@ -266,7 +266,8 @@ module.exports = {
             {
                 projection: {_id: 0},
                 skip: page > 0 ? ((page) * pageSize) : 0,
-                limit: pageSize
+                limit: pageSize,
+                sort: {_id: -1}
             }
         )
         .stream();

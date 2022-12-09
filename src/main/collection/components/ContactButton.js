@@ -7,6 +7,31 @@ export const ContactButton = () => {
 
     const {collectionState, setCollectionState} = useCollectionContext();
     const {account} = useAccount();
+
+    const isContact = (id) => {
+        if(account && account.contacts){
+                for(let i = 0; i < account.contacts.length; i++){
+                    if(account.contacts[0].userid === id){
+                        return true;
+                    }
+                }
+                return false;
+        }
+        return false;
+    }
+
+    const isContactRequested = (id) => {
+        if(account && account.notices && account.notices.length > 0){
+            for(let i = 0; i < account.notices.length; i++){
+                if(account.notices[i].type && account.notices[i].type.indexOf('pending-contact') > -1){
+                    if(account.notices[i].targetUserid === id){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     
     const handleAddContact = (e) => {
         const approve = (id) => {
@@ -42,8 +67,18 @@ export const ContactButton = () => {
     }
 
     return(
-        <button className='col btn btn-outline-light btn-sm fa fa-users'
+        <div>
+        {
+            !account.user || !account.user.isAuth || !account.user.isVerified ||
+            collectionState.isOwn || isContact(collectionState.userid) || isContactRequested(collectionState.userid)
+            ? 
+            <div></div> 
+            : 
+            <button className='col btn btn-outline-light btn-sm fa fa-users'
             onClick={handleAddContact} hidden={!collectionState.contactReqEnabled}>{'Add as contact'}
-        </button>
+            </button>
+        }
+        </div>
+        
     );
 }
