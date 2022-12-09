@@ -146,13 +146,13 @@ module.exports = {
         }
     },
     isExistingAnim: async (anim) => {
-        const sig = 'isExistingAnim: ';
-        console.debug(`${file}${sig}`);
+        const sig = `${file}isExistingAnim: `;
+        console.debug(`${sig}`);
         const db = await mongoUtil.getDb();
         let exists = 0;
         try{
             exists = await db.collection('Anims')
-                .countDocuments({'anims.animid': anim.animid});
+                .countDocuments({animid: anim.animid});
             console.debug("Anim EXISTS: " + exists);
         }catch(error){
             console.debug(error);
@@ -190,18 +190,34 @@ module.exports = {
     updateAnim: async (anim, res) => {
         const sig = 'updateAnim: ';
         console.debug(`${file}${sig}`);
+        console.dir(anim);
         const db = await mongoUtil.getDb();
         if( await module.exports.isExistingAnim(anim) ){
             try{
-                await db.collection('Anims')
-                    .updateOne({userid: anim.userid, animid: anim.animid},
-                        anim,
-                        (err, result) => {
-                            err
-                            ? res.status(500).send("Error updating the resource: " + err)
-                            : result && result.modifiedCount
-                            ? res.status(201).send(result)
-                            : res.status(500).send("Something went wrong updating the resource")
+                await db.collection('Anims').replaceOne(
+                    {animid: {$eq: anim.animid}},
+                    {
+                        animid: anim.animid,
+                        userid: anim.userid,
+                        username: anim.username,
+                        name: anim.name,
+                        type: anim.type,
+                        created: anim.created,
+                        modified: Date.now(),
+                        frate: anim.frate,
+                        size: anim.size,
+                        privacy: anim.privacy,
+                        frames: anim.frames,
+                        lastFrame: anim.lastFrame,
+                        layers: anim.layers
+                    },
+                    (err, result) => {
+                        console.dir(result);
+                        err
+                        ? res.status(500).send("Error updating the resource: " + err)
+                        : result && result.modifiedCount
+                        ? res.status(201).send(result)
+                        : res.status(500).send("Something went wrong updating the resource")
                         });
             }catch(error){
                 console.error(error);
