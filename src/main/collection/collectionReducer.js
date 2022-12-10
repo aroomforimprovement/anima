@@ -56,7 +56,7 @@ export const collectionReducer = (state, action) => {
                 userid: action.data.userid, isOwn: action.data.isOwn, isSet: action.data.isSet});
         }
         case 'PAGE':{
-            return({...state, page: action.data, thumbFiles: [], previewFiles: [], anims: [], isSet: false, index: 0});
+            return({...state, page: action.data, thumbFiles: [], previewFiles: [], anims: [], readyAnims: [], isSet: false, index: 0});
         }
         case 'SET_CONTACT_REQ_ENABLED':{
             return({...state, contactReqEnabled: action.data});
@@ -84,7 +84,6 @@ export const collectionReducer = (state, action) => {
                 return({...state, viewFile: url, viewFileName: action.data.name});
             }
             return({...state, viewFile: null, viewFileName: null, selectedAnim: null});
-            
         }
         case 'ADD_PREVIEW_FILE':{
             if(action.data){
@@ -92,7 +91,9 @@ export const collectionReducer = (state, action) => {
                 const files = [...state.previewFiles];
                 //files[action.data.index] = url;
                 files.push(url);
-                return({...state, previewFiles: files, index: action.data.index+1})
+                return({...state, 
+                    previewFiles: files,
+                    index: action.data.index+1})
             }
             return({...state})
         }

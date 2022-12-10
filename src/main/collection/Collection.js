@@ -17,7 +17,8 @@ import { ContactButton } from './components/ContactButton';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false,
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false, page: 0,
-    selectedAnim: null, previewFiles: [], thumbFiles: [], progressFrame: {max: 0, now: 0}};
+    selectedAnim: null, previewFiles: [], thumbFiles: [], 
+    progressFrame: {max: 0, now: 0}};
 export const CollectionContext = createContext(INIT_COLLECTION_STATE);
 
 export const useCollectionContext = () => {
@@ -88,10 +89,10 @@ const Collection = ({browse}) => {
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
     const [isFailed, setIsFailed] = useState(false);
-    
+
     useEffect(() => {
         const handleFailure = async () => {
-            handleFailedConnection(SITE.failed_retrieval_message, true, toast);
+            handleFailedConnection(SITE.failed_retrieval_message, true);
         }
         if(isFailed){
             handleFailure();
@@ -174,8 +175,8 @@ const Collection = ({browse}) => {
             >{'<'}</Button>
         )
     }
-    
-    const collectionItems = collectionState ? collectionState.anims?.map((anim, index) => {
+
+    const collectionItems = collectionState?.anims ? collectionState.anims.map((anim, index) => {
         return <CollectionItem 
             key={index} 
             index={index} 
