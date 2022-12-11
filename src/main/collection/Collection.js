@@ -14,6 +14,7 @@ import { handleFailedConnection } from '../../common/Toast';
 import { useAccount } from '../../shared/account';
 import { Button } from 'react-bootstrap';
 import { ContactButton } from './components/ContactButton';
+import { PageButtons } from './components/PageButtons';
 
 const INIT_COLLECTION_STATE = {anims: null, id: false, isSet: false, isBrowse: false,
     contactReqEnabled: true, index: 0, downloaded: 100000, isViewerOpen: false, page: 0,
@@ -146,39 +147,7 @@ const Collection = ({browse}) => {
             <h5>Latest anims</h5>
         </div>
 
-    const PageUp = () => {
-        const pageUp = () => {
-            if(collectionState?.anims.length >= 10){
-                setCollectionState({type: 'PAGE', data: collectionState.page+1});
-            }else{
-                setCollectionState({type: 'PAGE', data: 0});
-            }
-        }
-        return(
-            <Button
-                type="button"
-                variant="secondary"
-                size="lg"
-                text=">" 
-                onClick={pageUp} 
-            >{'>'}</Button>
-        )
-    }
-    const PageDown = () => {
-        const pageDown = () => {
-            if(collectionState.page > 0){
-                setCollectionState({type: 'PAGE', data: collectionState.page-1});
-            }
-        }
-        return(
-            <Button
-                type="button"
-                variant="secondary"
-                size="lg"
-                onClick={pageDown}
-            >{'<'}</Button>
-        )
-    }
+    
 
     const collectionItems = collectionState?.anims ? collectionState.anims.map((anim, index) => {
         return <CollectionItem 
@@ -217,11 +186,7 @@ const Collection = ({browse}) => {
                                     </div>
                                     <br/>
                                     <div className='row page-btns'>
-                                        <PageDown className='col col-3 float-start page-btn'/>
-                                        <div className='col col-3'>
-                                                {`${collectionState.page+1}`}
-                                        </div>
-                                        <PageUp className='col col-3 float-end page-btn'/>
+                                        <PageButtons/>
                                     </div>
                                 </div>
                                 {collectionState.isViewerOpen && collectionState.viewFile 
