@@ -1,7 +1,7 @@
 import React from "react";
 import { DisplayName } from "./DisplayName";
 import { ClearChoices } from "./ClearChoices";
-import { ResendVerfication } from "./ResendVerification";
+import { ResendVerification } from "./ResendVerification";
 
 export const Settings = ({account}) => {
 
@@ -9,7 +9,7 @@ export const Settings = ({account}) => {
         <div>
             <DisplayName account={account}/>
             <ClearChoices />
-            <ResendVerfication user={account.user}/>
+            <ResendVerification user={account.user}/>
         </div>
     )
 }

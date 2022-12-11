@@ -148,7 +148,11 @@ const Collection = ({browse}) => {
 
     const PageUp = () => {
         const pageUp = () => {
-            setCollectionState({type: 'PAGE', data: collectionState.page+1});
+            if(collectionState?.anims.length >= 10){
+                setCollectionState({type: 'PAGE', data: collectionState.page+1});
+            }else{
+                setCollectionState({type: 'PAGE', data: 0});
+            }
         }
         return(
             <Button

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'buttoned-toaster';
 
-export const ResendVerfication = ({user}) => {
+export const ResendVerification = ({user}) => {
     const endpoint = `${process.env.REACT_APP_API_URL}verify`
     const [sent, setSent] = useState(false);
     

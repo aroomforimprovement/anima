@@ -14,8 +14,8 @@ import { Loading } from "../../../common/Loading";
 import { useAccount } from "../../../shared/account";
 
 const collectionItemInitialState = {viewFile: null, viewName: null, 
-    previewFile: null, thumbFile: null, previewName: null, hidden: false, deleted: false,
-    progressFrame: {max: 0, now: 0}
+    previewFile: null, thumbFile: null, previewName: null, hidden: false, 
+    deleted: false, progressFrame: {max: 0, now: 0}
 }
 
 export const CollectionItem = ({anim, index, previewFile, thumbFile}) => {
@@ -46,14 +46,12 @@ export const CollectionItem = ({anim, index, previewFile, thumbFile}) => {
     }
     
     const handleDelete = (e) => {
-
         const approve = (id) => {
             deleteAnim(anim.animid, account.user)
             .then((res) => {
                 if(res){
                     toast.success("Anim deleted");
                     //collectionItemDispatch({type: 'DELETE_ANIM', data:anim.animid});
-
                     setCollectionState({type: 'DELETE_ANIM', data: anim.animid});
                 }else{
                     toast.error("Error deleting the anim");
@@ -119,7 +117,7 @@ export const CollectionItem = ({anim, index, previewFile, thumbFile}) => {
     return(
         <CollectionContext.Consumer >
             {() => (
-            <div className={`col col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2
+            <div className={`col ${'col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3 col-xxl-2'}
                 py-1 px-3 my-2 mx-1 coll-item`}>
                 {
                 account.isSet 
