@@ -5,6 +5,8 @@ const auth = require('../util/auth-util');
 const fetch = require('node-fetch');
 //const ESAPI = require('node-esapi');
 
+const file = 'controllers/index.js: ';
+
 module.exports = {
     addLogin: async (data, res) => {
         let login;
@@ -107,9 +109,12 @@ module.exports = {
         }
     },
     resendVerification: async (req, res) => {
+        const sig = `${file}resendVerification: `;
+        console.log(sig);
         // eslint-disable-next-line no-undef
         const endpoint = `https://${process.env.AUTH_DOMAIN}/api/v2/jobs/verification-email`;
         const token = await auth.getAuthManToken();
+        console.dir(token);
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -117,6 +122,7 @@ module.exports = {
         const body = JSON.stringify(req.body);
         const response = await fetch(endpoint, {method: 'POST', headers: headers, body: body});
             const data = await response.json();
+            console.log(`${sig}data: `);
             console.dir(data);
             if(data.type){
                 res.status(200).send(`Verification email resent: ${data.id}`);
