@@ -2,6 +2,59 @@ import { arrayRemove } from "../../utils/utils";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
+export const getCollection = async (id, isBrowse, access, signal, page) => {
+    //console.log(access);
+    let url;
+    let req = {
+        method: 'GET',
+        mode: 'cors',
+        signal: signal,
+        headers: {}
+    };
+    if(isBrowse){
+        url = `${apiUrl}collection/${page}`;
+    }else{
+        url = `${apiUrl}collection/${id}/${page}`; 
+    }
+    if(access){
+        req.headers = {
+            Authorization: `Bearer ${access}`
+        }
+    }
+    return fetch(url, req)
+    .then(response => {
+        if(response.ok){
+            const reader = response.body.getReader();
+            return new ReadableStream({
+                start(controller){
+                    const pump = () => {
+                        return reader.read().then(({done, value}) => {
+                            if(done){
+                                controller.close();
+                                return;
+                            }
+                            controller.enqueue(value);
+                            return pump();
+                        });
+                    }
+                    return pump();
+                }
+            })
+        }
+    }, error => {
+        console.error("Error fetching data: getCollection");
+        console.error(error);
+        return false;
+    })
+    .then(stream => new Response(stream))
+    .then(response => response.json())
+    .then(body => body)
+    .catch(err => {
+        console.error("Error fetching data: getCollection");
+        console.error(err);
+        return false;
+    });
+}
 
 export const addContactRequest = async (userid, username, requsername, requserid, access) => {
     return fetch(`${apiUrl}collection`, {

@@ -1,7 +1,7 @@
 import React, { useReducer, useContext, createContext, useEffect, useState } from 'react';
 import { CollectionItem } from './item/CollectionItem';
 import { Loading } from '../../common/Loading';
-import { collectionReducer } from './collectionReducer';
+import { collectionReducer, getCollection } from './collectionReducer';
 import { useParams } from 'react-router';
 import toast from 'buttoned-toaster';
 import './collection.scss';
@@ -12,7 +12,6 @@ import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { preview } from '../create/animation/preview';
 import { handleFailedConnection } from '../../common/Toast';
 import { useAccount } from '../../shared/account';
-import { Button } from 'react-bootstrap';
 import { ContactButton } from './components/ContactButton';
 import { PageButtons } from './components/PageButtons';
 
@@ -32,60 +31,6 @@ const Collection = ({browse}) => {
 
     const {account} = useAccount();
     const splat = useParams()[0];
-    
-    const getCollection = async (id, isBrowse, access, signal, page) => {
-        //console.log(access);
-        let url;
-        let req = {
-            method: 'GET',
-            mode: 'cors',
-            signal: signal,
-            headers: {}
-        };
-        if(isBrowse){
-            url = `${apiUrl}collection/${page}`;
-        }else{
-            url = `${apiUrl}collection/${id}/${page}`; 
-        }
-        if(access){
-            req.headers = {
-                Authorization: `Bearer ${access}`
-            }
-        }
-        return fetch(url, req)
-        .then(response => {
-            if(response.ok){
-                const reader = response.body.getReader();
-                return new ReadableStream({
-                    start(controller){
-                        const pump = () => {
-                            return reader.read().then(({done, value}) => {
-                                if(done){
-                                    controller.close();
-                                    return;
-                                }
-                                controller.enqueue(value);
-                                return pump();
-                            });
-                        }
-                        return pump();
-                    }
-                })
-            }
-        }, error => {
-            console.error("Error fetching data: getCollection");
-            console.error(error);
-            return false;
-        })
-        .then(stream => new Response(stream))
-        .then(response => response.json())
-        .then(body => body)
-        .catch(err => {
-            console.error("Error fetching data: getCollection");
-            console.error(err);
-            return false;
-        });
-    }
     
     const [collectionState, setCollectionState] = useReducer(collectionReducer, INIT_COLLECTION_STATE); 
     const stateOfCollection = { collectionState, setCollectionState };
@@ -147,8 +92,6 @@ const Collection = ({browse}) => {
             <h5>Latest anims</h5>
         </div>
 
-    
-
     const collectionItems = collectionState?.anims ? collectionState.anims.map((anim, index) => {
         return <CollectionItem 
             key={index} 
@@ -174,43 +117,35 @@ const Collection = ({browse}) => {
             ?
             <div>
                 <CollectionContext.Provider value={stateOfCollection}>
-                    {/*<CollectionContext.Consumer>
-                        {() => {*/}
-                            <div>
-                                {collectionHeading}
-                                <div className='col col-12 collection'>
-                                    <div className='row'>
-                                        <div className='col col-12'>
-                                            {collectionItems}
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div className='row page-btns'>
-                                        <PageButtons/>
-                                    </div>
-                                </div>
-                                {collectionState.isViewerOpen && collectionState.viewFile 
-                                ?
-                                <Viewer 
-                                    viewFile={collectionState.viewFile} 
-                                    anim={collectionState.selectedAnim}
-                                    name={collectionState.viewFileName}
-                                /> 
-                                : 
-                                <Div/>
-                                }
-                                {
-                                collectionState.isViewerOpen && !collectionState.viewFile 
-                                ?
-                                <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
-                                    collectionState={collectionState} type={'VIEW'}
-                                    setCollectionState={setCollectionState} clip={false}
-                                /> 
-                                : <Div/>
-                                }
+                    <div>
+                        {collectionHeading}
+                        <div className='col col-12 collection'>
+                            {collectionItems}
+                            <div className='row page-btns'>
+                                <PageButtons/>
                             </div>
-                        {/*}}
-                    </CollectionContext.Consumer>*/}
+                        </div>
+                        {
+                        collectionState.isViewerOpen && collectionState.viewFile 
+                        ?
+                        <Viewer 
+                            viewFile={collectionState.viewFile} 
+                            anim={collectionState.selectedAnim}
+                            name={collectionState.viewFileName}
+                        /> 
+                        : 
+                        <Div/>
+                        }
+                        {
+                        collectionState.isViewerOpen && !collectionState.viewFile 
+                        ?
+                        <ReactP5Wrapper sketch={preview} anim={collectionState.selectedAnim} index={"temp"}
+                            collectionState={collectionState} type={'VIEW'}
+                            setCollectionState={setCollectionState} clip={false}
+                        /> 
+                        : <Div/>
+                        }
+                    </div>
                 </CollectionContext.Provider>
             </div>
             :
