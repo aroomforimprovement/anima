@@ -17,7 +17,12 @@ export const Notice = ({notice, i}) => {
                     .then((response) => {
                         if(response && response.ok){
                             toast.success('Contact request approved');
-                            dispatch({type: 'DELETE_NOTICE', data: i})
+                            dispatch({type: 'DELETE_NOTICE', data: i});
+                            dispatch({type: 'ADD_CONTACT', data: 
+                                {
+                                    userid: notice.reqUserid,
+                                    username: notice.reqUsername
+                                }})
                         }else{
                             toast.error('Error approving contact request');
                         }

@@ -91,7 +91,7 @@ module.exports = {
     newCollection: async (colObj) => {
         const sig = 'newCollection: ';
         console.debug(`${file}${sig}`);
-        console.dir(colObj);
+        //console.dir(colObj);
         const client = await getClient();
         const db = await getDb();
         
@@ -289,7 +289,7 @@ module.exports = {
         return pendings;
     },
     getAccount: async (id) => {
-        const sig = 'newAccount: ';
+        const sig = 'getAccount: ';
         console.debug(`${file}${sig}`);
         const client = await getClient();
         const db = await getDb();
@@ -312,7 +312,8 @@ module.exports = {
                     });
                 });
                 accountResult.notices = notices;
-
+                console.debug("accountResult.notices");
+                console.dir(accountResult.notices);
                 const contacts = [];
                 const contactsCursor = db.collection('Contacts')
                     .find({userid: id}, { session });

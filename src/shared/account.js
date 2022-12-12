@@ -53,6 +53,11 @@ const reducer = (state, action) => {
             const newContacts = arrayRemove(contacts, contact);
             return ({...state, contacts: newContacts});
         }
+        case 'ADD_CONTACT':{
+            let contacts = [...state.contacts];
+            const contact = contacts.push(action.data);
+            return({...state, contacts: contacts});
+        }
         default:
             return state;
     }

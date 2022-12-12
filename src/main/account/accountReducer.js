@@ -31,7 +31,7 @@ export const addContact = async (notice, i, access) => {
 }
 
 export const getAccountInfo = async (id, access) => {
-    return fetch(`${apiUrl}collection/${id}`, {
+    return fetch(`${apiUrl}collection/${id}/0`, {
         headers: {
             Authorization: `Bearer ${access}`
         }   
