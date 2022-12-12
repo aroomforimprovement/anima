@@ -14,6 +14,7 @@ import { ToastRack } from 'buttoned-toaster';
 import { useAccount } from '../shared/account';
 import { Loading } from '../common/Loading';
 import { Help } from './help/Help';
+import Messages from './messages/Messages';
 
 
 const Main = () => {
@@ -29,6 +30,7 @@ const Main = () => {
     const BrowsePage = () => { return <Collection browse={true} /> }
     const HelpPage = () => { return <Help />}
     const AccountPage = () => { return <Account />}
+    const MessagesPage = () => { return <Messages />}
 
     
     const {account} = useAccount();
@@ -58,6 +60,7 @@ const Main = () => {
                 <Route path='/login' history={history} component={LoginPage} />
                 <Route path='/logout' history={history} component={LogoutPage} />
                 <Route path='/help' history={history} component={HelpPage} />
+                <Route path='/messages' history={history} component={MessagesPage} />
                 <Route path='/' history={history} component={HomePage} />
                 <Redirect to='/login' history={history}/>
             </Switch>
