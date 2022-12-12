@@ -436,9 +436,7 @@ module.exports = {
         const db = await mongoUtil.getDb();
         const notice = update.deleteNotice;
         let id = notice.userid;
-//        if(notice.type === 'pending-contact'){
-//            id = notice.targetUserid;
-//        }
+
         db.collection('Notices').updateOne({userid: id},
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
