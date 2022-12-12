@@ -122,7 +122,7 @@ module.exports = {
         });
 
         animsStream.on('data', (doc) => {
-            console.log(doc);
+            //console.log(doc);
             anims.push(doc);
         });
 
@@ -137,12 +137,12 @@ module.exports = {
         const userid = req.params[0];
         const page = req.params[1];
         const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
+        
         try{
-
             await getAccount(userid).then((result) => {
                 if(result.ok){
                     console.debug('result');
-                    console.dir(result);
+                    //console.dir(result);
                     const collection = result.account;
                     //filter the result based on ownership, contact/privacy
                     module.exports.setGetCollectionResponse(collection, requser, page, res)
@@ -154,6 +154,7 @@ module.exports = {
             console.error(error);
             res.status(500).send(error);
         }
+
     },
     getCollectionToPost: (collection) => {
         //stub
@@ -435,14 +436,15 @@ module.exports = {
         const db = await mongoUtil.getDb();
         const notice = update.deleteNotice;
         let id = notice.userid;
-        if(notice.type === 'pending-contact'){
-            id = notice.targetUserid;
-        }
+//        if(notice.type === 'pending-contact'){
+//            id = notice.targetUserid;
+//        }
         db.collection('Notices').updateOne({userid: id},
         //TODO should really have a uuid for each notice
             {$pull: {notices: {message: notice.message}}},
             (err, result) => {
                 console.error(err);
+                console.dir(result);
                 err
                 ? res.status(500).send(err)
                 : result && result.modifiedCount
