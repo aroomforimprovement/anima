@@ -82,12 +82,37 @@ export const Animation = ({splat}) => {
                 })
                 .catch(err => console.error(err));
         }
+
+        const getConversation = async (id, signal) => {
+            return fetch(`${apiUrl}messages/${id}`,{
+                signal: signal,
+                headers: {
+                    Authorization: `Bearer ${access}`,
+                }
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }else{
+                    console.error("response not ok");
+                }
+            }, error => {
+                console.error(error);
+            }).then(response => {
+                //TODO do something with result
+                console.dir(response);
+            }).catch(err => console.error(err))
+        }
+
         if(account.user && account.user.isAuth && account.user.access){
             setAccess(account.user.access, signal);
             updateAnim({type: 'UPDATE_ANIM_USER', data: account.user, signal: signal});
         }
         if(!anim.isSet && splat && account.user && access){
-            getSavedAnim(splat, signal);
+            if(splat.indexOf('=') > -1){
+                getConversation(splat, signal);
+            }else{
+                getSavedAnim(splat, signal);
+            }
         }
         return () => {
             controller.abort();

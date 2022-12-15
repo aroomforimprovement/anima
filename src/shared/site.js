@@ -36,6 +36,7 @@ export const SITE = {
         "layers": process.env.REACT_APP_URL + '/assets/layers.svg',
         "recOff": process.env.REACT_APP_URL + '/assets/rec-off.svg',
         "recOn": process.env.REACT_APP_URL + '/assets/rec-on.svg',
+        "message": process.env.REACT_APP_URL + '/assets/message.svg',
     },
     "help": {
         "image_001": process.env.REACT_APP_URL + '/assets/help/image_001.png',

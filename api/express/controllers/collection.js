@@ -142,7 +142,6 @@ module.exports = {
             await getAccount(userid).then((result) => {
                 if(result.ok){
                     console.debug('result');
-                    //console.dir(result);
                     const collection = result.account;
                     //filter the result based on ownership, contact/privacy
                     module.exports.setGetCollectionResponse(collection, requser, page, res)

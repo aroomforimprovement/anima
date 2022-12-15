@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink, Switch } from "react-router-dom";
 import { SITE } from '../../../../shared/site';
 import { deleteContact } from '../../accountReducer';
 import toast from 'buttoned-toaster';
@@ -10,7 +11,7 @@ export const Contact = ({contact, i}) => {
     const {account, dispatch} = useAccount();
     
     const handleVisitContact = (i) => {
-        const id = account.contacts[i].userid;
+        const id = account.contacts[i]?.userid;
         window.location.href = `/collection/${id}`;
     }
 
@@ -61,6 +62,10 @@ export const Contact = ({contact, i}) => {
                         onClick={() => handleDeleteContact(i)}>
                         <img src={SITE.icons.wipe} alt={`Delete ${contact.name} from contacts`}/>
                     </button>
+                    <NavLink className='btn btn-outline-secondary btn-sm mx-1'
+                        to={`/create/${account.user?.userid}=${account.contacts?.[i]?.userid}/2`}>
+                            <img src={SITE.icons.message} alt={`Message ${contact.name}`}/>
+                    </NavLink>
                 </div>
             </div>
         </div>

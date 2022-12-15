@@ -16,6 +16,7 @@ const indexRouter = require('./routes/index');
 const accountRouter = require('./routes/account');
 const animRouter = require('./routes/anim');
 const collectionRouter = require('./routes/collection');
+const messageRouter = require('./routes/messages');
 
 const app = express();
 
@@ -79,8 +80,8 @@ app.use(limiter);
 app.use('/.netlify/functions/server/account', accountRouter);
 app.use('/.netlify/functions/server/anim', animRouter);
 app.use('/.netlify/functions/server/collection', collectionRouter);
+app.use('/.netlify/functions/server/messages', messageRouter);
 app.use('/.netlify/functions/server/', indexRouter);
-
 
 app.use(function(req, res, next){
     next(createError(404));
