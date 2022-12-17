@@ -63,7 +63,7 @@ export const Contact = ({contact, i}) => {
                         <img src={SITE.icons.wipe} alt={`Delete ${contact.name} from contacts`}/>
                     </button>
                     <NavLink className='btn btn-outline-secondary btn-sm mx-1'
-                        to={`/create/${account.user?.userid}=${account.contacts?.[i]?.userid}/2`}>
+                        to={`/create/${account.user?.userid}=${account.contacts?.[i]?.userid}`}>
                             <img src={SITE.icons.message} alt={`Message ${contact.name}`}/>
                     </NavLink>
                 </div>

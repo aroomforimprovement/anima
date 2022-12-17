@@ -105,6 +105,34 @@ export const animReducer = (state, action) => {
             return false;
         });
     }
+
+    const sendAnimAsMessage = async (anim, access) => {
+        const currentUrl = window.location.href; 
+        console.debug(currentUrl);
+        const id = currentUrl.substring(currentUrl.indexOf('create') + 7);
+        console.debug(id);
+        return fetch(`${apiUrl}messages`, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({convid: id, anim: anim}),
+            headers: {
+                Authorization: `Bearer ${access}`,
+                'Content-Type':'application/json',
+            }
+        }).then(response => {
+            if(response.ok){
+                toast.success("Message sent");
+                return true;
+            }else{
+                toast.error("Problem sending message");
+                return false;
+            }
+        }).catch(error => {
+            toast.error("Error sending message");
+            console.dir(error);
+            return false;
+        })
+    }
     
     switch(action.type){    
         case 'SET_ANIM':{
@@ -268,10 +296,15 @@ export const animReducer = (state, action) => {
                 temp = state.anim.animid;
             }else if(action.data){
                 let anim = {...state.anim};
-                anim.size = action.data;
+                //anim.size = action.data;
                 saveAnimToAccount(state.anim, action.data);
             }
             return ({...state, enabled: true, isSaveOpen: false, temp: temp, saveClose: true});    
+        }
+        case 'SEND_AS_MESSAGE':{
+            let anim = {...state.anim};
+            sendAnimAsMessage(state.anim, action.data);
+            return ({...state, enabled: true, isSaveOpen: false, saveClose: true});
         }
         case 'CANCEL_SAVE':{
             return({...state, enabled: true, isSaveOpen: false, saveClose: true});

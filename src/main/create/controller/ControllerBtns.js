@@ -385,6 +385,13 @@ export const Save = ({dummy}) => {
     );
 }
 
+export const Send = ({dummy}) => {
+    return(
+        <ControllerBtn dispatchType='SAVE' dummy={dummy}
+            btnText={'Send as message'} icon={SITE.icons.message} />
+    )
+}
+
 export const Preview = ({dummy}) => {
     return(
         <ControllerBtn dispatchType='PREVIEW' dummy={dummy}

@@ -66,6 +66,9 @@ export const controlReducer = (state, action) => {
         case 'SAVE':{
             return ({...state, save: action.data});
         }
+        case 'SEND':{
+            return ({...state, send: action.data})
+        }
         case 'PRIVACY':{
             return ({...state, privacy: action.data});
         }

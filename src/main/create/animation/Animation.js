@@ -32,6 +32,7 @@ export const Animation = ({splat}) => {
     const animState = { anim, updateAnim };
 
     const [name, setName] = useState(anim?.anim?.name);
+    const [isMessage, setIsMessage] = useState(window.location.href.indexOf('=') > -1);
 
     useEffect(() => {
         if(anim.anim.name){
@@ -100,7 +101,7 @@ export const Animation = ({splat}) => {
             }).then(response => {
                 //TODO do something with result
                 console.dir(response);
-            }).catch(err => console.error(err))
+            }).catch(err => console.error(err));
         }
 
         if(account.user && account.user.isAuth && account.user.access){
@@ -124,8 +125,13 @@ export const Animation = ({splat}) => {
         updateAnim({type: 'USERID', data: true})
         updateAnim({type: 'NAME', data: name})
         if(access){
-            toast.info("Saving to account...");
-            updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});
+            if(isMessage){
+                toast.info("Sending as message...");
+                updateAnim({type: 'SEND_AS_MESSAGE', data: access});
+            }else{
+                toast.info("Saving to account...");
+                updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});  
+            }
         }else{
             redirectAfterTempSave(anim.temp);
         }

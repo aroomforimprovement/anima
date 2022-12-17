@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { SITE } from '../../../shared/site';
 import { values, CC, CONTROLS } from '../values';
 import { useControlContext } from '../Create';
-import { Next, Undo, Redo, Save, Download, Preview, Layer } from './ControllerBtns';
+import { Next, Undo, Redo, Save, Download, Preview, Layer, Send } from './ControllerBtns';
 import toast from 'buttoned-toaster';
 
 
@@ -328,7 +328,7 @@ const BgFrameOpacity = ({func}) => {
 }
 
 export const MobileSaveController = () => {
-    
+    const [isMessage, setIsMessage] = useState(window.location.href.indexOf('=') > -1);
     const closeExpandable = () => {
         dispatch({type: 'Close'});
     }
@@ -364,7 +364,7 @@ export const MobileSaveController = () => {
     return(
         <div className='save-controller col col-sm-6 col-xl-7'>
             <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
-                <Save/>
+                {isMessage ? <Send/> : <Save/>}
             </div>
             <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'>
                 <Download/>

@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { MobileController, MobileSaveController } from './MobileController';
 import { Mode, PenColour, PenSize, Undo, Redo, FrameRate,
-    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame, Layer } from './ControllerBtns';
+    Background, Next, Download, Save, Preview, EnableShortcuts, AdjustBg, AdjustBgFrame, Layer, Send } from './ControllerBtns';
 import { ControllerInfo } from './ControllerInfo';
 import './controller.scss';
 
 
 export const Controller = () => {
-
     return(
         <div>
             <BrowserView>
@@ -33,13 +32,14 @@ export const Controller = () => {
 }
 
 export const SaveController = () => {
+    const [isMessage, setIsMessage] = useState(window.location.href.indexOf('=') > -1);
     return(
         <div>
             <div className='container controller col-12 col-md-8 col-lg-8 col-xl-8 col-xxl-7 mt-1 mb-1'> 
             <BrowserView>
                 <div className='row'>
                     <div className='save-controller col col-sm-6 col-xl-7'>
-                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Save /></div>
+                        <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'>{isMessage ? <Send /> : <Save />}</div>
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Download /></div>
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><Preview /></div>
                         <div className='col col-sm-2 col-md-3 col-lg-2 col-xl-1 btn-ctl m-2 mx-xs-0'><AdjustBg /></div>
