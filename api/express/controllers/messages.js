@@ -6,19 +6,15 @@ module.exports = {
     addMessage: async (req, res) => {
         const sig = `${file}addMessage: `;
         console.debug(sig);
-        const userid = req.user.sub.replace('auth0|', '');
-        const username = req.user.name;
         const convid = await module.exports.isExistingConversation(req.body.convid);
         console.debug(`${sig}convid: ${convid}`);
         const message = {
-            userid: userid,
-            username: username,
             anim: req.body.anim,
             convid: req.body.convid
         }
         const record = {
-            userid: userid,
-            username: username,
+            userid: req.body.anim.userid,
+            username: req.body.anim.username,
             anim: req.body.anim.name
         }
         newMessage(convid, message, record, res);

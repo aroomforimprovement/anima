@@ -20,10 +20,10 @@ module.exports = {
                 );
                 const messageId = messageResult.insertedId;
                 if(messageId){
-                    //update conversation
+                    record.messid = messageId;
                     const convResult = await db.collection('Conversations').updateOne(
                         {convid: convid}, {
-                            $addToSet: {messages: messageId}
+                            $addToSet: {messages: record}
                         }
                     );
                     console.dir(convResult);
