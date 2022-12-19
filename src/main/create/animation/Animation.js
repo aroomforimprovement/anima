@@ -11,6 +11,8 @@ import { Redirect } from 'react-router';
 import { useAccount } from '../../../shared/account';
 import { isMobile } from 'react-device-detect';
 import toast from 'buttoned-toaster';
+import { Conversation } from '../messages/components/Conversation';
+import { Div } from '../../../common/Div';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -30,10 +32,9 @@ export const Animation = ({splat}) => {
     const initAnimState = newAnimState(account.user);
     const [ anim, updateAnim ] = useReducer(animReducer, initAnimState);
     const animState = { anim, updateAnim };
-
-    const [name, setName] = useState(anim?.anim?.name);
     const [isMessage, setIsMessage] = useState(window.location.href.indexOf('=') > -1);
-
+    const [name, setName] = useState(anim?.anim?.name);
+    
     useEffect(() => {
         if(anim.anim.name){
             setName(anim.anim.name)
@@ -99,8 +100,8 @@ export const Animation = ({splat}) => {
             }, error => {
                 console.error(error);
             }).then(response => {
-                //TODO do something with result
-                console.dir(response);
+                console.log(response);
+                updateAnim({type: 'SET_CONVERSATION', data: response});
             }).catch(err => console.error(err));
         }
 
@@ -171,16 +172,28 @@ export const Animation = ({splat}) => {
             <Redirect to='/login'/>
         );
     }
-    
+
     return(
         <div>
             <ControlContext.Consumer> 
                 {() => (
                 <AnimContext.Provider value={animState} >
-                    <ReactP5Wrapper sketch={sketch}
-                        controls={controls} updateControls={updateControls}
-                        anim={anim} updateAnim={updateAnim} index={'temp'}
-                        id='animCanvas' clip={false}/>
+                    <div className='container'>
+                        <div className='row'>
+                            {isMessage  && anim?.conversation 
+                            ?
+                            <Conversation 
+                                className='col col-4'
+                                conversation={anim.conversation}
+                                updateAnim={updateAnim}/> 
+                            : <Div/>}
+                            <ReactP5Wrapper 
+                                sketch={sketch}
+                                controls={controls} updateControls={updateControls}
+                                anim={anim} updateAnim={updateAnim} index={'temp'}
+                                id='animCanvas' clip={false}/>
+                        </div>
+                    </div>
                     <Modal show={anim.isPreviewOpen} 
                         onShow={() => updateAnim({type: 'setIsPreviewOpen', data: true})}
                         onHide={() => updateAnim({type: 'setIsPreviewOpen', data: false})}>

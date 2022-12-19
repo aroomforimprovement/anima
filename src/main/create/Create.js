@@ -5,6 +5,7 @@ import { Animation } from './animation/Animation';
 import { values } from './values';
 import { controlReducer } from './controller/controlReducer';
 import { useParams } from 'react-router';
+import './create.scss';
 
 export const ControlContext = createContext(values.initialControlState);
 
@@ -17,6 +18,7 @@ const Create = ({edit, loggingIn}) => {
     const [ controls, updateControls ] = useReducer(controlReducer, values.initialControlState);
     const controlState = { controls, updateControls };
     const splat = useParams()[0];
+
     return(
         <div>
             <ControlContext.Provider value={controlState}>

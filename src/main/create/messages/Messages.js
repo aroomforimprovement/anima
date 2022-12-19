@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { Loading } from "../../common/Loading";
-import { useAccount } from "../../shared/account"
+import { Loading } from "../../../common/Loading";
+import { useAccount } from "../../../shared/account"
 import { messagesReducer } from "./messagesReducer";
 
 const MessagesContext = createContext();

@@ -58,6 +58,7 @@ export const newAnimState = (user) => {
         isPreviewOpen: false,
         isSaveOpen: false,
         isWiped: true,
+        conversation: null,
     }
 }
 
@@ -275,6 +276,7 @@ export const animReducer = (state, action) => {
             });
         }
         case 'SET_VIEW_FILE':{
+            console.debug("SET VIEW FILE");
             return({...state, 
                 viewFile: URL.createObjectURL(action.data.blob),
                 viewName: action.data.name
@@ -305,6 +307,10 @@ export const animReducer = (state, action) => {
             let anim = {...state.anim};
             sendAnimAsMessage(state.anim, action.data);
             return ({...state, enabled: true, isSaveOpen: false, saveClose: true});
+        }
+        case 'SET_CONVERSATION':{
+            console.log(action.data)
+            return ({...state, conversation: action.data});
         }
         case 'CANCEL_SAVE':{
             return({...state, enabled: true, isSaveOpen: false, saveClose: true});

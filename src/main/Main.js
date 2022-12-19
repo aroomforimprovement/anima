@@ -14,7 +14,7 @@ import { ToastRack } from 'buttoned-toaster';
 import { useAccount } from '../shared/account';
 import { Loading } from '../common/Loading';
 import { Help } from './help/Help';
-import Messages from './messages/Messages';
+import Messages from './create/messages/Messages';
 
 
 const Main = () => {

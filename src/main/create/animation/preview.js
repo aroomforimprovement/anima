@@ -16,6 +16,7 @@ export const preview = (p5) => {
     }
 
     p5.updateWithProps = (props) => {
+        console.dir(props)
         if(props.anim 
         && p5 
         && props.anim.name !== 'nothing' 
@@ -46,6 +47,20 @@ export const preview = (p5) => {
                     }
                 );
             });
+        }else if(props.anim && props.anim !== 'nothing' && props.updateAnim){
+            console.debug('preview: updateWithProps: props.anim -> previewAnim');
+            previewAnim(
+                {
+                    a: props.anim,
+                    type: props.type,
+                    p5canvas: p5canvas,
+                    p5: p5,
+                    index: 'temp',
+                    clip: false,
+                    drawing: false,
+                    updateAnim: props.updateAnim
+                }
+            )
         }
     }
     

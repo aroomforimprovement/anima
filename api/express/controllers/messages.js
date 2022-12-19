@@ -1,3 +1,4 @@
+const ObjectId = require('mongodb').ObjectId;
 const { newMessage } = require("../transactions/messages");
 const { getDb } = require("../util/mongo-util");
 const file = 'controllers/messages.js: ';
@@ -8,16 +9,33 @@ module.exports = {
         console.debug(sig);
         const convid = await module.exports.isExistingConversation(req.body.convid);
         console.debug(`${sig}convid: ${convid}`);
+        const time = Date.now();
         const message = {
             anim: req.body.anim,
-            convid: req.body.convid
+            convid: req.body.convid,
+            time: time
         }
         const record = {
             userid: req.body.anim.userid,
             username: req.body.anim.username,
-            anim: req.body.anim.name
+            anim: req.body.anim.name,
+            time: time
         }
         newMessage(convid, message, record, res);
+    },
+    getMessage: async (id, res) => {
+        const sig = `${file}getMessage: `;
+        console.debug(`${sig}${id}`);
+        const db = await getDb();
+
+        
+        const result = await db.collection('Messages').findOne({_id: new ObjectId(id)});
+        console.dir(result);
+        if(result){
+            res.status(200).send(result);
+        }else{
+            res.status(500).send(result);
+        }
     },
     getConversation: async (id, res) => {
         const sig = `${file}getConversation: `;
@@ -30,10 +48,14 @@ module.exports = {
         }
     },
     getExistingConversation: async (id, res) => {
+        const sig = `${file}getExistingConversation: `;
+        console.debug(sig);
         const db = await getDb();
         
         try{
-            const result = db.collection('Conversations').findOne({convid: id});
+            const result = await db.collection('Conversations').findOne({convid: id});
+            console.debug(`${sig}findOne: convid: ${id}`);
+            console.dir(result);
             if(result){
                 res.status(200).send(result);
             }else{

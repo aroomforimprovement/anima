@@ -125,7 +125,8 @@ export const drawStroke = async (params) => {
  */
 
 export const previewAnim = async (params) => {
-        
+        console.debug('previewAnim');
+        console.dir(params);
         try{
             renderAnim(params);
         }catch(err){
@@ -182,6 +183,8 @@ export const renderAnim = async (params) => {
     //console.log("Capture took "+duration);
     capturer.save((blob) => {
         if(params.type.indexOf('VIEW') > -1){ 
+            console.debug('renderAnim -> playPreview');
+            console.dir(params)
             playPreview(
                 {
                     blob: blob, 
@@ -197,7 +200,8 @@ export const renderAnim = async (params) => {
                         params.setCollectionState({type: 'SET_INDEX', data: params.index+1});
                 }else if(params.setCollectionState){
                     params.setCollectionState({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
-                }else if(params.updateAnim){params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
+                }else if(params.updateAnim){
+                    params.updateAnim({type: 'SET_VIEW_FILE', data: {blob: blob, name: params.a.name}});
                 }
             });
         }else if(params.type === 'DOWNLOAD'){
@@ -296,6 +300,8 @@ export const downloadAnimAsWebm = async (params) => {
 
 
  export const playPreview = async (params) => {
+    console.log('playPreview');
+    console.dir(params)
     if(params.setCollectionState && params.clip){
         await params.setCollectionState({
             type: 'ADD_PREVIEW_FILE', 
@@ -307,6 +313,7 @@ export const downloadAnimAsWebm = async (params) => {
             data: {blob: params.blob, name: params.name}
         });
     }else if(params.updateAnim){
+        console.debug('playPreview -> updateAnim, SET_VIEW_FILE');
         await params.updateAnim({
             type: 'SET_VIEW_FILE',
             data: {blob: params.blob, name: params.name}

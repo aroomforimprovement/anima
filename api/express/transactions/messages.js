@@ -36,7 +36,6 @@ module.exports = {
                 }else{
                     res.status(500).send("Problem sending message");
                 }
-                
             }catch(error){
                 console.error(error);
                 res.status(500).send("Problem sending message");

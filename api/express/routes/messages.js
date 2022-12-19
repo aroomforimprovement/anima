@@ -3,6 +3,12 @@ const router = express.Router();
 const messages = require('../controllers/messages');
 const util = require('../util/routes-util');
 
+router.get('/message/*', util.jwtCheck(true), (req, res) => {
+    console.debug(`reached GET /messages/message/${req.params[0]}`);
+    //TODO valid request check
+    messages.getMessage(req.params[0], res);
+})
+
 router.get('/*', util.jwtCheck(true), (req, res) => {
     console.debug(`reached GET /messages/${req.params[0]}`)
     //TODO check ownership, check is contact

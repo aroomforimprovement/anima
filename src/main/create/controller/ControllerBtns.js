@@ -394,8 +394,11 @@ export const Send = ({dummy}) => {
 
 export const Preview = ({dummy}) => {
     return(
-        <ControllerBtn dispatchType='PREVIEW' dummy={dummy}
-            btnText={'Preview animation'} icon={SITE.icons.preview} />
+        <ControllerBtn 
+            dispatchType='PREVIEW' 
+            dummy={dummy}
+            btnText={'Preview animation'} 
+            icon={SITE.icons.preview} />
     )
 }
 
