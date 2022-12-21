@@ -23,10 +23,12 @@ export const Conversation = ({conversation, updateAnim}) => {
     return(
         <div className='conversation'>
             {open ? <div>{messages}</div> : <Div/>}
-            <button type='button' className='btn btn-secondary btn-sm mb-1' 
+            {conversation?.messages?.length > 0 
+            ? <button type='button' className='btn btn-secondary btn-sm mb-1' 
                 onClick={() => {
                     setOpen(!open);
                 }}>{`${open ? 'Hide' : 'See'} conversation`}</button>
+            : <Div />}
         </div>
     )
 }

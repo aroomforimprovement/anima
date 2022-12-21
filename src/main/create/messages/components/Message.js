@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { Div } from "../../../../common/Div";
 import { useAccount } from "../../../../shared/account";
