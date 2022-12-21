@@ -1,15 +1,22 @@
 import { Message } from "./Message";
 import { useState } from 'react';
 import { Div } from "../../../../common/Div";
+import { ReactP5Wrapper } from "react-p5-wrapper";
 
 export const Conversation = ({conversation, updateAnim}) => {
 
     const [open, setOpen] = useState(true);
+    const [thumbFiles, setThumbFiles] = useState([]);
     
     const messages = conversation?.messages?.map((message, i) => {
         console.dir(message);
         return(
-            <Message key={i} message={message} updateAnim={updateAnim}/>
+            <Message key={i} 
+                message={message} 
+                updateAnim={updateAnim}
+                thumbFile={thumbFiles?.[i]}
+                index={i}
+            />
         )
     })
 

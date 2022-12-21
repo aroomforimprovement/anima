@@ -19,7 +19,8 @@ module.exports = {
             userid: req.body.anim.userid,
             username: req.body.anim.username,
             anim: req.body.anim.name,
-            time: time
+            time: time,
+            thumb: req.body.anim.frames[0] ? req.body.anim.frames[0] : {}
         }
         newMessage(convid, message, record, res);
     },
@@ -28,7 +29,6 @@ module.exports = {
         console.debug(`${sig}${id}`);
         const db = await getDb();
 
-        
         const result = await db.collection('Messages').findOne({_id: new ObjectId(id)});
         console.dir(result);
         if(result){

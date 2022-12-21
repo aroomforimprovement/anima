@@ -1,4 +1,4 @@
-import { previewAnim, previewAnimMobile } from './anim-util';
+import { previewAnim, previewAnimMobile, renderThumb } from './anim-util';
 import { values } from '../values';
 
 export const preview = (p5) => {
@@ -17,7 +17,17 @@ export const preview = (p5) => {
 
     p5.updateWithProps = (props) => {
         console.dir(props)
-        if(props.anim 
+        if(props.type === 'THUMB'){
+            console.debug('THUMB');
+            renderThumb({
+                a: props.anim,
+                p5canvas: p5canvas,
+                p5: p5,
+                index: 'temp',
+                dispatch: props.dispatch
+
+            });
+        }else if(props.anim 
         && p5 
         && props.anim.name !== 'nothing' 
         && props.collectionState 

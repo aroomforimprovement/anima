@@ -263,6 +263,8 @@ export const renderThumb = async (params) => {
         setBgOverlay(params.p5, true);
         let frames = [...params.a.frames];
         const thumb = frames[0];
+        console.dir(params);
+        console.dir(thumb)
         setThumbCaptured(thumb, params.a.name, params.index, params.p5, params.p5canvas,
             params.dispatch, params.setCollectionState);
 }
