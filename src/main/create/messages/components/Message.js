@@ -3,9 +3,9 @@ import { useEffect, useReducer, useState } from "react";
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { Div } from "../../../../common/Div";
 import { useAccount } from "../../../../shared/account";
-import { Thumb } from "../../../collection/item/Thumb";
-import { previewAnim } from "../../animation/anim-util";
 import { preview } from "../../animation/preview";
+import TimeAgo from "javascript-time-ago";
+import en from 'javascript-time-ago/locale/en';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -16,7 +16,9 @@ export const Message = ({message, updateAnim, index}) => {
     const [view, setView] = useState(false);
     const [viewFile, setViewFile] = useState(null);
     const [anim, setAnim] = useState(null);
-
+    TimeAgo.addLocale(en);
+    const timeAgo = new TimeAgo();
+    
     const reducer = (state, action) => {
         switch(action.type){
             case 'SET_THUMB_FILE':{
@@ -66,7 +68,7 @@ export const Message = ({message, updateAnim, index}) => {
             onClick={() => renderMessage()}>
             <div className='message-sub'>{`${message.username}: `}</div><br/>
             <div className='message-header'>{`${message.anim}`}</div>
-            <div className='message-sub'>{`, ${getDateTime(message.time)}`}</div>
+            <div className='message-sub'>{`, ${getDateTime(timeAgo.format(message.time, 'round'))}`}</div>
             <div className='message-img float-end'>
                 <img className="message-img rounded-3 p0"
                     key={index}
