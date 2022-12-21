@@ -1,5 +1,4 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { Controller, SaveController } from './controller/Controller';
 import { Jumbotron } from 'reactstrap';
 import { Animation } from './animation/Animation';
 import { values } from './values';
@@ -22,7 +21,6 @@ const Create = ({edit, loggingIn}) => {
     return(
         <div>
             <ControlContext.Provider value={controlState}>
-                <Controller />
                 <Jumbotron >
                     <Animation 
                         edit={edit} 
@@ -30,7 +28,6 @@ const Create = ({edit, loggingIn}) => {
                         loggingIn={loggingIn}
                     />
                 </Jumbotron>
-                <SaveController />
             </ControlContext.Provider>        
         </div>
     );

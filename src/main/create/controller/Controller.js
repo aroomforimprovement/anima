@@ -11,16 +11,16 @@ export const Controller = () => {
     return(
         <div>
             <BrowserView>
-                <div className='container controller col-sm-12 col-md-6 col-lg-5 col-xl-4 my-1'>
+                <div className='container controller my-1 mx-auto'>
                     <div className='row'>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Mode /></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenSize /></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><PenColour /></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Undo/></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Redo/></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><FrameRate/></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Background/></div>
-                        <div className='btn-ctl col-1 col-sm-1 mx-1 mx-md-2 mx-lg-2'><Next/></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><Mode /></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><PenSize /></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><PenColour /></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><Undo/></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><Redo/></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><FrameRate/></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><Background/></div>
+                        <div className='btn-ctl col-1 col-sm-1 mx-auto'><Next/></div>
                     </div>
                 </div>
             </BrowserView>

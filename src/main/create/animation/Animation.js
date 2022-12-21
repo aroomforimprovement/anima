@@ -13,6 +13,7 @@ import { isMobile } from 'react-device-detect';
 import toast from 'buttoned-toaster';
 import { Conversation } from '../messages/components/Conversation';
 import { Div } from '../../../common/Div';
+import { Controller, SaveController } from '../controller/Controller';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -187,11 +188,13 @@ export const Animation = ({splat}) => {
                                 conversation={anim.conversation}
                                 updateAnim={updateAnim}/> 
                             : <Div/>}
+                            <Controller />
                             <ReactP5Wrapper 
                                 sketch={sketch}
                                 controls={controls} updateControls={updateControls}
                                 anim={anim} updateAnim={updateAnim} index={'temp'}
                                 id='animCanvas' clip={false}/>
+                            <SaveController />
                         </div>
                     </div>
                     <Modal show={anim.isPreviewOpen} 
