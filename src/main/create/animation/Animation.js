@@ -183,18 +183,21 @@ export const Animation = ({splat}) => {
                         <div className='row'>
                             {isMessage  && anim?.conversation 
                             ?
-                            <Conversation 
-                                className='col col-4'
-                                conversation={anim.conversation}
-                                updateAnim={updateAnim}/> 
+                            <div className='col col-4'>
+                                <Conversation 
+                                    conversation={anim.conversation}
+                                    updateAnim={updateAnim}/>
+                            </div> 
                             : <Div/>}
-                            <Controller />
-                            <ReactP5Wrapper 
-                                sketch={sketch}
-                                controls={controls} updateControls={updateControls}
-                                anim={anim} updateAnim={updateAnim} index={'temp'}
-                                id='animCanvas' clip={false}/>
-                            <SaveController />
+                            <div className={isMessage ? 'col col-6' : 'col col-12'}>
+                                <Controller isMessage={isMessage}/>
+                                <ReactP5Wrapper 
+                                    sketch={sketch}
+                                    controls={controls} updateControls={updateControls}
+                                    anim={anim} updateAnim={updateAnim} index={'temp'}
+                                    id='animCanvas' clip={false}/>
+                                <SaveController isMessage={isMessage}/>
+                            </div>
                         </div>
                     </div>
                     <Modal show={anim.isPreviewOpen} 
