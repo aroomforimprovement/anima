@@ -1,8 +1,29 @@
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
 .conversation{
-    border-radius:1vw;
-    border: 1px solid red;
     margin-top: 1vh;
+    max-height: 90vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .message{
@@ -14,8 +35,8 @@
     background: rgb(199, 198, 198);
     padding: 2vh;
     margin: 1vh 1vh 1vh 1vh;
-
-    min-width: 100%;
+    max-width: 90%;
+    min-width:90%;
     cursor: pointer;
 }
 
