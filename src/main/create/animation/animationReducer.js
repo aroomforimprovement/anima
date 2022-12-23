@@ -1,5 +1,6 @@
 import toast from 'buttoned-toaster';
 import { v4 as uuidv4 } from 'uuid';
+import { values } from '../values';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -62,6 +63,32 @@ export const newAnimState = (user) => {
     }
 }
 
+export const sendAnimAsMessage = async (anim, access) => {
+    const currentUrl = window.location.href; 
+    const id = currentUrl.substring(currentUrl.indexOf('create') + 7);
+    return fetch(`${apiUrl}messages`, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({convid: id, anim: anim}),
+        headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type':'application/json',
+        }
+    }).then(response => {
+        if(response.ok){
+            toast.success("Message sent");
+            return true;
+        }else{
+            toast.error("Problem sending message");
+            return false;
+        }
+    }).catch(error => {
+        toast.error("Error sending message");
+        console.dir(error);
+        return false;
+    })
+}
+
 /**
  * animReducer maintains the state of the anim object and 
  * extra state used during creation.
@@ -105,34 +132,6 @@ export const animReducer = (state, action) => {
             console.error(error)
             return false;
         });
-    }
-
-    const sendAnimAsMessage = async (anim, access) => {
-        const currentUrl = window.location.href; 
-        console.debug(currentUrl);
-        const id = currentUrl.substring(currentUrl.indexOf('create') + 7);
-        console.debug(id);
-        return fetch(`${apiUrl}messages`, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({convid: id, anim: anim}),
-            headers: {
-                Authorization: `Bearer ${access}`,
-                'Content-Type':'application/json',
-            }
-        }).then(response => {
-            if(response.ok){
-                toast.success("Message sent");
-                return true;
-            }else{
-                toast.error("Problem sending message");
-                return false;
-            }
-        }).catch(error => {
-            toast.error("Error sending message");
-            console.dir(error);
-            return false;
-        })
     }
     
     switch(action.type){    
@@ -303,10 +302,8 @@ export const animReducer = (state, action) => {
             }
             return ({...state, enabled: true, isSaveOpen: false, temp: temp, saveClose: true});    
         }
-        case 'SEND_AS_MESSAGE':{
-            let anim = {...state.anim};
-            sendAnimAsMessage(state.anim, action.data);
-            return ({...state, enabled: true, isSaveOpen: false, saveClose: true});
+        case 'SENT_AS_MESSAGE':{
+            return ({...values.initialAnimState, enabled: true, isSaveOpen: false, saveClose: true});
         }
         case 'SET_CONVERSATION':{
             console.log(action.data)

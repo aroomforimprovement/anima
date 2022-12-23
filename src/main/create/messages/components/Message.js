@@ -22,7 +22,6 @@ export const Message = ({message, updateAnim, index}) => {
     const reducer = (state, action) => {
         switch(action.type){
             case 'SET_THUMB_FILE':{
-                console.debug('SET_THUMB_FILE');
                 const thumbFile = action.data
                     ? URL.createObjectURL(action.data.blob)
                     : undefined;

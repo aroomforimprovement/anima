@@ -26,7 +26,7 @@ module.exports = {
                             $addToSet: {messages: record}
                         }
                     );
-                    console.dir(convResult);
+                    //console.dir(convResult);
                     if(convResult.modifiedCount){
                         await session.commitTransaction();
                         res.status(200).send("Message sent ok");
@@ -37,11 +37,11 @@ module.exports = {
                     res.status(500).send("Problem sending message");
                 }
             }catch(error){
-                console.error(error);
+                console.error(error.message);
                 res.status(500).send("Problem sending message");
             }
         }catch(error){
-            console.error(error);
+            console.error(error.message);
             res.status(500).send("Problem sending message");
         }
     }

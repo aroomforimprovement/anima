@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useReducer, useSta
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { ControlContext, useControlContext } from '../Create';
-import { animReducer, newAnimState } from './animationReducer';
+import { animReducer, newAnimState, sendAnimAsMessage } from './animationReducer';
 import { sketch } from './sketch';
 import { values } from '../values';
 import { Privacy } from '../controller/ControllerBtns';
@@ -22,7 +22,6 @@ const AnimContext = createContext(values.initialAnimState);
 export const useAnimContext = () => {
     return useContext(AnimContext);
 }
-
 
 export const Animation = ({splat}) => {
     const {account} = useAccount();
@@ -129,7 +128,13 @@ export const Animation = ({splat}) => {
         if(access){
             if(isMessage){
                 toast.info("Sending as message...");
-                updateAnim({type: 'SEND_AS_MESSAGE', data: access});
+                anim.anim.name = name;
+                sendAnimAsMessage(anim.anim, access)
+                    .then((result) => {
+                        if(result){
+                            updateAnim({type: 'SENT_AS_MESSAGE'});
+                        }
+                    });
             }else{
                 toast.info("Saving to account...");
                 updateAnim({type: 'SAVE_TO_ACCOUNT', data: access});  

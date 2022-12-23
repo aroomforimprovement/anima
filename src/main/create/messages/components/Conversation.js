@@ -8,7 +8,6 @@ export const Conversation = ({conversation, updateAnim}) => {
     const [open, setOpen] = useState(true);
     
     const messages = conversation?.messages?.map((message, i) => {
-        console.dir(message);
         return(
             <Message key={i} 
                 message={message} 
