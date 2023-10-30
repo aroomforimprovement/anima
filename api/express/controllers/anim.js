@@ -79,7 +79,7 @@ module.exports = {
         const sig = 'getAnim: ';
         console.log(`${file}${sig}`);
         const animid = req.params[0];
-        const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
+        const requser = req.user ? req.user.sub.replace(/.+\|/gm, '') : 'temp';
         try{
             await module.exports.getAnimById(animid).then((resolve, reject) => {
             if(reject){
@@ -165,7 +165,7 @@ module.exports = {
         console.debug(`${file}${sig}`);
         console.debug('REQUEST HEADERS: ' + req.headers);
         const body = req.body;
-        const requser = req.user && req.user.sub ? req.user.sub.replace('auth0|', '') : '';
+        const requser = req.user && req.user.sub ? req.user.sub.replace(/.+\|/gm, '') : '';
         console.debug("REQUSER: " + requser);
         if(body.animid && typeof body.animid == 'string' 
             && body.userid && typeof body.userid == 'string' 

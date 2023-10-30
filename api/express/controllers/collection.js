@@ -69,7 +69,7 @@ module.exports = {
         console.debug(`${sig}`);
         const userid = req.params[0];
         console.debug(`${sig}userid: ${userid}`)
-        const requser = req.user ? req.user.sub.replace('auth0|', '') : null;
+        const requser = req.user ? req.user.sub.replace(/.+\|/gm, '') : null;
         if(requser !== userid){
             res.status(403).send("Requester does not have mission to delete this resource");
             return;
@@ -136,7 +136,7 @@ module.exports = {
         console.debug(`${file}${sig}`);
         const userid = req.params[0];
         const page = req.params[1];
-        const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
+        const requser = req.user ? req.user.sub.replace(/.+\|/gm, '') : 'temp';
         
         try{
             await getAccount(userid).then((result) => {
@@ -188,7 +188,7 @@ module.exports = {
         }
         const body = req.body;
         console.dir(body);
-        const requser = req.user.sub.replace('auth0|', '');
+        const requser = req.user.sub.replace(/.+\|/gm, '');
         console.debug(`${requser} =? ${body.userid}`);
         console.debug(`${requser} =? ${body.targetUserid}`);
         console.debug(`${requser} =? ${body.reqUserid}`);
