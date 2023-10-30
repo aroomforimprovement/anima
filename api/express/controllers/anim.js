@@ -28,7 +28,7 @@ module.exports = {
         console.dir(req.params);
         const animid = req.params[0];
         console.debug("animid: "+animid)
-        const requser = req.user ? req.user.sub.replace('auth0|', '') : 'temp';
+        const requser = req.user ? req.user.sub.replace(/.+\|/gm, '') : 'temp';
         if(await module.exports.isExistingAnim({animid: animid})){
             module.exports.isRequesterOwner(requser, animid).then((resolve, reject) => {
                 if(reject){

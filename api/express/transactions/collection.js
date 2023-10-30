@@ -253,7 +253,7 @@ module.exports = {
                 
         if(size > 12*1024){
             const newDocResult = await db.collection(docType).insertOne(
-                { userid: userid, [docType]: [] }, { session }
+                { userid: userid, [type]: [] }, { session }
             );
             if(newDocResult.insertedId){
                 await db.collection(docType).updateOne(
